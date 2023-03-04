@@ -1,8 +1,12 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-from os import paramCount
+import os
 import parseopt
+import sequtils
+import tables
+
+import toposort
 
 import ceras
 import constants
@@ -41,7 +45,11 @@ proc radula_options*() =
                     echo RADULA_HELP_BEHAVE
                     quit(1)
             of "c", "ceras":
-                radula_behave_ceras_print(remainingArgs(p))
+                radula_behave_ceras_print(remainingArgs(p).deduplicate())
+                var table = initTable[string, seq[string]]()
+                for item in remainingArgs(p).deduplicate():
+                    radula_behave_ceras_resolve(item, table)
+                echo toposort(table)
                 quit(0)
             of "h", "help":
                 echo RADULA_HELP
