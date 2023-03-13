@@ -6,7 +6,7 @@ import os
 import ../../src/architecture
 import ../../src/constants
 
-radula_behave_architecture_environment("aarch64")
+radula_behave_architecture_environment("x86-64")
 
 echo "BLD     :: ", getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD)
 
@@ -25,14 +25,14 @@ echo "UARCH   :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT)
 assert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) ==
     radula_behave_architecture_tuple()
 
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE) == "aarch64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA) == "--with-gcc-arch=armv8-a"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS) == "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION) == "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX) == "arm64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION) == ""
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE) == "arch/arm64/boot/Image"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL) == "aarch64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER) == "aarch64"
-assert getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET) == "aarch64-glaucus-linux-musl"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT) == "aarch64"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE) == "x86-64"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA) == "--with-gcc-arch=x86-64"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS) == "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION) == "--with-arch=x86-64-v3 --with-tune=generic"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX) == "x86_64"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION) == "x86_64_"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE) == "arch/x86/boot/bzImage"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL) == "x86_64"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER) == "x86_64"
+assert getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET) == "x86_64-glaucus-linux-musl"
+assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT) == "x86_64"
