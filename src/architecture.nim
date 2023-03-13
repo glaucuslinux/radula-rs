@@ -18,8 +18,7 @@ proc radula_behave_architecture_tuple*(): string =
                 RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS).strip()
 
 proc radula_behave_architecture_environment*(architecture: string) =
-    putEnv(RADULA_ENVIRONMENT_TUPLE_BUILD, getEnv(
-        radula_behave_architecture_tuple()))
+    putEnv(RADULA_ENVIRONMENT_TUPLE_BUILD, radula_behave_architecture_tuple())
 
     putEnv(RADULA_ENVIRONMENT_ARCHITECTURE, architecture)
     putEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA, RADULA_ARCHITECTURE_CERATA & architecture)
