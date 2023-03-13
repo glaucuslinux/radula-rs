@@ -31,12 +31,26 @@ proc radula_options*() =
                 of "b", "bootstrap":
                     p.next()
                     case p.key
+                    of "c", "clean":
+                        echo "clean complete"
+                    of "d", "distclean":
+                        echo "distclean complete"
                     of "h", "help":
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
+                    of "i", "img":
+                        echo "img complete"
                     of "l", "list":
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP_LIST
                     of "r", "require":
                         echo "Checking if host has all required packages..."
+                    of "s", "release":
+                        echo "release complete"
+                    of "t", "toolchain":
+                        echo "toolchain complete"
+                    of "x", "cross":
+                        echo "cross complete"
+                    of "z", "iso":
+                        echo "iso complete"
                     else:
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
                         quit(1)
