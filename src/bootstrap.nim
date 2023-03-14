@@ -1,0 +1,23 @@
+# Copyright (c) 2018-2023, Firas Khalil Khana
+# Distributed under the terms of the ISC License
+
+import os
+
+import constants
+
+#
+# Bootstrap Functions
+#
+
+proc radula_behave_bootstrap_environment*() =
+    let path = parentDir(getCurrentDir())
+
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS, path)
+
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS, path / RADULA_DIRECTORY_BACKUPS)
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA, path / RADULA_DIRECTORY_CERATA)
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS, path / RADULA_DIRECTORY_CROSS)
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS, path / RADULA_DIRECTORY_LOGS)
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_SOURCES, path / RADULA_DIRECTORY_SOURCES)
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY, path / RADULA_DIRECTORY_TEMPORARY)
+    putEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN, path / RADULA_DIRECTORY_TOOLCHAIN)
