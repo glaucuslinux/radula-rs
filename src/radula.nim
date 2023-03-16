@@ -3,6 +3,4 @@
 
 when isMainModule:
     import options
-    import bootstrap
-    radula_behave_bootstrap_environment()
     radula_options()
