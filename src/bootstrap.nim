@@ -26,8 +26,6 @@ proc radula_behave_bootstrap_environment*() =
         RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN) / RADULA_PATH_USR /
         RADULA_PATH_BIN & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
 
-    echo getEnv(RADULA_ENVIRONMENT_PATH)
-
 proc radula_behave_bootstrap_initialize*() =
     createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
     createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
