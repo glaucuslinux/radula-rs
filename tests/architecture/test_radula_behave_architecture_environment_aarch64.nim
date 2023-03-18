@@ -10,6 +10,8 @@ radula_behave_architecture_environment("aarch64")
 
 echo "BLD     :: ", getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD)
 
+echo ""
+
 echo "ARCH    :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE)
 echo "CARCH   :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA)
 echo "FARCH   :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS)
