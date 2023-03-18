@@ -6,7 +6,7 @@ import os
 import constants
 
 #
-# Flags Functions
+# Flags Function
 #
 
 # This will be used whether we're bootstrapping or not so don't add _bootstrap_
