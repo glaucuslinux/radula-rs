@@ -6,10 +6,10 @@ import parseopt
 import sequtils
 import tables
 
-import toposort
-
 import ceras
 import constants
+
+import toposort
 
 proc radula_options*() =
     if paramCount() < 1:

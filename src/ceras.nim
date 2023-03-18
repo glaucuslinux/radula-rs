@@ -5,9 +5,9 @@ import os
 import strutils
 import tables
 
-import parsetoml
-
 import constants
+
+import parsetoml
 
 # Returns the full path to the `ceras` file
 proc radula_behave_ceras_path_ceras*(name: string): string =
