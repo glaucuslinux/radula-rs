@@ -18,6 +18,7 @@ proc radula_behave_bootstrap_cross_ccache*() =
     putEnv(RADULA_ENVIRONMENT_PATH, getEnv(
         RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN) / RADULA_PATH_USR /
         RADULA_PATH_LIB / RADULA_CERAS_CCACHE / getEnv(RADULA_ENVIRONMENT_PATH))
+    createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
 
 proc radula_behave_bootstrap_toolchain_ccache*() =
     putEnv(RADULA_ENVIRONMENT_CCACHE_CONFIGURATION,
@@ -26,3 +27,4 @@ proc radula_behave_bootstrap_toolchain_ccache*() =
     putEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY, getEnv(
         RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY) / RADULA_CERAS_CCACHE)
     putEnv(RADULA_ENVIRONMENT_PATH, getEnv(RADULA_PATH_CCACHE) / getEnv(RADULA_ENVIRONMENT_PATH))
+    createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
