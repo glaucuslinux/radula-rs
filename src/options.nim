@@ -11,6 +11,10 @@ import constants
 
 import toposort
 
+#
+# Options Function
+#
+
 proc radula_options*() =
     if paramCount() < 1:
         echo RADULA_HELP

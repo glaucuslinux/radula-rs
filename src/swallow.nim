@@ -13,16 +13,19 @@ import hashlib/misc/xxhash
 import parsetoml
 
 # Asynchronously download source tarballs
-proc radula_behave_download*(url: string, path: string) {.async.} =
-    let client = newAsyncHttpClient()
-    await client.downloadFile(url, path)
-
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var futures = newSeq[Future[void]](names.len)
+
     for i, name in names:
         let ceras = radula_behave_ceras_parse(name)
+
+        let version = try: ceras["ver"].getStr() except: ""
+        let commit = try: ceras["cmt"].getStr() except: ""
         let url = try: ceras["url"].getStr() except: ""
-        futures[i] = radula_behave_download(url, lastPathPart(url))
+
+        echo "    swallow  :< " & (name & " " & version & " " & commit).strip()
+
+        futures[i] = newAsyncHttpClient().downloadFile(url, lastPathPart(url))
 
     await all(futures)
 
