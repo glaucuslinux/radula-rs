@@ -12,24 +12,46 @@ import ceras
 import hashlib/misc/xxhash
 import parsetoml
 
-# Asynchronously download source tarballs
-proc radula_behave_swallow*(names: seq[string]) {.async.} =
-    var futures = newSeq[Future[void]](names.len)
-
-    for i, name in names:
-        let ceras = radula_behave_ceras_parse(name)
-
-        let version = try: ceras["ver"].getStr() except: ""
-        let commit = try: ceras["cmt"].getStr() except: ""
-        let url = try: ceras["url"].getStr() except: ""
-
-        echo "    swallow  :< " & (name & " " & version & " " & commit).strip()
-
-        futures[i] = newAsyncHttpClient().downloadFile(url, lastPathPart(url))
-
-    await all(futures)
-
 # Verifies `XXH3_128bits` checksum of source tarball
 proc radula_behave_verify*(name: string, file: string, checksum: string): bool =
     checksum == $count[XXHASH3_128](newFileStream(joinPath(
             radula_behave_ceras_path_source(name), file), fmRead))
+
+# Asynchronously swallow cerata
+proc radula_behave_swallow*(names: seq[string]) {.async.} =
+    var
+        clones: seq[string]
+        downloads: seq[Future[void]]
+
+    for name in names:
+        let
+            ceras = radula_behave_ceras_parse(name)
+
+            version = try: ceras["ver"].getStr() except: ""
+            url = try: ceras["url"].getStr() except: ""
+
+        if dirExists(radula_behave_ceras_path_source(name)):
+            if not (version == "git"):
+                let checksum = try: ceras["sum"].getStr() except: ""
+                if radula_behave_verify(name, lastPathPart(url), checksum):
+                    continue
+        else:
+            if version == "git":
+                clones &= name
+            else:
+                echo "    swallow  :< " & (name & " " & version).strip()
+
+                downloads &= newAsyncHttpClient().downloadFile(url,
+                    lastPathPart(url))
+
+    await all(downloads)
+    # use startprocesses for starting multiple git clones as well
+
+    for name in names:
+        let
+            ceras = radula_behave_ceras_parse(name)
+
+            url = try: ceras["url"].getStr() except: ""
+            checksum = try: ceras["url"].getStr() except: ""
+
+            file = radula_behave_ceras_path_source(name) / lastPathPart(url)

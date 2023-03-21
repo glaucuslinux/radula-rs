@@ -18,11 +18,10 @@ import parsetoml
 #
 
 proc radula_behave_envenomate*(names: seq[string], stage: string) =
-    # Download source tarballs in parallel
-    # waitFor radula_behave_swallow(names)
+    # Swallow cerata in parallel
+    waitFor radula_behave_swallow(names)
 
     for name in names:
-        # We only require `nom` and `ver` from the `ceras` file
         let ceras = radula_behave_ceras_parse(name)
 
         let version = try: ceras["ver"].getStr() except: ""
@@ -30,9 +29,9 @@ proc radula_behave_envenomate*(names: seq[string], stage: string) =
 
         echo " envenomate  :> " & (name & " " & version & " " & commit).strip()
 
-        echo "testing: ", RADULA_PATH_RADULA_CLUSTERS /
-                RADULA_DIRECTORY_GLAUCUS / name / stage
-        discard execProcess(RADULA_CERAS_DASH, args = [RADULA_TOOTH_SHELL_FLAGS,
+        # We only use `nom` and `ver` from the `ceras` file
+        discard execProcess(RADULA_CERAS_DASH,
+            workingDir = RADULA_DIRECTORY_TEMPORARY, args = [RADULA_TOOTH_SHELL_FLAGS,
             ". " & RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS /
             name / stage &
             " && prepare && configure && build && check && install"],
