@@ -17,6 +17,10 @@ proc radula_behave_ceras_path_ceras*(name: string): string =
 proc radula_behave_ceras_path_source*(name: string): string =
     joinPath(RADULA_PATH_RADULA_SOURCES, name)
 
+# Checks if the full path to the `ceras` file exists
+proc radula_behave_ceras_exist*(name: string): bool =
+    fileExists(radula_behave_ceras_path_ceras(name))
+
 proc radula_behave_ceras_parse*(name: string): TomlValueRef =
     parseFile(radula_behave_ceras_path_ceras(name))
 

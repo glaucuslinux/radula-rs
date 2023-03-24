@@ -4,6 +4,7 @@
 import asyncdispatch
 import httpclient
 import os
+import sequtils
 import streams
 import strutils
 
@@ -21,37 +22,38 @@ proc radula_behave_verify*(name: string, file: string, checksum: string): bool =
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
         clones: seq[string]
-        downloads: seq[Future[void]]
+        downloads: seq[(seq[string], Future[void])]
+        invalid: seq[string]
+        swallowed: seq[string]
+        virtuals: seq[string]
 
-    for name in names:
+    for name in names.deduplicate():
+        if not radula_behave_ceras_exist(name):
+            invalid &= name
+            continue
+
         let
             ceras = radula_behave_ceras_parse(name)
 
             version = try: ceras["ver"].getStr() except: ""
             url = try: ceras["url"].getStr() except: ""
 
+        if (url == ""):
+            virtuals &= name
+            continue
+
         if dirExists(radula_behave_ceras_path_source(name)):
-            if not (version == "git"):
-                let checksum = try: ceras["sum"].getStr() except: ""
-                if radula_behave_verify(name, lastPathPart(url), checksum):
-                    continue
+            swallowed &= name
+            continue
         else:
             if version == "git":
-                clones &= name
+                clones &= @[name, ceras["cmt"].getStr(), url]
             else:
                 echo "    swallow  :< " & (name & " " & version).strip()
 
-                downloads &= newAsyncHttpClient().downloadFile(url,
-                    lastPathPart(url))
+                downloads &= (@[name, url, ceras["sum"].getStr()],
+                        newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
 
-    await all(downloads)
+    waitFor all(downloads.unzip()[1])
     # use startprocesses for starting multiple git clones as well
-
-    for name in names:
-        let
-            ceras = radula_behave_ceras_parse(name)
-
-            url = try: ceras["url"].getStr() except: ""
-            checksum = try: ceras["url"].getStr() except: ""
-
-            file = radula_behave_ceras_path_source(name) / lastPathPart(url)
+    # loop over swallowed cerata and check if they are valid (checksums)
