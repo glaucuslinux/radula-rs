@@ -68,15 +68,15 @@ proc radula_behave_ceras_print*(names: seq[string]) =
                 "None"
         echo ""
 
-# Resolve dependencies using topological sorting
+# Resolve concentrates using topological sorting
 proc radula_behave_ceras_concentrates_resolve*(name: string,
-        dependencies: var Table[string, seq[string]]) =
-    dependencies[name] =
+        concentrates: var Table[string, seq[string]]) =
+    concentrates[name] =
         try:
             radula_behave_ceras_parse(name)["cnt"].getStr().split()
         except CatchableError:
             @[]
 
-    if dependencies[name].len() > 0:
-        for dependency in dependencies[name]:
-            radula_behave_ceras_concentrates_resolve(dependency, dependencies)
+    if concentrates[name].len() > 0:
+        for concentrate in concentrates[name]:
+            radula_behave_ceras_concentrates_resolve(concentrate, concentrates)

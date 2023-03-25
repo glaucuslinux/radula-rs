@@ -25,7 +25,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
         names = names.deduplicate()
 
-        dependencies: Table[string, seq[string]]
+        concentrates: Table[string, seq[string]]
 
         clones: seq[seq[string]]
         downloads: seq[(seq[string], Future[void])]
@@ -48,9 +48,9 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             echo "        skip  :| ", name, " virtual"
             continue
 
-        radula_behave_ceras_concentrates_resolve(name, dependencies)
+        radula_behave_ceras_concentrates_resolve(name, concentrates)
 
-    for name in toposort(dependencies):
+    for name in toposort(concentrates):
         let
             ceras = radula_behave_ceras_parse(name)
 
