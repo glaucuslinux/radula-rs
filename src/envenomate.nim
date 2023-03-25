@@ -6,6 +6,7 @@ import os
 import osproc
 import strtabs
 import strutils
+import terminal
 
 import ceras
 import constants
@@ -22,12 +23,21 @@ proc radula_behave_envenomate*(names: seq[string], stage: string) =
     waitFor radula_behave_swallow(names)
 
     for name in names:
-        let ceras = radula_behave_ceras_parse(name)
+        let
+            ceras = radula_behave_ceras_parse(name)
 
-        let version = try: ceras["ver"].getStr() except: ""
-        let commit = try: ceras["cmt"].getStr() except: ""
+            version =
+                try:
+                    ceras["ver"].getStr()
+                except CatchableError:
+                    ""
+            commit =
+                try:
+                    ceras["cmt"].getStr()
+                except CatchableError:
+                    ""
 
-        echo " envenomate  :> " & (name & " " & version & " " & commit).strip()
+        stdout.styledWriteLine(fgGreen, "  envenomate  :~ ", resetStyle, name, " ceras")
 
         # We only use `nom` and `ver` from the `ceras` file
         discard execProcess(RADULA_CERAS_DASH,

@@ -7,6 +7,7 @@ import os
 import sequtils
 import streams
 import strutils
+import terminal
 
 import ceras
 
@@ -24,8 +25,6 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
         names = names.deduplicate()
 
-        swallowed: seq[string]
-
         dependencies: Table[string, seq[string]]
 
         clones: seq[seq[string]]
@@ -33,37 +32,57 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
 
     for name in names:
         if not radula_behave_ceras_exist(name):
-            echo "        skip  :! " & name & " invalid ceras"
-            continue
+            stdout.styledWriteLine(fgRed, "       abort  :! ", resetStyle, name, " invalid ceras name")
+            quit(1)
 
         let
             ceras = radula_behave_ceras_parse(name)
 
-            version = try: ceras["ver"].getStr() except: ""
-            url = try: ceras["url"].getStr() except: ""
+            url =
+                try:
+                    ceras["url"].getStr()
+                except CatchableError:
+                    ""
 
         if (url == ""):
-            echo "        skip  :! " & name & " virtual ceras"
+            echo "        skip  :| ", name, " virtual"
             continue
-        # downloads &= (@[name, url, ceras["sum"].getStr()],
-        #         newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
 
         radula_behave_ceras_concentrates_resolve(name, dependencies)
 
+    for name in toposort(dependencies):
+        let
+            ceras = radula_behave_ceras_parse(name)
+
+            version =
+                try:
+                    ceras["ver"].getStr()
+                except CatchableError:
+                    ""
+            url =
+                try:
+                    ceras["url"].getStr()
+                except CatchableError:
+                    ""
+
+        if (url == ""):
+            echo "        skip  :| ", name, " virtual"
+            continue
+
         if dirExists(radula_behave_ceras_path_source(name)):
-            swallowed &= name
+            echo "        skip  :| ", name, " swallowed"
             continue
         else:
             if version == "git":
                 clones &= @[name, ceras["cmt"].getStr(), url]
             else:
-                echo "    swallow   :< " & name & " " & version
+                stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
+                    name, " ", version)
 
                 downloads &= (@[name, url, ceras["sum"].getStr()],
-                        newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
+                    newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
 
-    # waitFor all(downloads.unzip()[1])
+    waitFor all(downloads.unzip()[1])
 
-    echo toposort(dependencies)
     # use startprocesses for starting multiple git clones as well
     # loop over swallowed cerata and check if they are valid (checksums
