@@ -2,6 +2,7 @@
 # Distributed under the terms of the ISC License
 
 import os
+import sequtils
 import strutils
 import tables
 
@@ -25,11 +26,15 @@ proc radula_behave_ceras_parse*(name: string): TomlValueRef =
     parseFile(radula_behave_ceras_path_ceras(name))
 
 proc radula_behave_ceras_print*(names: seq[string]) =
-    for name in names:
+    for name in names.deduplicate():
+        if not radula_behave_ceras_exist(name):
+            echo "        skip  :! " & name & " invalid ceras"
+            continue
+
         let ceras = radula_behave_ceras_parse(name)
         echo "Name          :: ", ceras["nom"].getStr()
         echo "Version       :: ", try: ceras["ver"].getStr() except: "None",
-                try: " " & ceras["cmt"].getStr() except: ""
+            try: " " & ceras["cmt"].getStr() except: ""
         echo "URL           :: ", try: ceras["url"].getStr() except: "None"
         echo "Checksum      :: ", try: ceras["sum"].getStr() except: "None"
         echo "Concentrates  :: ", try: ceras["cnt"].getStr() except: "None"
@@ -37,12 +42,14 @@ proc radula_behave_ceras_print*(names: seq[string]) =
         echo ""
 
 # Resolve dependencies using topological sorting
-proc radula_behave_ceras_resolve*(name: string, table: var Table[string, seq[
-        string]]) =
-    let ceras = radula_behave_ceras_parse(name)
-    let name = ceras["nom"].getStr()
-    let concentrates = try: ceras["cnt"].getStr().split() except: @[]
-    table[name] = concentrates
-    if table[name].len > 0:
-        for dep in concentrates:
-            radula_behave_ceras_resolve(dep, table)
+proc radula_behave_ceras_concentrates_resolve*(name: string,
+        dependencies: var Table[string, seq[string]]) =
+    dependencies[name] =
+        try:
+            radula_behave_ceras_parse(name)["cnt"].getStr().split()
+        except:
+            @[]
+
+    if dependencies[name].len > 0:
+        for dependency in dependencies[name]:
+            radula_behave_ceras_concentrates_resolve(dependency, dependencies)

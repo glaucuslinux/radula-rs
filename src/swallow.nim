@@ -12,6 +12,7 @@ import ceras
 
 import hashlib/misc/xxhash
 import parsetoml
+import toposort
 
 # Verifies `XXH3_128bits` checksum of source tarball
 proc radula_behave_verify*(name: string, file: string, checksum: string): bool =
@@ -21,15 +22,18 @@ proc radula_behave_verify*(name: string, file: string, checksum: string): bool =
 # Asynchronously swallow cerata
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
-        clones: seq[string]
-        downloads: seq[(seq[string], Future[void])]
-        invalid: seq[string]
-        swallowed: seq[string]
-        virtuals: seq[string]
+        names = names.deduplicate()
 
-    for name in names.deduplicate():
+        swallowed: seq[string]
+
+        dependencies: Table[string, seq[string]]
+
+        clones: seq[seq[string]]
+        downloads: seq[(seq[string], Future[void])]
+
+    for name in names:
         if not radula_behave_ceras_exist(name):
-            invalid &= name
+            echo "        skip  :! " & name & " invalid ceras"
             continue
 
         let
@@ -39,8 +43,12 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             url = try: ceras["url"].getStr() except: ""
 
         if (url == ""):
-            virtuals &= name
+            echo "        skip  :! " & name & " virtual ceras"
             continue
+        # downloads &= (@[name, url, ceras["sum"].getStr()],
+        #         newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
+
+        radula_behave_ceras_concentrates_resolve(name, dependencies)
 
         if dirExists(radula_behave_ceras_path_source(name)):
             swallowed &= name
@@ -49,11 +57,13 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             if version == "git":
                 clones &= @[name, ceras["cmt"].getStr(), url]
             else:
-                echo "    swallow  :< " & (name & " " & version).strip()
+                echo "    swallow   :< " & name & " " & version
 
                 downloads &= (@[name, url, ceras["sum"].getStr()],
                         newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
 
-    waitFor all(downloads.unzip()[1])
+    # waitFor all(downloads.unzip()[1])
+
+    echo toposort(dependencies)
     # use startprocesses for starting multiple git clones as well
-    # loop over swallowed cerata and check if they are valid (checksums)
+    # loop over swallowed cerata and check if they are valid (checksums

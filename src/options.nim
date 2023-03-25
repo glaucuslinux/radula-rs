@@ -3,13 +3,9 @@
 
 import os
 import parseopt
-import sequtils
-import tables
 
 import ceras
 import constants
-
-import toposort
 
 #
 # Options Function
@@ -63,11 +59,7 @@ proc radula_options*() =
                     echo RADULA_HELP_BEHAVE
                     quit(1)
             of "c", "ceras":
-                radula_behave_ceras_print(remainingArgs(p).deduplicate())
-                var table = initTable[string, seq[string]]()
-                for item in remainingArgs(p).deduplicate():
-                    radula_behave_ceras_resolve(item, table)
-                echo toposort(table)
+                radula_behave_ceras_print(remainingArgs(p))
                 quit(0)
             of "h", "help":
                 echo RADULA_HELP
