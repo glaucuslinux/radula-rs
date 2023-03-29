@@ -1,24 +1,25 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import asyncdispatch
-import httpclient
-import os
-import sequtils
-import streams
-import strutils
-import terminal
+import std/[
+    asyncdispatch,
+    httpclient,
+    os,
+    sequtils,
+    sha1,
+    strutils,
+    terminal
+]
 
 import ceras
 
-import hashlib/misc/xxhash
-import parsetoml
-import toposort
+import
+    parsetoml,
+    toposort
 
-# Verifies `XXH3_128bits` checksum of source tarball
-proc radula_behave_verify*(name: string, file: string, checksum: string): bool =
-    checksum == $count[XXHASH3_128](newFileStream(joinPath(
-            radula_behave_ceras_path_source(name), file), fmRead))
+# Verify `SHA-1` checksum of source tarball
+proc radula_behave_verify*(file: string, checksum: string): bool =
+    parseSecureHash(checksum) == secureHashFile(file)
 
 # Asynchronously swallow cerata
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
@@ -69,9 +70,22 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             echo "        skip  :| ", name, " virtual"
             continue
 
-        if dirExists(radula_behave_ceras_path_source(name)):
-            echo "        skip  :| ", name, " swallowed"
-            continue
+        let path = radula_behave_ceras_path_source(name)
+
+        if dirExists(path):
+            if version == "git":
+                echo "        skip  :| ", name, " swallowed"
+                continue
+            else:
+                if radula_behave_verify(path / lastPathPart(url), ceras[
+                        "sum"].getStr()):
+                    echo "        skip  :| ", name, " swallowed"
+                    continue
+                else:
+                    stdout.styledWriteLine(fgRed, "       abort  :! ",
+                            resetStyle, name, " invalid ceras checksum")
+                    quit(1)
+
         else:
             if version == "git":
                 clones &= @[name, ceras["cmt"].getStr(), url]
@@ -79,8 +93,10 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
                     name, " ", version)
 
+                createDir(path)
+
                 downloads &= (@[name, url, ceras["sum"].getStr()],
-                    newAsyncHttpClient().downloadFile(url, lastPathPart(url)))
+                    newAsyncHttpClient().downloadFile(url, path / lastPathPart(url)))
 
     waitFor all(downloads.unzip()[1])
 

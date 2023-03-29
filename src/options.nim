@@ -1,11 +1,14 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import os
-import parseopt
+import std/[
+    os,
+    parseopt
+]
 
-import ceras
-import constants
+import
+    ceras,
+    constants
 
 #
 # Options Function

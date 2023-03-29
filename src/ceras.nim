@@ -1,11 +1,13 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import os
-import sequtils
-import strutils
-import tables
-import terminal
+import std/[
+    os,
+    sequtils,
+    strutils,
+    tables,
+    terminal
+]
 
 import constants
 

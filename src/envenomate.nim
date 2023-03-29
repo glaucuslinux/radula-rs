@@ -1,16 +1,18 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import asyncdispatch
-import os
-import osproc
-import strtabs
-import strutils
-import terminal
+import std/[
+    asyncdispatch,
+    os,
+    osproc,
+    strtabs,
+    terminal
+]
 
-import ceras
-import constants
-import swallow
+import
+    ceras,
+    constants,
+    swallow
 
 import parsetoml
 

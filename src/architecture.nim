@@ -1,9 +1,11 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import os
-import osproc
-import strutils
+import std/[
+    os,
+    osproc,
+    strutils
+]
 
 import constants
 
