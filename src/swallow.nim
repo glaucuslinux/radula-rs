@@ -6,7 +6,6 @@ import std/[
     httpclient,
     os,
     sequtils,
-    sha1,
     strutils,
     terminal
 ]
@@ -14,12 +13,13 @@ import std/[
 import ceras
 
 import
+    hashlib/misc/blake3,
     parsetoml,
     toposort
 
-# Verify `SHA-1` checksum of source tarball
+# Verify `BLAKE3` checksum of source tarball
 proc radula_behave_verify*(file: string, checksum: string): bool =
-    parseSecureHash(checksum) == secureHashFile(file)
+    $count[BLAKE3](readFile(file)) == checksum
 
 # Asynchronously swallow cerata
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
@@ -39,13 +39,9 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
         let
             ceras = radula_behave_ceras_parse(name)
 
-            url =
-                try:
-                    ceras["url"].getStr()
-                except CatchableError:
-                    ""
-
-        if (url == ""):
+        try:
+            discard ceras["url"].getStr()
+        except CatchableError:
             echo "        skip  :| ", name, " virtual"
             continue
 
@@ -66,7 +62,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 except CatchableError:
                     ""
 
-        if (url == ""):
+        if (url.isEmptyOrWhitespace()):
             echo "        skip  :| ", name, " virtual"
             continue
 
