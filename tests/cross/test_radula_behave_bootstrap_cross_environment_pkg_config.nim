@@ -4,10 +4,13 @@
 import os
 import strutils
 
+import ../../src/bootstrap
 import ../../src/constants
-import ../../src/pkg_config
+import ../../src/cross
 
-radula_behave_pkg_config_environment()
+radula_behave_bootstrap_environment()
+
+radula_behave_bootstrap_cross_environment_pkg_config()
 
 echo "PKG_CONFIG_LIBDIR               :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR)
 echo "PKG_CONFIG_PATH                 :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH)
@@ -15,8 +18,8 @@ echo "PKG_CONFIG_SYSROOT_DIR          :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG
 echo "PKG_CONFIG_SYSTEM_INCLUDE_PATH  :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
 echo "PKG_CONFIG_SYSTEM_LIBRARY_PATH  :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
-assert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR).endsWith(RADULA_PATH_PKG_CONFIG_LIBDIR_PATH)
-assert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH).endsWith(RADULA_PATH_PKG_CONFIG_LIBDIR_PATH)
-assert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR).endsWith(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-assert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH).endsWith(RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
-assert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH).endsWith(RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
+doAssert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR).endsWith("cross/usr/lib/pkgconfig")
+doAssert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH).endsWith("cross/usr/lib/pkgconfig")
+doAssert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR).endsWith("cross/")
+doAssert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH).endsWith("cross/usr/include")
+doAssert getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH).endsWith("cross/usr/lib")

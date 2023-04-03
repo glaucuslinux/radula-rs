@@ -3,4 +3,4 @@
 
 import ../../src/architecture
 
-assert radula_behave_architecture_tuple() == "x86_64-pc-linux-gnu"
+doAssert radula_behave_architecture_tuple() == "x86_64-pc-linux-gnu"

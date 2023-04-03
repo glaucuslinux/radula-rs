@@ -7,8 +7,12 @@ import std/[
 ]
 
 import
+    bootstrap,
     ceras,
-    constants
+    clean,
+    constants,
+    cross,
+    toolchain
 
 #
 # Options Function
@@ -35,8 +39,20 @@ proc radula_options*() =
                     p.next()
                     case p.key
                     of "c", "clean":
+                        radula_behave_bootstrap_environment()
+                        radula_behave_bootstrap_toolchain_environment_directories()
+                        radula_behave_bootstrap_cross_environment_directories()
+
+                        radula_behave_bootstrap_clean()
+
                         echo "clean complete"
                     of "d", "distclean":
+                        radula_behave_bootstrap_environment()
+                        radula_behave_bootstrap_toolchain_environment_directories()
+                        radula_behave_bootstrap_cross_environment_directories()
+
+                        radula_behave_bootstrap_distclean()
+
                         echo "distclean complete"
                     of "h", "help":
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP

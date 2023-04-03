@@ -25,14 +25,14 @@ echo ""
 
 echo "PATH  :: ", getEnv(RADULA_ENVIRONMENT_PATH)
 
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).endsWith("glaucus")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).endsWith("glaucus")
 
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).endsWith("bak")
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA).endsWith("cerata")
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS).endsWith("cross")
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS).endsWith("log")
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_SOURCES).endsWith("src")
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).endsWith("tmp")
-assert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).endsWith("toolchain")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).endsWith("bak")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA).endsWith("cerata")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS).endsWith("cross")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS).endsWith("log")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_SOURCES).endsWith("src")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).endsWith("tmp")
+doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).endsWith("toolchain")
 
-assert getEnv(RADULA_ENVIRONMENT_PATH).split(':')[0].endsWith("toolchain/usr/bin")
+doAssert getEnv(RADULA_ENVIRONMENT_PATH).split(':')[0].endsWith("toolchain/usr/bin")

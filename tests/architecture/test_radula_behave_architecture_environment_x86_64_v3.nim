@@ -24,17 +24,17 @@ echo "MLARCH  :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER)
 echo "TGT     :: ", getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET)
 echo "UARCH   :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT)
 
-assert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) ==
+doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) ==
     radula_behave_architecture_tuple()
 
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE) == "x86-64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA) == "--with-gcc-arch=x86-64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS) == "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION) == "--with-arch=x86-64-v3 --with-tune=generic"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX) == "x86_64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION) == "x86_64_"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE) == "arch/x86/boot/bzImage"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL) == "x86_64"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER) == "x86_64"
-assert getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET) == "x86_64-glaucus-linux-musl"
-assert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT) == "x86_64"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE) == "x86-64"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA) == "--with-gcc-arch=x86-64"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS) == "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION) == "--with-arch=x86-64-v3 --with-tune=generic"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX) == "x86_64"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION) == "x86_64_"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE) == "arch/x86/boot/bzImage"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL) == "x86_64"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER) == "x86_64"
+doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET) == "x86_64-glaucus-linux-musl"
+doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT) == "x86_64"
