@@ -3,7 +3,9 @@
 
 import std/os
 
-import constants
+import
+    constants,
+    envenomate
 
 #
 # Cross Functions
@@ -21,7 +23,135 @@ proc radula_behave_bootstrap_cross_ccache*() =
     createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
 
 proc radula_behave_bootstrap_cross_envenomate*() =
-    echo "test"
+    radula_behave_envenomate(@[
+        # Filesystem & Package Management
+        RADULA_CERAS_HYDROSKELETON,
+        RADULA_CERAS_IANA_ETC,
+        RADULA_CERAS_CERATA,
+        RADULA_CERAS_RADULA,
+
+        # Headers
+        RADULA_CERAS_MUSL_UTILS,
+        RADULA_CERAS_LINUX_HEADERS,
+
+        # Init
+        RADULA_CERAS_SKALIBS,
+        RADULA_CERAS_NSSS,
+        RADULA_CERAS_EXECLINE,
+        RADULA_CERAS_S6,
+        RADULA_CERAS_UTMPS,
+
+        # Compatibility
+        RADULA_CERAS_MUSL_FTS,
+        RADULA_CERAS_MUSL_OBSTACK,
+        RADULA_CERAS_MUSL_RPMATCH,
+        RADULA_CERAS_LIBUCONTEXT,
+
+        # i18n & L10n
+        RADULA_CERAS_GETTEXT_TINY,
+        RADULA_CERAS_MUSL_LOCALES,
+
+        # Permissions
+        RADULA_CERAS_ATTR,
+        RADULA_CERAS_ACL,
+        RADULA_CERAS_SHADOW,
+
+        # Hashing
+        RADULA_CERAS_LIBRESSL,
+        RADULA_CERAS_XXHASH,
+
+        # Userland
+        RADULA_CERAS_TOYBOX,
+        RADULA_CERAS_DIFFUTILS,
+        RADULA_CERAS_FILE,
+        RADULA_CERAS_FINDUTILS,
+        RADULA_CERAS_SED,
+
+        # Development
+        RADULA_CERAS_EXPAT,
+
+        # Compression
+        RADULA_CERAS_BZIP2,
+        RADULA_CERAS_LBZIP2,
+        RADULA_CERAS_LBZIP2_UTILS,
+        RADULA_CERAS_LZ4,
+        RADULA_CERAS_LZLIB,
+        RADULA_CERAS_PLZIP,
+        RADULA_CERAS_XZ,
+        RADULA_CERAS_ZLIB_NG,
+        RADULA_CERAS_PIGZ,
+        RADULA_CERAS_ZSTD,
+        RADULA_CERAS_LIBARCHIVE,
+
+        # Development
+        RADULA_CERAS_AUTOCONF,
+        RADULA_CERAS_AUTOMAKE,
+        RADULA_CERAS_BINUTILS,
+        RADULA_CERAS_BYACC,
+        RADULA_CERAS_CMAKE,
+        RADULA_CERAS_FLEX,
+        RADULA_CERAS_GCC,
+        RADULA_CERAS_HELP2MAN,
+        RADULA_CERAS_LIBTOOL,
+        RADULA_CERAS_MAKE,
+        RADULA_CERAS_MAWK,
+        RADULA_CERAS_OM4,
+        RADULA_CERAS_PATCH,
+        RADULA_CERAS_PKGCONF,
+        RADULA_CERAS_PYTHON,
+        RADULA_CERAS_SAMURAI,
+
+        # Synchronization
+        RADULA_CERAS_RSYNC,
+
+        # Editors, Pagers and Shells
+        RADULA_CERAS_NETBSD_CURSES,
+        RADULA_CERAS_LIBEDIT,
+        RADULA_CERAS_PCRE2,
+        RADULA_CERAS_DASH,
+        RADULA_CERAS_YASH,
+        RADULA_CERAS_LESS,
+        RADULA_CERAS_VIM,
+        RADULA_CERAS_MANDOC,
+
+        # Userland
+        RADULA_CERAS_BC,
+        RADULA_CERAS_GREP,
+        RADULA_CERAS_PLOCATE,
+
+        # Networking
+        RADULA_CERAS_LIBCAP,
+        RADULA_CERAS_LIBCAP_NG,
+        RADULA_CERAS_IPROUTE2,
+        RADULA_CERAS_IPUTILS,
+        RADULA_CERAS_SDHCP,
+        RADULA_CERAS_CURL,
+        RADULA_CERAS_WGET2,
+
+        # Time Zone
+        RADULA_CERAS_TZCODE,
+        RADULA_CERAS_TZDATA,
+
+        # Utilities
+        RADULA_CERAS_KMOD,
+        RADULA_CERAS_EUDEV,
+        RADULA_CERAS_PSMISC,
+        RADULA_CERAS_PROCPS_NG,
+        RADULA_CERAS_UTIL_LINUX,
+        RADULA_CERAS_E2FSPROGS,
+        RADULA_CERAS_PCIUTILS,
+        RADULA_CERAS_HWDATA,
+
+        # Services
+        RADULA_CERAS_S6_LINUX_INIT,
+        RADULA_CERAS_S6_RC,
+        RADULA_CERAS_S6_BOOT_SCRIPTS,
+
+        # Kernel
+        RADULA_CERAS_LIBUARGP,
+        RADULA_CERAS_LIBELF,
+        RADULA_CERAS_LINUX
+    ], RADULA_DIRECTORY_CROSS)
 
 proc radula_behave_bootstrap_cross_environment_directories*() =
     let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY) / RADULA_DIRECTORY_CROSS
