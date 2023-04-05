@@ -6,7 +6,7 @@ import os
 import ../../src/architecture
 import ../../src/constants
 
-radula_behave_architecture_environment("riscv64")
+radula_behave_architecture_environment(RADULA_ARCHITECTURE_RISCV64)
 
 echo "BLD     :: ", getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD)
 
