@@ -21,6 +21,8 @@ import
 #
 
 proc radula_options*() =
+    setControlCHook(radula_behave_abort)
+
     if paramCount() < 1:
         echo RADULA_HELP
         quit(1)
@@ -88,6 +90,7 @@ proc radula_options*() =
                         radula_behave_bootstrap_toolchain_envenomate()
                         radula_behave_bootstrap_toolchain_backup()
 
+                        echo ""
                         echo "toolchain complete"
                     of "x", "cross":
                         echo "cross complete"

@@ -43,28 +43,29 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                     ""
 
         if (url.isEmptyOrWhitespace()):
-            stdout.styledWriteLine("        skip  :| ", styleBright,
-                &"{name:48}", resetStyle, fgBlue, "virtual", resetStyle)
+            stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
+                styleBright, &"{name:24}", resetStyle, &"{\"virtual\":24}",
+                fgBlue, "complete", resetStyle)
             continue
 
         let path = radula_behave_ceras_path_source(name)
 
         if dirExists(path):
             if version == "git":
-                stdout.styledWriteLine("        skip  :| ", styleBright,
-                    &"{name:24}", resetStyle, fgGreen, "swallowed", resetStyle)
+                stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
+                    styleBright, &"{name:24}", resetStyle, &"{version:24}",
+                    fgBlue, "complete", resetStyle)
                 continue
             else:
                 if radula_behave_verify(path / lastPathPart(url), ceras[
                         "sum"].getStr()):
-                    stdout.styledWriteLine("        skip  :| ", styleBright,
-                        &"{name:24}", resetStyle, &"{version:24}", fgGreen,
-                        "swallowed", resetStyle)
+                    stdout.styledWriteLine(fgBlue, "     swallow  :@ ",
+                        resetStyle, styleBright, &"{name:24}", resetStyle,
+                        &"{version:24}", fgBlue, "complete", resetStyle)
                     continue
                 else:
-                    stdout.styledWriteLine(fgRed, "       abort  :! ",
-                        resetStyle, styleBright, &"{name:24}", resetStyle,
-                        &"{version:24}", fgRed, "invalid checksum", resetStyle)
+                    stdout.styledWriteLine(fgRed, styleBright,
+                        &"       abort  :! {name:24}{version:24}invalid checksum", resetStyle)
                     quit(1)
 
         else:
@@ -72,7 +73,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 clones &= @[name, ceras["cmt"].getStr(), url]
             else:
                 stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
-                    styleBright, &"{name:24}", resetStyle, version)
+                    styleBright, &"{name:24}", resetStyle, &"{version:24}")
 
                 createDir(path)
 

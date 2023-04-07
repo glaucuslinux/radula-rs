@@ -1,7 +1,11 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/os
+import std/[
+    os,
+    strformat,
+    terminal
+]
 
 import constants
 
@@ -33,3 +37,11 @@ proc radula_behave_bootstrap_distclean*() =
     # `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS` and
     # `RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS` are removed
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
+
+proc radula_behave_abort*() {.noconv.} =
+    stdout.styledWriteLine(fgRed, styleBright,
+            &"     abort  :! {\"interrupt signal received\":48}clean", resetStyle)
+
+    radula_behave_bootstrap_clean()
+
+    quit(1)
