@@ -6,6 +6,7 @@ import std/[
     httpclient,
     os,
     sequtils,
+    strformat,
     strutils,
     terminal
 ]
@@ -14,8 +15,7 @@ import ceras
 
 import
     hashlib/misc/blake3,
-    parsetoml,
-    toposort
+    parsetoml
 
 # Verify `BLAKE3` checksum of source tarball
 proc radula_behave_verify*(file: string, checksum: string): bool =
@@ -24,30 +24,10 @@ proc radula_behave_verify*(file: string, checksum: string): bool =
 # Asynchronously swallow cerata
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
-        names = names.deduplicate()
-
-        concentrates: Table[string, seq[string]]
-
         clones: seq[seq[string]]
         downloads: seq[(seq[string], Future[void])]
 
     for name in names:
-        if not radula_behave_ceras_exist(name):
-            stdout.styledWriteLine(fgRed, "       abort  :! ", resetStyle, name, " invalid ceras name")
-            quit(1)
-
-        let
-            ceras = radula_behave_ceras_parse(name)
-
-        try:
-            discard ceras["url"].getStr()
-        except CatchableError:
-            echo "        skip  :| ", name, " virtual"
-            continue
-
-        radula_behave_ceras_concentrates_resolve(name, concentrates)
-
-    for name in toposort(concentrates):
         let
             ceras = radula_behave_ceras_parse(name)
 
@@ -63,23 +43,28 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                     ""
 
         if (url.isEmptyOrWhitespace()):
-            echo "        skip  :| ", name, " virtual"
+            stdout.styledWriteLine("        skip  :| ", styleBright,
+                &"{name:48}", resetStyle, fgBlue, "virtual", resetStyle)
             continue
 
         let path = radula_behave_ceras_path_source(name)
 
         if dirExists(path):
             if version == "git":
-                echo "        skip  :| ", name, " swallowed"
+                stdout.styledWriteLine("        skip  :| ", styleBright,
+                    &"{name:24}", resetStyle, fgGreen, "swallowed", resetStyle)
                 continue
             else:
                 if radula_behave_verify(path / lastPathPart(url), ceras[
                         "sum"].getStr()):
-                    echo "        skip  :| ", name, " swallowed"
+                    stdout.styledWriteLine("        skip  :| ", styleBright,
+                        &"{name:24}", resetStyle, &"{version:24}", fgGreen,
+                        "swallowed", resetStyle)
                     continue
                 else:
                     stdout.styledWriteLine(fgRed, "       abort  :! ",
-                            resetStyle, name, " invalid ceras checksum")
+                        resetStyle, styleBright, &"{name:24}", resetStyle,
+                        &"{version:24}", fgRed, "invalid checksum", resetStyle)
                     quit(1)
 
         else:
@@ -87,7 +72,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 clones &= @[name, ceras["cmt"].getStr(), url]
             else:
                 stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
-                    name, " ", version)
+                    styleBright, &"{name:24}", resetStyle, version)
 
                 createDir(path)
 

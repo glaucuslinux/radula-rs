@@ -1,12 +1,15 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/os
+import std/[
+    os,
+    osproc
+]
 
 import constants
 
 #
-# Teeth Function
+# Teeth Functions
 #
 
 proc radula_behave_teeth_environment*() =
@@ -37,3 +40,11 @@ proc radula_behave_teeth_environment*() =
     putEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC, RADULA_CERAS_RSYNC & " " & RADULA_TOOTH_RSYNC_FLAGS)
     # Use `byacc` as the default YACC implementation
     putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
+
+#
+# rsync Function
+#
+
+proc radula_behave_rsync*(source, destination: string) =
+    discard execProcess(RADULA_CERAS_RSYNC, args = [RADULA_TOOTH_RSYNC_FLAGS,
+        source, destination, "--delete"])

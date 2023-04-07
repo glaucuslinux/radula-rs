@@ -5,7 +5,8 @@ import std/os
 
 import
     constants,
-    envenomate
+    envenomate,
+    teeth
 
 #
 # Cross Functions
@@ -151,7 +152,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_LIBUARGP,
         RADULA_CERAS_LIBELF,
         RADULA_CERAS_LINUX
-    ], RADULA_DIRECTORY_CROSS)
+    ], RADULA_DIRECTORY_CROSS, false)
 
 proc radula_behave_bootstrap_cross_environment_directories*() =
     let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY) / RADULA_DIRECTORY_CROSS
@@ -204,3 +205,20 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
     putEnv(RADULA_ENVIRONMENT_CROSS_SIZE, cross_compile & RADULA_CROSS_SIZE)
     putEnv(RADULA_ENVIRONMENT_CROSS_STRINGS, cross_compile & RADULA_CROSS_STRINGS)
     putEnv(RADULA_ENVIRONMENT_CROSS_STRIP, cross_compile & RADULA_CROSS_STRIP)
+
+proc radula_behave_bootstrap_cross_prepare*() =
+    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
+        RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
+    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
+        RADULA_DIRECTORY_TOOLCHAIN, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
+
+    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
+    createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
+
+    # Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
+    createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_SOURCES))
+
+    # Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
+    createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
+
+    removeDir(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))

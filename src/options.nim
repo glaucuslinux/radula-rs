@@ -7,11 +7,13 @@ import std/[
 ]
 
 import
+    architecture,
     bootstrap,
     ceras,
     clean,
     constants,
     cross,
+    teeth,
     toolchain
 
 #
@@ -65,6 +67,27 @@ proc radula_options*() =
                     of "s", "release":
                         echo "release complete"
                     of "t", "toolchain":
+                        radula_behave_bootstrap_environment()
+
+                        radula_behave_teeth_environment()
+
+                        radula_behave_architecture_environment(RADULA_ARCHITECTURE_X86_64_V3)
+
+                        radula_behave_bootstrap_toolchain_environment_directories()
+
+                        # Needed for clean to work
+                        radula_behave_bootstrap_cross_environment_directories()
+
+                        radula_behave_bootstrap_clean()
+
+                        radula_behave_bootstrap_initialize()
+
+                        radula_behave_bootstrap_toolchain_ccache()
+
+                        radula_behave_bootstrap_toolchain_prepare()
+                        radula_behave_bootstrap_toolchain_envenomate()
+                        radula_behave_bootstrap_toolchain_backup()
+
                         echo "toolchain complete"
                     of "x", "cross":
                         echo "cross complete"

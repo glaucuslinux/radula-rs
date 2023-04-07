@@ -17,7 +17,7 @@ import constants
 # Get canonical system tuple using the `config.guess` file
 proc radula_behave_architecture_tuple*(): string =
     execProcess(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS /
-                RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS).strip()
+        RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS).strip()
 
 proc radula_behave_architecture_environment*(architecture: string) =
     putEnv(RADULA_ENVIRONMENT_TUPLE_BUILD, radula_behave_architecture_tuple())

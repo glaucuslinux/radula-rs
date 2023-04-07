@@ -4,6 +4,7 @@
 import std/[
     os,
     sequtils,
+    strformat,
     strutils,
     tables,
     terminal
@@ -28,10 +29,24 @@ proc radula_behave_ceras_exist*(name: string): bool =
 proc radula_behave_ceras_parse*(name: string): TomlValueRef =
     parseFile(radula_behave_ceras_path_ceras(name))
 
+# Resolve concentrates using topological sorting
+proc radula_behave_ceras_concentrates_resolve*(name: string,
+        concentrates: var Table[string, seq[string]]) =
+    concentrates[name] =
+        try:
+            radula_behave_ceras_parse(name)["cnt"].getStr().split()
+        except CatchableError:
+            @[]
+
+    if concentrates[name].len() > 0:
+        for concentrate in concentrates[name]:
+            radula_behave_ceras_concentrates_resolve(concentrate, concentrates)
+
 proc radula_behave_ceras_print*(names: seq[string]) =
     for name in names.deduplicate():
         if not radula_behave_ceras_exist(name):
-            stdout.styledWriteLine(fgRed, "        abort :! ", resetStyle, name, " invalid ceras name")
+            stdout.styledWriteLine(fgRed, "       abort  :! ", resetStyle,
+                &"{name:48}", fgRed, "invalid name", resetStyle)
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
@@ -69,16 +84,3 @@ proc radula_behave_ceras_print*(names: seq[string]) =
             except CatchableError:
                 "None"
         echo ""
-
-# Resolve concentrates using topological sorting
-proc radula_behave_ceras_concentrates_resolve*(name: string,
-        concentrates: var Table[string, seq[string]]) =
-    concentrates[name] =
-        try:
-            radula_behave_ceras_parse(name)["cnt"].getStr().split()
-        except CatchableError:
-            @[]
-
-    if concentrates[name].len() > 0:
-        for concentrate in concentrates[name]:
-            radula_behave_ceras_concentrates_resolve(concentrate, concentrates)
