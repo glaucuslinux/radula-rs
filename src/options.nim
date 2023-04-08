@@ -21,6 +21,7 @@ import
 #
 
 proc radula_options*() =
+    # Catch Ctrl-C and exit gracefully
     setControlCHook(radula_behave_abort)
 
     if paramCount() < 1:

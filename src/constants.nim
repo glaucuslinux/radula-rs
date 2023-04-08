@@ -520,5 +520,8 @@ const
 
     RADULA_TOOTH_SHELL_FLAGS* = "-c"
 
+    RADULA_TOOTH_TAR* = "bsdtar"
+    RADULA_TOOTH_TAR_EXTRACT_FLAGS* = "-xvf"
+
     RADULA_TOOTH_UMOUNT* = "umount"
     RADULA_TOOTH_UMOUNT_FLAGS* = "-fqRv"

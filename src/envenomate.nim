@@ -25,12 +25,12 @@ import
 #
 
 proc radula_behave_stage*(name, version, stage, function: string) =
-    stdout.styledWriteLine(fgMagenta, &"{\"Envenomate\":14}", resetStyle, ":~ ",
-        fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}",
-        fgMagenta, function, resetStyle)
+    styledEcho fgMagenta, &"{\"Envenomate\":14}", resetStyle, ":~ ", fgBlue,
+        styleBright, &"{name:24}", resetStyle, &"{version:24}", fgMagenta,
+        function, resetStyle
 
     sleep 1000
-    if not (function == "install"):
+    if function != "install":
         cursorUp 1
     eraseLine()
 
@@ -49,8 +49,8 @@ proc radula_behave_envenomate*(names: seq[string],
 
     for name in names:
         if not radula_behave_ceras_exist(name):
-            stdout.styledWriteLine(fgRed, styleBright,
-                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle)
+            styledEcho fgRed, styleBright,
+                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
@@ -61,7 +61,8 @@ proc radula_behave_envenomate*(names: seq[string],
     if resolve:
         names = toposort(concentrates)
 
-    stdout.styledWriteLine(styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}Status", resetStyle)
+    styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}Status", resetStyle
+
     echo ""
 
     # Swallow cerata in parallel
@@ -93,6 +94,6 @@ proc radula_behave_envenomate*(names: seq[string],
         cursorUp 1
         eraseLine()
 
-        stdout.styledWriteLine(fgGreen, &"{\"Envenomate\":13}", fgDefault,
-            " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle,
-            &"{version:24}", fgGreen, "complete", fgDefault)
+        styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue,
+            styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen,
+            "complete", fgDefault

@@ -45,13 +45,13 @@ proc radula_behave_ceras_concentrates_resolve*(name: string,
 proc radula_behave_ceras_print*(names: seq[string]) =
     for name in names.deduplicate():
         if not radula_behave_ceras_exist(name):
-            stdout.styledWriteLine(fgRed, styleBright,
-                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle)
+            styledEcho fgRed, styleBright,
+                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
-        stdout.styledWriteLine(&"{\"Name\":13} :: ", fgBlue, styleBright, ceras[
-            "nom"].getStr(), resetStyle)
+        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, ceras[
+            "nom"].getStr(), resetStyle
 
         echo &"{\"Version\":13} :: ",
             try:

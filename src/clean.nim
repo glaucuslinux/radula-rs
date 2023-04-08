@@ -41,8 +41,7 @@ proc radula_behave_bootstrap_distclean*() =
 proc radula_behave_abort*() {.noconv.} =
     echo ""
 
-    stdout.styledWriteLine(fgRed, styleBright,
-            &"{\"Abort\":13} :! {\"interrupt signal received\":48}clean", resetStyle)
+    styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {\"interrupt signal received\":48}clean", resetStyle
 
     radula_behave_bootstrap_clean()
 
