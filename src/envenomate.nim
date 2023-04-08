@@ -24,10 +24,15 @@ import
 # Envenomate Functions
 #
 
-proc radula_behave_stage*(name, version, stage, function: string) =
-    styledEcho fgMagenta, &"{\"Envenomate\":14}", resetStyle, ":~ ", fgBlue,
-        styleBright, &"{name:24}", resetStyle, &"{version:24}", fgMagenta,
-        function, resetStyle
+proc radula_behave_stage*(name, version, commit = "", stage, function: string) =
+    if version == "git":
+        styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault,
+            " :~ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}",
+            fgMagenta, function, resetStyle
+    else:
+        styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault,
+            " :~ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}",
+            fgMagenta, function, resetStyle
 
     sleep 1000
     if function != "install":
@@ -61,14 +66,18 @@ proc radula_behave_envenomate*(names: seq[string],
     if resolve:
         names = toposort(concentrates)
 
-    styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}Status", resetStyle
+    echo &"Swallow {names.len()} cerata..."
 
-    echo ""
+    radula_behave_ceras_print_header()
 
     # Swallow cerata in parallel
     waitFor radula_behave_swallow(names)
 
     echo ""
+
+    echo &"Envenomate {names.len()} cerata..."
+
+    radula_behave_ceras_print_header()
 
     for name in names:
         let
@@ -85,15 +94,17 @@ proc radula_behave_envenomate*(names: seq[string],
                 except CatchableError:
                     ""
 
-        radula_behave_stage(name, version, stage, "prepare")
-        radula_behave_stage(name, version, stage, "configure")
-        radula_behave_stage(name, version, stage, "build")
-        radula_behave_stage(name, version, stage, "check")
-        radula_behave_stage(name, version, stage, "install")
+        for function in @["prepare", "configure", "build", "check", "install"]:
+            radula_behave_stage(name, version, commit, stage, function)
 
         cursorUp 1
         eraseLine()
 
-        styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue,
-            styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen,
-            "complete", fgDefault
+        if version == "git":
+            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ",
+                fgBlue, styleBright, &"{name:24}", resetStyle,
+                &"{commit:24}", fgGreen, "complete", fgDefault
+        else:
+            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ",
+                fgBlue, styleBright, &"{name:24}", resetStyle,
+                &"{version:24}", fgGreen, "complete", fgDefault

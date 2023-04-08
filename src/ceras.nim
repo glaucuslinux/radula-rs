@@ -85,3 +85,8 @@ proc radula_behave_ceras_print*(names: seq[string]) =
             except CatchableError:
                 "None"
         echo ""
+
+proc radula_behave_ceras_print_header*() =
+    echo ""
+
+    styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}Status", resetStyle

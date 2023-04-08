@@ -482,6 +482,8 @@ const
     RADULA_TOOTH_FIND* = "find"
 
     RADULA_TOOTH_GIT* = "git"
+    RADULA_TOOTH_GIT_CHECKOUT_FLAGS* = "checkout"
+    RADULA_TOOTH_GIT_CLONE_FLAGS* = "clone"
 
     RADULA_TOOTH_LN* = "ln"
     RADULA_TOOTH_LN_FLAGS* = "-fnsv"
@@ -521,6 +523,7 @@ const
     RADULA_TOOTH_SHELL_FLAGS* = "-c"
 
     RADULA_TOOTH_TAR* = "bsdtar"
+    RADULA_TOOTH_TAR_CREATE_FLAGS* = "-cvf"
     RADULA_TOOTH_TAR_EXTRACT_FLAGS* = "-xvf"
 
     RADULA_TOOTH_UMOUNT* = "umount"
