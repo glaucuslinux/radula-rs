@@ -24,7 +24,8 @@ import
 # Envenomate Functions
 #
 
-proc radula_behave_stage*(name, version, commit = "", stage, function: string) =
+proc radula_behave_stage*(name, version, commit = "", stage,
+    function: string): (string, int) =
     if version == "git":
         styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault,
             " :~ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}",
@@ -34,16 +35,13 @@ proc radula_behave_stage*(name, version, commit = "", stage, function: string) =
             " :~ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}",
             fgMagenta, function, resetStyle
 
-    sleep 1000
     if function != "install":
         cursorUp 1
     eraseLine()
 
-    # We only use `nom` and `ver` from the `ceras` file
-    # let (output, exitCode) = execCmdEx(RADULA_CERAS_DASH & " " &
-    #     RADULA_TOOTH_SHELL_FLAGS & " " & (
-    #     &"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && {function}").quoteShell)
-    # echo "exit code is ", exitCode
+    # We only use `nom` and `ver` from the `ceras`file
+    execCmdEx(RADULA_CERAS_DASH & " " & RADULA_TOOTH_SHELL_FLAGS & " " & (
+        &"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && {function}").quoteShell)
 
 proc radula_behave_envenomate*(names: seq[string],
     stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
@@ -95,7 +93,7 @@ proc radula_behave_envenomate*(names: seq[string],
                     ""
 
         for function in @["prepare", "configure", "build", "check", "install"]:
-            radula_behave_stage(name, version, commit, stage, function)
+            echo radula_behave_stage(name, version, commit, stage, function)
 
         cursorUp 1
         eraseLine()

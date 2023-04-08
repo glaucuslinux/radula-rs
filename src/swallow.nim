@@ -180,11 +180,9 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             let
                 name = ceras[0]
                 commit = ceras[1]
-                url = ceras[2]
-                path = ceras[3]
 
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13}", fgDefault,
                 " :@ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}",
                 fgMagenta, "clone", resetStyle
 
-            discard radula_behave_clone(commit, url, path)
+            discard radula_behave_clone(commit, url = ceras[2], path = ceras[3])
