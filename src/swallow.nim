@@ -43,37 +43,45 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                     ""
 
         if (url.isEmptyOrWhitespace()):
-            stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
-                styleBright, &"{name:24}", resetStyle, &"{\"virtual\":24}",
-                fgBlue, "complete", resetStyle)
+            stdout.styledWriteLine(fgGreen, &"{\"Swallow\":13}", fgDefault,
+                " :@ ", fgBlue, styleBright, &"{name:24}", resetStyle,
+                &"{\"virtual\":24}", fgGreen, "complete", fgDefault)
             continue
 
         let path = radula_behave_ceras_path_source(name)
 
         if dirExists(path):
             if version == "git":
-                stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
-                    styleBright, &"{name:24}", resetStyle, &"{version:24}",
-                    fgBlue, "complete", resetStyle)
+                stdout.styledWriteLine(fgGreen, &"{\"Swallow\":13}", fgDefault,
+                    " :@ ", fgBlue, styleBright, &"{name:24}", resetStyle,
+                    &"{version:24}", fgGreen, "complete", fgDefault)
                 continue
             else:
+                stdout.styledWriteLine(fgMagenta, &"{\"Swallow\":13}",
+                    fgDefault, " :@ ", fgBlue, styleBright, &"{name:24}",
+                    resetStyle, &"{version:24}", fgMagenta, "verify", fgDefault)
                 if radula_behave_verify(path / lastPathPart(url), ceras[
-                        "sum"].getStr()):
-                    stdout.styledWriteLine(fgBlue, "     swallow  :@ ",
-                        resetStyle, styleBright, &"{name:24}", resetStyle,
-                        &"{version:24}", fgBlue, "complete", resetStyle)
+                    "sum"].getStr()):
+                    cursorUp 1
+                    eraseLine()
+
+                    stdout.styledWriteLine(fgGreen, &"{\"Swallow\":13}",
+                        fgDefault, " :@ ", fgBlue, styleBright,
+                        &"{name:24}", resetStyle, &"{version:24}", fgGreen,
+                        "complete", resetStyle)
                     continue
                 else:
                     stdout.styledWriteLine(fgRed, styleBright,
-                        &"       abort  :! {name:24}{version:24}invalid checksum", resetStyle)
+                        &"{\"Abort\":13} :! {name:24}{version:24}invalid checksum", resetStyle)
                     quit(1)
 
         else:
             if version == "git":
                 clones &= @[name, ceras["cmt"].getStr(), url]
             else:
-                stdout.styledWriteLine(fgBlue, "     swallow  :@ ", resetStyle,
-                    styleBright, &"{name:24}", resetStyle, &"{version:24}")
+                stdout.styledWriteLine(&"{\"Swallow\":13} :@ ", fgBlue,
+                    styleBright, &"{name:24}", resetStyle, &"{version:24}",
+                    fgMagenta, "fetch", fgDefault)
 
                 createDir(path)
 

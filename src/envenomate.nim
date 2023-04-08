@@ -25,9 +25,9 @@ import
 #
 
 proc radula_behave_stage*(name, version, stage, function: string) =
-    stdout.styledWriteLine(fgGreen, "  envenomate  :~ ", resetStyle,
-        styleBright, &"{name:24}", resetStyle, &"{version:24}", fgYellow,
-        function, resetStyle)
+    stdout.styledWriteLine(fgMagenta, &"{\"Envenomate\":14}", resetStyle, ":~ ",
+        fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}",
+        fgMagenta, function, resetStyle)
 
     sleep 1000
     if not (function == "install"):
@@ -50,7 +50,7 @@ proc radula_behave_envenomate*(names: seq[string],
     for name in names:
         if not radula_behave_ceras_exist(name):
             stdout.styledWriteLine(fgRed, styleBright,
-                &"       abort  :! {name:48}invalid name", resetStyle)
+                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle)
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
@@ -61,8 +61,13 @@ proc radula_behave_envenomate*(names: seq[string],
     if resolve:
         names = toposort(concentrates)
 
+    stdout.styledWriteLine(styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}Status", resetStyle)
+    echo ""
+
     # Swallow cerata in parallel
     waitFor radula_behave_swallow(names)
+
+    echo ""
 
     for name in names:
         let
@@ -88,6 +93,6 @@ proc radula_behave_envenomate*(names: seq[string],
         cursorUp 1
         eraseLine()
 
-        stdout.styledWriteLine(fgGreen, "  envenomate  :~ ", resetStyle,
-            styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen,
-            "complete", resetStyle)
+        stdout.styledWriteLine(fgGreen, &"{\"Envenomate\":13}", fgDefault,
+            " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle,
+            &"{version:24}", fgGreen, "complete", fgDefault)

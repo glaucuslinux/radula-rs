@@ -39,8 +39,10 @@ proc radula_behave_bootstrap_distclean*() =
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
 
 proc radula_behave_abort*() {.noconv.} =
+    echo ""
+
     stdout.styledWriteLine(fgRed, styleBright,
-            &"     abort  :! {\"interrupt signal received\":48}clean", resetStyle)
+            &"{\"Abort\":13} :! {\"interrupt signal received\":48}clean", resetStyle)
 
     radula_behave_bootstrap_clean()
 

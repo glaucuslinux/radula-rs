@@ -46,13 +46,14 @@ proc radula_behave_ceras_print*(names: seq[string]) =
     for name in names.deduplicate():
         if not radula_behave_ceras_exist(name):
             stdout.styledWriteLine(fgRed, styleBright,
-                &"       abort  :! {name:48}invalid name", resetStyle)
+                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle)
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
-        echo "Name          :: ", ceras["nom"].getStr()
+        stdout.styledWriteLine(&"{\"Name\":13} :: ", fgBlue, styleBright, ceras[
+            "nom"].getStr(), resetStyle)
 
-        echo "Version       :: ",
+        echo &"{\"Version\":13} :: ",
             try:
                 ceras["ver"].getStr()
             except CatchableError:
@@ -63,22 +64,22 @@ proc radula_behave_ceras_print*(names: seq[string]) =
             except CatchableError:
                 ""
 
-        echo "URL           :: ",
+        echo &"{\"URL\":13} :: ",
             try:
                 ceras["url"].getStr()
             except CatchableError:
                 "None"
-        echo "Checksum      :: ",
+        echo &"{\"Checksum\":13} :: ",
             try:
                 ceras["sum"].getStr()
             except CatchableError:
                 "None"
-        echo "Concentrates  :: ",
+        echo &"{\"Concentrates\":13} :: ",
             try:
                 ceras["cnt"].getStr()
             except CatchableError:
                 "None"
-        echo "Cysts         :: ",
+        echo &"{\"Cysts\":13} :: ",
             try:
                 ceras["cys"].getStr()
             except CatchableError:
