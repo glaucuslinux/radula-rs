@@ -7,7 +7,6 @@ import std/[
     osproc,
     sequtils,
     strformat,
-    strtabs,
     terminal
 ]
 
@@ -24,28 +23,19 @@ import
 # Envenomate Functions
 #
 
-proc radula_behave_stage*(name, version, commit = "", stage,
-    function: string): (string, int) =
-    if version == "git":
-        styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault,
-            " :~ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}",
-            fgMagenta, function, resetStyle
-    else:
-        styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault,
-            " :~ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}",
-            fgMagenta, function, resetStyle
-
-    if function != "install":
-        cursorUp 1
-    eraseLine()
-
+proc radula_behave_stage*(name, version, commit = "", stage: string): (string, int) =
     # We only use `nom` and `ver` from the `ceras`file
+    #
+    # All basic functions need to be called together to prevent the loss of the
+    # current working directory...
     execCmdEx(RADULA_CERAS_DASH & " " & RADULA_TOOTH_SHELL_FLAGS & " " & (
-        &"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && {function}").quoteShell)
+        &"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare && configure && build && check && install").quoteShell)
 
 proc radula_behave_envenomate*(names: seq[string],
     stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
     var
+        log_file: File
+
         names = names.deduplicate()
 
         concentrates: Table[string, seq[string]]
@@ -55,8 +45,6 @@ proc radula_behave_envenomate*(names: seq[string],
             styledEcho fgRed, styleBright,
                 &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
             quit(1)
-
-        let ceras = radula_behave_ceras_parse(name)
 
         if resolve:
             radula_behave_ceras_concentrates_resolve(name, concentrates)
@@ -92,8 +80,25 @@ proc radula_behave_envenomate*(names: seq[string],
                 except CatchableError:
                     ""
 
-        for function in @["prepare", "configure", "build", "check", "install"]:
-            echo radula_behave_stage(name, version, commit, stage, function)
+        if version == "git":
+            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}",
+                fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault,
+                &"{commit:24}", fgMagenta, "function", resetStyle
+        else:
+            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}",
+                fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault,
+                &"{version:24}", fgMagenta, "function", resetStyle
+
+        case stage
+        of RADULA_DIRECTORY_CROSS:
+            log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG), fmAppend)
+        of RADULA_DIRECTORY_SYSTEM:
+            echo "system is not implemented yet..."
+        of RADULA_DIRECTORY_TOOLCHAIN:
+            log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), fmAppend)
+
+        log_file.write(radula_behave_stage(name, version, commit, stage)[0])
+        log_file.close()
 
         cursorUp 1
         eraseLine()
