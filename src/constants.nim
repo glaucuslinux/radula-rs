@@ -528,3 +528,6 @@ const
 
     RADULA_TOOTH_UMOUNT* = "umount"
     RADULA_TOOTH_UMOUNT_FLAGS* = "-fqRv"
+
+    RADULA_TOOTH_ZSTD_COMPRESS_FLAGS* = "-22 --ultra --long=31 -T0"
+    RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS * = "--long=31"

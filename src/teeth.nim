@@ -3,10 +3,28 @@
 
 import std/[
     os,
-    osproc
+    osproc,
+    strformat
 ]
 
 import constants
+
+#
+# Compress Functions
+#
+
+proc radula_behave_compress*(archive, directory: string): (string, int) =
+    execCmdEx(&"{RADULA_TOOTH_TAR} -I '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} {directory}")
+
+proc radula_behave_decompress*(archive, directory: string): (string, int) =
+    execCmdEx(&"{RADULA_TOOTH_TAR} -I '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory}")
+
+#
+# rsync Function
+#
+
+proc radula_behave_rsync*(source, destination: string): (string, int) =
+    execCmdEx(&"{RADULA_CERAS_RSYNC} {RADULA_TOOTH_RSYNC_FLAGS} {source} {destination} --delete")
 
 #
 # Teeth Functions
@@ -40,11 +58,3 @@ proc radula_behave_teeth_environment*() =
     putEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC, RADULA_CERAS_RSYNC & " " & RADULA_TOOTH_RSYNC_FLAGS)
     # Use `byacc` as the default YACC implementation
     putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
-
-#
-# rsync Function
-#
-
-proc radula_behave_rsync*(source, destination: string) =
-    discard execProcess(RADULA_CERAS_RSYNC, args = [RADULA_TOOTH_RSYNC_FLAGS,
-        source, destination, "--delete"])

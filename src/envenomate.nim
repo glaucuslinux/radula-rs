@@ -26,7 +26,7 @@ import
 proc radula_behave_stage*(name, version, commit = "", stage: string): (string, int) =
     # We only use `nom` and `ver` from the `ceras`file
     #
-    # All basic functions need to be called together to prevent the loss of the
+    # All phases need to be called sequentially to prevent the loss of the
     # current working directory...
     execCmdEx(RADULA_CERAS_DASH & " " & RADULA_TOOTH_SHELL_FLAGS & " " & (
         &"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare && configure && build && check && install").quoteShell)
@@ -83,11 +83,11 @@ proc radula_behave_envenomate*(names: seq[string],
         if version == "git":
             styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}",
                 fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault,
-                &"{commit:24}", fgMagenta, "function", resetStyle
+                &"{commit:24}", fgMagenta, "phase", resetStyle
         else:
             styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}",
                 fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault,
-                &"{version:24}", fgMagenta, "function", resetStyle
+                &"{version:24}", fgMagenta, "phase", resetStyle
 
         case stage
         of RADULA_DIRECTORY_CROSS:

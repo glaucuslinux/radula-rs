@@ -1,7 +1,11 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/os
+import std/[
+    os,
+    strutils,
+    times
+]
 
 import
     constants,
@@ -13,11 +17,14 @@ import
 #
 
 proc radula_behave_bootstrap_toolchain_backup*() =
-    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS),
+        getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN),
+        getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
     # Backup toolchain log file
-    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG),
+        getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_behave_bootstrap_toolchain_ccache*() =
     putEnv(RADULA_ENVIRONMENT_CCACHE_CONFIGURATION,
@@ -63,3 +70,36 @@ proc radula_behave_bootstrap_toolchain_prepare*() =
     createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS))
     # Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_SOURCES))
+
+proc radula_behave_bootstrap_toolchain_release*() =
+    let path = RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_DIRECTORY_TOOLCHAIN
+
+    removeDir(path)
+    createDir(path)
+
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
+        RADULA_DIRECTORY_CROSS, path)
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
+        RADULA_DIRECTORY_TOOLCHAIN, path)
+
+    # Remove all `lib64` directories because glaucus is a pure 64-bit system
+    removeDir(path / RADULA_DIRECTORY_CROSS / RADULA_PATH_LIB64)
+    removeDir(path / RADULA_DIRECTORY_CROSS / RADULA_PATH_USR / RADULA_PATH_LIB64)
+    removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_LIB64)
+
+    # Remove libtool archive (.la) files
+    for file in walkDirRec(path):
+        if file.endsWith(".la"):
+            removeFile(file)
+
+    # Remove toolchain documentation
+    removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR /
+        RADULA_PATH_SHARE / RADULA_PATH_DOC)
+    removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR /
+        RADULA_PATH_SHARE / RADULA_PATH_INFO)
+    removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR /
+        RADULA_PATH_SHARE / RADULA_PATH_MAN)
+
+    discard radula_behave_compress(getEnv(
+        RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN &
+        now().format("ddMMYYYY"), path)

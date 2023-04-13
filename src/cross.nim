@@ -207,9 +207,9 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
     putEnv(RADULA_ENVIRONMENT_CROSS_STRIP, cross_compile & RADULA_CROSS_STRIP)
 
 proc radula_behave_bootstrap_cross_prepare*() =
-    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
         RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
-    radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) /
         RADULA_DIRECTORY_TOOLCHAIN, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
 
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
