@@ -102,4 +102,4 @@ proc radula_behave_bootstrap_toolchain_release*() =
 
     discard radula_behave_compress(getEnv(
         RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN &
-        now().format("ddMMYYYY"), path)
+        "-" & now().format("ddMMYYYY") & ".tar.zst", path)

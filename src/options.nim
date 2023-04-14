@@ -13,6 +13,7 @@ import
     clean,
     constants,
     cross,
+    flags,
     teeth,
     toolchain
 
@@ -68,6 +69,10 @@ proc radula_options*() =
                     of "r", "require":
                         echo "Checking if host has all required packages..."
                     of "s", "release":
+                        radula_behave_bootstrap_environment()
+
+                        radula_behave_bootstrap_toolchain_release()
+
                         echo "release complete"
                     of "t", "toolchain":
                         radula_behave_bootstrap_environment()
@@ -94,6 +99,24 @@ proc radula_options*() =
                         echo ""
                         echo "toolchain complete"
                     of "x", "cross":
+                        radula_behave_bootstrap_environment()
+
+                        radula_behave_teeth_environment()
+
+                        radula_behave_architecture_environment(RADULA_ARCHITECTURE_X86_64_V3)
+
+                        radula_behave_flags_environment()
+
+                        radula_behave_bootstrap_cross_environment_directories()
+                        radula_behave_bootstrap_cross_environment_teeth()
+
+                        radula_behave_bootstrap_cross_ccache()
+
+                        radula_behave_bootstrap_cross_environment_pkg_config()
+
+                        radula_behave_bootstrap_cross_prepare()
+                        radula_behave_bootstrap_cross_envenomate()
+
                         echo "cross complete"
                     of "z", "iso":
                         echo "iso complete"

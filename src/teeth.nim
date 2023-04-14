@@ -14,10 +14,10 @@ import constants
 #
 
 proc radula_behave_compress*(archive, directory: string): (string, int) =
-    execCmdEx(&"{RADULA_TOOTH_TAR} -I '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} {directory}")
+    execCmdEx(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} .")
 
 proc radula_behave_decompress*(archive, directory: string): (string, int) =
-    execCmdEx(&"{RADULA_TOOTH_TAR} -I '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory}")
+    execCmdEx(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory}")
 
 #
 # rsync Function
