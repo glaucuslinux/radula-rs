@@ -117,6 +117,7 @@ proc radula_options*() =
                         radula_behave_bootstrap_cross_prepare()
                         radula_behave_bootstrap_cross_envenomate()
 
+                        echo ""
                         echo "cross complete"
                     of "z", "iso":
                         echo "iso complete"

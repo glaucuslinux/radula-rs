@@ -48,10 +48,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_MUSL_RPMATCH,
         RADULA_CERAS_LIBUCONTEXT,
 
-        # i18n & L10n
-        RADULA_CERAS_GETTEXT_TINY,
-        RADULA_CERAS_MUSL_LOCALES,
-
         # Permissions
         RADULA_CERAS_ATTR,
         RADULA_CERAS_ACL,
@@ -221,4 +217,4 @@ proc radula_behave_bootstrap_cross_prepare*() =
     # Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
     createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
 
-    removeDir(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
+    removeFile(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
