@@ -51,6 +51,8 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Permissions
         RADULA_CERAS_ATTR,
         RADULA_CERAS_ACL,
+        RADULA_CERAS_LIBCAP,
+        RADULA_CERAS_LIBCAP_NG,
         RADULA_CERAS_SHADOW,
 
         # Hashing
@@ -117,8 +119,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_PLOCATE,
 
         # Networking
-        RADULA_CERAS_LIBCAP,
-        RADULA_CERAS_LIBCAP_NG,
         RADULA_CERAS_IPROUTE2,
         RADULA_CERAS_IPUTILS,
         RADULA_CERAS_SDHCP,
