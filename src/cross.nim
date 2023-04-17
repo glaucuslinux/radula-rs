@@ -48,7 +48,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_MUSL_RPMATCH,
         RADULA_CERAS_LIBUCONTEXT,
 
-        # Permissions
+        # Permissions & Capabilities
         RADULA_CERAS_ATTR,
         RADULA_CERAS_ACL,
         RADULA_CERAS_LIBCAP,
