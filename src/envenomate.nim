@@ -42,8 +42,8 @@ proc radula_behave_envenomate*(names: seq[string],
 
     for name in names:
         if not radula_behave_ceras_exist(name):
-            styledEcho fgRed, styleBright,
-                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
+
             quit(1)
 
         if resolve:
@@ -81,13 +81,11 @@ proc radula_behave_envenomate*(names: seq[string],
                     ""
 
         if version == "git":
-            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}",
-                fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault,
-                &"{commit:24}", fgMagenta, "phase", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}", fgMagenta, "phase", resetStyle
         else:
-            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}",
-                fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault,
-                &"{version:24}", fgMagenta, "phase", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}", fgMagenta, "phase", resetStyle
+
+        let output = radula_behave_stage(name, version, commit, stage)
 
         case stage
         of RADULA_DIRECTORY_CROSS:
@@ -97,17 +95,18 @@ proc radula_behave_envenomate*(names: seq[string],
         of RADULA_DIRECTORY_TOOLCHAIN:
             log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), fmAppend)
 
-        log_file.write(radula_behave_stage(name, version, commit, stage)[0])
+        log_file.write(output[0])
         log_file.close()
 
         cursorUp 1
         eraseLine()
 
+        if output[1] != 0:
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}exit {output[1]}", resetStyle
+
+            quit(1)
+
         if version == "git":
-            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ",
-                fgBlue, styleBright, &"{name:24}", resetStyle,
-                &"{commit:24}", fgGreen, "complete", fgDefault
+            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{commit:24}", fgGreen, "complete", fgDefault
         else:
-            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ",
-                fgBlue, styleBright, &"{name:24}", resetStyle,
-                &"{version:24}", fgGreen, "complete", fgDefault
+            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen, "complete", fgDefault
