@@ -7,7 +7,8 @@ import std/[
     osproc,
     sequtils,
     strformat,
-    terminal
+    terminal,
+    times
 ]
 
 import
@@ -28,8 +29,7 @@ proc radula_behave_stage*(name, version, commit = "", stage: string): (string, i
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working directory...
-    execCmdEx(RADULA_CERAS_DASH & " " & RADULA_TOOTH_SHELL_FLAGS & " " & (
-        &"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare && configure && build && check && install").quoteShell)
+    execCmdEx(RADULA_CERAS_DASH & " " & RADULA_TOOTH_SHELL_FLAGS & " " & (&"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare && configure && build && check && install").quoteShell)
 
 proc radula_behave_envenomate*(names: seq[string],
     stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
@@ -42,7 +42,7 @@ proc radula_behave_envenomate*(names: seq[string],
 
     for name in names:
         if not radula_behave_ceras_exist(name):
-            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             quit(1)
 
@@ -81,17 +81,15 @@ proc radula_behave_envenomate*(names: seq[string],
                     ""
 
         if version == "git":
-            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}", fgMagenta, "phase", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {name:24}{commit:24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
         else:
-            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}", fgMagenta, "phase", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {name:24}{version:24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
         let output = radula_behave_stage(name, version, commit, stage)
 
         case stage
         of RADULA_DIRECTORY_CROSS:
             log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG), fmAppend)
-        of RADULA_DIRECTORY_SYSTEM:
-            echo "system is not implemented yet..."
         of RADULA_DIRECTORY_TOOLCHAIN:
             log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), fmAppend)
 
@@ -102,11 +100,11 @@ proc radula_behave_envenomate*(names: seq[string],
         eraseLine()
 
         if output[1] != 0:
-            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}exit {output[1]}", resetStyle
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{output[1]:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             quit(1)
 
         if version == "git":
-            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{commit:24}", fgGreen, "complete", fgDefault
+            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{commit:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
         else:
-            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen, "complete", fgDefault
+            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault

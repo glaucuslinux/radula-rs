@@ -7,7 +7,8 @@ import std/[
     strformat,
     strutils,
     tables,
-    terminal
+    terminal,
+    times
 ]
 
 import constants
@@ -45,8 +46,7 @@ proc radula_behave_ceras_concentrates_resolve*(name: string,
 proc radula_behave_ceras_print*(names: seq[string]) =
     for name in names.deduplicate():
         if not radula_behave_ceras_exist(name):
-            styledEcho fgRed, styleBright,
-                &"{\"Abort\":13} :! {name:48}invalid name", resetStyle
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
@@ -89,4 +89,4 @@ proc radula_behave_ceras_print*(names: seq[string]) =
 proc radula_behave_ceras_print_header*() =
     echo ""
 
-    styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}Status", resetStyle
+    styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle

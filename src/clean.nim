@@ -4,7 +4,8 @@
 import std/[
     os,
     strformat,
-    terminal
+    terminal,
+    times
 ]
 
 import constants
@@ -41,8 +42,8 @@ proc radula_behave_bootstrap_distclean*() =
 proc radula_behave_abort*() {.noconv.} =
     echo ""
 
-    styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {\"interrupt signal received\":48}clean", resetStyle
+    styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {\"interrupt signal received\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    radula_behave_bootstrap_clean()
+    # radula_behave_bootstrap_clean()
 
     quit(1)

@@ -9,7 +9,8 @@ import std/[
     sequtils,
     strformat,
     strutils,
-    terminal
+    terminal,
+    times
 ]
 
 import
@@ -25,8 +26,7 @@ proc radula_behave_clone*(commit, url, path: string): (string, int) =
     result = execCmdEx(&"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path}")
 
     if result[1] == 0:
-        result = execCmdEx(&"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {commit}",
-            workingDir = path)
+        result = execCmdEx(&"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {commit}", workingDir = path)
 
 # Extract tarballs
 proc radula_behave_extract*(file, path: string): (string, int) =
@@ -59,52 +59,43 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                     ""
 
         if (url.isEmptyOrWhitespace()):
-            styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue,
-                styleBright, &"{name:24}", resetStyle, &"{version:24}",
-                fgGreen, "complete", resetStyle
+            styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
             continue
 
-        let path = radula_behave_ceras_path_source(name)
+        let
+            path = radula_behave_ceras_path_source(name)
+            file = path / lastPathPart(url)
 
         if dirExists(path):
             if version == "git":
                 let commit = ceras["cmt"].getStr()
 
-                styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ",
-                    fgBlue, styleBright, &"{name:24}", resetStyle,
-                    &"{commit:24}", fgGreen, "complete", fgDefault
+                styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{commit:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
                 continue
             else:
-                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13}",
-                    fgDefault, " :@ ", fgBlue, &"{name:24}", fgDefault,
-                    &"{version:24}", fgMagenta, "verify", resetStyle
+                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{version:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                if radula_behave_verify(path / lastPathPart(url), ceras[
-                    "sum"].getStr()):
-                    cursorUp 1
-                    eraseLine()
+                cursorUp 1
+                eraseLine()
 
-                    styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ",
-                        fgBlue, styleBright, &"{name:24}", resetStyle,
-                        &"{version:24}", fgGreen, "complete", resetStyle
+                if fileExists(file) and radula_behave_verify(file, ceras["sum"].getStr()):
+                    styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
                     continue
                 else:
-                    styledEcho fgRed, styleBright,
-                        &"{\"Abort\":13} :! {name:24}{version:24}invalid checksum", resetStyle
+                    removeDir(path)
+                    createDir(path)
 
-                    quit(1)
+                    downloads &= (@[name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
         else:
             if version == "git":
                 clones &= @[name, ceras["cmt"].getStr(), url, path]
             else:
                 createDir(path)
 
-                downloads &= (@[name, version, url, ceras["sum"].getStr()],
-                    newAsyncHttpClient().downloadFile(url, path /
-                    lastPathPart(url)))
+                downloads &= (@[name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, path / lastPathPart(url)))
 
     length = downloads.unzip()[0].len()
 
@@ -119,15 +110,13 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             let
                 name = ceras[0]
                 version = ceras[1]
-            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13}", fgDefault,
-                " :@ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}",
-                fgMagenta, "download", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{version:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
         waitFor all(downloads.unzip()[1])
 
         echo ""
 
-        echo "Verify and extract cerata..."
+        echo "Verify and extract {length} cerata..."
 
         radula_behave_ceras_print_header()
 
@@ -141,31 +130,24 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 path = radula_behave_ceras_path_source(name)
                 file = path / lastPathPart(url)
 
-            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13}", fgDefault,
-                " :@ ", fgBlue, &"{name:24}", fgDefault, &"{version:24}",
-                fgMagenta, "verify", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{version:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+            cursorUp 1
+            eraseLine()
 
             if radula_behave_verify(file, checksum):
-                cursorUp 1
-                eraseLine()
-
-                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13}",
-                    fgDefault, " :@ ", fgBlue, &"{name:24}", fgDefault,
-                    &"{version:24}", fgMagenta, "extract", resetStyle
+                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{version:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                 discard radula_behave_extract(file, path)
             else:
-                styledEcho fgRed, styleBright,
-                    &"{\"Abort\":13} :! {name:24}{version:24}invalid checksum", resetStyle
+                styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:24}{version:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                 quit(1)
 
             cursorUp 1
             eraseLine()
 
-            styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue,
-                styleBright, &"{name:24}", resetStyle, &"{version:24}",
-                fgGreen, "complete", resetStyle
+            styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{version:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
     length = clones.len()
 
@@ -181,8 +163,6 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 name = ceras[0]
                 commit = ceras[1]
 
-            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13}", fgDefault,
-                " :@ ", fgBlue, &"{name:24}", fgDefault, &"{commit:24}",
-                fgMagenta, "clone", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{commit:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             discard radula_behave_clone(commit, url = ceras[2], path = ceras[3])
