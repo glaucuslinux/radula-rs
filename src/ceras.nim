@@ -31,8 +31,7 @@ proc radula_behave_ceras_parse*(name: string): TomlValueRef =
     parseFile(radula_behave_ceras_path_ceras(name))
 
 # Resolve concentrates using topological sorting
-proc radula_behave_ceras_concentrates_resolve*(name: string,
-        concentrates: var Table[string, seq[string]]) =
+proc radula_behave_ceras_concentrates_resolve*(name: string, concentrates: var Table[string, seq[string]]) =
     concentrates[name] =
         try:
             radula_behave_ceras_parse(name)["cnt"].getStr().split()
@@ -47,11 +46,12 @@ proc radula_behave_ceras_print*(names: seq[string]) =
     for name in names.deduplicate():
         if not radula_behave_ceras_exist(name):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
             quit(1)
 
         let ceras = radula_behave_ceras_parse(name)
-        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, ceras[
-            "nom"].getStr(), resetStyle
+
+        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, ceras["nom"].getStr(), resetStyle
 
         echo &"{\"Version\":13} :: ",
             try:

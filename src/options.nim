@@ -29,13 +29,15 @@ proc radula_options*() =
         echo RADULA_HELP
         quit(1)
 
-    var
-        p = initOptParser()
+    var p = initOptParser()
+
     for kind, key, value in getOpt():
         p.next()
+
         case kind
         of cmdArgument, cmdEnd:
             echo RADULA_HELP
+
             quit(1)
         of cmdLongOption, cmdShortOption:
             case p.key
@@ -43,6 +45,7 @@ proc radula_options*() =
                 case value
                 of "b", "bootstrap":
                     p.next()
+
                     case p.key
                     of "c", "clean":
                         radula_behave_bootstrap_environment()
@@ -123,20 +126,27 @@ proc radula_options*() =
                         echo "iso complete"
                     else:
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
+
                         quit(1)
+
                     quit(0)
                 else:
                     echo RADULA_HELP_BEHAVE
+
                     quit(1)
             of "c", "ceras":
                 radula_behave_ceras_print(remainingArgs(p))
+
                 quit(0)
             of "h", "help":
                 echo RADULA_HELP
+
                 quit(0)
             of "v", "version":
                 echo RADULA_HELP_VERSION
+
                 quit(0)
             else:
                 echo RADULA_HELP
+
                 quit(1)

@@ -31,8 +31,7 @@ proc radula_behave_stage*(name, version, commit = "", stage: string): (string, i
     # current working directory...
     execCmdEx(RADULA_CERAS_DASH & " " & RADULA_TOOTH_SHELL_FLAGS & " " & (&"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare && configure && build && check && install").quoteShell)
 
-proc radula_behave_envenomate*(names: seq[string],
-    stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
+proc radula_behave_envenomate*(names: seq[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
     var
         log_file: File
 
