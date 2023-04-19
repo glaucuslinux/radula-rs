@@ -88,4 +88,7 @@ proc radula_behave_bootstrap_toolchain_release*() =
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_INFO)
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_MAN)
 
-    discard radula_behave_compress(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN & '-' & now().format("ddMMYYYY") & ".tar.zst", path)
+    let output = radula_behave_compress(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN & '-' & now().format("ddMMYYYY") & ".tar.zst", path)
+
+    if output[1] == 0:
+        removeDir(path)
