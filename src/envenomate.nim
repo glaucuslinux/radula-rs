@@ -25,12 +25,12 @@ import
 # Envenomate Functions
 #
 
-proc radula_behave_stage*(name, version, commit = "", stage: string): (string, int) =
+proc radula_behave_stage*(name, version, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
     # We only use `nom` and `ver` from the `ceras`file
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working directory...
-    execCmdEx(RADULA_CERAS_DASH & ' ' & RADULA_TOOTH_SHELL_FLAGS & ' ' & (&"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1" % [">> log.txt 2>&1"]).quoteShell)
+    execCmdEx(RADULA_CERAS_DASH & ' ' & RADULA_TOOTH_SHELL_FLAGS & ' ' & (&"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1" % [&">> {log_file} 2>&1"]).quoteShell)
 
 proc radula_behave_envenomate*(names: openArray[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
     var
@@ -89,13 +89,13 @@ proc radula_behave_envenomate*(names: openArray[string], stage: string = RADULA_
         else:
             styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {name:24}{version:24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-        let output = radula_behave_stage(name, version, commit, stage)
-
         case stage
         of RADULA_DIRECTORY_CROSS:
             log_file = getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
         of RADULA_DIRECTORY_TOOLCHAIN:
             log_file = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
+
+        let output = radula_behave_stage(name, version, stage, log_file)
 
         cursorUp 1
         eraseLine()
