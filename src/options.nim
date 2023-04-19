@@ -27,6 +27,7 @@ proc radula_options*() =
 
     if paramCount() < 1:
         echo RADULA_HELP
+
         quit(1)
 
     var p = initOptParser()

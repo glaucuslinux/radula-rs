@@ -1,12 +1,10 @@
---define:danger
---define:lto
---define:release
---define:useMalloc
---define:ssl
---define:strip
---threads:on
---opt:speed
---mm:orc
-
-when findExe("mold").len > 0 and defined(linux):
-    switch("passL", "-fuse-ld=mold")
+switch("define", "danger")
+switch("define", "lto")
+switch("define", "release")
+switch("define", "useMalloc")
+switch("define", "ssl")
+switch("define", "strip")
+switch("mm", "orc")
+switch("opt", "speed")
+switch("passL", "-fuse-ld=mold")
+switch("threads", "on")

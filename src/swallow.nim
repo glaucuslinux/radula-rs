@@ -41,6 +41,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
         clones: seq[seq[string]]
         downloads: seq[(seq[string], Future[void])]
+
         length: int
 
     for name in names:
@@ -95,7 +96,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             else:
                 createDir(path)
 
-                downloads &= (@[name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, path / lastPathPart(url)))
+                downloads &= (@[name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
 
     length = downloads.unzip()[0].len()
 
@@ -116,7 +117,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
 
         echo ""
 
-        echo "Verify and extract {length} cerata..."
+        echo &"Verify and extract {length} cerata..."
 
         radula_behave_ceras_print_header()
 

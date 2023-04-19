@@ -24,9 +24,9 @@ proc radula_behave_bootstrap_toolchain_backup*() =
     discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_behave_bootstrap_toolchain_ccache*() =
-    putEnv(RADULA_ENVIRONMENT_CCACHE_CONFIGURATION, RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_CERAS_CCACHE / RADULA_FILE_CCACHE_CONFIGURATION)
     putEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN) / RADULA_CERAS_CCACHE)
     putEnv(RADULA_ENVIRONMENT_PATH, RADULA_PATH_CCACHE & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
+
     createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
 
 
@@ -88,4 +88,4 @@ proc radula_behave_bootstrap_toolchain_release*() =
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_INFO)
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_MAN)
 
-    discard radula_behave_compress(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN & "-" & now().format("ddMMYYYY") & ".tar.zst", path)
+    discard radula_behave_compress(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN & '-' & now().format("ddMMYYYY") & ".tar.zst", path)

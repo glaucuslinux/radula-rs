@@ -15,6 +15,10 @@ import constants
 
 import parsetoml
 
+#
+# Ceras Functions
+#
+
 # Returns the full path to the `ceras` file
 proc radula_behave_ceras_path_ceras*(name: string): string =
     RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / name / RADULA_CERAS
@@ -84,6 +88,7 @@ proc radula_behave_ceras_print*(names: seq[string]) =
                 ceras["cys"].getStr()
             except CatchableError:
                 "None"
+
         echo ""
 
 proc radula_behave_ceras_print_header*() =

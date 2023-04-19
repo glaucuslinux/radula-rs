@@ -15,11 +15,11 @@ import constants
 
 # These will be used whether we're bootstrapping or not so don't add _bootstrap_ to its name
 # Get canonical system tuple using the `config.guess` file
-proc radula_behave_architecture_tuple*(): string =
-    execProcess(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS).strip()
+proc radula_behave_architecture_tuple*(): (string, int) =
+    execCmdEx(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS)
 
 proc radula_behave_architecture_environment*(architecture: string) =
-    putEnv(RADULA_ENVIRONMENT_TUPLE_BUILD, radula_behave_architecture_tuple())
+    putEnv(RADULA_ENVIRONMENT_TUPLE_BUILD, radula_behave_architecture_tuple()[0].strip())
 
     putEnv(RADULA_ENVIRONMENT_ARCHITECTURE, architecture)
     putEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA, RADULA_ARCHITECTURE_CERATA & architecture)

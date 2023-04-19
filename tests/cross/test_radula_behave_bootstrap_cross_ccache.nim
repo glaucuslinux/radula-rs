@@ -14,11 +14,9 @@ radula_behave_bootstrap_cross_environment_directories()
 
 radula_behave_bootstrap_cross_ccache()
 
-echo "CCACHE_CONFIGPATH  :: ", getEnv(RADULA_ENVIRONMENT_CCACHE_CONFIGURATION)
 echo "CCACHE_DIR         :: ", getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY)
 echo "PATH               :: ", getEnv(RADULA_ENVIRONMENT_PATH)
 
-doAssert getEnv(RADULA_ENVIRONMENT_CCACHE_CONFIGURATION).endsWith("ccache.conf")
 doAssert getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY).endsWith("tmp/cross/ccache")
 # check if the `/` in `/toolchain...` is needed or not
 doAssert getEnv(RADULA_ENVIRONMENT_PATH).split(':')[0].endsWith("/toolchain/usr/lib/ccache")
