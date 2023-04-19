@@ -7,6 +7,7 @@ import std/[
     osproc,
     sequtils,
     strformat,
+    strutils,
     terminal,
     times
 ]
@@ -29,11 +30,11 @@ proc radula_behave_stage*(name, version, commit = "", stage: string): (string, i
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working directory...
-    execCmdEx(RADULA_CERAS_DASH & ' ' & RADULA_TOOTH_SHELL_FLAGS & ' ' & (&"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare && configure && build && check && install").quoteShell)
+    execCmdEx(RADULA_CERAS_DASH & ' ' & RADULA_TOOTH_SHELL_FLAGS & ' ' & (&"nom={name} ver={version} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{name}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1" % [">> log.txt 2>&1"]).quoteShell)
 
-proc radula_behave_envenomate*(names: seq[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
+proc radula_behave_envenomate*(names: openArray[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
     var
-        log_file: File
+        log_file: string
 
         names = names.deduplicate()
 
@@ -92,12 +93,9 @@ proc radula_behave_envenomate*(names: seq[string], stage: string = RADULA_DIRECT
 
         case stage
         of RADULA_DIRECTORY_CROSS:
-            log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG), fmAppend)
+            log_file = getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
         of RADULA_DIRECTORY_TOOLCHAIN:
-            log_file = open(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), fmAppend)
-
-        log_file.write(output[0])
-        log_file.close()
+            log_file = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
         cursorUp 1
         eraseLine()

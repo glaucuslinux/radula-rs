@@ -39,8 +39,8 @@ proc radula_behave_verify*(file, checksum: string): bool =
 # Asynchronously swallow cerata
 proc radula_behave_swallow*(names: seq[string]) {.async.} =
     var
-        clones: seq[seq[string]]
-        downloads: seq[(seq[string], Future[void])]
+        clones: seq[array[4, string]]
+        downloads: seq[(array[4, string], Future[void])]
 
         length: int
 
@@ -89,14 +89,14 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                     removeDir(path)
                     createDir(path)
 
-                    downloads &= (@[name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
+                    downloads &= ([name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
         else:
             if version == "git":
-                clones &= @[name, ceras["cmt"].getStr(), url, path]
+                clones &= [name, ceras["cmt"].getStr(), url, path]
             else:
                 createDir(path)
 
-                downloads &= (@[name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
+                downloads &= ([name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
 
     length = downloads.unzip()[0].len()
 

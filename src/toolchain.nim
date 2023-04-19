@@ -31,7 +31,7 @@ proc radula_behave_bootstrap_toolchain_ccache*() =
 
 
 proc radula_behave_bootstrap_toolchain_envenomate*() =
-    radula_behave_envenomate(@[
+    radula_behave_envenomate([
         RADULA_CERAS_MUSL_HEADERS,
         RADULA_CERAS_BINUTILS,
         RADULA_CERAS_GCC,

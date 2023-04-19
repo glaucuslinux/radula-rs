@@ -19,7 +19,7 @@ proc radula_behave_bootstrap_cross_ccache*() =
     createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
 
 proc radula_behave_bootstrap_cross_envenomate*() =
-    radula_behave_envenomate(@[
+    radula_behave_envenomate([
         # Filesystem & Package Management
         RADULA_CERAS_HYDROSKELETON,
         RADULA_CERAS_IANA_ETC,
