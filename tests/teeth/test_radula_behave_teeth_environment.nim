@@ -1,7 +1,7 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import os
+import std/os
 
 import ../../src/constants
 import ../../src/teeth

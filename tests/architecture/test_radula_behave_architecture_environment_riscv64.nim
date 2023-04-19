@@ -1,7 +1,10 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import os
+import std/[
+    os,
+    strutils
+]
 
 import ../../src/architecture
 import ../../src/constants
@@ -24,8 +27,7 @@ echo "MLARCH  :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER)
 echo "TGT     :: ", getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET)
 echo "UARCH   :: ", getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT)
 
-doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) ==
-    radula_behave_architecture_tuple()
+doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) == radula_behave_architecture_tuple()[0].strip()
 
 doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE) == "riscv64"
 doAssert getEnv(RADULA_ENVIRONMENT_ARCHITECTURE_CERATA) == "--with-gcc-arch=rv64gc"

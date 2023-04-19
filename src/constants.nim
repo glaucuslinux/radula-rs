@@ -36,11 +36,10 @@ const
     RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
     RADULA_ARCHITECTURE_X86_64_V3_LINUX_IMAGE* = "arch/x86/boot/bzImage"
 
-#
-# Cerata
-#
+    #
+    # Cerata
+    #
 
-const
     RADULA_CERAS* = "ceras"
 
     RADULA_CERAS_ACL* = "acl"
@@ -174,11 +173,10 @@ const
     RADULA_CERAS_ZLIB_NG* = "zlib-ng"
     RADULA_CERAS_ZSTD* = "zstd"
 
-#
-# Cross
-#
+    #
+    # Cross
+    #
 
-const
     RADULA_CROSS_ARCHIVER* = "gcc-ar"
     RADULA_CROSS_ASSEMBLER* = "as"
     RADULA_CROSS_C_COMPILER* = "gcc"
@@ -195,11 +193,10 @@ const
     RADULA_CROSS_STRINGS* = "strings"
     RADULA_CROSS_STRIP* = "strip"
 
-#
-# Directories
-#
+    #
+    # Directories
+    #
 
-const
     RADULA_DIRECTORY_BACKUPS* = "bak"
     RADULA_DIRECTORY_BUILDS* = "bld"
     RADULA_DIRECTORY_CERATA* = "cerata"
@@ -211,11 +208,10 @@ const
     RADULA_DIRECTORY_TEMPORARY* = "tmp"
     RADULA_DIRECTORY_TOOLCHAIN* = "toolchain"
 
-#
-# Environment Variables
-#
+    #
+    # Environment Variables
+    #
 
-const
     # Architectures
     RADULA_ENVIRONMENT_ARCHITECTURE* = "ARCH"
     RADULA_ENVIRONMENT_ARCHITECTURE_CERATA* = "CARCH"
@@ -317,11 +313,10 @@ const
     RADULA_ENVIRONMENT_TUPLE_BUILD* = "BLD"
     RADULA_ENVIRONMENT_TUPLE_TARGET* = "TGT"
 
-#
-# Files
-#
+    #
+    # Files
+    #
 
-const
     RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
     RADULA_FILE_GLAUCUS_IMG* = "glaucus.img"
@@ -330,20 +325,18 @@ const
     RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "syslinux/extlinux.conf"
     RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
-#
-# Flags
-#
+    #
+    # Flags
+    #
 
-const
     RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -Ofast -fomit-frame-pointer -fmerge-all-constants -fmodulo-sched -fmodulo-sched-allow-regmoves -fgcse-sm -fgcse-las -fdevirtualize-at-ltrans -fira-loop-pressure -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -floop-parallelize-all -fvariable-expansion-in-unroller -falign-functions=32 -flimit-function-alignment -flto=auto -flto-compression-level=19 -fuse-linker-plugin -ftracer -funroll-loops -ffunction-sections -fdata-sections -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
     RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
     RADULA_FLAGS_LINKER* = "-Wl,--strip-all -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
-#
-# Help Messages
-#
+    #
+    # Help Messages
+    #
 
-const
     RADULA_HELP* = """USAGE:
   radula [ OPTIONS ]
 
@@ -409,11 +402,10 @@ OPTIONS:
 Copyright (c) 2018-2023, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
-#
-# Paths
-#
+    #
+    # Paths
+    #
 
-const
     RADULA_PATH_BIN* = "bin"
     RADULA_PATH_BOOT* = "boot"
 
@@ -451,11 +443,10 @@ const
 
     RADULA_PATH_UTMPS* = "s6/current/run-image/utmps"
 
-#
-# Teeth
-#
+    #
+    # Teeth
+    #
 
-const
     # A tooth is a tool available on the host system
     RADULA_TOOTH_AUTORECONF* = "autoreconf"
     RADULA_TOOTH_AUTORECONF_FLAGS* = "-vfis"
