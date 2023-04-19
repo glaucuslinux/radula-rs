@@ -322,6 +322,8 @@ const
     RADULA_FILE_GLAUCUS_IMG* = "glaucus.img"
     RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024M"
 
+    RADULA_FILE_RADULA_LOCK* = "/tmp/radula.lck"
+
     RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "syslinux/extlinux.conf"
     RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
@@ -347,24 +349,12 @@ OPTIONS:
   -v, --version  Display current version number"""
 
     RADULA_HELP_BEHAVE* = """USAGE:
-  radula [ -b | --behave ] [ OPTIONS ]
+  radula [ -b | --behave ] =|: [ OPTIONS ]
 
 OPTIONS:
   b, bootstrap   Perform bootstrap behavior
   e, envenomate  Perform envenomate behavior
-  h, help        Display this help message
-  i, binary      Perform binary behavior"""
-
-    RADULA_HELP_BEHAVE_BINARY* = """USAGE:
-  radula [ -b | --behave ] [ i | binary ] [ OPTIONS ] [ cerata ]
-
-OPTIONS:
-  d, decyst   Remove binary cerata without preserving their cysts
-  h, help     Display this help message
-  i, install  Install binary cerata
-  r, remove   Remove binary cerata while preserving their cysts
-  s, search   Search for binary cerata within the remote repositories
-  u, upgrade  Upgrade binary cerata"""
+  h, help        Display this help message"""
 
     RADULA_HELP_BEHAVE_BOOTSTRAP* = """USAGE:
   radula [ -b | --behave ] =|: [ b | bootstrap ] [ OPTIONS ]
@@ -387,7 +377,7 @@ OPTIONS:
   x86-64,   x86-64-v3,  x86_64,  x86_64-v3,  x86_64_v3"""
 
     RADULA_HELP_BEHAVE_ENVENOMATE* = """USAGE:
-  radula [ -b | --behave ] [ e | envenomate ] [ OPTIONS ] [ cerata ]
+  radula [ -b | --behave ] =|: [ e | envenomate ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
   d, decyst   Remove cerata without preserving their cysts

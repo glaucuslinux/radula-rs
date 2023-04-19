@@ -15,7 +15,8 @@ import std/[
 import
     ceras,
     constants,
-    swallow
+    swallow,
+    utilities
 
 import
     parsetoml,
@@ -46,7 +47,7 @@ proc radula_behave_envenomate*(names: openArray[string], stage: string = RADULA_
         if not radula_behave_ceras_exist(name):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            quit(1)
+            radula_exit(1)
 
         if resolve:
             radula_behave_ceras_concentrates_resolve(name, concentrates)
@@ -103,7 +104,7 @@ proc radula_behave_envenomate*(names: openArray[string], stage: string = RADULA_
         if output[1] != 0:
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{output[1]:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            quit(1)
+            radula_exit(1)
 
         if version == "git":
             styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{name:24}", resetStyle, &"{commit:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault

@@ -15,7 +15,8 @@ import
     cross,
     flags,
     teeth,
-    toolchain
+    toolchain,
+    utilities
 
 #
 # Options Function
@@ -25,10 +26,17 @@ proc radula_options*() =
     # Catch Ctrl-C and exit gracefully
     setControlCHook(radula_behave_abort)
 
+    if fileExists(RADULA_FILE_RADULA_LOCK):
+        echo "An instance is already running of radula"
+        
+        radula_exit(1)
+    else:
+        writeFile(RADULA_FILE_RADULA_LOCK, "")
+
     if paramCount() < 1:
         echo RADULA_HELP
 
-        quit(1)
+        radula_exit(1)
 
     var p = initOptParser()
 
@@ -39,7 +47,7 @@ proc radula_options*() =
         of cmdArgument, cmdEnd:
             echo RADULA_HELP
 
-            quit(1)
+            radula_exit(1)
         of cmdLongOption, cmdShortOption:
             case p.key
             of "b", "behave":
@@ -128,26 +136,33 @@ proc radula_options*() =
                     else:
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
 
-                        quit(1)
+                        radula_exit(1)
 
-                    quit(0)
+                    radula_exit()
+                of "e", "envenomate":
+                    echo RADULA_HELP_BEHAVE_ENVENOMATE
+                of "h", "help":
+                    echo RADULA_HELP_BEHAVE
+
                 else:
                     echo RADULA_HELP_BEHAVE
 
-                    quit(1)
+                    radula_exit(1)
+
+                radula_exit()
             of "c", "ceras":
                 radula_behave_ceras_print(remainingArgs(p))
 
-                quit(0)
+                radula_exit()
             of "h", "help":
                 echo RADULA_HELP
 
-                quit(0)
+                radula_exit()
             of "v", "version":
                 echo RADULA_HELP_VERSION
 
-                quit(0)
+                radula_exit()
             else:
                 echo RADULA_HELP
 
-                quit(1)
+                radula_exit(1)

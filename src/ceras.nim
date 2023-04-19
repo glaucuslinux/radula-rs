@@ -11,7 +11,9 @@ import std/[
     times
 ]
 
-import constants
+import
+    constants,
+    utilities
 
 import parsetoml
 
@@ -51,7 +53,7 @@ proc radula_behave_ceras_print*(names: seq[string]) =
         if not radula_behave_ceras_exist(name):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            quit(1)
+            radula_exit(1)
 
         let ceras = radula_behave_ceras_parse(name)
 

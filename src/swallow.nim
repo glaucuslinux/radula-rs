@@ -15,7 +15,8 @@ import std/[
 
 import
     ceras,
-    constants
+    constants,
+    utilities
 
 import
     hashlib/misc/blake3,
@@ -143,7 +144,7 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
             else:
                 styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:24}{version:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                quit(1)
+                radula_exit(1)
 
             cursorUp 1
             eraseLine()

@@ -1,12 +1,7 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-    os,
-    strformat,
-    terminal,
-    times
-]
+import std/os
 
 import constants
 
@@ -38,10 +33,3 @@ proc radula_behave_bootstrap_distclean*() =
     # `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS` and
     # `RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS` are removed
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
-
-proc radula_behave_abort*() {.noconv.} =
-    echo ""
-
-    styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {\"interrupt signal received\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
-
-    quit(1)
