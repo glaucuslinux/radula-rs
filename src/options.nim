@@ -132,6 +132,8 @@ proc radula_behave_options*() =
                     echo RADULA_HELP_BEHAVE
 
                     radula_behave_exit(QuitFailure)
+
+                radula_behave_exit()
             of "c", "ceras":
                 let cerata = remainingArgs(p)
 
