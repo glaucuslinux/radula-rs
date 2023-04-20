@@ -7,36 +7,23 @@ import std/[
 ]
 
 import
-    architecture,
     bootstrap,
     ceras,
-    clean,
     constants,
-    cross,
-    flags,
-    teeth,
-    toolchain,
-    utilities
+    genome,
+    teeth
 
-#
-# Options Function
-#
-
-proc radula_options*() =
-    # Catch Ctrl-C and exit gracefully
+proc radula_behave_options*() =
+    # Catch `Ctrl-C` and exit gracefully
     setControlCHook(radula_behave_abort)
 
-    if fileExists(RADULA_FILE_RADULA_LOCK):
-        echo "An instance is already running of radula"
-        
-        radula_exit(1)
-    else:
-        writeFile(RADULA_FILE_RADULA_LOCK, "")
+    # Check if lock file exists
+    radula_behave_lock()
 
     if paramCount() < 1:
         echo RADULA_HELP
 
-        radula_exit(1)
+        radula_behave_exit(1)
 
     var p = initOptParser()
 
@@ -47,7 +34,7 @@ proc radula_options*() =
         of cmdArgument, cmdEnd:
             echo RADULA_HELP
 
-            radula_exit(1)
+            radula_behave_exit(1)
         of cmdLongOption, cmdShortOption:
             case p.key
             of "b", "behave":
@@ -91,7 +78,7 @@ proc radula_options*() =
 
                         radula_behave_teeth_environment()
 
-                        radula_behave_architecture_environment(RADULA_ARCHITECTURE_X86_64_V3)
+                        radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
 
                         radula_behave_bootstrap_toolchain_environment_directories()
 
@@ -115,7 +102,7 @@ proc radula_options*() =
 
                         radula_behave_teeth_environment()
 
-                        radula_behave_architecture_environment(RADULA_ARCHITECTURE_X86_64_V3)
+                        radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
 
                         radula_behave_flags_environment()
 
@@ -136,33 +123,35 @@ proc radula_options*() =
                     else:
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
 
-                        radula_exit(1)
-
-                    radula_exit()
+                        radula_behave_exit(1)
                 of "e", "envenomate":
                     echo RADULA_HELP_BEHAVE_ENVENOMATE
                 of "h", "help":
                     echo RADULA_HELP_BEHAVE
-
                 else:
                     echo RADULA_HELP_BEHAVE
 
-                    radula_exit(1)
-
-                radula_exit()
+                    radula_behave_exit(1)
             of "c", "ceras":
-                radula_behave_ceras_print(remainingArgs(p))
+                let cerata = remainingArgs(p)
 
-                radula_exit()
+                if cerata.len() >= 1:
+                    radula_behave_ceras_print(cerata)
+                else:
+                    case value:
+                    of "h", "help":
+                        echo RADULA_HELP_CERAS
+                    else:
+                        echo RADULA_HELP_CERAS
+
+                        radula_behave_exit(1)
             of "h", "help":
                 echo RADULA_HELP
-
-                radula_exit()
             of "v", "version":
                 echo RADULA_HELP_VERSION
-
-                radula_exit()
             else:
                 echo RADULA_HELP
 
-                radula_exit(1)
+                radula_behave_exit(1)
+
+            radula_behave_exit()

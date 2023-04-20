@@ -3,4 +3,4 @@
 
 when isMainModule:
     import options
-    radula_options()
+    radula_behave_options()

@@ -3,11 +3,10 @@
 
 import std/os
 
-import ../../src/architecture
 import ../../src/constants
-import ../../src/flags
+import ../../src/genome
 
-radula_behave_architecture_environment("x86-64")
+radula_behave_genome_environment("x86-64")
 
 radula_behave_flags_environment()
 

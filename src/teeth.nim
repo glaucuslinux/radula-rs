@@ -4,31 +4,18 @@
 import std/[
     os,
     osproc,
-    strformat
+    strformat,
+    terminal,
+    times
 ]
 
 import constants
-
-#
-# Compress Functions
-#
 
 proc radula_behave_compress*(archive, directory: string): (string, int) =
     execCmdEx(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} .")
 
 proc radula_behave_decompress*(archive, directory: string): (string, int) =
     execCmdEx(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory}")
-
-#
-# rsync Function
-#
-
-proc radula_behave_rsync*(source, destination: string): (string, int) =
-    execCmdEx(&"{RADULA_CERAS_RSYNC} {RADULA_TOOTH_RSYNC_FLAGS} {source} {destination} --delete")
-
-#
-# Teeth Functions
-#
 
 proc radula_behave_teeth_environment*() =
     putEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF, RADULA_TOOTH_AUTORECONF & ' ' & RADULA_TOOTH_AUTORECONF_FLAGS)
@@ -58,3 +45,26 @@ proc radula_behave_teeth_environment*() =
     putEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC, RADULA_CERAS_RSYNC & ' ' & RADULA_TOOTH_RSYNC_FLAGS)
     # Use `byacc` as the default YACC implementation
     putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
+
+proc radula_behave_rsync*(source, destination: string): (string, int) =
+    execCmdEx(&"{getEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC)} {source} {destination} --delete")
+
+proc radula_behave_exit*(exit_code: int = 0) =
+    remove_file(RADULA_FILE_RADULA_LOCK)
+
+    quit(exit_code)
+
+proc radula_behave_abort*() {.noconv.} =
+    echo ""
+
+    styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"interrupt signal received\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
+
+    radula_behave_exit(1)
+
+proc radula_behave_lock*() =
+    if fileExists(RADULA_FILE_RADULA_LOCK):
+        echo "An instance is already running of radula"
+        
+        radula_behave_exit(1)
+    else:
+        writeFile(RADULA_FILE_RADULA_LOCK, "")

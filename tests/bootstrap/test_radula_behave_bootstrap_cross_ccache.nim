@@ -8,16 +8,16 @@ import std/[
 
 import ../../src/bootstrap
 import ../../src/constants
-import ../../src/toolchain
 
 radula_behave_bootstrap_environment()
 
-radula_behave_bootstrap_toolchain_environment_directories()
+radula_behave_bootstrap_cross_environment_directories()
 
-radula_behave_bootstrap_toolchain_ccache()
+radula_behave_bootstrap_cross_ccache()
 
 echo "CCACHE_DIR         :: ", getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY)
 echo "PATH               :: ", getEnv(RADULA_ENVIRONMENT_PATH)
 
-doAssert getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY).endsWith("tmp/toolchain/ccache")
-doAssert getEnv(RADULA_ENVIRONMENT_PATH).startsWith("/usr/lib/ccache:/usr/lib/ccache/bin:/usr/lib64/ccache")
+doAssert getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY).endsWith("tmp/cross/ccache")
+# check if the `/` in `/toolchain...` is needed or not
+doAssert getEnv(RADULA_ENVIRONMENT_PATH).split(':')[0].endsWith("/toolchain/usr/lib/ccache")

@@ -4,44 +4,7 @@
 # All constants are prefixed with `RADULA_`
 # All constants are ordered alphabetically
 
-#
-# Architectures
-#
-
 const
-    RADULA_ARCHITECTURE_CERATA* = "--with-gcc-arch="
-    RADULA_ARCHITECTURE_TUPLE_TARGET* = "-glaucus-linux-musl"
-
-    # aarch64
-    RADULA_ARCHITECTURE_AARCH64* = "aarch64"
-    RADULA_ARCHITECTURE_AARCH64_CERATA* = "armv8-a"
-    RADULA_ARCHITECTURE_AARCH64_FLAGS* = "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
-    RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION* = "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
-    RADULA_ARCHITECTURE_AARCH64_LINUX* = "arm64"
-    RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE* = "arch/arm64/boot/Image"
-
-    # riscv64
-    RADULA_ARCHITECTURE_RISCV64* = "riscv64"
-    RADULA_ARCHITECTURE_RISCV64_CERATA* = "rv64gc"
-    RADULA_ARCHITECTURE_RISCV64_FLAGS* = "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany"
-    RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION* = "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d"
-    RADULA_ARCHITECTURE_RISCV64_LINUX* = "riscv"
-    RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE* = "arch/riscv/boot/Image"
-
-    # x86-64-v3
-    RADULA_ARCHITECTURE_X86_64_V3* = "x86-64"
-    RADULA_ARCHITECTURE_X86_64_V3_FLAGS* = "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-    RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION* = "--with-arch=x86-64-v3 --with-tune=generic"
-    RADULA_ARCHITECTURE_X86_64_V3_LINUX* = "x86_64"
-    RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
-    RADULA_ARCHITECTURE_X86_64_V3_LINUX_IMAGE* = "arch/x86/boot/bzImage"
-
-    #
-    # Cerata
-    #
-
-    RADULA_CERAS* = "ceras"
-
     RADULA_CERAS_ACL* = "acl"
     RADULA_CERAS_ATTR* = "attr"
     RADULA_CERAS_AUTOCONF* = "autoconf"
@@ -173,9 +136,6 @@ const
     RADULA_CERAS_ZLIB_NG* = "zlib-ng"
     RADULA_CERAS_ZSTD* = "zstd"
 
-    #
-    # Cross
-    #
 
     RADULA_CROSS_ARCHIVER* = "gcc-ar"
     RADULA_CROSS_ASSEMBLER* = "as"
@@ -193,9 +153,6 @@ const
     RADULA_CROSS_STRINGS* = "strings"
     RADULA_CROSS_STRIP* = "strip"
 
-    #
-    # Directories
-    #
 
     RADULA_DIRECTORY_BACKUPS* = "bak"
     RADULA_DIRECTORY_BUILDS* = "bld"
@@ -208,26 +165,9 @@ const
     RADULA_DIRECTORY_TEMPORARY* = "tmp"
     RADULA_DIRECTORY_TOOLCHAIN* = "toolchain"
 
-    #
-    # Environment Variables
-    #
 
-    # Architectures
-    RADULA_ENVIRONMENT_ARCHITECTURE* = "ARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_CERATA* = "CARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS* = "FARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION* = "GCARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_LINUX* = "LARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION* = "LCARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE* = "LIARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_MUSL* = "MARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER* = "MLARCH"
-    RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT* = "UARCH"
-
-    # Ccache
     RADULA_ENVIRONMENT_CCACHE_DIRECTORY* = "CCACHE_DIR"
 
-    # Cross
     RADULA_ENVIRONMENT_CROSS_ARCHIVER* = "AR"
     RADULA_ENVIRONMENT_CROSS_ASSEMBLER* = "AS"
     RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER* = "BUILD_CC"
@@ -249,16 +189,12 @@ const
     RADULA_ENVIRONMENT_CROSS_STRINGS* = "STRINGS"
     RADULA_ENVIRONMENT_CROSS_STRIP* = "STRIP"
 
-    # Directories
     RADULA_ENVIRONMENT_DIRECTORY_BACKUPS* = "BAKD"
     RADULA_ENVIRONMENT_DIRECTORY_CERATA* = "CERD"
-
     RADULA_ENVIRONMENT_DIRECTORY_CROSS* = "CRSD"
-
     RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS* = "GLAD"
     RADULA_ENVIRONMENT_DIRECTORY_LOGS* = "LOGD"
     RADULA_ENVIRONMENT_DIRECTORY_SOURCES* = "SRCD"
-
     RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY* = "TMPD"
     RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS* = "XTMP"
     RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS* = "XBLD"
@@ -266,29 +202,34 @@ const
     RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN* = "TTMP"
     RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS* = "TBLD"
     RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_SOURCES* = "TSRC"
-
     RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN* = "TLCD"
 
-    # Files
     RADULA_ENVIRONMENT_FILE_CROSS_LOG* = "XLOG"
     RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG* = "TLOG"
 
-    # Flags
     RADULA_ENVIRONMENT_FLAGS_C_COMPILER* = "CFLAGS"
     RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER* = "CXXFLAGS"
     RADULA_ENVIRONMENT_FLAGS_LINKER* = "LDFLAGS"
 
-    # Paths
+    RADULA_ENVIRONMENT_GENOME* = "ARCH"
+    RADULA_ENVIRONMENT_GENOME_CERATA* = "CARCH"
+    RADULA_ENVIRONMENT_GENOME_FLAGS* = "FARCH"
+    RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION* = "GCARCH"
+    RADULA_ENVIRONMENT_GENOME_LINUX* = "LARCH"
+    RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION* = "LCARCH"
+    RADULA_ENVIRONMENT_GENOME_LINUX_IMAGE* = "LIARCH"
+    RADULA_ENVIRONMENT_GENOME_MUSL* = "MARCH"
+    RADULA_ENVIRONMENT_GENOME_MUSL_LINKER* = "MLARCH"
+    RADULA_ENVIRONMENT_GENOME_UCONTEXT* = "UARCH"
+
     RADULA_ENVIRONMENT_PATH* = "PATH"
 
-    # pkg-config
     RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR* = "PKG_CONFIG_LIBDIR"
     RADULA_ENVIRONMENT_PKG_CONFIG_PATH* = "PKG_CONFIG_PATH"
     RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR* = "PKG_CONFIG_SYSROOT_DIR"
     RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "PKG_CONFIG_SYSTEM_INCLUDE_PATH"
     RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "PKG_CONFIG_SYSTEM_LIBRARY_PATH"
 
-    # Teeth
     RADULA_ENVIRONMENT_TOOTH_AUTORECONF* = "AUTORECONF"
     RADULA_ENVIRONMENT_TOOTH_AWK* = "AWK"
     RADULA_ENVIRONMENT_TOOTH_BISON* = "BISON"
@@ -309,14 +250,11 @@ const
     RADULA_ENVIRONMENT_TOOTH_RSYNC* = "RSYNC"
     RADULA_ENVIRONMENT_TOOTH_YACC* = "YACC"
 
-    # Tuples
     RADULA_ENVIRONMENT_TUPLE_BUILD* = "BLD"
     RADULA_ENVIRONMENT_TUPLE_TARGET* = "TGT"
 
-    #
-    # Files
-    #
 
+    RADULA_FILE_CERAS* = "ceras"
     RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
     RADULA_FILE_GLAUCUS_IMG* = "glaucus.img"
@@ -327,17 +265,36 @@ const
     RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "syslinux/extlinux.conf"
     RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
-    #
-    # Flags
-    #
 
     RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -Ofast -fomit-frame-pointer -fmerge-all-constants -fmodulo-sched -fmodulo-sched-allow-regmoves -fgcse-sm -fgcse-las -fdevirtualize-at-ltrans -fira-loop-pressure -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -floop-parallelize-all -fvariable-expansion-in-unroller -falign-functions=32 -flimit-function-alignment -flto=auto -flto-compression-level=19 -fuse-linker-plugin -ftracer -funroll-loops -ffunction-sections -fdata-sections -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
     RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
     RADULA_FLAGS_LINKER* = "-Wl,--strip-all -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
-    #
-    # Help Messages
-    #
+
+    RADULA_GENOME_CERATA* = "--with-gcc-arch="
+    RADULA_GENOME_TUPLE_TARGET* = "-glaucus-linux-musl"
+
+    RADULA_GENOME_AARCH64* = "aarch64"
+    RADULA_GENOME_AARCH64_CERATA* = "armv8-a"
+    RADULA_GENOME_AARCH64_FLAGS* = "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
+    RADULA_GENOME_AARCH64_GCC_CONFIGURATION* = "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
+    RADULA_GENOME_AARCH64_LINUX* = "arm64"
+    RADULA_GENOME_AARCH64_LINUX_IMAGE* = "arch/arm64/boot/Image"
+
+    RADULA_GENOME_RISCV64* = "riscv64"
+    RADULA_GENOME_RISCV64_CERATA* = "rv64gc"
+    RADULA_GENOME_RISCV64_FLAGS* = "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany"
+    RADULA_GENOME_RISCV64_GCC_CONFIGURATION* = "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d"
+    RADULA_GENOME_RISCV64_LINUX* = "riscv"
+    RADULA_GENOME_RISCV64_LINUX_IMAGE* = "arch/riscv/boot/Image"
+
+    RADULA_GENOME_X86_64_V3* = "x86-64"
+    RADULA_GENOME_X86_64_V3_FLAGS* = "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+    RADULA_GENOME_X86_64_V3_GCC_CONFIGURATION* = "--with-arch=x86-64-v3 --with-tune=generic"
+    RADULA_GENOME_X86_64_V3_LINUX* = "x86_64"
+    RADULA_GENOME_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
+    RADULA_GENOME_X86_64_V3_LINUX_IMAGE* = "arch/x86/boot/bzImage"
+
 
     RADULA_HELP* = """USAGE:
   radula [ OPTIONS ]
@@ -360,41 +317,44 @@ OPTIONS:
   radula [ -b | --behave ] =|: [ b | bootstrap ] [ OPTIONS ]
 
 OPTIONS:
-  c, clean      Clean up while preserving sources and backups
-  d, distclean  Clean up everything
-  h, help       Display this help message
-  i, img        Release an IMG image file of the glaucus system
-  l, list       List supported genomes
-  r, require    Check if host has all required packages
-  s, release    Release a compressed tarball of the toolchain
-  t, toolchain  Bootstrap a cross compiler toolchain
-  x, cross      Bootstrap a cross compiled glaucus system
-  z, iso        Release an ISO image file of the glaucus system"""
+  c, clean       Clean up while preserving sources and backups
+  d, distclean   Clean up everything
+  h, help        Display this help message
+  i, img         Release an IMG image file of the glaucus system
+  l, list        List supported genomes
+  r, require     Check if host has all required packages
+  s, release     Release a compressed tarball of the toolchain
+  t, toolchain   Bootstrap a cross compiler toolchain
+  x, cross       Bootstrap a cross compiled glaucus system
+  z, iso         Release an ISO image file of the glaucus system"""
 
-    RADULA_HELP_BEHAVE_BOOTSTRAP_LIST* = """GENOMES (ARCHITECTURES):
-  aarch64,  arm64,      armv8-a
-  riscv,    riscv64,    rv64gc
-  x86-64,   x86-64-v3,  x86_64,  x86_64-v3,  x86_64_v3"""
+    RADULA_HELP_BEHAVE_BOOTSTRAP_LIST* = """GENOMES:
+  aarch64,       arm64,           armv8-a
+  riscv,         riscv64,         rv64gc
+  x86-64,        x86-64-v3,       x86_64,       x86_64-v3,       x86_64_v3"""
 
     RADULA_HELP_BEHAVE_ENVENOMATE* = """USAGE:
   radula [ -b | --behave ] =|: [ e | envenomate ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-  d, decyst   Remove cerata without preserving their cysts
-  h, help     Display this help message
-  i, install  Install cerata from source
-  r, remove   Remove cerata while preserving their cysts
-  s, search   Search for cerata within the cerata directory
-  u, upgrade  Upgrade cerata"""
+  d, decyst      Remove cerata without preserving their cysts
+  h, help        Display this help message
+  i, install     Install cerata from source
+  r, remove      Remove cerata while preserving their cysts
+  s, search      Search for cerata within the cerata directory
+  u, upgrade     Upgrade cerata"""
+
+    RADULA_HELP_CERAS* = """USAGE:
+  radula [ -c | --ceras ] =|: [ OPTIONS ] [ cerata ]
+
+OPTIONS:
+  h, help        Display this help message"""
 
     RADULA_HELP_VERSION* = """radula version 0.1.0
 
 Copyright (c) 2018-2023, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
-    #
-    # Paths
-    #
 
     RADULA_PATH_BIN* = "bin"
     RADULA_PATH_BOOT* = "boot"
@@ -410,11 +370,9 @@ Distributed under the terms of the ISC License"""
 
     RADULA_PATH_LIB* = "lib"
     RADULA_PATH_LIB64* = "lib64"
-
     RADULA_PATH_LOST_FOUND* = "lost+found"
 
     RADULA_PATH_MAN* = "man"
-
     RADULA_PATH_MNT* = "mnt"
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
@@ -430,14 +388,9 @@ Distributed under the terms of the ISC License"""
     RADULA_PATH_RADULA_SOURCES* = "/var/cache/radula/src"
 
     RADULA_PATH_USR* = "usr"
-
     RADULA_PATH_UTMPS* = "s6/current/run-image/utmps"
 
-    #
-    # Teeth
-    #
 
-    # A tooth is a tool available on the host system
     RADULA_TOOTH_AUTORECONF* = "autoreconf"
     RADULA_TOOTH_AUTORECONF_FLAGS* = "-vfis"
 
@@ -447,7 +400,6 @@ Distributed under the terms of the ISC License"""
     RADULA_TOOTH_CHOWN* = "chown"
 
     RADULA_TOOTH_DATE* = "date"
-
     RADULA_TOOTH_DD* = "dd"
 
     RADULA_TOOTH_EXTLINUX* = "extlinux"
@@ -461,30 +413,22 @@ Distributed under the terms of the ISC License"""
 
     RADULA_TOOTH_LN* = "ln"
     RADULA_TOOTH_LN_FLAGS* = "-fnsv"
-
     RADULA_TOOTH_LOSETUP* = "losetup"
 
     RADULA_TOOTH_MAKEFLAGS* = "-j4 -O"
-
     # Full path is being used here to not overlap with the install() function in stage files
     RADULA_TOOTH_MKDIR* = "/usr/bin/install"
     RADULA_TOOTH_MKDIR_FLAGS* = "-dv"
-
     RADULA_TOOTH_MKE2FS* = "mke2fs"
     RADULA_TOOTH_MKE2FS_FLAGS* = "-t"
-
     RADULA_TOOTH_MODPROBE* = "modprobe"
-
     RADULA_TOOTH_MOUNT* = "mount"
-
     RADULA_TOOTH_MV* = "mv"
     RADULA_TOOTH_MV_FLAGS* = "-v"
 
     RADULA_TOOTH_PARTED* = "parted"
     RADULA_TOOTH_PARTED_FLAGS* = "-s"
-
     RADULA_TOOTH_PARTX* = "partx"
-
     RADULA_TOOTH_PATCH_FLAGS* = "--verbose"
 
     RADULA_TOOTH_QEMU_IMG* = "qemu-img"

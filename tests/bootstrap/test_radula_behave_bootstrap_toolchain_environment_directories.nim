@@ -8,7 +8,6 @@ import std/[
 
 import ../../src/bootstrap
 import ../../src/constants
-import ../../src/toolchain
 
 radula_behave_bootstrap_environment()
 

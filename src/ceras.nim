@@ -13,17 +13,13 @@ import std/[
 
 import
     constants,
-    utilities
+    teeth
 
 import parsetoml
 
-#
-# Ceras Functions
-#
-
 # Returns the full path to the `ceras` file
 proc radula_behave_ceras_path_ceras*(name: string): string =
-    RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / name / RADULA_CERAS
+    RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / name / RADULA_FILE_CERAS
 
 # Returns the full path to the `ceras` source directory
 proc radula_behave_ceras_path_source*(name: string): string =
@@ -53,7 +49,7 @@ proc radula_behave_ceras_print*(names: seq[string]) =
         if not radula_behave_ceras_exist(name):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            radula_exit(1)
+            radula_behave_exit(1)
 
         let ceras = radula_behave_ceras_parse(name)
 

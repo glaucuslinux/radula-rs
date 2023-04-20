@@ -3,6 +3,6 @@
 
 import std/strutils
 
-import ../../src/architecture
+import ../../src/genome
 
-doAssert radula_behave_architecture_tuple()[0].strip() == "x86_64-pc-linux-gnu"
+doAssert radula_behave_genome_tuple()[0].strip() == "x86_64-pc-linux-gnu"

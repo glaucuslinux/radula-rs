@@ -6,14 +6,13 @@ import std/[
     strutils
 ]
 
-import ../../src/architecture
 import ../../src/bootstrap
 import ../../src/constants
-import ../../src/cross
+import ../../src/genome
 
 radula_behave_bootstrap_environment()
 
-radula_behave_architecture_environment(RADULA_ARCHITECTURE_X86_64_V3)
+radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
 
 radula_behave_bootstrap_cross_environment_teeth()
 
