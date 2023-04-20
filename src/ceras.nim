@@ -11,9 +11,7 @@ import std/[
     times
 ]
 
-import
-    constants,
-    teeth
+import constants
 
 import parsetoml
 
