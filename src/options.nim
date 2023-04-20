@@ -70,6 +70,8 @@ proc radula_behave_options*() =
                     of "s", "release":
                         radula_behave_bootstrap_environment()
 
+                        radula_behave_teeth_environment()
+
                         radula_behave_bootstrap_toolchain_release()
 
                         echo "release complete"
