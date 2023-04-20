@@ -59,12 +59,12 @@ proc radula_behave_abort*() {.noconv.} =
 
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"interrupt signal received\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
-    radula_behave_exit(1)
+    radula_behave_exit(QuitFailure)
 
 proc radula_behave_lock*() =
     if fileExists(RADULA_FILE_RADULA_LOCK):
-        echo "An instance is already running of radula"
+        styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"lock file exists\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
         
-        radula_behave_exit(1)
+        quit(QuitFailure)
     else:
         writeFile(RADULA_FILE_RADULA_LOCK, "")

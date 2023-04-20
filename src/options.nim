@@ -17,13 +17,10 @@ proc radula_behave_options*() =
     # Catch `Ctrl-C` and exit gracefully
     setControlCHook(radula_behave_abort)
 
-    # Check if lock file exists
-    radula_behave_lock()
-
     if paramCount() < 1:
         echo RADULA_HELP
 
-        radula_behave_exit(1)
+        quit(QuitFailure)
 
     var p = initOptParser()
 
@@ -34,10 +31,13 @@ proc radula_behave_options*() =
         of cmdArgument, cmdEnd:
             echo RADULA_HELP
 
-            radula_behave_exit(1)
+            quit(QuitFailure)
         of cmdLongOption, cmdShortOption:
             case p.key
             of "b", "behave":
+                # Check lock file
+                radula_behave_lock()
+
                 case value
                 of "b", "bootstrap":
                     p.next()
@@ -123,7 +123,7 @@ proc radula_behave_options*() =
                     else:
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
 
-                        radula_behave_exit(1)
+                        radula_behave_exit(QuitFailure)
                 of "e", "envenomate":
                     echo RADULA_HELP_BEHAVE_ENVENOMATE
                 of "h", "help":
@@ -131,7 +131,7 @@ proc radula_behave_options*() =
                 else:
                     echo RADULA_HELP_BEHAVE
 
-                    radula_behave_exit(1)
+                    radula_behave_exit(QuitFailure)
             of "c", "ceras":
                 let cerata = remainingArgs(p)
 
@@ -144,7 +144,7 @@ proc radula_behave_options*() =
                     else:
                         echo RADULA_HELP_CERAS
 
-                        radula_behave_exit(1)
+                        quit(QuitFailure)
             of "h", "help":
                 echo RADULA_HELP
             of "v", "version":
@@ -152,6 +152,6 @@ proc radula_behave_options*() =
             else:
                 echo RADULA_HELP
 
-                radula_behave_exit(1)
+                quit(QuitFailure)
 
-            radula_behave_exit()
+            quit()
