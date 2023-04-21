@@ -131,12 +131,13 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Userland
         RADULA_CERAS_BC,
         RADULA_CERAS_GREP,
-        RADULA_CERAS_PLOCATE,
+        # RADULA_CERAS_PLOCATE,
 
         # Networking
         RADULA_CERAS_IPROUTE2,
         RADULA_CERAS_IPUTILS,
         RADULA_CERAS_SDHCP,
+        RADULA_CERAS_AXEL,
         RADULA_CERAS_CURL,
         RADULA_CERAS_WGET2,
 

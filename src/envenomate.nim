@@ -2,8 +2,6 @@
 # Distributed under the terms of the ISC License
 
 import std/[
-    asyncdispatch,
-    httpclient,
     os,
     osproc,
     sequtils,
@@ -23,13 +21,6 @@ import
     parsetoml,
     toposort
 
-# Clone repositories
-proc radula_behave_clone*(commit, url, path: string): (string, int) =
-    result = execCmdEx(&"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path}")
-
-    if result[1] == 0:
-        result = execCmdEx(&"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {commit}", workingDir = path)
-
 # Extract tarballs
 proc radula_behave_extract*(file, path: string): (string, int) =
     execCmdEx(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {file} -C {path}")
@@ -38,11 +29,11 @@ proc radula_behave_extract*(file, path: string): (string, int) =
 proc radula_behave_verify*(file, checksum: string): bool =
     $count[BLAKE3](readFile(file)) == checksum
 
-# Asynchronously swallow cerata
-proc radula_behave_swallow*(names: seq[string]) {.async.} =
+# Swallow cerata
+proc radula_behave_swallow*(names: seq[string]) =
     var
-        clones: seq[array[4, string]]
-        downloads: seq[(array[4, string], Future[void])]
+        clones: seq[(array[4, string], string)]
+        downloads: seq[(array[4, string], string)]
 
         length: int
 
@@ -91,14 +82,16 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                     removeDir(path)
                     createDir(path)
 
-                    downloads &= ([name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
+                    downloads &= ([name, version, url, ceras["sum"].getStr()], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
         else:
             if version == "git":
-                clones &= [name, ceras["cmt"].getStr(), url, path]
+                let commit = ceras["cmt"].getStr()
+
+                clones &= ([name, commit, url, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} --quiet && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {commit} --quiet")
             else:
                 createDir(path)
 
-                downloads &= ([name, version, url, ceras["sum"].getStr()], newAsyncHttpClient().downloadFile(url, file))
+                downloads &= ([name, version, url, ceras["sum"].getStr()], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
 
     length = downloads.unzip()[0].len()
 
@@ -115,7 +108,8 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
                 version = ceras[1]
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{version:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-        waitFor all(downloads.unzip()[1])
+        for cluster in downloads.unzip()[1].distribute(length div 5):
+            discard execProcesses(cluster)
 
         echo ""
 
@@ -161,14 +155,14 @@ proc radula_behave_swallow*(names: seq[string]) {.async.} =
 
         radula_behave_ceras_print_header()
 
-        for ceras in clones:
+        for ceras in clones.unzip()[0]:
             let
                 name = ceras[0]
                 commit = ceras[1]
 
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {name:24}{commit:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            discard radula_behave_clone(commit, url = ceras[2], path = ceras[3])
+        discard execProcesses(clones.unzip()[1])
 
 proc radula_behave_stage*(name, version, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
     # We only use `nom` and `ver` from the `ceras`file
@@ -206,7 +200,7 @@ proc radula_behave_envenomate*(names: openArray[string], stage: string = RADULA_
     radula_behave_ceras_print_header()
 
     # Swallow cerata in parallel
-    waitFor radula_behave_swallow(names)
+    radula_behave_swallow(names)
 
     echo ""
 
