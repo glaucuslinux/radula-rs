@@ -16,40 +16,40 @@ import constants
 import parsetoml
 
 # Returns the full path to the `ceras` file
-proc radula_behave_ceras_path_ceras*(name: string): string =
-    RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / name / RADULA_FILE_CERAS
+proc radula_behave_ceras_path_ceras*(nom: string): string =
+    RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / nom / RADULA_FILE_CERAS
 
 # Returns the full path to the `ceras` source directory
-proc radula_behave_ceras_path_source*(name: string): string =
-    RADULA_PATH_RADULA_SOURCES / name
+proc radula_behave_ceras_path_source*(nom: string): string =
+    RADULA_PATH_RADULA_SOURCES / nom
 
 # Checks if the full path to the `ceras` file exists
-proc radula_behave_ceras_exist*(name: string): bool =
-    fileExists(radula_behave_ceras_path_ceras(name))
+proc radula_behave_ceras_exist*(nom: string): bool =
+    fileExists(radula_behave_ceras_path_ceras(nom))
 
-proc radula_behave_ceras_parse*(name: string): TomlValueRef =
-    parseFile(radula_behave_ceras_path_ceras(name))
+proc radula_behave_ceras_parse*(nom: string): TomlValueRef =
+    parseFile(radula_behave_ceras_path_ceras(nom))
 
 # Resolve concentrates using topological sorting
-proc radula_behave_ceras_concentrates_resolve*(name: string, concentrates: var Table[string, seq[string]]) =
-    concentrates[name] =
+proc radula_behave_ceras_concentrates_resolve*(nom: string, concentrates: var Table[string, seq[string]]) =
+    concentrates[nom] =
         try:
-            radula_behave_ceras_parse(name)["cnt"].getStr().split()
+            radula_behave_ceras_parse(nom)["cnt"].getStr().split()
         except CatchableError:
             @[]
 
-    if concentrates[name].len() > 0:
-        for concentrate in concentrates[name]:
+    if concentrates[nom].len() > 0:
+        for concentrate in concentrates[nom]:
             radula_behave_ceras_concentrates_resolve(concentrate, concentrates)
 
-proc radula_behave_ceras_print*(names: seq[string]) =
-    for name in names.deduplicate():
-        if not radula_behave_ceras_exist(name):
-            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {name:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+proc radula_behave_ceras_print*(noms: seq[string]) =
+    for nom in noms.deduplicate():
+        if not radula_behave_ceras_exist(nom):
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             quit(QuitFailure)
 
-        let ceras = radula_behave_ceras_parse(name)
+        let ceras = radula_behave_ceras_parse(nom)
 
         styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, ceras["nom"].getStr(), resetStyle
 
