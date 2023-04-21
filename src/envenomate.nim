@@ -89,12 +89,12 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 else:
                     removeDir(path)
 
-                    downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
+                    downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {file} --no-clobber --quiet")
         else:
             if ver == "git":
                 clones &= ([nom, cmt, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} --quiet && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} --quiet")
             else:
-                downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
+                downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {file} --no-clobber --quiet")
 
     length = downloads.unzip()[0].len()
 
