@@ -27,13 +27,16 @@ proc radula_behave_extract*(file, path: string): (string, int) =
 
 # Verify `BLAKE3` sum of source tarball
 proc radula_behave_verify*(file, sum: string): bool =
-    $count[BLAKE3](readFile(file)) == sum
+    try:
+        $count[BLAKE3](readFile(file)) == sum
+    except CatchableError:
+        false
 
 # Swallow cerata
 proc radula_behave_swallow*(noms: seq[string]) =
     var
-        clones: seq[(array[4, string], string)]
-        downloads: seq[(array[4, string], string)]
+        clones: seq[(array[3, string], string)]
+        downloads: seq[(array[5, string], string)]
 
         length: int
 
@@ -52,43 +55,46 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 except CatchableError:
                     ""
 
+        # Check for virtual cerata
         if (url.isEmptyOrWhitespace()):
             styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
             continue
 
         let
+            cmt =
+                try:
+                    ceras["cmt"].getStr()
+                except CatchableError:
+                    ""
+            sum =
+                try:
+                    ceras["sum"].getStr()
+                except CatchableError:
+                    ""
+
             path = radula_behave_ceras_path_source(nom)
             file = path / lastPathPart(url)
 
         if dirExists(path):
             if ver == "git":
-                let cmt = ceras["cmt"].getStr()
-
                 styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
                 continue
             else:
-                let sum = ceras["sum"].getStr()
-
-                if fileExists(file) and radula_behave_verify(file, sum):
+                if radula_behave_verify(file, sum):
                     styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
                     continue
                 else:
                     removeDir(path)
-                    createDir(path)
 
-                    downloads &= ([nom, ver, url, sum], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
+                    downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
         else:
             if ver == "git":
-                let cmt = ceras["cmt"].getStr()
-
-                clones &= ([nom, cmt, url, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} --quiet && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} --quiet")
+                clones &= ([nom, cmt, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} --quiet && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} --quiet")
             else:
-                createDir(path)
-
-                downloads &= ([nom, ver, url, ceras["sum"].getStr()], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
+                downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {path} --no-clobber --quiet")
 
     length = downloads.unzip()[0].len()
 
@@ -105,7 +111,11 @@ proc radula_behave_swallow*(noms: seq[string]) =
                     nom = ceras[0]
                     ver = ceras[1]
 
+                    path = ceras[3]
+
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+                createDir(path)
             discard execProcesses(cluster.unzip()[1])
 
         echo ""
@@ -118,11 +128,10 @@ proc radula_behave_swallow*(noms: seq[string]) =
             let
                 nom = ceras[0]
                 ver = ceras[1]
-                url = ceras[2]
-                sum = ceras[3]
+                sum = ceras[2]
 
-                path = radula_behave_ceras_path_source(nom)
-                file = path / lastPathPart(url)
+                path = ceras[3]
+                file = ceras[4]
 
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
