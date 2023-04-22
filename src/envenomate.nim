@@ -158,24 +158,44 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 cursorDown counter - i
         )
 
+    counter = 0
+
     length = clones.len()
 
     if length > 0:
         echo ""
 
-        echo &"Clone {length} cerata..."
+        echo &"Clone and checkout {length} cerata..."
 
         radula_behave_ceras_print_header()
 
+        let cluster = clones.unzip()[0]
+
         discard execProcesses(clones.unzip()[1], n = 5, beforeRunEvent =
             proc (i: int) =
-                let tmp = clones.unzip()[0]
-
                 let
-                    nom = tmp[0]
-                    cmt = tmp[1]
+                    ceras = cluster[i]
+
+                    nom = ceras[0]
+                    cmt = ceras[1]
 
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{cmt:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+                counter += 1
+        , afterRunEvent =
+            proc (i: int; p: Process) =
+                let
+                    ceras = cluster[i]
+
+                    nom = ceras[0]
+                    cmt = ceras[1]
+
+                cursorUp counter - i
+                eraseLine()
+
+                styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+
+                cursorDown counter - i
         )
 
 proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
