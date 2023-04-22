@@ -56,7 +56,7 @@ proc radula_behave_ceras_verify_source*(file, sum: string): bool =
 proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
     concentrates[nom] =
         try:
-            radula_behave_ceras_parse_ceras(nom)["cnt"].getStr().split()
+            radula_behave_ceras_parse_ceras(nom){"cnt"}.getStr().split()
         except CatchableError:
             @[]
 
@@ -73,39 +73,15 @@ proc radula_behave_ceras_print*(noms: seq[string]) =
 
         let ceras = radula_behave_ceras_parse_ceras(nom)
 
-        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, ceras["nom"].getStr(), resetStyle
+        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, nom, resetStyle
 
-        echo &"{\"Version\":13} :: ",
-            try:
-                ceras["ver"].getStr()
-            except CatchableError:
-                "None",
+        const NONE = ansiForegroundColorCode(fgRed) & "None" & ansiForegroundColorCode(fgDefault)
 
-            try:
-                " " & ceras["cmt"].getStr()
-            except CatchableError:
-                ""
-
-        echo &"{\"URL\":13} :: ",
-            try:
-                ceras["url"].getStr()
-            except CatchableError:
-                "None"
-        echo &"{\"Checksum\":13} :: ",
-            try:
-                ceras["sum"].getStr()
-            except CatchableError:
-                "None"
-        echo &"{\"Concentrates\":13} :: ",
-            try:
-                ceras["cnt"].getStr()
-            except CatchableError:
-                "None"
-        echo &"{\"Cysts\":13} :: ",
-            try:
-                ceras["cys"].getStr()
-            except CatchableError:
-                "None"
+        echo &"{\"Version\":13} :: ", ceras{"cmt"}.getStr(ceras{"ver"}.getStr(NONE))
+        echo &"{\"URL\":13} :: ", ceras{"url"}.getStr(NONE)
+        echo &"{\"Checksum\":13} :: ", ceras{"sum"}.getStr(NONE)
+        echo &"{\"Concentrates\":13} :: ", ceras{"cnt"}.getStr(NONE)
+        echo &"{\"Cysts\":13} :: ", ceras{"cys"}.getStr(NONE)
 
         echo ""
 
