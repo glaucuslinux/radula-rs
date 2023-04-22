@@ -34,16 +34,8 @@ proc radula_behave_swallow*(noms: seq[string]) =
         let
             ceras = radula_behave_ceras_parse_ceras(nom)
 
-            ver =
-                try:
-                    ceras["ver"].getStr()
-                except CatchableError:
-                    ""
-            url =
-                try:
-                    ceras["url"].getStr()
-                except CatchableError:
-                    ""
+            ver = ceras{"ver"}.getStr()
+            url = ceras{"url"}.getStr()
 
         # Check for virtual cerata
         if (url.isEmptyOrWhitespace()):
@@ -52,16 +44,8 @@ proc radula_behave_swallow*(noms: seq[string]) =
             continue
 
         let
-            cmt =
-                try:
-                    ceras["cmt"].getStr()
-                except CatchableError:
-                    ""
-            sum =
-                try:
-                    ceras["sum"].getStr()
-                except CatchableError:
-                    ""
+            cmt = ceras{"cmt"}.getStr()
+            sum = ceras{"sum"}.getStr()
 
             path = radula_behave_ceras_path_source(nom)
             file = path / lastPathPart(url)
@@ -246,16 +230,8 @@ proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_D
         let
             ceras = radula_behave_ceras_parse_ceras(nom)
 
-            ver =
-                try:
-                    ceras["ver"].getStr()
-                except CatchableError:
-                    ""
-            cmt =
-                try:
-                    ceras["cmt"].getStr()
-                except CatchableError:
-                    ""
+            ver = ceras{"ver"}.getStr()
+            cmt = ceras{"cmt"}.getStr()
 
         if ver == "git":
             styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{cmt:24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
