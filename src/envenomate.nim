@@ -101,12 +101,13 @@ proc radula_behave_swallow*(noms: seq[string]) =
 
         radula_behave_ceras_print_header()
 
-        for i, cluster in downloads.distribute(length div 5):
-            let tmp = cluster.unzip()[0]
-            length = cluster.len()
+        let cluster = downloads.unzip()[0]
 
-            for ceras in tmp:
+        discard execProcesses(downloads.unzip()[1], n = 5, beforeRunEvent =
+            proc (i: int) =
                 let
+                    ceras = cluster[i]
+
                     nom = ceras[0]
                     ver = ceras[1]
 
@@ -115,42 +116,42 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                 createDir(path)
-            discard execProcesses(cluster.unzip()[1], afterRunEvent =
-                proc (i: int; p: Process) =
-                    let
-                        ceras = tmp[i]
+        , afterRunEvent =
+            proc (i: int; p: Process) =
+                let
+                    ceras = cluster[i]
 
-                        nom = ceras[0]
-                        ver = ceras[1]
-                        sum = ceras[2]
+                    nom = ceras[0]
+                    ver = ceras[1]
+                    sum = ceras[2]
 
-                        path = ceras[3]
-                        file = ceras[4]
+                    path = ceras[3]
+                    file = ceras[4]
 
-                    cursorUp length - i
-                    eraseLine()
+                cursorUp length - i
+                eraseLine()
 
-                    styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                    cursorUp 1
-                    eraseLine()
+                cursorUp 1
+                eraseLine()
 
-                    if radula_behave_ceras_verify_source(file, sum):
-                        styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                if radula_behave_ceras_verify_source(file, sum):
+                    styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                        discard radula_behave_ceras_extract_source(file, path)
-                    else:
-                        styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                    discard radula_behave_ceras_extract_source(file, path)
+                else:
+                    styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                        radula_behave_exit(QuitFailure)
+                    radula_behave_exit(QuitFailure)
 
-                    cursorUp 1
-                    eraseLine()
+                cursorUp 1
+                eraseLine()
 
-                    styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+                styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-                    cursorDown length - i
-            )
+                cursorDown length - i
+        )
 
     length = clones.len()
 
@@ -161,14 +162,16 @@ proc radula_behave_swallow*(noms: seq[string]) =
 
         radula_behave_ceras_print_header()
 
-        for ceras in clones.unzip()[0]:
-            let
-                nom = ceras[0]
-                cmt = ceras[1]
+        discard execProcesses(clones.unzip()[1], n = 5, beforeRunEvent =
+            proc (i: int) =
+                let tmp = clones.unzip()[0]
 
-            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{cmt:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                let
+                    nom = tmp[0]
+                    cmt = tmp[1]
 
-        discard execProcesses(clones.unzip()[1])
+                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{cmt:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+        )
 
 proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
     # We only use `nom` and `ver` from the `ceras`file
