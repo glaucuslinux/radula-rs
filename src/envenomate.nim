@@ -85,12 +85,12 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 else:
                     removeDir(path)
 
-                    downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {file} --no-clobber --quiet")
+                    downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_WGET2} -q -O {file} -c --show-progress -N {url}")
         else:
             if ver == "git":
-                clones &= ([nom, cmt, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} --quiet && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} --quiet")
+                clones &= ([nom, cmt, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} -q && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} -q")
             else:
-                downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {file} --no-clobber --quiet")
+                downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_WGET2} -q -O {file} -c --show-progress -N {url}")
 
     length = downloads.len()
 

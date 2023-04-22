@@ -9,7 +9,6 @@ const
     RADULA_CERAS_ATTR* = "attr"
     RADULA_CERAS_AUTOCONF* = "autoconf"
     RADULA_CERAS_AUTOMAKE* = "automake"
-    RADULA_CERAS_AXEL* = "axel"
 
     RADULA_CERAS_BASH* = "bash"
     RADULA_CERAS_BC* = "bc"
