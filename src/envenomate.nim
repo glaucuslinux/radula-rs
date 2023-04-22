@@ -28,7 +28,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
         clones: seq[(array[3, string], string)]
         downloads: seq[(array[5, string], string)]
 
-        length: int
+        counter, length: int
 
     for nom in noms:
         let
@@ -116,6 +116,8 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                 createDir(path)
+
+                counter += 1
         , afterRunEvent =
             proc (i: int; p: Process) =
                 let
@@ -128,7 +130,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
                     path = ceras[3]
                     file = ceras[4]
 
-                cursorUp length - i
+                cursorUp counter - i
                 eraseLine()
 
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
@@ -150,7 +152,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
 
                 styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-                cursorDown length - i
+                cursorDown counter - i
         )
 
     length = clones.len()
