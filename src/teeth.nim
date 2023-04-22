@@ -52,6 +52,8 @@ proc radula_behave_rsync*(source, destination: string): (string, int) =
 proc radula_behave_exit*(exit_code: int = 0) =
     remove_file(RADULA_FILE_RADULA_LOCK)
 
+    showCursor()
+
     quit(exit_code)
 
 proc radula_behave_abort*() {.noconv.} =
@@ -67,4 +69,6 @@ proc radula_behave_lock*() =
         
         quit(QuitFailure)
     else:
+        hideCursor()
+
         writeFile(RADULA_FILE_RADULA_LOCK, "")

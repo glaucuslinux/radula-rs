@@ -135,14 +135,17 @@ proc radula_behave_swallow*(noms: seq[string]) =
 
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                cursorUp 1
-                eraseLine()
-
                 if radula_behave_ceras_verify_source(file, sum):
+                    cursorUp 1
+                    eraseLine()
+
                     styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                     discard radula_behave_ceras_extract_source(file, path)
                 else:
+                    cursorUp 1
+                    eraseLine()
+
                     styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                     radula_behave_exit(QuitFailure)
