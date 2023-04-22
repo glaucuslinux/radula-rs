@@ -69,18 +69,19 @@ proc radula_behave_swallow*(noms: seq[string]) =
         if dirExists(path):
             if ver == "git":
                 styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
-
-                continue
             else:
                 if radula_behave_ceras_verify_source(file, sum):
-                    if radula_behave_ceras_extract_source(path):
+                    if radula_behave_ceras_extract_source(file):
                         styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
-
-                        continue
                     else:
                         styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                         discard radula_behave_ceras_extract_source(file, path)
+
+                        cursorUp 1
+                        eraseLine()
+
+                        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
                 else:
                     removeDir(path)
 
@@ -91,17 +92,20 @@ proc radula_behave_swallow*(noms: seq[string]) =
             else:
                 downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_AXEL} {url} --output {file} --no-clobber --quiet")
 
-    length = downloads.unzip()[0].len()
+    length = downloads.len()
 
     if length > 0:
         echo ""
 
-        echo &"Download {length} cerata..."
+        echo &"Download, verify and extract {length} cerata..."
 
         radula_behave_ceras_print_header()
 
         for i, cluster in downloads.distribute(length div 5):
-            for ceras in cluster.unzip()[0]:
+            let tmp = cluster.unzip()[0]
+            length = cluster.len()
+
+            for ceras in tmp:
                 let
                     nom = ceras[0]
                     ver = ceras[1]
@@ -111,41 +115,42 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                 createDir(path)
-            discard execProcesses(cluster.unzip()[1])
+            discard execProcesses(cluster.unzip()[1], afterRunEvent =
+                proc (i: int; p: Process) =
+                    let
+                        ceras = tmp[i]
 
-        echo ""
+                        nom = ceras[0]
+                        ver = ceras[1]
+                        sum = ceras[2]
 
-        echo &"Verify and extract {length} cerata..."
+                        path = ceras[3]
+                        file = ceras[4]
 
-        radula_behave_ceras_print_header()
+                    cursorUp length - i
+                    eraseLine()
 
-        for ceras in downloads.unzip()[0]:
-            let
-                nom = ceras[0]
-                ver = ceras[1]
-                sum = ceras[2]
+                    styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                path = ceras[3]
-                file = ceras[4]
+                    cursorUp 1
+                    eraseLine()
 
-            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                    if radula_behave_ceras_verify_source(file, sum):
+                        styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            cursorUp 1
-            eraseLine()
+                        discard radula_behave_ceras_extract_source(file, path)
+                    else:
+                        styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            if radula_behave_ceras_verify_source(file, sum):
-                styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                        radula_behave_exit(QuitFailure)
 
-                discard radula_behave_ceras_extract_source(file, path)
-            else:
-                styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+                    cursorUp 1
+                    eraseLine()
 
-                radula_behave_exit(QuitFailure)
+                    styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-            cursorUp 1
-            eraseLine()
-
-            styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+                    cursorDown length - i
+            )
 
     length = clones.len()
 

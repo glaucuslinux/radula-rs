@@ -35,9 +35,9 @@ proc radula_behave_ceras_parse_ceras*(nom: string): TomlValueRef =
     parseFile(radula_behave_ceras_path_ceras(nom))
 
 # Checks if the `ceras` source is extracted
-proc radula_behave_ceras_extract_source*(path: string): bool =
-    for i in walkDir(path):
-        if i[0] != pcFile:
+proc radula_behave_ceras_extract_source*(file: string): bool =
+    for i in walkDir(parentDir(file)):
+        if i[1] != file:
             return true
     return false
 
