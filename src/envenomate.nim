@@ -21,16 +21,6 @@ import
     parsetoml,
     toposort
 
-# Extract tarballs
-proc radula_behave_extract*(file, path: string): (string, int) =
-    execCmdEx(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {file} -C {path}")
-
-# Verify `BLAKE3` sum of source tarball
-proc radula_behave_verify*(file, sum: string): bool =
-    try:
-        $count[BLAKE3](readFile(file)) == sum
-    except CatchableError:
-        false
 
 # Swallow cerata
 proc radula_behave_swallow*(noms: seq[string]) =
@@ -42,7 +32,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
 
     for nom in noms:
         let
-            ceras = radula_behave_ceras_parse(nom)
+            ceras = radula_behave_ceras_parse_ceras(nom)
 
             ver =
                 try:
@@ -82,10 +72,15 @@ proc radula_behave_swallow*(noms: seq[string]) =
 
                 continue
             else:
-                if radula_behave_verify(file, sum):
-                    styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+                if radula_behave_ceras_verify_source(file, sum):
+                    if radula_behave_ceras_extract_source(path):
+                        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-                    continue
+                        continue
+                    else:
+                        styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+                        discard radula_behave_ceras_extract_source(file, path)
                 else:
                     removeDir(path)
 
@@ -138,10 +133,10 @@ proc radula_behave_swallow*(noms: seq[string]) =
             cursorUp 1
             eraseLine()
 
-            if radula_behave_verify(file, sum):
+            if radula_behave_ceras_verify_source(file, sum):
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                discard radula_behave_extract(file, path)
+                discard radula_behave_ceras_extract_source(file, path)
             else:
                 styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
@@ -188,13 +183,13 @@ proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_D
         length: int
 
     for nom in noms:
-        if not radula_behave_ceras_exist(nom):
+        if not radula_behave_ceras_exist_ceras(nom):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             radula_behave_exit(QuitFailure)
 
         if resolve:
-            radula_behave_ceras_concentrates_resolve(nom, concentrates)
+            radula_behave_ceras_resolve_concentrates(nom, concentrates)
 
     if resolve:
         noms = toposort(concentrates)
@@ -216,7 +211,7 @@ proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_D
 
     for nom in noms:
         let
-            ceras = radula_behave_ceras_parse(nom)
+            ceras = radula_behave_ceras_parse_ceras(nom)
 
             ver =
                 try:
