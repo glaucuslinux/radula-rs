@@ -3,7 +3,6 @@
 
 import std/[
     os,
-    osproc,
     sequtils,
     strformat,
     strutils,
