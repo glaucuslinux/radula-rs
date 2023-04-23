@@ -51,7 +51,8 @@ proc radula_behave_ceras_verify_source*(file, sum: string): bool =
 
 # Resolve concentrates using topological sorting
 proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
-    concentrates[nom] = try: radula_behave_ceras_parse_ceras(nom){"cnt"}.getStr().split() except CatchableError: @[]
+    # Don't use `{}` because we don't want an empty string "" in our Table
+    concentrates[nom] = try: radula_behave_ceras_parse_ceras(nom)["cnt"].getStr().split() except CatchableError: @[]
 
     if concentrates[nom].len() > 0:
         for concentrate in concentrates[nom]:

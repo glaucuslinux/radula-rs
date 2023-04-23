@@ -204,28 +204,26 @@ proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_D
 
             radula_behave_exit(QuitFailure)
 
-        if resolve:
-            radula_behave_ceras_resolve_concentrates(nom, concentrates)
+        radula_behave_ceras_resolve_concentrates(nom, concentrates)
 
-    if resolve:
-        noms = toposort(concentrates)
+    let cluster = toposort(concentrates)
 
-    length = noms.len()
+    length = cluster.len()
 
     echo &"Swallow {length} cerata..."
 
     radula_behave_ceras_print_header()
 
     # Swallow cerata in parallel
-    radula_behave_swallow(noms)
+    radula_behave_swallow(cluster)
 
     echo ""
 
-    echo &"Envenomate {length} cerata..."
+    echo &"Envenomate {(if resolve: length else: noms.len())} cerata..."
 
     radula_behave_ceras_print_header()
 
-    for nom in noms:
+    for nom in (if resolve: cluster else: noms):
         let
             ceras = radula_behave_ceras_parse_ceras(nom)
 
