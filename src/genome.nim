@@ -9,15 +9,14 @@ import std/[
 
 import constants
 
-# This will be used whether we're bootstrapping or not so don't add _bootstrap_
-# to its name. Also, ensure `radula_behave_genome_environment()` is run.
+# This will be used regardless of the bootstrap behavior, so don't add `_bootstrap_`
+# to its name. Also, ensure `radula_behave_genome_environment()` is run beforehand.
 proc radula_behave_flags_environment*() =
     putEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER, RADULA_FLAGS_C_COMPILER & ' ' & getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS))
     putEnv(RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER, getEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER) & ' ' & RADULA_FLAGS_CXX_COMPILER)
     putEnv(RADULA_ENVIRONMENT_FLAGS_LINKER, RADULA_FLAGS_LINKER & ' ' & getEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER))
 
-# These will be used whether we're bootstrapping or not so don't add _bootstrap_ to its name
-# Get canonical system tuple using the `config.guess` file
+# Get canonical system tuple from `config.guess`
 proc radula_behave_genome_tuple*(): (string, int) =
     execCmdEx(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS)
 
