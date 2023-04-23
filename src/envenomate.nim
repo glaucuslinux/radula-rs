@@ -21,7 +21,6 @@ import
     parsetoml,
     toposort
 
-
 # Swallow cerata
 proc radula_behave_swallow*(noms: seq[string]) =
     var
