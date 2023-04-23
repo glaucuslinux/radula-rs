@@ -47,18 +47,11 @@ proc radula_behave_ceras_extract_source*(file, path: string): (string, int) =
 
 # Verify the `ceras` source
 proc radula_behave_ceras_verify_source*(file, sum: string): bool =
-    try:
-        $count[BLAKE3](readFile(file)) == sum
-    except CatchableError:
-        false
+    $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
 
 # Resolve concentrates using topological sorting
 proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
-    concentrates[nom] =
-        try:
-            radula_behave_ceras_parse_ceras(nom){"cnt"}.getStr().split()
-        except CatchableError:
-            @[]
+    concentrates[nom] = try: radula_behave_ceras_parse_ceras(nom){"cnt"}.getStr().split() except CatchableError: @[]
 
     if concentrates[nom].len() > 0:
         for concentrate in concentrates[nom]:
