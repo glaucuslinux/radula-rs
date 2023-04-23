@@ -19,15 +19,15 @@ import
     parsetoml
 
 # Return the full path to the `ceras` file
-proc radula_behave_ceras_path_ceras*(nom: string): string =
+func radula_behave_ceras_path_ceras*(nom: string): string =
     RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / nom / RADULA_FILE_CERAS
 
 # Return the full path to the `ceras` source directory
-proc radula_behave_ceras_path_source*(nom: string): string =
+func radula_behave_ceras_path_source*(nom: string): string =
     RADULA_PATH_RADULA_SOURCES / nom
 
 # Check if the full path to the `ceras` file exists
-proc radula_behave_ceras_exist_ceras*(nom: string): bool =
+func radula_behave_ceras_exist_ceras*(nom: string): bool =
     fileExists(radula_behave_ceras_path_ceras(nom))
 
 # Parse the `ceras` file
