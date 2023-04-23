@@ -47,19 +47,19 @@ proc radula_behave_swallow*(noms: seq[string]) =
             sum = ceras{"sum"}.getStr()
 
             path = radula_behave_ceras_path_source(nom)
-            file = path / lastPathPart(url)
+            archive = path / lastPathPart(url)
 
         if dirExists(path):
             if ver == "git":
                 styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
             else:
-                if radula_behave_ceras_verify_source(file, sum):
-                    if radula_behave_ceras_extract_source(file):
+                if radula_behave_ceras_verify_source(archive, sum):
+                    if radula_behave_ceras_extract_source(archive):
                         styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
                     else:
                         styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                        discard radula_behave_ceras_extract_source(file, path)
+                        discard radula_behave_extract_archive(archive, path)
 
                         cursorUp 1
                         eraseLine()
@@ -68,12 +68,12 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 else:
                     removeDir(path)
 
-                    downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_WGET2} -q -O {file} -c -N {url}")
+                    downloads &= ([nom, ver, sum, path, archive], &"{RADULA_CERAS_WGET2} -q -O {archive} -c -N {url}")
         else:
             if ver == "git":
                 clones &= ([nom, cmt, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} -q && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} -q")
             else:
-                downloads &= ([nom, ver, sum, path, file], &"{RADULA_CERAS_WGET2} -q -O {file} -c -N {url}")
+                downloads &= ([nom, ver, sum, path, archive], &"{RADULA_CERAS_WGET2} -q -O {archive} -c -N {url}")
 
     length = downloads.len()
 
@@ -111,20 +111,20 @@ proc radula_behave_swallow*(noms: seq[string]) =
                     sum = ceras[2]
 
                     path = ceras[3]
-                    file = ceras[4]
+                    archive = ceras[4]
 
                 cursorUp counter - i
                 eraseLine()
 
                 styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                if radula_behave_ceras_verify_source(file, sum):
+                if radula_behave_ceras_verify_source(archive, sum):
                     cursorUp 1
                     eraseLine()
 
                     styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-                    discard radula_behave_ceras_extract_source(file, path)
+                    discard radula_behave_extract_archive(archive, path)
                 else:
                     cursorUp 1
                     eraseLine()

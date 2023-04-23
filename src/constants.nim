@@ -324,7 +324,7 @@ OPTIONS:
   i, img         Release an IMG image file of the glaucus system
   l, list        List supported genomes
   r, require     Check if host has all required packages
-  s, release     Release a compressed tarball of the toolchain
+  s, release     Create a compressed archive of the toolchain
   t, toolchain   Bootstrap a cross compiler toolchain
   x, cross       Bootstrap a cross compiled glaucus system
   z, iso         Release an ISO image file of the glaucus system"""
