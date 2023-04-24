@@ -3,6 +3,7 @@
 
 import std/[
     os,
+    strformat,
     strutils,
     times
 ]
@@ -18,18 +19,6 @@ proc radula_behave_bootstrap_clean*() =
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS))
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
-
-proc radula_behave_bootstrap_distclean*() =
-    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-    removeFile(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_FILE_GLAUCUS_IMG)
-    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_SOURCES))
-
-    radula_behave_bootstrap_clean()
-
-    # Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
-    # `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS` and
-    # `RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS` are removed
-    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
 
 proc radula_behave_bootstrap_cross_ccache*() =
     putEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS) / RADULA_CERAS_CCACHE)
@@ -226,6 +215,18 @@ proc radula_behave_bootstrap_cross_prepare*() =
 
     removeFile(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
 
+proc radula_behave_bootstrap_distclean*() =
+    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+    removeFile(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_FILE_GLAUCUS_IMG)
+    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_SOURCES))
+
+    radula_behave_bootstrap_clean()
+
+    # Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
+    # `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS` and
+    # `RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS` are removed
+    removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
+
 proc radula_behave_bootstrap_environment*() =
     let path = parentDir(getCurrentDir())
 
@@ -259,7 +260,6 @@ proc radula_behave_bootstrap_toolchain_ccache*() =
     putEnv(RADULA_ENVIRONMENT_PATH, RADULA_PATH_CCACHE & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
 
     createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
-
 
 proc radula_behave_bootstrap_toolchain_envenomate*() =
     radula_behave_envenomate([
@@ -319,7 +319,7 @@ proc radula_behave_bootstrap_toolchain_release*() =
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_INFO)
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_MAN)
 
-    let output = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TOOLCHAIN & '-' & now().format("ddMMYYYY") & ".tar.zst", path)
+    let output = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_TOOLCHAIN}-{now().format(\"ddMMYYYY\")}.tar.zst", path)
 
     if output[1] == 0:
         removeDir(path)
