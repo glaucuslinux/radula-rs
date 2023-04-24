@@ -53,8 +53,8 @@ proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Ta
 proc radula_behave_ceras_verify_source*(file, sum: string): bool =
     $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
 
-proc radula_behave_ceras_print*(noms: seq[string]) =
-    for nom in noms.deduplicate():
+proc radula_behave_ceras_print*(cerata: seq[string]) =
+    for nom in cerata.deduplicate():
         if not radula_behave_ceras_exist_ceras(nom):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 

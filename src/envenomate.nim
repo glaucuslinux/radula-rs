@@ -21,15 +21,22 @@ import
     parsetoml,
     toposort
 
+proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
+    # We only use `nom` and `ver` from the `ceras`file
+    #
+    # All phases need to be called sequentially to prevent the loss of the
+    # current working directory...
+    execCmdEx(&"{RADULA_CERAS_DASH} {RADULA_TOOTH_SHELL_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{nom}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1'" % [&">> {log_file} 2>&1"])
+
 # Swallow cerata
-proc radula_behave_swallow*(noms: seq[string]) =
+proc radula_behave_swallow*(cerata: seq[string]) =
     var
         clones: seq[(array[3, string], string)]
         downloads: seq[(array[5, string], string)]
 
         counter, length: int
 
-    for nom in noms:
+    for nom in cerata:
         let
             ceras = radula_behave_ceras_parse_ceras(nom)
 
@@ -37,7 +44,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
             url = ceras{"url"}.getStr()
 
         # Check for virtual cerata
-        if (url.isEmptyOrWhitespace()):
+        if url.isEmptyOrWhitespace():
             styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
             continue
@@ -54,9 +61,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
             else:
                 if radula_behave_ceras_verify_source(archive, sum):
-                    if radula_behave_ceras_extract_source(archive):
-                        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
-                    else:
+                    if not radula_behave_ceras_extract_source(archive):
                         styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
                         discard radula_behave_extract_archive(archive, path)
@@ -64,7 +69,7 @@ proc radula_behave_swallow*(noms: seq[string]) =
                         cursorUp 1
                         eraseLine()
 
-                        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+                    styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
                 else:
                     removeDir(path)
 
@@ -181,24 +186,17 @@ proc radula_behave_swallow*(noms: seq[string]) =
                 cursorDown counter - i
         )
 
-proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
-    # We only use `nom` and `ver` from the `ceras`file
-    #
-    # All phases need to be called sequentially to prevent the loss of the
-    # current working directory...
-    execCmdEx(RADULA_CERAS_DASH & ' ' & RADULA_TOOTH_SHELL_FLAGS & ' ' & (&"nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{nom}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1" % [&">> {log_file} 2>&1"]).quoteShell)
-
-proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
+proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
     var
-        log_file: string
-
-        noms = noms.deduplicate()
+        cerata = cerata.deduplicate()
 
         concentrates: Table[string, seq[string]]
 
         length: int
 
-    for nom in noms:
+        log_file: string
+
+    for nom in cerata:
         if not radula_behave_ceras_exist_ceras(nom):
             styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
@@ -219,27 +217,20 @@ proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_D
 
     echo ""
 
-    echo &"Envenomate {(if resolve: length else: noms.len())} cerata..."
+    echo &"Envenomate {(if resolve: length else: cerata.len())} cerata..."
 
     radula_behave_ceras_print_header()
 
-    for nom in (if resolve: cluster else: noms):
+    for nom in (if resolve: cluster else: cerata):
         let
             ceras = radula_behave_ceras_parse_ceras(nom)
 
             ver = ceras{"ver"}.getStr()
             cmt = ceras{"cmt"}.getStr()
 
-        if ver == "git":
-            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{cmt:24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
-        else:
-            styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{ver:24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+        styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-        case stage
-        of RADULA_DIRECTORY_CROSS:
-            log_file = getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
-        of RADULA_DIRECTORY_TOOLCHAIN:
-            log_file = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
+        log_file = getEnv(if stage == RADULA_DIRECTORY_CROSS: RADULA_ENVIRONMENT_FILE_CROSS_LOG else: RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
         let output = radula_behave_stage(nom, ver, stage, log_file)
 
@@ -247,11 +238,8 @@ proc radula_behave_envenomate*(noms: openArray[string], stage: string = RADULA_D
         eraseLine()
 
         if output[1] != 0:
-            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{output[1]:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{output[1]:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             radula_behave_exit(QuitFailure)
 
-        if ver == "git":
-            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
-        else:
-            styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+        styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
