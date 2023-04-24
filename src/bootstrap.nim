@@ -88,12 +88,12 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Development
         RADULA_CERAS_AUTOCONF,
         RADULA_CERAS_AUTOMAKE,
-        # RADULA_CERAS_BINUTILS,
+        RADULA_CERAS_BINUTILS,
         RADULA_CERAS_BYACC,
         RADULA_CERAS_CCACHE,
-        # RADULA_CERAS_CMAKE,
+        RADULA_CERAS_CMAKE,
         RADULA_CERAS_FLEX,
-        # RADULA_CERAS_GCC,
+        RADULA_CERAS_GCC,
         RADULA_CERAS_HELP2MAN,
         RADULA_CERAS_LIBTOOL,
         RADULA_CERAS_MAKE,
@@ -120,7 +120,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Userland
         RADULA_CERAS_BC,
         RADULA_CERAS_GREP,
-        # RADULA_CERAS_PLOCATE,
+        RADULA_CERAS_PLOCATE,
 
         # Networking
         RADULA_CERAS_IPROUTE2,
