@@ -14,9 +14,6 @@ import
     teeth
 
 proc radula_behave_options*() =
-    # Catch `Ctrl-C` and exit gracefully
-    setControlCHook(radula_behave_abort)
-
     if paramCount() < 1:
         echo RADULA_HELP
 
@@ -24,10 +21,10 @@ proc radula_behave_options*() =
 
     var p = initOptParser()
 
-    for kind, key, value in getOpt():
+    while true:
         p.next()
 
-        case kind
+        case p.kind
         of cmdArgument, cmdEnd:
             echo RADULA_HELP
 
@@ -35,10 +32,13 @@ proc radula_behave_options*() =
         of cmdLongOption, cmdShortOption:
             case p.key
             of "b", "behave":
+                # Catch `Ctrl-C` and exit gracefully
+                setControlCHook(radula_behave_abort)
+
                 # Check lock file
                 radula_behave_lock()
 
-                case value
+                case p.val
                 of "b", "bootstrap":
                     p.next()
 
@@ -142,7 +142,7 @@ proc radula_behave_options*() =
                 if cerata.len() >= 1:
                     radula_behave_ceras_print(cerata)
                 else:
-                    case value:
+                    case p.val:
                     of "h", "help":
                         echo RADULA_HELP_CERAS
                     else:
