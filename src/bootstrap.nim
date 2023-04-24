@@ -98,6 +98,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_LIBTOOL,
         RADULA_CERAS_MAKE,
         RADULA_CERAS_MAWK,
+        RADULA_CERAS_MOLD,
         RADULA_CERAS_OM4,
         RADULA_CERAS_PATCH,
         RADULA_CERAS_PKGCONF,
