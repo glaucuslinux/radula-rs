@@ -62,10 +62,9 @@ proc radula_behave_ceras_print*(cerata: seq[string]) =
 
         let ceras = radula_behave_ceras_parse_ceras(nom)
 
-        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, nom, resetStyle
-
         const NONE = ansiForegroundColorCode(fgRed) & "None" & ansiForegroundColorCode(fgDefault)
 
+        styledEcho &"{\"Name\":13} :: ", fgBlue, styleBright, nom, resetStyle
         echo &"{\"Version\":13} :: ", ceras{"cmt"}.getStr(ceras{"ver"}.getStr(NONE))
         echo &"{\"URL\":13} :: ", ceras{"url"}.getStr(NONE)
         echo &"{\"Checksum\":13} :: ", ceras{"sum"}.getStr(NONE)
