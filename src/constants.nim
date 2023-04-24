@@ -75,6 +75,7 @@ const
     RADULA_CERAS_MAKE* = "make"
     RADULA_CERAS_MANDOC* = "mandoc"
     RADULA_CERAS_MAWK* = "mawk"
+    RADULA_CERAS_MIMALLOC* = "mimalloc"
     RADULA_CERAS_MKSH* = "mksh"
     RADULA_CERAS_MOLD* = "mold"
     RADULA_CERAS_MPC* = "mpc"
