@@ -88,18 +88,18 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Development
         RADULA_CERAS_AUTOCONF,
         RADULA_CERAS_AUTOMAKE,
-        RADULA_CERAS_BINUTILS,
+        # RADULA_CERAS_BINUTILS,
         RADULA_CERAS_BYACC,
         RADULA_CERAS_CCACHE,
         # RADULA_CERAS_CMAKE,
         RADULA_CERAS_FLEX,
-        RADULA_CERAS_GCC,
+        # RADULA_CERAS_GCC,
         RADULA_CERAS_HELP2MAN,
         RADULA_CERAS_LIBTOOL,
         RADULA_CERAS_MAKE,
         RADULA_CERAS_MAWK,
         RADULA_CERAS_MIMALLOC,
-        RADULA_CERAS_MOLD,
+        # RADULA_CERAS_MOLD,
         RADULA_CERAS_OM4,
         RADULA_CERAS_PATCH,
         RADULA_CERAS_PKGCONF,
@@ -107,33 +107,33 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_SAMURAI,
 
         # Synchronization
-        RADULA_CERAS_RSYNC,
+        # RADULA_CERAS_RSYNC,
 
         # Editors, Pagers and Shells
         RADULA_CERAS_NETBSD_CURSES,
         RADULA_CERAS_LIBEDIT,
         RADULA_CERAS_PCRE2,
-        RADULA_CERAS_DASH,
-        RADULA_CERAS_YASH,
-        RADULA_CERAS_LESS,
-        RADULA_CERAS_VIM,
-        RADULA_CERAS_MANDOC,
+        # RADULA_CERAS_DASH,
+        # RADULA_CERAS_YASH,
+        # RADULA_CERAS_LESS,
+        # RADULA_CERAS_VIM,
+        # RADULA_CERAS_MANDOC,
 
         # Userland
         RADULA_CERAS_BC,
-        RADULA_CERAS_GREP,
-        RADULA_CERAS_PLOCATE,
+        # RADULA_CERAS_GREP,
+        # RADULA_CERAS_PLOCATE,
 
         # Networking
         RADULA_CERAS_IPROUTE2,
         RADULA_CERAS_IPUTILS,
-        RADULA_CERAS_SDHCP,
-        RADULA_CERAS_CURL,
-        RADULA_CERAS_WGET2,
+        # RADULA_CERAS_SDHCP,
+        # RADULA_CERAS_CURL,
+        # RADULA_CERAS_WGET2,
 
         # Time Zone
-        RADULA_CERAS_TZCODE,
-        RADULA_CERAS_TZDATA,
+        # RADULA_CERAS_TZCODE,
+        # RADULA_CERAS_TZDATA,
 
         # Utilities
         RADULA_CERAS_KMOD,
@@ -142,8 +142,8 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_PROCPS_NG,
         RADULA_CERAS_UTIL_LINUX,
         RADULA_CERAS_E2FSPROGS,
-        RADULA_CERAS_PCIUTILS,
-        RADULA_CERAS_HWDATA,
+        # RADULA_CERAS_PCIUTILS,
+        # RADULA_CERAS_HWDATA,
 
         # Services
         RADULA_CERAS_S6_LINUX_INIT,
