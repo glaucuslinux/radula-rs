@@ -21,12 +21,12 @@ import
     parsetoml,
     toposort
 
-proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): (string, int) =
+proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log_file: string): int =
     # We only use `nom` and `ver` from the `ceras`file
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working directory...
-    execCmdEx(&"{RADULA_CERAS_DASH} {RADULA_TOOTH_SHELL_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{nom}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1'" % [&">> {log_file} 2>&1"])
+    execCmd(&"{RADULA_CERAS_DASH} {RADULA_TOOTH_SHELL_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS}/{RADULA_DIRECTORY_GLAUCUS}/{nom}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1'" % [&">> {log_file} 2>&1"])
 
 # Swallow cerata
 proc radula_behave_swallow*(cerata: seq[string]) =
@@ -232,13 +232,13 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
 
         log_file = getEnv(if stage == RADULA_DIRECTORY_CROSS: RADULA_ENVIRONMENT_FILE_CROSS_LOG else: RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
-        let output = radula_behave_stage(nom, ver, stage, log_file)
+        let status = radula_behave_stage(nom, ver, stage, log_file)
 
         cursorUp 1
         eraseLine()
 
-        if output[1] != 0:
-            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{output[1]:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+        if status != 0:
+            styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             radula_behave_exit(QuitFailure)
 
