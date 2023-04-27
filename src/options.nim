@@ -62,6 +62,12 @@ proc radula_behave_options*() =
                     of "h", "help":
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP
                     of "i", "img":
+                        radula_behave_bootstrap_environment()
+
+                        radula_behave_teeth_environment()
+
+                        radula_behave_bootstrap_cross_img()
+
                         echo "img complete"
                     of "l", "list":
                         echo RADULA_HELP_BEHAVE_BOOTSTRAP_LIST
@@ -80,6 +86,7 @@ proc radula_behave_options*() =
 
                         radula_behave_teeth_environment()
 
+                        # Default to `x86-64-v3`
                         radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
 
                         radula_behave_bootstrap_toolchain_environment_directories()
@@ -104,6 +111,7 @@ proc radula_behave_options*() =
 
                         radula_behave_teeth_environment()
 
+                        # Default to `x86-64-v3`
                         radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
 
                         radula_behave_flags_environment()

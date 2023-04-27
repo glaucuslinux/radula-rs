@@ -3,6 +3,7 @@
 
 import std/[
     os,
+    osproc,
     strformat,
     strutils,
     times
@@ -88,18 +89,18 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Development
         RADULA_CERAS_AUTOCONF,
         RADULA_CERAS_AUTOMAKE,
-        # RADULA_CERAS_BINUTILS,
+        RADULA_CERAS_BINUTILS,
         RADULA_CERAS_BYACC,
         RADULA_CERAS_CCACHE,
         # RADULA_CERAS_CMAKE,
         RADULA_CERAS_FLEX,
-        # RADULA_CERAS_GCC,
+        RADULA_CERAS_GCC,
         RADULA_CERAS_HELP2MAN,
         RADULA_CERAS_LIBTOOL,
         RADULA_CERAS_MAKE,
         RADULA_CERAS_MAWK,
         RADULA_CERAS_MIMALLOC,
-        # RADULA_CERAS_MOLD,
+        RADULA_CERAS_MOLD,
         RADULA_CERAS_OM4,
         RADULA_CERAS_PATCH,
         RADULA_CERAS_PKGCONF,
@@ -107,33 +108,33 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_SAMURAI,
 
         # Synchronization
-        # RADULA_CERAS_RSYNC,
+        RADULA_CERAS_RSYNC,
 
         # Editors, Pagers and Shells
         RADULA_CERAS_NETBSD_CURSES,
         RADULA_CERAS_LIBEDIT,
         RADULA_CERAS_PCRE2,
-        # RADULA_CERAS_DASH,
-        # RADULA_CERAS_YASH,
-        # RADULA_CERAS_LESS,
-        # RADULA_CERAS_VIM,
-        # RADULA_CERAS_MANDOC,
+        RADULA_CERAS_DASH,
+        RADULA_CERAS_YASH,
+        RADULA_CERAS_LESS,
+        RADULA_CERAS_VIM,
+        RADULA_CERAS_MANDOC,
 
         # Userland
         RADULA_CERAS_BC,
-        # RADULA_CERAS_GREP,
-        # RADULA_CERAS_PLOCATE,
+        RADULA_CERAS_GREP,
+        RADULA_CERAS_PLOCATE,
 
         # Networking
         RADULA_CERAS_IPROUTE2,
         RADULA_CERAS_IPUTILS,
-        # RADULA_CERAS_SDHCP,
-        # RADULA_CERAS_CURL,
-        # RADULA_CERAS_WGET2,
+        RADULA_CERAS_SDHCP,
+        RADULA_CERAS_CURL,
+        RADULA_CERAS_WGET2,
 
         # Time Zone
-        # RADULA_CERAS_TZCODE,
-        # RADULA_CERAS_TZDATA,
+        RADULA_CERAS_TZCODE,
+        RADULA_CERAS_TZDATA,
 
         # Utilities
         RADULA_CERAS_KMOD,
@@ -142,8 +143,8 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         RADULA_CERAS_PROCPS_NG,
         RADULA_CERAS_UTIL_LINUX,
         RADULA_CERAS_E2FSPROGS,
-        # RADULA_CERAS_PCIUTILS,
-        # RADULA_CERAS_HWDATA,
+        RADULA_CERAS_PCIUTILS,
+        RADULA_CERAS_HWDATA,
 
         # Services
         RADULA_CERAS_S6_LINUX_INIT,
@@ -153,7 +154,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
         # Kernel
         RADULA_CERAS_LIBUARGP,
         RADULA_CERAS_LIBELF,
-        RADULA_CERAS_LINUX
+        # RADULA_CERAS_LINUX
     ], RADULA_DIRECTORY_CROSS, false)
 
 proc radula_behave_bootstrap_cross_environment_directories*() =
@@ -202,6 +203,73 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
     putEnv(RADULA_ENVIRONMENT_CROSS_STRINGS, cross_compile & RADULA_CROSS_STRINGS)
     putEnv(RADULA_ENVIRONMENT_CROSS_STRIP, cross_compile & RADULA_CROSS_STRIP)
 
+proc radula_behave_bootstrap_cross_img*() =
+    # Default to `x86-64-v3`
+    let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_IMG}-{now().format(\"ddMMYYYY\")}.img"
+
+    # Create a new IMG image file
+    discard execCmd(&"{RADULA_TOOTH_QEMU_IMG} create -f raw {img} {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
+
+    # Write mbr.bin (from SYSLINUX) to the first 440 bytes of the IMG image file
+    discard execCmd(&"{RADULA_TOOTH_DD} if={RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_FILE_SYSLINUX_MBR_BIN} of={img} conv=notrunc bs=440 count=1 {RADULA_TOOTH_SHELL_REDIRECTION}")
+
+    # Partition the IMG image file
+    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} {img} mklabel msdos")
+    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} mkpart primary ext4 0 {RADULA_FILE_GLAUCUS_IMG_SIZE}")
+    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} set 1 boot on")
+
+    discard execCmd(&"{RADULA_TOOTH_MODPROBE} loop")
+
+    # Detach all used loop devices
+    discard execCmd(&"{RADULA_TOOTH_LOSETUP} -D")
+
+    # Find the first unused loop device
+    let
+        device = execCmdEx(&"{RADULA_TOOTH_LOSETUP} -f")[0].strip()
+        partition = device & "p1"
+
+    # Associate the first unused loop device with the IMG image file
+    discard execCmd(&"{RADULA_TOOTH_LOSETUP} {device} {img}")
+
+    # Notify the kernel about the new partition on the IMG image file
+    discard execCmd(&"{RADULA_TOOTH_PARTX} -a {device}")
+
+    # Create an `ext4` partition in the partition
+    discard execCmd(&"{RADULA_TOOTH_MKE2FS} {RADULA_TOOTH_MKE2FS_FLAGS} ext4 {partition}")
+
+    let mount = RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_MNT / RADULA_DIRECTORY_GLAUCUS
+
+    createDir(mount)
+
+    discard execCmd(&"{RADULA_TOOTH_MOUNT} {partition} {mount}")
+
+    # Remove `/lost+found` directory
+    removeDir(mount / RADULA_PATH_LOST_FOUND)
+
+    discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) & RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+
+    # Install `extlinux` as the default bootloader
+
+    let path = mount / RADULA_PATH_BOOT / RADULA_TOOTH_EXTLINUX
+
+    createDir(path)
+
+    discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+
+    discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path}")
+
+    # Change ownerships
+    discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 mount")
+    discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 20:20 {mount / RADULA_PATH_ETC / RADULA_PATH_UTMPS}")
+
+    # Clean up
+    discard execCmd(&"{RADULA_TOOTH_UMOUNT} {RADULA_TOOTH_UMOUNT_FLAGS} {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
+    discard execCmd(&"{RADULA_TOOTH_PARTX} -d {partition} {RADULA_TOOTH_SHELL_REDIRECTION}")
+    discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
+
+    # Backup the new IMG image file
+    discard radula_behave_rsync(img, getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+
 proc radula_behave_bootstrap_cross_prepare*() =
     discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
     discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_TOOLCHAIN, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
@@ -219,7 +287,6 @@ proc radula_behave_bootstrap_cross_prepare*() =
 
 proc radula_behave_bootstrap_distclean*() =
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-    removeFile(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_FILE_GLAUCUS_IMG)
     removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_SOURCES))
 
     radula_behave_bootstrap_clean()
@@ -321,7 +388,7 @@ proc radula_behave_bootstrap_toolchain_release*() =
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_INFO)
     removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_MAN)
 
-    let output = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_TOOLCHAIN}-{now().format(\"ddMMYYYY\")}.tar.zst", path)
+    let status = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_TOOLCHAIN}-{now().format(\"ddMMYYYY\")}.tar.zst", path)
 
-    if output[1] == 0:
+    if status == 0:
         removeDir(path)

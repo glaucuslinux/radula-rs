@@ -259,7 +259,6 @@ const
     RADULA_FILE_CERAS* = "ceras"
     RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
-    RADULA_FILE_GLAUCUS_IMG* = "glaucus.img"
     RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024M"
 
     RADULA_FILE_RADULA_LOCK* = "/tmp/radula.lck"
@@ -293,6 +292,7 @@ const
     RADULA_GENOME_X86_64_V3* = "x86-64"
     RADULA_GENOME_X86_64_V3_FLAGS* = "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
     RADULA_GENOME_X86_64_V3_GCC_CONFIGURATION* = "--with-arch=x86-64-v3 --with-tune=generic"
+    RADULA_GENOME_X86_64_V3_IMG* = "x86-64-v3"
     RADULA_GENOME_X86_64_V3_LINUX* = "x86_64"
     RADULA_GENOME_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
     RADULA_GENOME_X86_64_V3_LINUX_IMAGE* = "arch/x86/boot/bzImage"
@@ -439,8 +439,10 @@ Distributed under the terms of the ISC License"""
     RADULA_TOOTH_RM_FLAGS* = "-frv"
 
     RADULA_TOOTH_RSYNC_FLAGS* = "-vaHAXSx"
+    RADULA_TOOTH_RSYNC_IMG_FLAGS* = "-vaHAXx"
 
-    RADULA_TOOTH_SHELL_FLAGS* = "-c"
+    RADULA_TOOTH_SHELL_COMMAND_FLAGS* = "-c"
+    RADULA_TOOTH_SHELL_REDIRECTION* = "2>&1"
 
     RADULA_TOOTH_TAR* = "bsdtar"
     RADULA_TOOTH_TAR_CREATE_FLAGS* = "-cvf"

@@ -12,16 +12,16 @@ import std/[
 import constants
 
 # Create `ceras` archive from directory
-proc radula_behave_create_archive_zstd*(archive, directory: string): (string, int) =
-    execCmdEx(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} .")
+proc radula_behave_create_archive_zstd*(archive, directory: string): int =
+    execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} . {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 # Extract `ceras` source archive into directory
-proc radula_behave_extract_archive*(archive, directory: string): (string, int) =
-    execCmdEx(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory}")
+proc radula_behave_extract_archive*(archive, directory: string): int =
+    execCmd(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 # Extract `ceras` archive into directory
-proc radula_behave_extract_archive_zstd*(archive, directory: string): (string, int) =
-    execCmdEx(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory}")
+proc radula_behave_extract_archive_zstd*(archive, directory: string): int =
+    execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_behave_exit*(status: int = 0) =
     remove_file(RADULA_FILE_RADULA_LOCK)
@@ -43,8 +43,8 @@ proc radula_behave_lock*() =
     else:
         writeFile(RADULA_FILE_RADULA_LOCK, "")
 
-proc radula_behave_rsync*(source, destination: string): (string, int) =
-    execCmdEx(&"{getEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC)} {source} {destination} --delete")
+proc radula_behave_rsync*(source, destination, flags: string = RADULA_TOOTH_RSYNC_FLAGS): int =
+    execCmd(&"{RADULA_CERAS_RSYNC} {flags} {source} {destination} --delete {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_behave_teeth_environment*() =
     putEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF, RADULA_TOOTH_AUTORECONF & ' ' & RADULA_TOOTH_AUTORECONF_FLAGS)
