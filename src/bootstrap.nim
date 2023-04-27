@@ -210,18 +210,19 @@ proc radula_behave_bootstrap_cross_img*() =
     # Create a new IMG image file
     discard execCmd(&"{RADULA_TOOTH_QEMU_IMG} create -f raw {img} {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-    # Write mbr.bin (from SYSLINUX) to the first 440 bytes of the IMG image file
+    # Write `mbr.bin` (from SYSLINUX) to the first 440 bytes of the IMG image file
     discard execCmd(&"{RADULA_TOOTH_DD} if={RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_FILE_SYSLINUX_MBR_BIN} of={img} conv=notrunc bs=440 count=1 {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Partition the IMG image file
-    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} {img} mklabel msdos")
-    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} mkpart primary ext4 0 {RADULA_FILE_GLAUCUS_IMG_SIZE}")
-    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} set 1 boot on")
+    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} {img} mklabel msdos {RADULA_TOOTH_SHELL_REDIRECTION}")
+    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} mkpart primary ext4 0 {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
+    discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} set 1 boot on {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-    discard execCmd(&"{RADULA_TOOTH_MODPROBE} loop")
+    # Load the `loop` module
+    discard execCmd(&"{RADULA_TOOTH_MODPROBE} loop {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Detach all used loop devices
-    discard execCmd(&"{RADULA_TOOTH_LOSETUP} -D")
+    discard execCmd(&"{RADULA_TOOTH_LOSETUP} -D {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Find the first unused loop device
     let
@@ -229,19 +230,19 @@ proc radula_behave_bootstrap_cross_img*() =
         partition = device & "p1"
 
     # Associate the first unused loop device with the IMG image file
-    discard execCmd(&"{RADULA_TOOTH_LOSETUP} {device} {img}")
+    discard execCmd(&"{RADULA_TOOTH_LOSETUP} {device} {img} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Notify the kernel about the new partition on the IMG image file
-    discard execCmd(&"{RADULA_TOOTH_PARTX} -a {device}")
+    discard execCmd(&"{RADULA_TOOTH_PARTX} -a {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-    # Create an `ext4` partition in the partition
-    discard execCmd(&"{RADULA_TOOTH_MKE2FS} {RADULA_TOOTH_MKE2FS_FLAGS} ext4 {partition}")
+    # Create an `ext4` file system in the partition
+    discard execCmd(&"{RADULA_TOOTH_MKE2FS} {RADULA_TOOTH_MKE2FS_FLAGS} ext4 {partition} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     let mount = RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_MNT / RADULA_DIRECTORY_GLAUCUS
 
     createDir(mount)
 
-    discard execCmd(&"{RADULA_TOOTH_MOUNT} {partition} {mount}")
+    discard execCmd(&"{RADULA_TOOTH_MOUNT} {partition} {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Remove `/lost+found` directory
     removeDir(mount / RADULA_PATH_LOST_FOUND)
@@ -249,18 +250,17 @@ proc radula_behave_bootstrap_cross_img*() =
     discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) & RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_FLAGS)
 
     # Install `extlinux` as the default bootloader
-
     let path = mount / RADULA_PATH_BOOT / RADULA_TOOTH_EXTLINUX
 
     createDir(path)
 
     discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path, RADULA_TOOTH_RSYNC_IMG_FLAGS)
 
-    discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path}")
+    discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Change ownerships
-    discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 mount")
-    discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 20:20 {mount / RADULA_PATH_ETC / RADULA_PATH_UTMPS}")
+    discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 mount {RADULA_TOOTH_SHELL_REDIRECTION}")
+    discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 20:20 {mount / RADULA_PATH_ETC / RADULA_PATH_UTMPS} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
     # Clean up
     discard execCmd(&"{RADULA_TOOTH_UMOUNT} {RADULA_TOOTH_UMOUNT_FLAGS} {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
