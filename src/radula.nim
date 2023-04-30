@@ -2,6 +2,6 @@
 # Distributed under the terms of the ISC License
 
 when isMainModule:
-    import options
+  import options
 
-    radula_behave_options()
+  radula_behave_options()
