@@ -6,6 +6,7 @@ import std/[
   osproc,
   strformat,
   strutils,
+  terminal,
   times
 ]
 
@@ -204,6 +205,11 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_CROSS_STRIP, cross_compile & RADULA_CROSS_STRIP)
 
 proc radula_behave_bootstrap_cross_img*() =
+  if not isAdmin():
+    styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"permission denied\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
+
+    radula_behave_exit(QuitFailure)
+
   # Default to `x86-64-v3`
   let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_IMG}-{now().format(\"ddMMYYYY\")}.img"
 

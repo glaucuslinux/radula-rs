@@ -62,9 +62,6 @@ proc radula_behave_options*() =
           of "h", "help":
             echo RADULA_HELP_BEHAVE_BOOTSTRAP
           of "i", "img":
-            if not isAdmin():
-              radula_behave_exit(QuitFailure)
-
             radula_behave_bootstrap_environment()
 
             radula_behave_teeth_environment()
