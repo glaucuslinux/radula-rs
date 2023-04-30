@@ -2,12 +2,13 @@
 # Distributed under the terms of the ISC License
 
 import std/[
-    os,
-    strutils
+  os,
+  strutils
 ]
 
-import ../../src/bootstrap
-import ../../src/constants
+import
+  ../../src/bootstrap,
+  ../../src/constants
 
 radula_behave_bootstrap_environment()
 

@@ -3,8 +3,9 @@
 
 import std/os
 
-import ../../src/constants
-import ../../src/genome
+import
+  ../../src/constants,
+  ../../src/genome
 
 radula_behave_genome_environment("aarch64")
 
