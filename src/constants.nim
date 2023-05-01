@@ -267,8 +267,8 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
 
-  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O3 -fomit-frame-pointer -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
-  RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
+  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O3 -fomit-frame-pointer -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -fvisibility=hidden"
+  RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden"
   RADULA_FLAGS_LINKER* = "-Wl,--strip-all -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
 
