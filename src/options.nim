@@ -98,8 +98,6 @@ proc radula_behave_options*() =
 
             radula_behave_bootstrap_initialize()
 
-            radula_behave_bootstrap_toolchain_ccache()
-
             radula_behave_bootstrap_toolchain_prepare()
             radula_behave_bootstrap_toolchain_envenomate()
             radula_behave_bootstrap_toolchain_backup()
@@ -118,8 +116,6 @@ proc radula_behave_options*() =
 
             radula_behave_bootstrap_cross_environment_directories()
             radula_behave_bootstrap_cross_environment_teeth()
-
-            radula_behave_bootstrap_cross_ccache()
 
             radula_behave_bootstrap_cross_environment_pkg_config()
 

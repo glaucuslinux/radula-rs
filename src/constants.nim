@@ -16,7 +16,6 @@ const
   RADULA_CERAS_BYACC* = "byacc"
   RADULA_CERAS_BZIP2* = "bzip2"
 
-  RADULA_CERAS_CCACHE* = "ccache"
   RADULA_CERAS_CERATA* = "cerata"
   RADULA_CERAS_CMAKE* = "cmake"
   RADULA_CERAS_CURL* = "curl"
@@ -166,8 +165,6 @@ const
   RADULA_DIRECTORY_TEMPORARY* = "tmp"
   RADULA_DIRECTORY_TOOLCHAIN* = "toolchain"
 
-
-  RADULA_ENVIRONMENT_CCACHE_DIRECTORY* = "CCACHE_DIR"
 
   RADULA_ENVIRONMENT_CROSS_ARCHIVER* = "AR"
   RADULA_ENVIRONMENT_CROSS_ASSEMBLER* = "AS"
@@ -360,9 +357,6 @@ Distributed under the terms of the ISC License"""
 
   RADULA_PATH_BIN* = "bin"
   RADULA_PATH_BOOT* = "boot"
-
-  # Default `ccache` directories on glaucus, Arch and Fedora
-  RADULA_PATH_CCACHE* = "/usr/lib/ccache:/usr/lib/ccache/bin:/usr/lib64/ccache"
 
   RADULA_PATH_DOC* = "doc"
 
