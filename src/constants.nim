@@ -75,7 +75,6 @@ const
   RADULA_CERAS_MANDOC* = "mandoc"
   RADULA_CERAS_MAWK* = "mawk"
   RADULA_CERAS_MIMALLOC* = "mimalloc"
-  RADULA_CERAS_MKSH* = "mksh"
   RADULA_CERAS_MOLD* = "mold"
   RADULA_CERAS_MPC* = "mpc"
   RADULA_CERAS_MPFR* = "mpfr"
@@ -264,8 +263,8 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
 
-  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O3 -fomit-frame-pointer -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -fvisibility=hidden"
-  RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden"
+  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O3 -fomit-frame-pointer -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
+  RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
   RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
 
