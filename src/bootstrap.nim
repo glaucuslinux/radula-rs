@@ -344,7 +344,6 @@ proc radula_behave_bootstrap_toolchain_envenomate*() =
     RADULA_CERAS_MUSL,
     RADULA_CERAS_LIBGCC,
     RADULA_CERAS_LIBSTDCXX_V3,
-    RADULA_CERAS_LIBGOMP,
     RADULA_CERAS_CCACHE,
     RADULA_CERAS_MOLD
   ], RADULA_DIRECTORY_TOOLCHAIN, false)
