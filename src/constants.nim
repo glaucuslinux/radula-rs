@@ -60,7 +60,6 @@ const
   RADULA_CERAS_LIBEDIT* = "libedit"
   RADULA_CERAS_LIBELF* = "libelf"
   RADULA_CERAS_LIBGCC* = "libgcc"
-  RADULA_CERAS_LIBGOMP* = "libgomp"
   RADULA_CERAS_LIBRESSL* = "libressl"
   RADULA_CERAS_LIBSTDCXX_V3* = "libstdc++-v3"
   RADULA_CERAS_LIBTOOL* = "libtool"
@@ -266,7 +265,7 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
 
-  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
+  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
   RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
   RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
@@ -430,7 +429,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_PARTED* = "parted"
   RADULA_TOOTH_PARTED_FLAGS* = "-s"
   RADULA_TOOTH_PARTX* = "partx"
-  RADULA_TOOTH_PATCH_FLAGS* = "--verbose"
+  RADULA_TOOTH_PATCH_FLAGS* = "--no-backup-if-mismatch --verbose"
 
   RADULA_TOOTH_QEMU_IMG* = "qemu-img"
 
