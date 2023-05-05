@@ -49,9 +49,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
 
     # Compatibility
     RADULA_CERAS_MUSL_FTS,
-    RADULA_CERAS_MUSL_OBSTACK,
-    RADULA_CERAS_MUSL_RPMATCH,
-    RADULA_CERAS_LIBUCONTEXT,
 
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
@@ -101,7 +98,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
     RADULA_CERAS_MIMALLOC,
-    RADULA_CERAS_MOLD,
     RADULA_CERAS_OM4,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
@@ -119,18 +115,15 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
     RADULA_CERAS_VIM,
-    RADULA_CERAS_MANDOC,
 
     # Userland
     RADULA_CERAS_BC,
     RADULA_CERAS_GREP,
-    RADULA_CERAS_PLOCATE,
 
     # Networking
     RADULA_CERAS_IPROUTE2,
     RADULA_CERAS_IPUTILS,
     RADULA_CERAS_SDHCP,
-    RADULA_CERAS_CURL,
     RADULA_CERAS_WGET2,
 
     # Time Zone
@@ -150,12 +143,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Services
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
-    RADULA_CERAS_S6_BOOT_SCRIPTS,
-
-    # Kernel
-    RADULA_CERAS_LIBUARGP,
-    RADULA_CERAS_LIBELF,
-    # RADULA_CERAS_LINUX
+    RADULA_CERAS_S6_BOOT_SCRIPTS
   ], RADULA_DIRECTORY_CROSS, false)
 
 proc radula_behave_bootstrap_cross_environment_directories*() =
@@ -344,8 +332,7 @@ proc radula_behave_bootstrap_toolchain_envenomate*() =
     RADULA_CERAS_MUSL,
     RADULA_CERAS_LIBGCC,
     RADULA_CERAS_LIBSTDCXX_V3,
-    RADULA_CERAS_CCACHE,
-    RADULA_CERAS_MOLD
+    RADULA_CERAS_CCACHE
   ], RADULA_DIRECTORY_TOOLCHAIN, false)
 
 proc radula_behave_bootstrap_toolchain_environment_directories*() =
