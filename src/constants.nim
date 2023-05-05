@@ -75,7 +75,6 @@ const
   RADULA_CERAS_MANDOC* = "mandoc"
   RADULA_CERAS_MAWK* = "mawk"
   RADULA_CERAS_MIMALLOC* = "mimalloc"
-  RADULA_CERAS_MOLD* = "mold"
   RADULA_CERAS_MPC* = "mpc"
   RADULA_CERAS_MPFR* = "mpfr"
   RADULA_CERAS_MUSL* = "musl"
@@ -139,10 +138,10 @@ const
   RADULA_CROSS_ARCHIVER* = "gcc-ar"
   RADULA_CROSS_ASSEMBLER* = "as"
   RADULA_CROSS_C_COMPILER* = "gcc"
-  RADULA_CROSS_C_CXX_COMPILER_LINKER* = "mold"
+  RADULA_CROSS_C_CXX_COMPILER_LINKER* = "bfd"
   RADULA_CROSS_C_CXX_PREPROCESSOR* = "-E"
   RADULA_CROSS_CXX_COMPILER* = "g++"
-  RADULA_CROSS_LINKER* = "ld.mold"
+  RADULA_CROSS_LINKER* = "ld.bfd"
   RADULA_CROSS_NAMES* = "gcc-nm"
   RADULA_CROSS_OBJECT_COPY* = "objcopy"
   RADULA_CROSS_OBJECT_DUMP* = "objdump"
@@ -265,7 +264,7 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
 
 
-  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=mold -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
+  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fuse-ld=bfd -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
   RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
   RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
