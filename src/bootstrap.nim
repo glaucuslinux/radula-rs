@@ -117,7 +117,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_VIM,
 
     # Userland
-    RADULA_CERAS_BC,
     RADULA_CERAS_GREP,
 
     # Networking
@@ -199,7 +198,7 @@ proc radula_behave_bootstrap_cross_img*() =
     radula_behave_exit(QuitFailure)
 
   # Default to `x86-64-v3`
-  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_IMG}-{now().format(\"ddMMYYYY\")}.img"
+  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_IMG}-{now().format(\"YYYYMMdd\")}.img"
 
   # Create a new IMG image file
   discard execCmd(&"{RADULA_TOOTH_QEMU_IMG} create -f raw {img} {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -380,7 +379,7 @@ proc radula_behave_bootstrap_toolchain_release*() =
   removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_INFO)
   removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_MAN)
 
-  let status = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_TOOLCHAIN}-{now().format(\"ddMMYYYY\")}.tar.zst", path)
+  let status = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_TOOLCHAIN}-{now().format(\"YYYYMMdd\")}.tar.zst", path)
 
   if status == 0:
     removeDir(path)
