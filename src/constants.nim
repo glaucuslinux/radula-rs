@@ -198,12 +198,15 @@ const
   RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS* = "XTMP"
   RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS* = "XBLD"
   RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_SOURCES* = "XSRC"
+  RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_BUILDS* = "SBLD"
+  RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_SOURCES* = "SSRC"
   RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN* = "TTMP"
   RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS* = "TBLD"
   RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_SOURCES* = "TSRC"
   RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN* = "TLCD"
 
   RADULA_ENVIRONMENT_FILE_CROSS_LOG* = "XLOG"
+  RADULA_ENVIRONMENT_FILE_SYSTEM_LOG* = "SLOG"
   RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG* = "TLOG"
 
   RADULA_ENVIRONMENT_FLAGS_C_COMPILER* = "CFLAGS"
@@ -325,6 +328,7 @@ OPTIONS:
   s, release     Create a compressed archive of the toolchain
   t, toolchain   Bootstrap a cross compiler toolchain
   x, cross       Bootstrap a cross compiled glaucus system
+  y, system      Bootstrap a native glaucus system
   z, iso         Release an ISO image file of the glaucus system"""
 
   RADULA_HELP_BEHAVE_BOOTSTRAP_LIST* = """GENOMES:
@@ -383,8 +387,12 @@ Distributed under the terms of the ISC License"""
 
   RADULA_PATH_SHARE* = "share"
 
-  RADULA_PATH_RADULA_CLUSTERS* = "/var/db/radula/clusters"
+  RADULA_PATH_RADULA_CLUSTERS_GLAUCUS* = "/var/db/radula/clusters/glaucus"
+  RADULA_PATH_RADULA_LOGS* = "/var/log/radula"
   RADULA_PATH_RADULA_SOURCES* = "/var/cache/radula/src"
+  RADULA_PATH_RADULA_TEMPORARY_CROSS* = "/var/tmp/radula/cross"
+  RADULA_PATH_RADULA_TEMPORARY_SYSTEM* = "/var/tmp/radula/system"
+  RADULA_PATH_RADULA_TEMPORARY_TOOLCHAIN* = "/var/tmp/radula/toolchain"
 
   RADULA_PATH_USR* = "usr"
   RADULA_PATH_UTMPS* = "s6/current/run-image/utmps"

@@ -128,6 +128,24 @@ proc radula_behave_options*() =
 
             echo ""
             echo "cross complete"
+          of "y", "system":
+            radula_behave_teeth_environment()
+
+            # Default to `x86-64-v3`
+            radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
+
+            radula_behave_flags_environment()
+
+            radula_behave_bootstrap_system_environment_directories()
+
+            radula_behave_bootstrap_system_ccache()
+
+            radula_behave_bootstrap_cross_environment_pkg_config()
+
+            radula_behave_bootstrap_system_envenomate()
+
+            echo ""
+            echo "system complete"
           of "z", "iso":
             echo "iso complete"
           else:

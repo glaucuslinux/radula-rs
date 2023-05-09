@@ -18,7 +18,7 @@ proc radula_behave_flags_environment*() =
 
 # Return the canonical system tuple from `config.guess`
 proc radula_behave_genome_tuple*(): (string, int) =
-  execCmdEx(RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS)
+  execCmdEx(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BINUTILS / RADULA_FILE_CONFIG_GUESS)
 
 proc radula_behave_genome_environment*(genome: string) =
   putEnv(RADULA_ENVIRONMENT_TUPLE_BUILD, radula_behave_genome_tuple()[0].strip())

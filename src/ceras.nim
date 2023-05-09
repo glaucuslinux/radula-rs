@@ -19,7 +19,7 @@ import
 
 # Return the full path to the `ceras` file
 func radula_behave_ceras_path_ceras*(nom: string): string =
-  RADULA_PATH_RADULA_CLUSTERS / RADULA_DIRECTORY_GLAUCUS / nom / RADULA_FILE_CERAS
+  RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / nom / RADULA_FILE_CERAS
 
 # Check if the full path to the `ceras` file exists
 func radula_behave_ceras_exist_ceras*(nom: string): bool =
