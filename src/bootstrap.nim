@@ -22,12 +22,6 @@ proc radula_behave_bootstrap_clean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
 
-proc radula_behave_bootstrap_cross_ccache*() =
-  putEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS) / RADULA_CERAS_CCACHE)
-  putEnv(RADULA_ENVIRONMENT_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN) / RADULA_PATH_USR / RADULA_PATH_LIB / RADULA_CERAS_CCACHE & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
-
-  createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
-
 proc radula_behave_bootstrap_cross_envenomate*() =
   radula_behave_envenomate([
     # Filesystem & Package Management
@@ -83,7 +77,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_BYACC,
-    RADULA_CERAS_CCACHE,
     # RADULA_CERAS_CMAKE,
     RADULA_CERAS_FLEX,
     RADULA_CERAS_GCC,
@@ -297,12 +290,6 @@ proc radula_behave_bootstrap_toolchain_backup*() =
   # Backup toolchain log file
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
-proc radula_behave_bootstrap_toolchain_ccache*() =
-  putEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN) / RADULA_CERAS_CCACHE)
-  putEnv(RADULA_ENVIRONMENT_PATH, RADULA_PATH_CCACHE & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
-
-  createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
-
 proc radula_behave_bootstrap_toolchain_envenomate*() =
   radula_behave_envenomate([
     RADULA_CERAS_MUSL_HEADERS,
@@ -310,8 +297,7 @@ proc radula_behave_bootstrap_toolchain_envenomate*() =
     RADULA_CERAS_GCC,
     RADULA_CERAS_MUSL,
     RADULA_CERAS_LIBGCC,
-    RADULA_CERAS_LIBSTDCXX_V3,
-    RADULA_CERAS_CCACHE
+    RADULA_CERAS_LIBSTDCXX_V3
   ], RADULA_DIRECTORY_TOOLCHAIN, false)
 
 proc radula_behave_bootstrap_toolchain_environment_directories*() =
@@ -363,12 +349,6 @@ proc radula_behave_bootstrap_toolchain_release*() =
 
   if status == 0:
     removeDir(path)
-
-proc radula_behave_bootstrap_system_ccache*() =
-  putEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS) / RADULA_CERAS_CCACHE)
-  putEnv(RADULA_ENVIRONMENT_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN) / RADULA_PATH_USR / RADULA_PATH_LIB / RADULA_CERAS_CCACHE & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
-
-  createDir(getEnv(RADULA_ENVIRONMENT_CCACHE_DIRECTORY))
 
 proc radula_behave_bootstrap_system_envenomate*() =
   radula_behave_envenomate([
@@ -425,7 +405,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_BYACC,
-    RADULA_CERAS_CCACHE,
     # RADULA_CERAS_CMAKE,
     RADULA_CERAS_FLEX,
     RADULA_CERAS_GCC,
