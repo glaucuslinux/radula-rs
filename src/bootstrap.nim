@@ -70,7 +70,9 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_LZ4,
     RADULA_CERAS_XZ,
     RADULA_CERAS_ZLIB_NG,
+    RADULA_CERAS_PIGZ,
     RADULA_CERAS_ZSTD,
+    RADULA_CERAS_LIBARCHIVE,
 
     # Development
     RADULA_CERAS_AUTOCONF,
@@ -398,7 +400,9 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_LZ4,
     RADULA_CERAS_XZ,
     RADULA_CERAS_ZLIB_NG,
+    RADULA_CERAS_PIGZ,
     RADULA_CERAS_ZSTD,
+    RADULA_CERAS_LIBARCHIVE,
 
     # Development
     RADULA_CERAS_AUTOCONF,
