@@ -70,6 +70,7 @@ const
   RADULA_CERAS_LZ4* = "lz4"
   RADULA_CERAS_LZLIB* = "lzlib"
 
+  RADULA_CERAS_M4* = "m4"
   RADULA_CERAS_MAKE* = "make"
   RADULA_CERAS_MANDOC* = "mandoc"
   RADULA_CERAS_MAWK* = "mawk"
@@ -86,8 +87,6 @@ const
 
   RADULA_CERAS_NETBSD_CURSES* = "netbsd-curses"
   RADULA_CERAS_NSSS* = "nsss"
-
-  RADULA_CERAS_OM4* = "om4"
 
   RADULA_CERAS_PATCH* = "patch"
   RADULA_CERAS_PCIUTILS* = "pciutils"
