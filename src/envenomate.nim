@@ -26,7 +26,7 @@ proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log: string
   #
   # All phases need to be called sequentially to prevent the loss of the
   # current working directory...
-  execCmd(&"{RADULA_CERAS_DASH} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1'" % [&">> {log} 2>&1"])
+  execCmd(&"{RADULA_CERAS_YASH} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && prepare $1 && configure $1 && build $1 && check $1 && install $1'" % [&">> {log} 2>&1"])
 
 # Swallow cerata
 proc radula_behave_swallow*(cerata: seq[string]) =

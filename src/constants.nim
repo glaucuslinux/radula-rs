@@ -20,8 +20,6 @@ const
   RADULA_CERAS_CMAKE* = "cmake"
   RADULA_CERAS_CURL* = "curl"
 
-  # `dash` is the default shell for running scripts
-  RADULA_CERAS_DASH* = "dash"
   RADULA_CERAS_DIFFUTILS* = "diffutils"
 
   RADULA_CERAS_E2FSPROGS* = "e2fsprogs"
@@ -91,6 +89,8 @@ const
   RADULA_CERAS_PATCH* = "patch"
   RADULA_CERAS_PCIUTILS* = "pciutils"
   RADULA_CERAS_PCRE2* = "pcre2"
+  RADULA_CERAS_PERL* = "perl"
+  RADULA_CERAS_PERL_CROSS* = "perl-cross"
   RADULA_CERAS_PIGZ* = "pigz"
   RADULA_CERAS_PKGCONF* = "pkgconf"
   RADULA_CERAS_PLOCATE* = "plocate"
@@ -126,7 +126,6 @@ const
   RADULA_CERAS_XXHASH* = "xxhash"
   RADULA_CERAS_XZ* = "xz"
 
-  # `yash` is the default shell for interactive use
   RADULA_CERAS_YASH* = "yash"
 
   RADULA_CERAS_ZLIB_NG* = "zlib-ng"

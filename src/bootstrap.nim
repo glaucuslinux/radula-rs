@@ -75,6 +75,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_LIBARCHIVE,
 
     # Development
+    RADULA_CERAS_PERL_CROSS,
     RADULA_CERAS_AUTOCONF,
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
@@ -99,7 +100,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_NETBSD_CURSES,
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
-    RADULA_CERAS_DASH,
+    RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_VIM,
 
@@ -429,7 +430,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_NETBSD_CURSES,
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
-    RADULA_CERAS_DASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_VIM,
 
