@@ -47,6 +47,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
     RADULA_CERAS_ACL,
+    RADULA_CERAS_GPERF,
     RADULA_CERAS_LIBCAP,
     RADULA_CERAS_LIBCAP_NG,
     RADULA_CERAS_SHADOW,
@@ -377,6 +378,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
     RADULA_CERAS_ACL,
+    RADULA_CERAS_GPERF,
     RADULA_CERAS_LIBCAP,
     RADULA_CERAS_LIBCAP_NG,
     RADULA_CERAS_SHADOW,
