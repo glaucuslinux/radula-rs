@@ -56,7 +56,6 @@ const
   RADULA_CERAS_LIBCAP* = "libcap"
   RADULA_CERAS_LIBCAP_NG* = "libcap-ng"
   RADULA_CERAS_LIBEDIT* = "libedit"
-  RADULA_CERAS_LIBELF* = "libelf"
   RADULA_CERAS_LIBGCC* = "libgcc"
   RADULA_CERAS_LIBRESSL* = "libressl"
   RADULA_CERAS_LIBSTDCXX_V3* = "libstdc++-v3"
