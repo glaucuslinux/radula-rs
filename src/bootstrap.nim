@@ -407,6 +407,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_LIBARCHIVE,
 
     # Development
+    RADULA_CERAS_PERL,
     RADULA_CERAS_AUTOCONF,
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
