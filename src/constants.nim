@@ -90,7 +90,6 @@ const
   RADULA_CERAS_PCIUTILS* = "pciutils"
   RADULA_CERAS_PCRE2* = "pcre2"
   RADULA_CERAS_PERL* = "perl"
-  RADULA_CERAS_PERL_CROSS* = "perl-cross"
   RADULA_CERAS_PIGZ* = "pigz"
   RADULA_CERAS_PKGCONF* = "pkgconf"
   RADULA_CERAS_PLOCATE* = "plocate"

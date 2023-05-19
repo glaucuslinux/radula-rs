@@ -75,7 +75,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_LIBARCHIVE,
 
     # Development
-    RADULA_CERAS_PERL_CROSS,
     RADULA_CERAS_AUTOCONF,
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
