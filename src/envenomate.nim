@@ -230,7 +230,15 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
 
     styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    log = getEnv(if stage == RADULA_DIRECTORY_CROSS: RADULA_ENVIRONMENT_FILE_CROSS_LOG else: RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
+    case stage
+      of RADULA_DIRECTORY_CROSS:
+        log = getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
+      of RADULA_DIRECTORY_SYSTEM:
+        log = getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG)
+
+        createDir(getEnv(RADULA_PATH_RADULA_CACHE_VENOM) / nom / RADULA_DIRECTORY_SAC)
+      of RADULA_DIRECTORY_TOOLCHAIN:
+        log = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
     let status = radula_behave_stage(nom, ver, stage, log)
 

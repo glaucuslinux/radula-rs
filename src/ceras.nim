@@ -38,7 +38,7 @@ proc radula_behave_ceras_parse_ceras*(nom: string): TomlValueRef =
 
 # Return the full path to the `ceras` source directory
 func radula_behave_ceras_path_source*(nom: string): string =
-  RADULA_PATH_RADULA_SOURCES / nom
+  RADULA_PATH_RADULA_CACHE_SOURCES / nom
 
 # Resolve concentrates using topological sorting
 proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
