@@ -404,7 +404,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_BYACC,
-    # RADULA_CERAS_CMAKE,
+    RADULA_CERAS_CMAKE,
     RADULA_CERAS_FLEX,
     RADULA_CERAS_GCC,
     RADULA_CERAS_GETTEXT_TINY,
@@ -415,7 +415,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_MAWK,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
-    # RADULA_CERAS_PYTHON,
+    RADULA_CERAS_PYTHON,
     RADULA_CERAS_SAMURAI,
 
     # Synchronization
