@@ -26,7 +26,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
   radula_behave_envenomate([
     # Filesystem & Package Management
     RADULA_CERAS_HYDROSKELETON,
-    RADULA_CERAS_IANA_ETC,
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
 
