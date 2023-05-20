@@ -134,6 +134,7 @@ proc radula_behave_options*() =
             radula_behave_bootstrap_system_environment_directories()
             radula_behave_bootstrap_system_environment_pkg_config()
 
+            radula_behave_bootstrap_system_prepare()
             radula_behave_bootstrap_system_envenomate()
 
             echo ""
