@@ -236,7 +236,7 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
       of RADULA_DIRECTORY_SYSTEM:
         log = getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG)
 
-        createDir(getEnv(RADULA_PATH_RADULA_CACHE_VENOM) / nom / RADULA_DIRECTORY_SAC)
+        createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM) / nom / RADULA_DIRECTORY_SAC)
       of RADULA_DIRECTORY_TOOLCHAIN:
         log = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
