@@ -86,7 +86,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_MAWK,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
-    RADULA_CERAS_SAMURAI,
 
     # Synchronization
     RADULA_CERAS_RSYNC,
@@ -351,8 +350,21 @@ proc radula_behave_bootstrap_toolchain_release*() =
 
 proc radula_behave_bootstrap_system_envenomate*() =
   radula_behave_envenomate([
-    # Filesystem & Package Management
+    # Filesystem
     RADULA_CERAS_HYDROSKELETON,
+
+    # Development
+    RADULA_CERAS_GMP,
+    RADULA_CERAS_MPFR,
+    RADULA_CERAS_MPC,
+    RADULA_CERAS_ISL,
+    RADULA_CERAS_GCC,
+    RADULA_CERAS_PERL,
+    RADULA_CERAS_PYTHON,
+    RADULA_CERAS_CMAKE,
+    RADULA_CERAS_MESON,
+
+    # Package Management
     RADULA_CERAS_IANA_ETC,
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
@@ -381,14 +393,12 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_XXHASH,
 
     # Userland
-    RADULA_CERAS_TOYBOX,
     RADULA_CERAS_DIFFUTILS,
     RADULA_CERAS_FILE,
     RADULA_CERAS_FINDUTILS,
+    RADULA_CERAS_GREP,
     RADULA_CERAS_SED,
-
-    # Development
-    RADULA_CERAS_EXPAT,
+    RADULA_CERAS_TOYBOX,
 
     # Compression
     RADULA_CERAS_BZIP2,
@@ -400,14 +410,12 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_LIBARCHIVE,
 
     # Development
-    RADULA_CERAS_PERL,
     RADULA_CERAS_AUTOCONF,
     RADULA_CERAS_AUTOMAKE,
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_BYACC,
-    RADULA_CERAS_CMAKE,
+    RADULA_CERAS_EXPAT,
     RADULA_CERAS_FLEX,
-    RADULA_CERAS_GCC,
     RADULA_CERAS_GETTEXT_TINY,
     RADULA_CERAS_HELP2MAN,
     RADULA_CERAS_LIBTOOL,
@@ -416,7 +424,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_MAWK,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
-    RADULA_CERAS_PYTHON,
     RADULA_CERAS_SAMURAI,
 
     # Synchronization
@@ -428,9 +435,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_PCRE2,
     RADULA_CERAS_YASH,
     RADULA_CERAS_VIM,
-
-    # Userland
-    RADULA_CERAS_GREP,
 
     # Networking
     RADULA_CERAS_IPROUTE2,
