@@ -253,7 +253,7 @@ const
 
 
   RADULA_GENOME_CERATA* = "--with-gcc-arch="
-  RADULA_GENOME_TUPLE_TARGET* = "-glaucus-linux-musl"
+  RADULA_GENOME_TUPLE_TARGET* = "-pc-linux-musl"
 
   RADULA_GENOME_AARCH64* = "aarch64"
   RADULA_GENOME_AARCH64_CERATA* = "armv8-a"
