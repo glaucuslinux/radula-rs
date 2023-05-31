@@ -11,7 +11,7 @@ const
   RADULA_CERAS_AUTOMAKE* = "automake"
 
   RADULA_CERAS_BASH* = "bash"
-  RADULA_CERAS_BC* = "bc"
+  RADULA_CERAS_BC_GH* = "bc-gh"
   RADULA_CERAS_BINUTILS* = "binutils"
   RADULA_CERAS_BYACC* = "byacc"
   RADULA_CERAS_BZIP2* = "bzip2"
