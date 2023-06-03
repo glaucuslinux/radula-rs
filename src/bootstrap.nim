@@ -99,7 +99,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_VIM,
 
     # Userland
-    RADULA_CERAS_GREP,
+    RADULA_CERAS_UGREP,
 
     # Utilities
     RADULA_CERAS_KMOD,
@@ -391,9 +391,9 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_DIFFUTILS,
     RADULA_CERAS_FILE,
     RADULA_CERAS_FINDUTILS,
-    RADULA_CERAS_GREP,
     RADULA_CERAS_SED,
     RADULA_CERAS_TOYBOX,
+    RADULA_CERAS_UGREP,
 
     # Compression
     RADULA_CERAS_BZIP2,
