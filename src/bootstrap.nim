@@ -84,8 +84,10 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
+    RADULA_CERAS_MUON,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
+    RADULA_CERAS_SAMURAI,
 
     # Synchronization
     RADULA_CERAS_RSYNC,
@@ -100,6 +102,12 @@ proc radula_behave_bootstrap_cross_envenomate*() =
 
     # Userland
     RADULA_CERAS_GREP,
+
+    # Networking
+    RADULA_CERAS_IPROUTE2,
+    RADULA_CERAS_IPUTILS,
+    RADULA_CERAS_SDHCP,
+    RADULA_CERAS_WGET2,
 
     # Utilities
     RADULA_CERAS_KMOD,
@@ -359,9 +367,9 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_MPC,
     RADULA_CERAS_ISL,
     RADULA_CERAS_PERL,
-    RADULA_CERAS_PYTHON,
-    RADULA_CERAS_CMAKE,
-    RADULA_CERAS_MESON,
+    # RADULA_CERAS_PYTHON,
+    # RADULA_CERAS_CMAKE,
+    # RADULA_CERAS_MESON,
 
     # Package Management
     RADULA_CERAS_IANA_ETC,
@@ -415,13 +423,14 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_BYACC,
     RADULA_CERAS_EXPAT,
     RADULA_CERAS_FLEX,
-    RADULA_CERAS_GCC,
+    # RADULA_CERAS_GCC,
     RADULA_CERAS_GETTEXT_TINY,
     RADULA_CERAS_HELP2MAN,
     RADULA_CERAS_LIBTOOL,
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
+    RADULA_CERAS_MUON,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
     RADULA_CERAS_SAMURAI,

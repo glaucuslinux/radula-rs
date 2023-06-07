@@ -19,6 +19,7 @@ echo "LEX         :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LEX)
 echo "LN          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LN)
 echo "MAKE        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE)
 echo "MAKEFLAGS   :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)
+echo "MESON       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MESON)
 echo "MKDIR       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR)
 echo "MKDIR_P     :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P)
 echo "MV          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MV)
@@ -39,6 +40,7 @@ doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LEX) == "flex"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LN) == "ln -fnsv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE) == "make"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS) == "-j4 -O"
+doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MESON) == "muon"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR) == "/usr/bin/install -dv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P) == "/usr/bin/install -dv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MV) == "mv -v"

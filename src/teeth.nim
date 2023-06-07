@@ -48,29 +48,31 @@ proc radula_behave_rsync*(source, destination, flags: string = RADULA_TOOTH_RSYN
 
 proc radula_behave_teeth_environment*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF, RADULA_TOOTH_AUTORECONF & ' ' & RADULA_TOOTH_AUTORECONF_FLAGS)
-  # Use `mawk` as the default AWK implementation
+  # `mawk` is the default awk implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_AWK, RADULA_CERAS_MAWK)
-  # Use `byacc` as the default YACC implementation
+  # `byacc` is the default yacc implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_BISON, RADULA_CERAS_BYACC)
   putEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD, RADULA_TOOTH_CHMOD & ' ' & RADULA_TOOTH_CHMOD_CHOWN_FLAGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_CHOWN, RADULA_TOOTH_CHOWN & ' ' & RADULA_TOOTH_CHMOD_CHOWN_FLAGS)
-  # Use `flex` as the default LEX implementation
+  # `flex` is the default lex implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_FLEX, RADULA_CERAS_FLEX)
-  # Use `mawk` as the default AWK implementation
+  # `mawk` is the default awk implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_GAWK, RADULA_CERAS_MAWK)
-  # Use `flex` as the default LEX implementation
+  # `flex` is the default lex implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_LEX, RADULA_CERAS_FLEX)
   putEnv(RADULA_ENVIRONMENT_TOOTH_LN, RADULA_TOOTH_LN & ' ' & RADULA_TOOTH_LN_FLAGS)
   # `make` and its flags
   putEnv(RADULA_ENVIRONMENT_TOOTH_MAKE, RADULA_CERAS_MAKE)
   putEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS, RADULA_TOOTH_MAKEFLAGS)
+  # `muon` is the default meson implementation
+  putEnv(RADULA_ENVIRONMENT_TOOTH_MESON, RADULA_CERAS_MUON)
   putEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR, RADULA_TOOTH_MKDIR & ' ' & RADULA_TOOTH_MKDIR_FLAGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P, RADULA_TOOTH_MKDIR & ' ' & RADULA_TOOTH_MKDIR_FLAGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_MV, RADULA_TOOTH_MV & ' ' & RADULA_TOOTH_MV_FLAGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_PATCH, RADULA_CERAS_PATCH & ' ' & RADULA_TOOTH_PATCH_FLAGS)
-  # Use `pkgconf` as the default PKG_CONFIG implementation
+  # `pkgconf` is the default pkg-config implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG, RADULA_CERAS_PKGCONF)
   putEnv(RADULA_ENVIRONMENT_TOOTH_RM, RADULA_TOOTH_RM & ' ' & RADULA_TOOTH_RM_FLAGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC, RADULA_CERAS_RSYNC & ' ' & RADULA_TOOTH_RSYNC_FLAGS)
-  # Use `byacc` as the default YACC implementation
+  # `byacc` is the default yacc implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
