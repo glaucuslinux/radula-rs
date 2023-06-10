@@ -367,7 +367,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_MPC,
     RADULA_CERAS_ISL,
     RADULA_CERAS_PERL,
-    # RADULA_CERAS_CMAKE,
 
     # Package Management
     RADULA_CERAS_IANA_ETC,
