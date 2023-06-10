@@ -98,7 +98,9 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_PCRE2,
     RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
+    RADULA_CERAS_LESS,
     RADULA_CERAS_VIM,
+    RADULA_CERAS_MANDOC,
 
     # Userland
     RADULA_CERAS_GREP,
@@ -440,7 +442,9 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
     RADULA_CERAS_YASH,
+    RADULA_CERAS_LESS,
     RADULA_CERAS_VIM,
+    RADULA_CERAS_MANDOC,
 
     # Networking
     RADULA_CERAS_IPROUTE2,
