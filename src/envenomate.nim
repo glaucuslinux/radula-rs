@@ -236,7 +236,7 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
       of RADULA_DIRECTORY_SYSTEM:
         log = getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG)
 
-        createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM) / nom / RADULA_DIRECTORY_SAC)
+        createDir(RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC)
       of RADULA_DIRECTORY_TOOLCHAIN:
         log = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
@@ -249,5 +249,14 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
       styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
       radula_behave_exit(QuitFailure)
+
+    if stage == RADULA_DIRECTORY_SYSTEM:
+      let
+        sac = RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC
+
+        status = radula_behave_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}-{ver}.tar.zst", sac)
+
+      # if status == 0:
+        # removeDir(sac)
 
     styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault

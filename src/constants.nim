@@ -451,4 +451,4 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_UMOUNT_FLAGS* = "-fqRv"
 
   RADULA_TOOTH_ZSTD_COMPRESS_FLAGS* = "-22 --ultra -T0 --long=31"
-  RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS* = "-d --long=31"
+  RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS* = "-d -T0 --long=31"
