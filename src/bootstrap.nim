@@ -40,6 +40,9 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_S6,
     RADULA_CERAS_UTMPS,
 
+    # Compatibility
+    RADULA_CERAS_MUSL_FTS,
+
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
     RADULA_CERAS_ACL,
@@ -342,11 +345,6 @@ proc radula_behave_bootstrap_toolchain_release*() =
   removeDir(path / RADULA_DIRECTORY_CROSS / RADULA_PATH_LIB64)
   removeDir(path / RADULA_DIRECTORY_CROSS / RADULA_PATH_USR / RADULA_PATH_LIB64)
   removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_LIB64)
-
-  # Remove libtool archive (.la) files
-  for file in walkDirRec(path):
-    if file.endsWith(".la"):
-      removeFile(file)
 
   # Remove toolchain documentation
   removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_DOC)
