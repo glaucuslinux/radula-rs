@@ -236,6 +236,8 @@ const
   RADULA_ENVIRONMENT_TUPLE_TARGET* = "TGT"
 
 
+  RADULA_FILE_ARCHIVE* = ".tar.zst"
+
   RADULA_FILE_CERAS* = "ceras"
   RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
