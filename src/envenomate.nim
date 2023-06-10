@@ -228,6 +228,8 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
       ver = ceras{"ver"}.getStr()
       cmt = ceras{"cmt"}.getStr()
 
+      url = ceras{"url"}.getStr()
+
     styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
     case stage
@@ -254,7 +256,7 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
       let
         sac = RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC
 
-        status = radula_behave_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}-{ver}.tar.zst", sac)
+        status = radula_behave_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}", sac)
 
       # if status == 0:
         # removeDir(sac)
