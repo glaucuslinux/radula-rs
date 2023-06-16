@@ -392,6 +392,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_GPERF,
     RADULA_CERAS_LIBCAP,
     RADULA_CERAS_LIBCAP_NG,
+    RADULA_CERAS_OPENDOAS,
     RADULA_CERAS_SHADOW,
 
     # Hashing

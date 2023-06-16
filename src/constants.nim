@@ -86,6 +86,8 @@ const
   RADULA_CERAS_NETBSD_CURSES* = "netbsd-curses"
   RADULA_CERAS_NSSS* = "nsss"
 
+  RADULA_CERAS_OPENDOAS* = "opendoas"
+
   RADULA_CERAS_PATCH* = "patch"
   RADULA_CERAS_PCIUTILS* = "pciutils"
   RADULA_CERAS_PCRE2* = "pcre2"
