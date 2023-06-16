@@ -47,6 +47,7 @@ const
   RADULA_CERAS_IPUTILS* = "iputils"
   RADULA_CERAS_ISL* = "isl"
 
+  RADULA_CERAS_KBD* = "kbd"
   RADULA_CERAS_KMOD* = "kmod"
 
   RADULA_CERAS_LBZIP2* = "lbzip2"
@@ -108,6 +109,7 @@ const
   RADULA_CERAS_SED* = "sed"
   RADULA_CERAS_SHADOW* = "shadow"
   RADULA_CERAS_SKALIBS* = "skalibs"
+  RADULA_CERAS_SPLEEN* = "spleen"
 
   RADULA_CERAS_TOYBOX* = "toybox"
   RADULA_CERAS_TZCODE* = "tzcode"

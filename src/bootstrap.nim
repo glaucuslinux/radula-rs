@@ -95,15 +95,16 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Synchronization
     RADULA_CERAS_RSYNC,
 
-    # Editors, Pagers and Shells
+    # Editors, Fonts, Pagers and Shells
     RADULA_CERAS_NETBSD_CURSES,
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
+    RADULA_CERAS_SPLEEN,
     RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
-    RADULA_CERAS_VIM,
     RADULA_CERAS_MANDOC,
+    RADULA_CERAS_VIM,
 
     # Userland
     RADULA_CERAS_GREP,
@@ -115,6 +116,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_WGET2,
 
     # Utilities
+    RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
     RADULA_CERAS_EUDEV,
     RADULA_CERAS_PSMISC,
@@ -435,14 +437,15 @@ proc radula_behave_bootstrap_system_envenomate*() =
     # Synchronization
     RADULA_CERAS_RSYNC,
 
-    # Editors, Pagers and Shells
+    # Editors, Fonts, Pagers and Shells
     RADULA_CERAS_NETBSD_CURSES,
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
+    RADULA_CERAS_SPLEEN,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
-    RADULA_CERAS_VIM,
     RADULA_CERAS_MANDOC,
+    RADULA_CERAS_VIM,
 
     # Networking
     RADULA_CERAS_IPROUTE2,
@@ -451,6 +454,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_WGET2,
 
     # Utilities
+    RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
     RADULA_CERAS_EUDEV,
     RADULA_CERAS_PSMISC,
