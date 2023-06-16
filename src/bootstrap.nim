@@ -87,9 +87,9 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
+    RADULA_CERAS_MUON,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
-    RADULA_CERAS_MUON,
     RADULA_CERAS_SAMURAI,
 
     # Synchronization
