@@ -88,6 +88,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
+    RADULA_CERAS_MIMALLOC,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
     RADULA_CERAS_MUON,
@@ -96,11 +97,10 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Synchronization
     RADULA_CERAS_RSYNC,
 
-    # Editors, Fonts, Pagers and Shells
+    # Editors, Pagers and Shells
     RADULA_CERAS_NETBSD_CURSES,
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
-    RADULA_CERAS_SPLEEN,
     RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
@@ -120,8 +120,9 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
     RADULA_CERAS_LIBUDEV_ZERO,
-    RADULA_CERAS_PSMISC,
     RADULA_CERAS_PROCPS_NG,
+    RADULA_CERAS_PSMISC,
+    RADULA_CERAS_SPLEEN,
     RADULA_CERAS_UTIL_LINUX,
     RADULA_CERAS_E2FSPROGS,
 
@@ -392,7 +393,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_ATTR,
     RADULA_CERAS_ACL,
     RADULA_CERAS_GPERF,
-    RADULA_CERAS_HARDENED_MALLOC,
     RADULA_CERAS_LIBCAP,
     RADULA_CERAS_LIBCAP_NG,
     RADULA_CERAS_OPENDOAS,
@@ -433,6 +433,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
+    RADULA_CERAS_MIMALLOC,
     RADULA_CERAS_MUON,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
@@ -441,11 +442,10 @@ proc radula_behave_bootstrap_system_envenomate*() =
     # Synchronization
     RADULA_CERAS_RSYNC,
 
-    # Editors, Fonts, Pagers and Shells
+    # Editors, Pagers and Shells
     RADULA_CERAS_NETBSD_CURSES,
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
-    RADULA_CERAS_SPLEEN,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
     RADULA_CERAS_MANDOC,
@@ -461,8 +461,9 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
     RADULA_CERAS_LIBUDEV_ZERO,
-    RADULA_CERAS_PSMISC,
     RADULA_CERAS_PROCPS_NG,
+    RADULA_CERAS_PSMISC,
+    RADULA_CERAS_SPLEEN,
     RADULA_CERAS_UTIL_LINUX,
     RADULA_CERAS_E2FSPROGS,
 
