@@ -37,6 +37,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_SKALIBS,
     RADULA_CERAS_NSSS,
     RADULA_CERAS_EXECLINE,
+    RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
     RADULA_CERAS_UTMPS,
 
@@ -118,7 +119,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Utilities
     RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
-    RADULA_CERAS_EUDEV,
+    RADULA_CERAS_LIBUDEV_ZERO,
     RADULA_CERAS_PSMISC,
     RADULA_CERAS_PROCPS_NG,
     RADULA_CERAS_UTIL_LINUX,
@@ -383,6 +384,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_SKALIBS,
     RADULA_CERAS_NSSS,
     RADULA_CERAS_EXECLINE,
+    RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
     RADULA_CERAS_UTMPS,
 
@@ -458,7 +460,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     # Utilities
     RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
-    RADULA_CERAS_EUDEV,
+    RADULA_CERAS_LIBUDEV_ZERO,
     RADULA_CERAS_PSMISC,
     RADULA_CERAS_PROCPS_NG,
     RADULA_CERAS_UTIL_LINUX,
