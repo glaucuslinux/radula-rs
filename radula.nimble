@@ -11,6 +11,6 @@ bin           = @["radula"]
 # Dependencies
 
 requires "hashlib >= 1.0.1"
-requires "nim >= 1.6.12"
-requires "parsetoml >= 0.7.0"
+requires "nim >= 2.0.0"
+requires "parsetoml >= 0.7.1"
 requires "toposort >= 1.0.0"

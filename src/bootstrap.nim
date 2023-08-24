@@ -249,6 +249,9 @@ proc radula_behave_bootstrap_cross_img*() =
   # Backup the new IMG image file
   discard radula_behave_rsync(img, getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
+proc radula_behave_bootstrap_cross_iso*() =
+  echo ""
+
 proc radula_behave_bootstrap_cross_prepare*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_TOOLCHAIN, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
