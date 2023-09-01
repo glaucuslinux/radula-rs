@@ -278,10 +278,10 @@ const
   RADULA_GENOME_X86_64_V3* = "x86-64"
   RADULA_GENOME_X86_64_V3_FLAGS* = "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
   RADULA_GENOME_X86_64_V3_GCC_CONFIGURATION* = "--with-arch=x86-64-v3 --with-tune=generic"
-  RADULA_GENOME_X86_64_V3_IMG* = "x86-64-v3"
   RADULA_GENOME_X86_64_V3_LINUX* = "x86_64"
   RADULA_GENOME_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
   RADULA_GENOME_X86_64_V3_LINUX_IMAGE* = "arch/x86/boot/bzImage"
+  RADULA_GENOME_X86_64_V3_RELEASE* = "x86-64-v3"
 
 
   RADULA_HELP* = """USAGE:
@@ -308,14 +308,14 @@ OPTIONS:
   c, clean       Clean up while preserving sources and backups
   d, distclean   Clean up everything
   h, help        Display this help message
-  i, img         Release an IMG image file of the glaucus system
+  i, img         Release an IMG file of the glaucus system
   l, list        List supported genomes
   r, require     Check if host has all required packages
   s, release     Create a compressed archive of the toolchain
   t, toolchain   Bootstrap a cross compiler toolchain
   x, cross       Bootstrap a cross compiled glaucus system
   y, system      Bootstrap a native glaucus system
-  z, iso         Release an ISO image file of the glaucus system"""
+  z, iso         Release an ISO file of the glaucus system"""
 
   RADULA_HELP_BEHAVE_BOOTSTRAP_LIST* = """GENOMES:
   aarch64,       arm64,           armv8-a
@@ -407,6 +407,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_GIT* = "git"
   RADULA_TOOTH_GIT_CHECKOUT_FLAGS* = "checkout"
   RADULA_TOOTH_GIT_CLONE_FLAGS* = "clone"
+  RADULA_TOOTH_GRUB_MKRESCUE* = "grub-mkrescue"
 
   RADULA_TOOTH_LINKER* = "ld.bfd"
   RADULA_TOOTH_LN* = "ln"

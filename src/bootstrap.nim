@@ -184,15 +184,15 @@ proc radula_behave_bootstrap_cross_img*() =
     radula_behave_exit(QuitFailure)
 
   # Default to `x86-64-v3`
-  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_IMG}-{now().format(\"YYYYMMdd\")}.img"
+  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.img"
 
-  # Create a new IMG image file
+  # Create a new IMG file
   discard execCmd(&"{RADULA_TOOTH_QEMU_IMG} create -f raw {img} {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-  # Write `mbr.bin` (from SYSLINUX) to the first 440 bytes of the IMG image file
+  # Write `mbr.bin` (from SYSLINUX) to the first 440 bytes of the IMG file
   discard execCmd(&"{RADULA_TOOTH_DD} if={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_FILE_SYSLINUX_MBR_BIN} of={img} conv=notrunc bs=440 count=1 {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-  # Partition the IMG image file
+  # Partition the IMG file
   discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} {img} mklabel msdos {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} mkpart primary ext4 0 {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} set 1 boot on {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -208,10 +208,10 @@ proc radula_behave_bootstrap_cross_img*() =
     device = execCmdEx(&"{RADULA_TOOTH_LOSETUP} -f")[0].strip()
     partition = device & "p1"
 
-  # Associate the first unused loop device with the IMG image file
+  # Associate the first unused loop device with the IMG file
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} {device} {img} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-  # Notify the kernel about the new partition on the IMG image file
+  # Notify the kernel about the new partition on the IMG file
   discard execCmd(&"{RADULA_TOOTH_PARTX} -a {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Create an `ext4` file system in the partition
@@ -246,11 +246,15 @@ proc radula_behave_bootstrap_cross_img*() =
   discard execCmd(&"{RADULA_TOOTH_PARTX} -d {partition} {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-  # Backup the new IMG image file
+  # Backup the new IMG file
   discard radula_behave_rsync(img, getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_behave_bootstrap_cross_iso*() =
-  echo ""
+  # Default to `x86-64-v3`
+  let iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.iso"
+
+  # Create a new ISO file
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)}")
 
 proc radula_behave_bootstrap_cross_prepare*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
