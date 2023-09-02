@@ -141,6 +141,12 @@ proc radula_behave_options*() =
             echo ""
             echo "system complete"
           of "z", "iso":
+            radula_behave_bootstrap_environment()
+
+            radula_behave_teeth_environment()
+
+            radula_behave_bootstrap_cross_iso()
+
             echo "iso complete"
           else:
             echo RADULA_HELP_BEHAVE_BOOTSTRAP

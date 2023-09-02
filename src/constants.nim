@@ -13,6 +13,7 @@ const
   RADULA_CERAS_BASH* = "bash"
   RADULA_CERAS_BC_GH* = "bc-gh"
   RADULA_CERAS_BINUTILS* = "binutils"
+  RADULA_CERAS_BOOSTER* = "booster"
   RADULA_CERAS_BYACC* = "byacc"
   RADULA_CERAS_BZIP2* = "bzip2"
 
@@ -112,6 +113,7 @@ const
   RADULA_CERAS_SED* = "sed"
   RADULA_CERAS_SHADOW* = "shadow"
   RADULA_CERAS_SKALIBS* = "skalibs"
+  RADULA_CERAS_SYSLINUX* = "syslinux"
 
   RADULA_CERAS_TOYBOX* = "toybox"
   RADULA_CERAS_TZCODE* = "tzcode"
@@ -242,15 +244,22 @@ const
 
   RADULA_FILE_ARCHIVE* = ".tar.zst"
 
+  RADULA_FILE_BOOSTER_CONF* = "booster.yaml"
+
   RADULA_FILE_CERAS* = "ceras"
   RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
   RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024M"
 
+  RADULA_FILE_GRUB_CONF* = "grub.cfg"
+
+  RADULA_FILE_KERNEL_GLAUCUS* = "vmlinuz"
+  RADULA_FILE_KERNEL_HOST* = "vmlinuz-linux"
+
   RADULA_FILE_RADULA_LOCK* = "/tmp/radula.lck"
 
-  RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "syslinux/extlinux.conf"
-  RADULA_FILE_SYSLINUX_MBR_BIN* = "syslinux/mbr.bin"
+  RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "extlinux.conf"
+  RADULA_FILE_SYSLINUX_MBR_BIN* = "mbr.bin"
 
 
   RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
@@ -387,7 +396,6 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_AUTORECONF* = "autoreconf"
   RADULA_TOOTH_AUTORECONF_FLAGS* = "-vfis"
 
-  RADULA_TOOTH_C_COMPILER* = "gcc"
   RADULA_TOOTH_C_CXX_COMPILER_LINKER* = "bfd"
   RADULA_TOOTH_C_CXX_PREPROCESSOR* = "-E"
   # Both `chmod` and `chown` use the same flags
