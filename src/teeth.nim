@@ -24,7 +24,7 @@ proc radula_behave_extract_archive_zstd*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_behave_exit*(status: int = 0) =
-  remove_file(RADULA_FILE_RADULA_LOCK)
+  remove_file(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK)
 
   quit(status)
 
@@ -36,12 +36,12 @@ proc radula_behave_abort*() {.noconv.} =
   radula_behave_exit(QuitFailure)
 
 proc radula_behave_lock*() =
-  if fileExists(RADULA_FILE_RADULA_LOCK):
+  if fileExists(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK):
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"lock exists\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
     quit(QuitFailure)
   else:
-    writeFile(RADULA_FILE_RADULA_LOCK, "")
+    writeFile(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK, "")
 
 proc radula_behave_rsync*(source, destination, flags: string = RADULA_TOOTH_RSYNC_FLAGS): int =
   execCmd(&"{RADULA_CERAS_RSYNC} {flags} {source} {destination} --delete {RADULA_TOOTH_SHELL_REDIRECTION}")

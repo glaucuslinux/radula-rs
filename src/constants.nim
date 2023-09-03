@@ -253,10 +253,12 @@ const
 
   RADULA_FILE_GRUB_CONF* = "grub.cfg"
 
+  RADULA_FILE_INITRAMFS_GLAUCUS* = "initramfs"
+
   RADULA_FILE_KERNEL_GLAUCUS* = "vmlinuz"
   RADULA_FILE_KERNEL_HOST* = "vmlinuz-linux"
 
-  RADULA_FILE_RADULA_LOCK* = "/tmp/radula.lck"
+  RADULA_FILE_RADULA_LOCK* = "radula.lck"
 
   RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "extlinux.conf"
   RADULA_FILE_SYSLINUX_MBR_BIN* = "mbr.bin"
@@ -369,6 +371,7 @@ Distributed under the terms of the ISC License"""
 
   RADULA_PATH_MAN* = "man"
   RADULA_PATH_MNT* = "mnt"
+  RADULA_PATH_MODULES* = "modules"
 
   # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
   # automatically prefixed to PATH and LIBDIR)
