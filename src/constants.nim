@@ -255,9 +255,6 @@ const
 
   RADULA_FILE_INITRAMFS_GLAUCUS* = "initramfs"
 
-  RADULA_FILE_KERNEL_GLAUCUS* = "vmlinuz"
-  RADULA_FILE_KERNEL_HOST* = "vmlinuz-linux"
-
   RADULA_FILE_RADULA_LOCK* = "radula.lck"
 
   RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "extlinux.conf"

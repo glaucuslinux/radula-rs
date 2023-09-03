@@ -127,7 +127,10 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Services
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
-    RADULA_CERAS_S6_BOOT_SCRIPTS
+    RADULA_CERAS_S6_BOOT_SCRIPTS,
+
+    # Kernel
+    RADULA_CERAS_LINUX
   ], RADULA_DIRECTORY_CROSS, false)
 
 proc radula_behave_bootstrap_cross_environment_directories*() =
@@ -252,11 +255,7 @@ proc radula_behave_bootstrap_cross_img*() =
 proc radula_behave_bootstrap_cross_iso*() =
   let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
 
-  discard radula_behave_rsync(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_BOOT / RADULA_FILE_KERNEL_HOST, path / RADULA_FILE_KERNEL_GLAUCUS)
-
   discard execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} --universal --strip {path / RADULA_FILE_INITRAMFS_GLAUCUS}")
-
-  discard radula_behave_rsync(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_USR / RADULA_PATH_LIB / RADULA_PATH_MODULES, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_USR / RADULA_PATH_LIB)
 
   # Default to `x86-64-v3`
   let iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.iso"
@@ -481,7 +480,10 @@ proc radula_behave_bootstrap_system_envenomate*() =
     # Services
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
-    RADULA_CERAS_S6_BOOT_SCRIPTS
+    RADULA_CERAS_S6_BOOT_SCRIPTS,
+
+    # Kernel
+    RADULA_CERAS_LINUX
   ], RADULA_DIRECTORY_SYSTEM, false)
 
 proc radula_behave_bootstrap_system_environment_directories*() =
