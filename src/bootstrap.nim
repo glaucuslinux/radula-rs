@@ -254,7 +254,7 @@ proc radula_behave_bootstrap_cross_iso*() =
 
   discard radula_behave_rsync(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_BOOT / RADULA_FILE_KERNEL_HOST, path / RADULA_FILE_KERNEL_GLAUCUS)
 
-  discard execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} --universal --strip {path}/{RADULA_FILE_INITRAMFS_GLAUCUS}")
+  discard execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} --universal --strip {path / RADULA_FILE_INITRAMFS_GLAUCUS}")
 
   discard radula_behave_rsync(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_USR / RADULA_PATH_LIB / RADULA_PATH_MODULES, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_USR / RADULA_PATH_LIB)
 
@@ -262,7 +262,7 @@ proc radula_behave_bootstrap_cross_iso*() =
   let iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.iso"
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)}")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_behave_bootstrap_cross_prepare*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
