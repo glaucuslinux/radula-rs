@@ -265,9 +265,9 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "mbr.bin"
 
 
-  RADULA_FLAGS_C_COMPILER* = "-pipe -Werror=format-security -Wformat=2 -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -Wp,-D_FORTIFY_SOURCE=3 -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
+  RADULA_FLAGS_C_COMPILER* = "-pipe -Werror=format-security -Wformat=2 -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
   RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
-  RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,defs,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
+  RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
 
   RADULA_GENOME_CERATA* = "--with-gcc-arch="
