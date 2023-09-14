@@ -18,7 +18,8 @@ echo ""
 
 echo "ARCH    :: ", getEnv(RADULA_ENVIRONMENT_GENOME)
 echo "CARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_CERATA)
-echo "FARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS)
+echo "FCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER)
+echo "FLARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER)
 echo "GCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION)
 echo "LARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_LINUX)
 echo "LCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION)
@@ -32,7 +33,8 @@ doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) == radula_behave_genome_tuple()[
 
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME) == "riscv64"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_CERATA) == "--with-gcc-arch=rv64gc"
-doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS) == "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany"
+doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER) == "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany"
+doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER) == ""
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION) == "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_LINUX) == "riscv"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION) == ""

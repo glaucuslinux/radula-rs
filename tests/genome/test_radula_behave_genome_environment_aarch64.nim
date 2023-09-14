@@ -18,7 +18,8 @@ echo ""
 
 echo "ARCH    :: ", getEnv(RADULA_ENVIRONMENT_GENOME)
 echo "CARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_CERATA)
-echo "FARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS)
+echo "FCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER)
+echo "FLARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER)
 echo "GCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION)
 echo "LARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_LINUX)
 echo "LCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION)
@@ -32,7 +33,8 @@ doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) == radula_behave_genome_tuple()[
 
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME) == "aarch64"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_CERATA) == "--with-gcc-arch=armv8-a"
-doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS) == "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
+doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER) == "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
+doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER) == ""
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION) == "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_LINUX) == "arm64"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION) == ""

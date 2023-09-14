@@ -18,7 +18,8 @@ echo ""
 
 echo "ARCH    :: ", getEnv(RADULA_ENVIRONMENT_GENOME)
 echo "CARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_CERATA)
-echo "FARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS)
+echo "FCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER)
+echo "FLARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER)
 echo "GCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION)
 echo "LARCH   :: ", getEnv(RADULA_ENVIRONMENT_GENOME_LINUX)
 echo "LCARCH  :: ", getEnv(RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION)
@@ -32,7 +33,8 @@ doAssert getEnv(RADULA_ENVIRONMENT_TUPLE_BUILD) == radula_behave_genome_tuple()[
 
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME) == "x86-64"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_CERATA) == "--with-gcc-arch=x86-64"
-doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS) == "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER) == "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+doAssert getEnv(RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER) == "-Wl,-z,x86-64-v3"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION) == "--with-arch=x86-64-v3 --with-tune=generic"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_LINUX) == "x86_64"
 doAssert getEnv(RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION) == "x86_64_"

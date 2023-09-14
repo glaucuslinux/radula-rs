@@ -31,6 +31,7 @@ const
 
   RADULA_CERAS_FILE* = "file"
   RADULA_CERAS_FINDUTILS* = "findutils"
+  RADULA_CERAS_FINIT* = "finit"
   RADULA_CERAS_FLEX* = "flex"
 
   RADULA_CERAS_GCC* = "gcc"
@@ -58,12 +59,14 @@ const
   RADULA_CERAS_LIBCAP_NG* = "libcap-ng"
   RADULA_CERAS_LIBEDIT* = "libedit"
   RADULA_CERAS_LIBGCC* = "libgcc"
+  RADULA_CERAS_LIBITE* = "libite"
   RADULA_CERAS_LIBRESSL* = "libressl"
   RADULA_CERAS_LIBSTDCXX_V3* = "libstdc++-v3"
   RADULA_CERAS_LIBTOOL* = "libtool"
   RADULA_CERAS_LIBUARGP* = "libuargp"
   RADULA_CERAS_LIBUCONTEXT* = "libucontext"
   RADULA_CERAS_LIBUDEV_ZERO* = "libudev-zero"
+  RADULA_CERAS_LIBUEV* = "libuev"
   RADULA_CERAS_LINUX* = "linux"
   RADULA_CERAS_LINUX_HEADERS* = "linux-headers"
   RADULA_CERAS_LKSH* = "lksh"
@@ -181,7 +184,8 @@ const
 
   RADULA_ENVIRONMENT_GENOME* = "ARCH"
   RADULA_ENVIRONMENT_GENOME_CERATA* = "CARCH"
-  RADULA_ENVIRONMENT_GENOME_FLAGS* = "FARCH"
+  RADULA_ENVIRONMENT_GENOME_FLAGS_C_COMPILER* = "FCARCH"
+  RADULA_ENVIRONMENT_GENOME_FLAGS_LINKER* = "FLARCH"
   RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION* = "GCARCH"
   RADULA_ENVIRONMENT_GENOME_LINUX* = "LARCH"
   RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION* = "LCARCH"
@@ -261,9 +265,9 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "mbr.bin"
 
 
-  RADULA_FLAGS_C_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fno-stack-protector -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
+  RADULA_FLAGS_C_COMPILER* = "-pipe -Werror=format-security -Wformat=2 -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -Wp,-D_FORTIFY_SOURCE=3 -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt"
   RADULA_FLAGS_CXX_COMPILER* = "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden"
-  RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
+  RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,defs,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
 
   RADULA_GENOME_CERATA* = "--with-gcc-arch="
@@ -271,20 +275,21 @@ const
 
   RADULA_GENOME_AARCH64* = "aarch64"
   RADULA_GENOME_AARCH64_CERATA* = "armv8-a"
-  RADULA_GENOME_AARCH64_FLAGS* = "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
+  RADULA_GENOME_AARCH64_FLAGS_C_COMPILER* = "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic"
   RADULA_GENOME_AARCH64_GCC_CONFIGURATION* = "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
   RADULA_GENOME_AARCH64_LINUX* = "arm64"
   RADULA_GENOME_AARCH64_LINUX_IMAGE* = "arch/arm64/boot/Image"
 
   RADULA_GENOME_RISCV64* = "riscv64"
   RADULA_GENOME_RISCV64_CERATA* = "rv64gc"
-  RADULA_GENOME_RISCV64_FLAGS* = "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany"
+  RADULA_GENOME_RISCV64_FLAGS_C_COMPILER* = "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany"
   RADULA_GENOME_RISCV64_GCC_CONFIGURATION* = "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d"
   RADULA_GENOME_RISCV64_LINUX* = "riscv"
   RADULA_GENOME_RISCV64_LINUX_IMAGE* = "arch/riscv/boot/Image"
 
   RADULA_GENOME_X86_64_V3* = "x86-64"
-  RADULA_GENOME_X86_64_V3_FLAGS* = "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+  RADULA_GENOME_X86_64_V3_FLAGS_C_COMPILER* = "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+  RADULA_GENOME_X86_64_V3_FLAGS_LINKER* = "-Wl,-z,x86-64-v3"
   RADULA_GENOME_X86_64_V3_GCC_CONFIGURATION* = "--with-arch=x86-64-v3 --with-tune=generic"
   RADULA_GENOME_X86_64_V3_LINUX* = "x86_64"
   RADULA_GENOME_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
