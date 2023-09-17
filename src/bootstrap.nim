@@ -39,7 +39,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_EXECLINE,
     RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
-    RADULA_CERAS_UTMPS,
 
     # Compatibility
     RADULA_CERAS_MUSL_FTS,
@@ -245,7 +244,6 @@ proc radula_behave_bootstrap_cross_img*() =
 
   # Change ownerships
   discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
-  discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 20:20 {mount / RADULA_PATH_ETC / RADULA_PATH_UTMPS} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Clean up
   discard execCmd(&"{RADULA_TOOTH_UMOUNT} {RADULA_TOOTH_UMOUNT_FLAGS} {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -402,7 +400,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_EXECLINE,
     RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
-    RADULA_CERAS_UTMPS,
 
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,

@@ -124,7 +124,6 @@ const
 
   RADULA_CERAS_UGREP* = "ugrep"
   RADULA_CERAS_UTIL_LINUX* = "util-linux"
-  RADULA_CERAS_UTMPS* = "utmps"
 
   RADULA_CERAS_VIM* = "vim"
 
@@ -393,7 +392,6 @@ Distributed under the terms of the ISC License"""
   RADULA_PATH_RADULA_TEMPORARY_TOOLCHAIN* = "/var/tmp/radula/toolchain"
 
   RADULA_PATH_USR* = "usr"
-  RADULA_PATH_UTMPS* = "s6/current/run-image/utmps"
 
 
   RADULA_TOOTH_ARCHIVER* = "gcc-ar"
