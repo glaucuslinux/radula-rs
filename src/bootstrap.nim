@@ -127,9 +127,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
     RADULA_CERAS_S6_BOOT_SCRIPTS,
-    # RADULA_CERAS_LIBITE,
-    # RADULA_CERAS_LIBUEV,
-    # RADULA_CERAS_FINIT,
 
     # Kernel
     RADULA_CERAS_LINUX
