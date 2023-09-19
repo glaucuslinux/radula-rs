@@ -89,7 +89,6 @@ const
   RADULA_CERAS_MUSL_UTILS* = "musl-utils"
 
   RADULA_CERAS_NETBSD_CURSES* = "netbsd-curses"
-  RADULA_CERAS_NSSS* = "nsss"
 
   RADULA_CERAS_OPENDOAS* = "opendoas"
 

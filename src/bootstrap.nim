@@ -35,7 +35,6 @@ proc radula_behave_bootstrap_cross_envenomate*() =
 
     # Init
     RADULA_CERAS_SKALIBS,
-    RADULA_CERAS_NSSS,
     RADULA_CERAS_EXECLINE,
     RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
@@ -393,7 +392,6 @@ proc radula_behave_bootstrap_system_envenomate*() =
 
     # Init
     RADULA_CERAS_SKALIBS,
-    RADULA_CERAS_NSSS,
     RADULA_CERAS_EXECLINE,
     RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
