@@ -25,13 +25,11 @@ const
 
   RADULA_CERAS_E2FSPROGS* = "e2fsprogs"
   RADULA_CERAS_ELFUTILS* = "elfutils"
-  RADULA_CERAS_EUDEV* = "eudev"
   RADULA_CERAS_EXECLINE* = "execline"
   RADULA_CERAS_EXPAT* = "expat"
 
   RADULA_CERAS_FILE* = "file"
   RADULA_CERAS_FINDUTILS* = "findutils"
-  RADULA_CERAS_FINIT* = "finit"
   RADULA_CERAS_FLEX* = "flex"
 
   RADULA_CERAS_GCC* = "gcc"
@@ -59,19 +57,14 @@ const
   RADULA_CERAS_LIBCAP_NG* = "libcap-ng"
   RADULA_CERAS_LIBEDIT* = "libedit"
   RADULA_CERAS_LIBGCC* = "libgcc"
-  RADULA_CERAS_LIBITE* = "libite"
   RADULA_CERAS_LIBRESSL* = "libressl"
   RADULA_CERAS_LIBSTDCXX_V3* = "libstdc++-v3"
   RADULA_CERAS_LIBTOOL* = "libtool"
-  RADULA_CERAS_LIBUARGP* = "libuargp"
-  RADULA_CERAS_LIBUCONTEXT* = "libucontext"
   RADULA_CERAS_LIBUDEV_ZERO* = "libudev-zero"
-  RADULA_CERAS_LIBUEV* = "libuev"
   RADULA_CERAS_LINUX* = "linux"
   RADULA_CERAS_LINUX_HEADERS* = "linux-headers"
   RADULA_CERAS_LKSH* = "lksh"
   RADULA_CERAS_LZ4* = "lz4"
-  RADULA_CERAS_LZLIB* = "lzlib"
 
   RADULA_CERAS_M4* = "m4"
   RADULA_CERAS_MAKE* = "make"
@@ -85,7 +78,6 @@ const
   RADULA_CERAS_MUSL* = "musl"
   RADULA_CERAS_MUSL_FTS* = "musl-fts"
   RADULA_CERAS_MUSL_HEADERS* = "musl-headers"
-  RADULA_CERAS_MUSL_OBSTACK* = "musl-obstack"
   RADULA_CERAS_MUSL_UTILS* = "musl-utils"
 
   RADULA_CERAS_NETBSD_CURSES* = "netbsd-curses"
@@ -99,7 +91,6 @@ const
   RADULA_CERAS_PIGZ* = "pigz"
   RADULA_CERAS_PKGCONF* = "pkgconf"
   RADULA_CERAS_PLOCATE* = "plocate"
-  RADULA_CERAS_PLZIP* = "plzip"
   RADULA_CERAS_PROCPS_NG* = "procps-ng"
   RADULA_CERAS_PSMISC* = "psmisc"
 
