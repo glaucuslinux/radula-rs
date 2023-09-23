@@ -35,6 +35,9 @@ proc radula_behave_abort*() {.noconv.} =
 
   radula_behave_exit(QuitFailure)
 
+proc radula_behave_generate_initramfs*(bootstrap: bool = false, directory: string) =
+  discard execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RADULA_FILE_INITRAMFS_GLAUCUS}")
+
 proc radula_behave_lock*() =
   if fileExists(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK):
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"lock exists\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
