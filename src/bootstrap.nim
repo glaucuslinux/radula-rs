@@ -230,16 +230,16 @@ proc radula_behave_bootstrap_cross_img*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_FLAGS)
 
   # Install `extlinux` as the default bootloader
-  let path = mount / RADULA_PATH_BOOT / RADULA_TOOTH_EXTLINUX
+  let path = mount / RADULA_PATH_BOOT
 
-  createDir(path)
+  createDir(path / RADULA_TOOTH_EXTLINUX)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_SYSLINUX / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_SYSLINUX / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path / RADULA_TOOTH_EXTLINUX, RADULA_TOOTH_RSYNC_IMG_FLAGS)
 
-  discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path} {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path / RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Generate initramfs
-  radula_behave_generate_initramfs(true, mount / RADULA_PATH_BOOT)
+  radula_behave_generate_initramfs(true, path)
 
   # Change ownerships
   discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -256,8 +256,15 @@ proc radula_behave_bootstrap_cross_iso*() =
   # Default to `x86-64-v3`
   let iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.iso"
 
+  # Install `grub` as the default bootloader
+  let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
+
+  createDir(path / RADULA_CERAS_GRUB)
+
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+
   # Generate initramfs
-  radula_behave_generate_initramfs(true, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT)
+  radula_behave_generate_initramfs(true, path)
 
   # Create a new ISO file
   discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} {RADULA_TOOTH_SHELL_REDIRECTION}")

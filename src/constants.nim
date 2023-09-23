@@ -37,6 +37,7 @@ const
   RADULA_CERAS_GMP* = "gmp"
   RADULA_CERAS_GPERF* = "gperf"
   RADULA_CERAS_GREP* = "grep"
+  RADULA_CERAS_GRUB* = "grub"
 
   RADULA_CERAS_HELP2MAN* = "help2man"
   RADULA_CERAS_HWDATA* = "hwdata"
