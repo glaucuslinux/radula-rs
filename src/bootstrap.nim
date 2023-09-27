@@ -254,10 +254,12 @@ proc radula_behave_bootstrap_cross_img*() =
 
 proc radula_behave_bootstrap_cross_iso*() =
   # Default to `x86-64-v3`
-  let iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.iso"
+  let
+    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}"
+    iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
 
-  # Install `grub` as the default bootloader
-  let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
+    # Install `grub` as the default bootloader
+    path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
 
   createDir(path / RADULA_CERAS_GRUB)
 
@@ -267,7 +269,7 @@ proc radula_behave_bootstrap_cross_iso*() =
   radula_behave_generate_initramfs(true, path)
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_behave_bootstrap_cross_prepare*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
