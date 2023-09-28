@@ -444,7 +444,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_RM* = "rm"
   RADULA_TOOTH_RM_FLAGS* = "-frv"
   RADULA_TOOTH_RSYNC_FLAGS* = "-vaHAXSx"
-  RADULA_TOOTH_RSYNC_IMG_FLAGS* = "-vaHAXx"
+  RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS* = "-vaHAXx"
 
   RADULA_TOOTH_SHELL_COMMAND_FLAGS* = "-c"
   RADULA_TOOTH_SHELL_REDIRECTION* = "> /dev/null 2>&1"

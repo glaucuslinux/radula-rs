@@ -57,7 +57,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     # Userland
     RADULA_CERAS_TOYBOX,
     RADULA_CERAS_DIFFUTILS,
-    # RADULA_CERAS_FILE,
+    RADULA_CERAS_FILE,
     RADULA_CERAS_FINDUTILS,
     RADULA_CERAS_SED,
 
@@ -227,14 +227,14 @@ proc radula_behave_bootstrap_cross_img*() =
   # Remove `/lost+found` directory
   removeDir(mount / RADULA_PATH_LOST_FOUND)
 
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   # Install `extlinux` as the default bootloader
   let path = mount / RADULA_PATH_BOOT
 
   createDir(path / RADULA_TOOTH_EXTLINUX)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_SYSLINUX / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path / RADULA_TOOTH_EXTLINUX, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_SYSLINUX / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path / RADULA_TOOTH_EXTLINUX, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path / RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
@@ -263,7 +263,7 @@ proc radula_behave_bootstrap_cross_iso*() =
 
   createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   # Generate initramfs
   radula_behave_generate_initramfs(true, path)
