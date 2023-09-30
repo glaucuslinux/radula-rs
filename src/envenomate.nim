@@ -21,7 +21,7 @@ import
   parsetoml,
   toposort
 
-proc radula_behave_stage*(nom, ver, stage = RADULA_DIRECTORY_SYSTEM, log: string): int =
+proc radula_behave_stage*(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
   # We only use `nom` and `ver` from the `ceras`file
   #
   # All phases need to be called sequentially to prevent the loss of the
@@ -186,7 +186,7 @@ proc radula_behave_swallow*(cerata: seq[string]) =
         cursorDown counter - i
     )
 
-proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA_DIRECTORY_SYSTEM, resolve: bool = true) =
+proc radula_behave_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true) =
   var
     cerata = cerata.deduplicate()
 
@@ -242,7 +242,7 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage: string = RADULA
       of RADULA_DIRECTORY_TOOLCHAIN:
         log = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
 
-    let status = radula_behave_stage(nom, ver, stage, log)
+    let status = radula_behave_stage(log, nom, ver, stage)
 
     cursorUp 1
     eraseLine()

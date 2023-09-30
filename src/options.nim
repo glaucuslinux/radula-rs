@@ -69,11 +69,7 @@ proc radula_behave_options*() =
             radula_behave_bootstrap_cross_img()
 
             echo "img complete"
-          of "l", "list":
-            echo RADULA_HELP_BEHAVE_BOOTSTRAP_LIST
-          of "r", "require":
-            echo "Checking if host has all required packages..."
-          of "s", "release":
+          of "r", "release":
             radula_behave_bootstrap_environment()
 
             radula_behave_teeth_environment()
@@ -81,6 +77,23 @@ proc radula_behave_options*() =
             radula_behave_bootstrap_toolchain_release()
 
             echo "release complete"
+          of "s", "system":
+            radula_behave_teeth_environment()
+
+            # Default to `x86-64-v3`
+            radula_behave_genome_environment(RADULA_GENOME_X86_64_V3, RADULA_DIRECTORY_SYSTEM)
+
+            radula_behave_flags_environment()
+
+            radula_behave_bootstrap_system_environment_directories()
+            radula_behave_bootstrap_system_environment_pkg_config()
+            radula_behave_bootstrap_system_environment_teeth()
+
+            radula_behave_bootstrap_system_prepare()
+            radula_behave_bootstrap_system_envenomate()
+
+            echo ""
+            echo "system complete"
           of "t", "toolchain":
             radula_behave_bootstrap_environment()
 
@@ -123,23 +136,6 @@ proc radula_behave_options*() =
 
             echo ""
             echo "cross complete"
-          of "y", "system":
-            radula_behave_teeth_environment()
-
-            # Default to `x86-64-v3`
-            radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
-
-            radula_behave_flags_environment()
-
-            radula_behave_bootstrap_system_environment_directories()
-            radula_behave_bootstrap_system_environment_pkg_config()
-            radula_behave_bootstrap_system_environment_teeth()
-
-            radula_behave_bootstrap_system_prepare()
-            radula_behave_bootstrap_system_envenomate()
-
-            echo ""
-            echo "system complete"
           of "z", "iso":
             radula_behave_bootstrap_environment()
 

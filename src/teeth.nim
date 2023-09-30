@@ -23,7 +23,7 @@ proc radula_behave_extract_archive*(archive, directory: string): int =
 proc radula_behave_extract_archive_zstd*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_behave_exit*(status: int = 0) =
+proc radula_behave_exit*(status = 0) =
   remove_file(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK)
 
   quit(status)
@@ -35,7 +35,7 @@ proc radula_behave_abort*() {.noconv.} =
 
   radula_behave_exit(QuitFailure)
 
-proc radula_behave_generate_initramfs*(bootstrap: bool = false, directory: string) =
+proc radula_behave_generate_initramfs*(bootstrap = false, directory: string) =
   discard execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RADULA_FILE_INITRAMFS_GLAUCUS}")
 
 proc radula_behave_lock*() =
@@ -46,7 +46,7 @@ proc radula_behave_lock*() =
   else:
     writeFile(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK, "")
 
-proc radula_behave_rsync*(source, destination, flags: string = RADULA_TOOTH_RSYNC_FLAGS): int =
+proc radula_behave_rsync*(source, destination: string, flags = RADULA_TOOTH_RSYNC_FLAGS): int =
   execCmd(&"{RADULA_CERAS_RSYNC} {flags} {source} {destination} --delete {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_behave_teeth_environment*() =
