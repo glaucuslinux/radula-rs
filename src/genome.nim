@@ -12,8 +12,8 @@ import constants
 # This will be used regardless of the bootstrap behavior, so don't add `_bootstrap_`
 # to its name. Also, ensure `radula_behave_genome_environment()` is run beforehand.
 proc radula_behave_flags_environment*() =
-  putEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER, RADULA_FLAGS_C_COMPILER)
-  putEnv(RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER, getEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER) & ' ' & RADULA_FLAGS_CXX_COMPILER)
+  putEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER, RADULA_FLAGS_C_CXX_COMPILER)
+  putEnv(RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER, getEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER) & ' ' & RADULA_FLAGS_C_CXX_COMPILER)
   putEnv(RADULA_ENVIRONMENT_FLAGS_LINKER, RADULA_FLAGS_LINKER & ' ' & getEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER))
 
 # Return the canonical system tuple from `config.guess`
