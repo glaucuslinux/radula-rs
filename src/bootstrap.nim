@@ -178,7 +178,22 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRINGS, cross_compile & RADULA_TOOTH_STRINGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRIP, cross_compile & RADULA_TOOTH_STRIP)
 
-proc radula_behave_bootstrap_cross_img*() =
+proc radula_behave_bootstrap_cross_prepare*() =
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_TOOLCHAIN, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
+
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
+  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
+
+  # Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
+  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_SOURCES))
+
+  # Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
+  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
+
+  removeFile(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
+
+proc radula_behave_bootstrap_cross_release_img*() =
   if not isAdmin():
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"permission denied\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
@@ -249,18 +264,18 @@ proc radula_behave_bootstrap_cross_img*() =
   discard execCmd(&"{RADULA_TOOTH_PARTX} -d {partition} {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-  # Backup the new IMG file
-  discard radula_behave_rsync(img, getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+  # Compress the IMG file
+  discard radula_behave_create_zstd(img)
 
-proc radula_behave_bootstrap_cross_iso*() =
+proc radula_behave_bootstrap_cross_release_iso*() =
   # Default to `x86-64-v3`
   let
     name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}"
     iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
 
-    # Install `grub` as the default bootloader
     path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
 
+  # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
   discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
@@ -271,20 +286,8 @@ proc radula_behave_bootstrap_cross_iso*() =
   # Create a new ISO file
   discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_behave_bootstrap_cross_prepare*() =
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_TOOLCHAIN, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
-
-  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
-  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
-
-  # Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
-  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_SOURCES))
-
-  # Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
-  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
-
-  removeFile(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
+  # Compress the ISO file
+  discard radula_behave_create_zstd(iso)
 
 proc radula_behave_bootstrap_distclean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))

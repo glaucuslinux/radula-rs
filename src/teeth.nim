@@ -11,15 +11,15 @@ import std/[
 
 import constants
 
-# Create `ceras` archive from directory
 proc radula_behave_create_archive_zstd*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} . {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-# Extract `ceras` source archive into directory
+proc radula_behave_create_zstd*(file: string): int =
+  execCmd(&"{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS} {file} {RADULA_TOOTH_SHELL_REDIRECTION}")
+
 proc radula_behave_extract_archive*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-# Extract `ceras` archive into directory
 proc radula_behave_extract_archive_zstd*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 

@@ -66,7 +66,7 @@ proc radula_behave_options*() =
 
             radula_behave_teeth_environment()
 
-            radula_behave_bootstrap_cross_img()
+            radula_behave_bootstrap_cross_release_img()
 
             echo "img complete"
           of "r", "release":
@@ -141,7 +141,7 @@ proc radula_behave_options*() =
 
             radula_behave_teeth_environment()
 
-            radula_behave_bootstrap_cross_iso()
+            radula_behave_bootstrap_cross_release_iso()
 
             echo "iso complete"
           else:
