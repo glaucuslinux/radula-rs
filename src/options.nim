@@ -74,7 +74,7 @@ proc radula_behave_options*() =
 
             radula_behave_teeth_environment()
 
-            radula_behave_bootstrap_toolchain_release()
+            radula_behave_bootstrap_release_iso()
 
             echo "release complete"
           of "s", "system":
@@ -114,6 +114,7 @@ proc radula_behave_options*() =
             radula_behave_bootstrap_toolchain_prepare()
             radula_behave_bootstrap_toolchain_envenomate()
             radula_behave_bootstrap_toolchain_backup()
+            radula_behave_bootstrap_toolchain_release()
 
             echo ""
             echo "toolchain complete"
@@ -136,14 +137,6 @@ proc radula_behave_options*() =
 
             echo ""
             echo "cross complete"
-          of "z", "iso":
-            radula_behave_bootstrap_environment()
-
-            radula_behave_teeth_environment()
-
-            radula_behave_bootstrap_cross_release_iso()
-
-            echo "iso complete"
           else:
             echo RADULA_HELP_BEHAVE_BOOTSTRAP
 

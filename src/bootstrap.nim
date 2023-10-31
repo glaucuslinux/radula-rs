@@ -267,28 +267,6 @@ proc radula_behave_bootstrap_cross_release_img*() =
   # Compress the IMG file
   discard radula_behave_create_zstd(img)
 
-proc radula_behave_bootstrap_cross_release_iso*() =
-  # Default to `x86-64-v3`
-  let
-    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}"
-    iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
-
-    path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
-
-  # Install `grub` as the default bootloader
-  createDir(path / RADULA_CERAS_GRUB)
-
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
-
-  # Generate initramfs
-  radula_behave_generate_initramfs(true, path)
-
-  # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} {RADULA_TOOTH_SHELL_REDIRECTION}")
-
-  # Compress the ISO file
-  discard radula_behave_create_zstd(iso)
-
 proc radula_behave_bootstrap_distclean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
@@ -320,6 +298,28 @@ proc radula_behave_bootstrap_initialize*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
+
+proc radula_behave_bootstrap_release_iso*() =
+  # Default to `x86-64-v3`
+  let
+    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}"
+    iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
+
+    path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
+
+  # Install `grub` as the default bootloader
+  createDir(path / RADULA_CERAS_GRUB)
+
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+
+  # Generate initramfs
+  radula_behave_generate_initramfs(true, path)
+
+  # Create a new ISO file
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} {RADULA_TOOTH_SHELL_REDIRECTION}")
+
+  # Compress the ISO file
+  discard radula_behave_create_zstd(iso)
 
 proc radula_behave_bootstrap_toolchain_backup*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))

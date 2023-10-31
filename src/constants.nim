@@ -286,11 +286,10 @@ OPTIONS:
   d, distclean   Clean up everything
   h, help        Display this help message
   i, img         Release an IMG file of the glaucus system
-  r, release     Create a compressed archive of the toolchain
+  r, release     Release an ISO file of the glaucus system
   s, system      Bootstrap a native glaucus system
   t, toolchain   Bootstrap a cross compiler toolchain
-  x, cross       Bootstrap a cross compiled glaucus system
-  z, iso         Release an ISO file of the glaucus system"""
+  x, cross       Bootstrap a cross compiled glaucus system"""
 
   RADULA_HELP_BEHAVE_ENVENOMATE* = """USAGE:
   radula [ -b | --behave ] =|: [ e | envenomate ] [ OPTIONS ] [ cerata ]
