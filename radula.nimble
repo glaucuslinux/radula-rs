@@ -1,15 +1,12 @@
 # Package
-
-version       = "0.1.0"
-author        = "Firas Khalil Khana <firasuke@glaucuslinux.org>"
-description   = "glaucus's radula"
-license       = "ISC"
-srcDir        = "src"
-bin           = @["radula"]
-
+version      = "0.1.0"
+author       = "Firas Khalil Khana <firasuke@glaucuslinux.org>"
+description  = "glaucus's radula"
+license      = "ISC"
+srcDir       = "src"
+bin          = @["radula"]
 
 # Dependencies
-
 requires "hashlib >= 1.0.1"
 requires "nim >= 2.0.0"
 requires "parsetoml >= 0.7.1"
