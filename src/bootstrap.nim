@@ -265,7 +265,10 @@ proc radula_behave_bootstrap_cross_release_img*() =
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Compress the IMG file
-  discard radula_behave_create_zstd(img)
+  let status = radula_behave_create_zstd(img)
+
+  if status == 0:
+    removeFile(img)
 
 proc radula_behave_bootstrap_distclean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
@@ -319,7 +322,10 @@ proc radula_behave_bootstrap_release_iso*() =
   discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Compress the ISO file
-  discard radula_behave_create_zstd(iso)
+  let status = radula_behave_create_zstd(iso)
+
+  if status == 0:
+    removeFile(iso)
 
 proc radula_behave_bootstrap_toolchain_backup*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))

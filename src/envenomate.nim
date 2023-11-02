@@ -258,7 +258,7 @@ proc radula_behave_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTO
 
         status = radula_behave_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", sac)
 
-      # if status == 0:
-        # removeDir(sac)
+      if status == 0:
+        removeDir(sac)
 
     styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault

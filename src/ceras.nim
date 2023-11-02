@@ -40,19 +40,6 @@ proc radula_behave_ceras_parse_ceras*(nom: string): TomlValueRef =
 func radula_behave_ceras_path_source*(nom: string): string =
   RADULA_PATH_RADULA_CACHE_SOURCES / nom
 
-# Resolve concentrates using topological sorting
-proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
-  # Don't use `{}` because we don't want an empty string "" in our Table
-  concentrates[nom] = try: radula_behave_ceras_parse_ceras(nom)["cnt"].getStr().split() except CatchableError: @[]
-
-  if concentrates[nom].len() > 0:
-    for concentrate in concentrates[nom]:
-      radula_behave_ceras_resolve_concentrates(concentrate, concentrates)
-
-# Verify the `ceras` source
-proc radula_behave_ceras_verify_source*(file, sum: string): bool =
-  $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
-
 proc radula_behave_ceras_print*(cerata: seq[string]) =
   for nom in cerata.deduplicate():
     if not radula_behave_ceras_exist_ceras(nom):
@@ -77,3 +64,16 @@ proc radula_behave_ceras_print_header*() =
   echo ""
 
   styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
+
+# Resolve concentrates using topological sorting
+proc radula_behave_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
+  # Don't use `{}` because we don't want an empty string "" in our Table
+  concentrates[nom] = try: radula_behave_ceras_parse_ceras(nom)["cnt"].getStr().split() except CatchableError: @[]
+
+  if concentrates[nom].len() > 0:
+    for concentrate in concentrates[nom]:
+      radula_behave_ceras_resolve_concentrates(concentrate, concentrates)
+
+# Verify the `ceras` source
+proc radula_behave_ceras_verify_source*(file, sum: string): bool =
+  $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
