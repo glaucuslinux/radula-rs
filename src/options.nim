@@ -113,7 +113,6 @@ proc radula_behave_options*() =
 
             radula_behave_bootstrap_toolchain_prepare()
             radula_behave_bootstrap_toolchain_envenomate()
-            radula_behave_bootstrap_toolchain_backup()
             radula_behave_bootstrap_toolchain_release()
 
             echo ""
