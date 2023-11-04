@@ -13,7 +13,7 @@ import
 
 radula_behave_bootstrap_environment()
 
-radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
+radula_behave_genome_environment()
 
 radula_behave_bootstrap_cross_environment_teeth()
 

@@ -80,8 +80,8 @@ proc radula_behave_options*() =
           of "s", "system":
             radula_behave_teeth_environment()
 
-            # Default to `x86-64-v3`
-            radula_behave_genome_environment(RADULA_GENOME_X86_64_V3, RADULA_DIRECTORY_SYSTEM)
+            # Default to `x86-64`
+            radula_behave_genome_environment(RADULA_DIRECTORY_SYSTEM)
 
             radula_behave_flags_environment()
 
@@ -99,8 +99,8 @@ proc radula_behave_options*() =
 
             radula_behave_teeth_environment()
 
-            # Default to `x86-64-v3`
-            radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
+            # Default to `x86-64`
+            radula_behave_genome_environment()
 
             radula_behave_bootstrap_toolchain_environment_directories()
 
@@ -123,8 +123,8 @@ proc radula_behave_options*() =
 
             radula_behave_teeth_environment()
 
-            # Default to `x86-64-v3`
-            radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
+            # Default to `x86-64`
+            radula_behave_genome_environment()
 
             radula_behave_flags_environment()
 

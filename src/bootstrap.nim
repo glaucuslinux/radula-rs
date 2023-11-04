@@ -199,8 +199,8 @@ proc radula_behave_bootstrap_cross_release_img*() =
 
     radula_behave_exit(QuitFailure)
 
-  # Default to `x86-64-v3`
-  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}.img"
+  # Default to `x86-64`
+  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}.img"
 
   # Create a new IMG file
   discard execCmd(&"{RADULA_TOOTH_QEMU_IMG} create -f raw {img} {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -303,9 +303,9 @@ proc radula_behave_bootstrap_initialize*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
 
 proc radula_behave_bootstrap_release_iso*() =
-  # Default to `x86-64-v3`
+  # Default to `x86-64`
   let
-    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3_RELEASE}-{now().format(\"YYYYMMdd\")}"
+    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}"
     iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
 
     path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT

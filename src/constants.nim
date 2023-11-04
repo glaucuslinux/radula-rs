@@ -166,13 +166,6 @@ const
   RADULA_ENVIRONMENT_FLAGS_LINKER* = "LDFLAGS"
 
   RADULA_ENVIRONMENT_GENOME* = "ARCH"
-  RADULA_ENVIRONMENT_GENOME_CERATA* = "CARCH"
-  RADULA_ENVIRONMENT_GENOME_GCC_CONFIGURATION* = "GCARCH"
-  RADULA_ENVIRONMENT_GENOME_LINUX* = "LARCH"
-  RADULA_ENVIRONMENT_GENOME_LINUX_CONFIGURATION* = "LCARCH"
-  RADULA_ENVIRONMENT_GENOME_LINUX_IMAGE* = "LIARCH"
-  RADULA_ENVIRONMENT_GENOME_MUSL* = "MARCH"
-  RADULA_ENVIRONMENT_GENOME_MUSL_LINKER* = "MLARCH"
 
   RADULA_ENVIRONMENT_PATH* = "PATH"
 
@@ -245,20 +238,15 @@ const
   RADULA_FILE_SYSLINUX_MBR_BIN* = "mbr.bin"
 
 
-  RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-  RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3 -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
+  RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+  RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
 
-  RADULA_GENOME_CERATA* = "--with-gcc-arch="
   RADULA_GENOME_TUPLE_TARGET_CROSS* = "-glaucus-linux-musl"
   RADULA_GENOME_TUPLE_TARGET_SYSTEM* = "-pc-linux-musl"
 
-  RADULA_GENOME_X86_64_V3* = "x86-64"
-  RADULA_GENOME_X86_64_V3_GCC_CONFIGURATION* = "--with-arch=x86-64-v3 --with-tune=generic"
-  RADULA_GENOME_X86_64_V3_LINUX* = "x86_64"
-  RADULA_GENOME_X86_64_V3_LINUX_CONFIGURATION* = "x86_64_"
-  RADULA_GENOME_X86_64_V3_LINUX_IMAGE* = "arch/x86/boot/bzImage"
-  RADULA_GENOME_X86_64_V3_RELEASE* = "x86-64-v3"
+  RADULA_GENOME_X86_64* = "x86-64"
+  RADULA_GENOME_X86_64_LINUX* = "x86_64"
 
 
   RADULA_HELP* = """USAGE:

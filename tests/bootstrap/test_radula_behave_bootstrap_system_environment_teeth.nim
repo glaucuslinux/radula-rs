@@ -1,17 +1,14 @@
 # Copyright (c) 2018-2023, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  os,
-  strutils
-]
+import std/os
 
 import
   ../../src/bootstrap,
   ../../src/constants,
   ../../src/genome
 
-radula_behave_genome_environment(RADULA_GENOME_X86_64_V3)
+radula_behave_genome_environment()
 
 radula_behave_bootstrap_system_environment_teeth()
 
