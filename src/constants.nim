@@ -224,16 +224,13 @@ const
   RADULA_FILE_CERAS* = "ceras"
   RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
-  RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024M"
+  RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024"
 
-  RADULA_FILE_GRUB_CONF* = "grub.cfg"
+  RADULA_FILE_GRUB_CONF* = "grub.cfg.iso"
 
   RADULA_FILE_INITRAMFS_GLAUCUS* = "initramfs"
 
   RADULA_FILE_RADULA_LOCK* = "radula.lck"
-
-  RADULA_FILE_SYSLINUX_EXTLINUX_CONF* = "extlinux.conf"
-  RADULA_FILE_SYSLINUX_MBR_BIN* = "mbr.bin"
 
 
   RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
@@ -352,9 +349,6 @@ Distributed under the terms of the ISC License"""
 
   RADULA_TOOTH_DD* = "dd"
 
-  RADULA_TOOTH_EXTLINUX* = "extlinux"
-  RADULA_TOOTH_EXTLINUX_FLAGS* = "--install"
-
   RADULA_TOOTH_GIT* = "git"
   RADULA_TOOTH_GIT_CHECKOUT_FLAGS* = "checkout"
   RADULA_TOOTH_GIT_CLONE_FLAGS* = "clone"
@@ -385,8 +379,6 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_PARTED_FLAGS* = "-s"
   RADULA_TOOTH_PARTX* = "partx"
   RADULA_TOOTH_PATCH_FLAGS* = "--no-backup-if-mismatch --verbose"
-
-  RADULA_TOOTH_QEMU_IMG* = "qemu-img"
 
   RADULA_TOOTH_RANDOM_ACCESS_LIBRARY* = "gcc-ranlib"
   RADULA_TOOTH_READ_ELF* = "readelf"

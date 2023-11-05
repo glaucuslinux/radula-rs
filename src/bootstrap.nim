@@ -200,10 +200,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
   let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}.img"
 
   # Create a new IMG file
-  discard execCmd(&"{RADULA_TOOTH_QEMU_IMG} create -f raw {img} {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
-
-  # Write `mbr.bin` (from SYSLINUX) to the first 440 bytes of the IMG file
-  discard execCmd(&"{RADULA_TOOTH_DD} if={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_SYSLINUX / RADULA_FILE_SYSLINUX_MBR_BIN} of={img} conv=notrunc bs=440 count=1 {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"{RADULA_TOOTH_DD} bs=1M count={RADULA_FILE_GLAUCUS_IMG_SIZE} if=/dev/zero of={img} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Partition the IMG file
   discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} {img} mklabel msdos {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -241,14 +238,14 @@ proc radula_behave_bootstrap_cross_release_img*() =
 
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
-  # Install `extlinux` as the default bootloader
   let path = mount / RADULA_PATH_BOOT
 
-  createDir(path / RADULA_TOOTH_EXTLINUX)
+  # Install `grub` as the default bootloader
+  createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_SYSLINUX / RADULA_FILE_SYSLINUX_EXTLINUX_CONF, path / RADULA_TOOTH_EXTLINUX, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
-  discard execCmd(&"{RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_EXTLINUX_FLAGS} {path / RADULA_TOOTH_EXTLINUX} {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"grub-install --no-floppy --target=i386-pc --grub-mkdevicemap=/home/firasuke/Downloads/Git/glaucus/cerata/grub/device.map --root-directory={mount} /dev/loop0 --force")
 
   # Generate initramfs
   radula_behave_generate_initramfs(true, path)
@@ -262,10 +259,10 @@ proc radula_behave_bootstrap_cross_release_img*() =
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Compress the IMG file
-  let status = radula_behave_create_zstd(img)
+  # let status = radula_behave_create_zstd(img)
 
-  if status == 0:
-    removeFile(img)
+  # if status == 0:
+    # removeFile(img)
 
 proc radula_behave_bootstrap_distclean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
@@ -307,19 +304,19 @@ proc radula_behave_bootstrap_release_iso*() =
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB / "grub.cfg", RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   # Generate initramfs
-  radula_behave_generate_initramfs(true, path)
+  # radula_behave_generate_initramfs(true, path)
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --modules=\"part_msdos part_gpt ext2 fat search_fs_uuid search_fs_file normal linux iso9660 multiboot configfile\" --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} ")
 
   # Compress the ISO file
-  let status = radula_behave_create_zstd(iso)
+  # let status = radula_behave_create_zstd(iso)
 
-  if status == 0:
-    removeFile(iso)
+  # if status == 0:
+    # removeFile(iso)
 
 proc radula_behave_bootstrap_toolchain_envenomate*() =
   radula_behave_envenomate([
