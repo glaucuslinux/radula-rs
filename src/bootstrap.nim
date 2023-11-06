@@ -245,7 +245,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
 
   discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
-  discard execCmd(&"grub-install --no-floppy --target=i386-pc --grub-mkdevicemap=/home/firasuke/Downloads/Git/glaucus/cerata/grub/device.map --root-directory={mount} /dev/loop0 --force")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --target=i386-pc --grub-mkdevicemap=/home/firasuke/Downloads/Git/glaucus/cerata/grub/device.map --root-directory={mount} /dev/loop0 --force")
 
   # Generate initramfs
   radula_behave_generate_initramfs(true, path)
@@ -310,7 +310,7 @@ proc radula_behave_bootstrap_release_iso*() =
   # radula_behave_generate_initramfs(true, path)
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} --compress=no --modules=\"part_msdos part_gpt ext2 fat search_fs_uuid search_fs_file normal linux iso9660 multiboot configfile\" --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} ")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} --modules=\"part_msdos part_gpt ext2 fat search_fs_uuid search_fs_file normal linux iso9660 multiboot configfile\" -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} ")
 
   # Compress the ISO file
   # let status = radula_behave_create_zstd(iso)

@@ -352,6 +352,8 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_GIT* = "git"
   RADULA_TOOTH_GIT_CHECKOUT_FLAGS* = "checkout"
   RADULA_TOOTH_GIT_CLONE_FLAGS* = "clone"
+  RADULA_TOOTH_GRUB_FLAGS* = "--compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none"
+  RADULA_TOOTH_GRUB_INSTALL* = "grub-install"
   RADULA_TOOTH_GRUB_MKRESCUE* = "grub-mkrescue"
 
   RADULA_TOOTH_LINKER* = "ld.bfd"
