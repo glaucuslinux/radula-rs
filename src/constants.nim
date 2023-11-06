@@ -100,7 +100,6 @@ const
   RADULA_CERAS_SED* = "sed"
   RADULA_CERAS_SHADOW* = "shadow"
   RADULA_CERAS_SKALIBS* = "skalibs"
-  RADULA_CERAS_SYSLINUX* = "syslinux"
 
   RADULA_CERAS_TOYBOX* = "toybox"
   RADULA_CERAS_TZCODE* = "tzcode"
