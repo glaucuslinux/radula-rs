@@ -310,7 +310,7 @@ proc radula_behave_bootstrap_release_iso*() =
   # radula_behave_generate_initramfs(true, path)
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} --modules=\"part_msdos part_gpt ext2 fat search_fs_uuid search_fs_file normal linux iso9660 multiboot configfile\" -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid {name} ")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid GLAUCUS")
 
   # Compress the ISO file
   # let status = radula_behave_create_zstd(iso)
