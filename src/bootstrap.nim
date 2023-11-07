@@ -225,7 +225,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
   discard execCmd(&"{RADULA_TOOTH_PARTX} -a {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Create an `ext4` file system in the partition
-  discard execCmd(&"{RADULA_TOOTH_MKE2FS} {RADULA_TOOTH_MKE2FS_FLAGS} ext4 {partition} {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"{RADULA_TOOTH_MKE2FS} {RADULA_TOOTH_MKE2FS_FLAGS} ext4 {partition}")
 
   let mount = RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_PATH_MNT / RADULA_DIRECTORY_GLAUCUS
 
@@ -245,7 +245,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
 
   discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
-  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --target=i386-pc --grub-mkdevicemap=/home/firasuke/Downloads/Git/glaucus/cerata/grub/device.map --root-directory={mount} /dev/loop0 --force")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --target=i386-pc --grub-mkdevicemap={getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA) / RADULA_CERAS_GRUB}/device.map --root-directory={mount} /dev/loop0 --force")
 
   # Generate initramfs
   radula_behave_generate_initramfs(true, path)
@@ -350,30 +350,6 @@ proc radula_behave_bootstrap_toolchain_prepare*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_SOURCES))
 
   removeFile(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG))
-
-proc radula_behave_bootstrap_toolchain_release*() =
-  let path = RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_DIRECTORY_TOOLCHAIN
-
-  removeDir(path)
-  createDir(path)
-
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), path)
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN), path)
-
-  # Remove all `lib64` directories because glaucus is a pure 64-bit system
-  removeDir(path / RADULA_DIRECTORY_CROSS / RADULA_PATH_LIB64)
-  removeDir(path / RADULA_DIRECTORY_CROSS / RADULA_PATH_USR / RADULA_PATH_LIB64)
-  removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_LIB64)
-
-  # Remove toolchain documentation
-  removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_DOC)
-  removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_INFO)
-  removeDir(path / RADULA_DIRECTORY_TOOLCHAIN / RADULA_PATH_USR / RADULA_PATH_SHARE / RADULA_PATH_MAN)
-
-  let status = radula_behave_create_archive_zstd(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_TOOLCHAIN}-{now().format(\"YYYYMMdd\")}{RADULA_FILE_ARCHIVE}", path)
-
-  if status == 0:
-    removeDir(path)
 
 proc radula_behave_bootstrap_system_envenomate*() =
   radula_behave_envenomate([
