@@ -243,9 +243,9 @@ proc radula_behave_bootstrap_cross_release_img*() =
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_IMG, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
-  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --target=i386-pc --grub-mkdevicemap={getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA) / RADULA_CERAS_GRUB}/device.map --root-directory={mount} /dev/loop0 --force")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --target=i386-pc --root-directory={mount} /dev/loop0 --force")
 
   # Generate initramfs
   radula_behave_generate_initramfs(true, path)
@@ -304,7 +304,7 @@ proc radula_behave_bootstrap_release_iso*() =
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, path / RADULA_CERAS_GRUB / "grub.cfg", RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_ISO, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   # Generate initramfs
   # radula_behave_generate_initramfs(true, path)
