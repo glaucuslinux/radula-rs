@@ -204,7 +204,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
 
   # Partition the IMG file
   discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} {img} mklabel msdos {RADULA_TOOTH_SHELL_REDIRECTION}")
-  discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} mkpart primary ext4 0 {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
+  discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} mkpart primary ext4 1 {RADULA_FILE_GLAUCUS_IMG_SIZE} {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_PARTED} {RADULA_TOOTH_PARTED_FLAGS} -a none {img} set 1 boot on {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Load the `loop` module
@@ -245,7 +245,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
 
   discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_IMG, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
-  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --target=i386-pc --root-directory={mount} /dev/loop0 --force")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --boot-directory={mount / RADULA_PATH_BOOT} --target=i386-pc {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Generate initramfs
   radula_behave_generate_initramfs(true, path)
