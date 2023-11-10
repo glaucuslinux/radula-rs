@@ -248,7 +248,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
   discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --boot-directory={mount / RADULA_PATH_BOOT} --target=i386-pc {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Generate initramfs
-  radula_behave_generate_initramfs(true, path)
+  radula_behave_generate_initramfs(path, true)
 
   # Change ownerships
   discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -307,7 +307,7 @@ proc radula_behave_bootstrap_release_iso*() =
   discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_ISO, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   # Generate initramfs
-  # radula_behave_generate_initramfs(true, path)
+  radula_behave_generate_initramfs(path, true)
 
   # Create a new ISO file
   discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid GLAUCUS")
