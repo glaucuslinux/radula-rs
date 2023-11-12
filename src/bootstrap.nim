@@ -357,11 +357,15 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_HYDROSKELETON,
 
     # Development
+    RADULA_CERAS_CMAKE,
     RADULA_CERAS_GMP,
+    RADULA_CERAS_JSON_C,
+    RADULA_CERAS_LIBFFI,
     RADULA_CERAS_MPFR,
     RADULA_CERAS_MPC,
     RADULA_CERAS_ISL,
     RADULA_CERAS_PERL,
+    RADULA_CERAS_PYTHON,
 
     # Package Management
     RADULA_CERAS_IANA_ETC,
@@ -460,7 +464,12 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_S6_BOOT_SCRIPTS,
 
     # Kernel
-    RADULA_CERAS_LINUX
+    RADULA_CERAS_LINUX,
+
+    # Graphics
+    RADULA_CERAS_WAYLAND,
+    RADULA_CERAS_WAYLAND_PROTOCOLS,
+    RADULA_CERAS_WLROOTS,
   ], RADULA_DIRECTORY_SYSTEM, false)
 
 proc radula_behave_bootstrap_system_environment_directories*() =

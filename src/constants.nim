@@ -44,6 +44,8 @@ const
   RADULA_CERAS_IPUTILS* = "iputils"
   RADULA_CERAS_ISL* = "isl"
 
+  RADULA_CERAS_JSON_C* = "json-c"
+
   RADULA_CERAS_KMOD* = "kmod"
 
   RADULA_CERAS_LBZIP2* = "lbzip2"
@@ -53,6 +55,7 @@ const
   RADULA_CERAS_LIBCAP* = "libcap"
   RADULA_CERAS_LIBCAP_NG* = "libcap-ng"
   RADULA_CERAS_LIBEDIT* = "libedit"
+  RADULA_CERAS_LIBFFI* = "libffi"
   RADULA_CERAS_LIBGCC* = "libgcc"
   RADULA_CERAS_LIBRESSL* = "libressl"
   RADULA_CERAS_LIBSTDCXX_V3* = "libstdc++-v3"
@@ -87,6 +90,7 @@ const
   RADULA_CERAS_PKGCONF* = "pkgconf"
   RADULA_CERAS_PROCPS_NG* = "procps-ng"
   RADULA_CERAS_PSMISC* = "psmisc"
+  RADULA_CERAS_PYTHON* = "python"
 
   RADULA_CERAS_RADULA* = "radula"
   RADULA_CERAS_RSYNC* = "rsync"
@@ -110,7 +114,10 @@ const
 
   RADULA_CERAS_VIM* = "vim"
 
+  RADULA_CERAS_WAYLAND* = "wayland"
+  RADULA_CERAS_WAYLAND_PROTOCOLS* = "wayland-protocols"
   RADULA_CERAS_WGET2* = "wget2"
+  RADULA_CERAS_WLROOTS* = "wlroots"
 
   RADULA_CERAS_XXHASH* = "xxhash"
   RADULA_CERAS_XZ* = "xz"
