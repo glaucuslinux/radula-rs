@@ -1,8 +1,4 @@
 # radula
-[![Join the chat at https://gitter.im/glaucuslinux/radula](
-https://badges.gitter.im/glaucuslinux/radula.svg)](
-https://gitter.im/glaucuslinux/radula?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 glaucus's radula
 
 ## Community
