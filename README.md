@@ -14,10 +14,8 @@ glaucus's radula
 * [YouTube](https://www.youtube.com/@glaucuslinux)
 
 ## Mirrors
-* [BitBucket](https://bitbucket.org/glaucuslinux/radula)
 * [Codeberg](https://codeberg.org/glaucuslinux/radula)
 * [Framagit](https://framagit.org/glaucuslinux/radula)
 * [GitHub](https://github.com/glaucuslinux/radula)
 * [GitLab](https://gitlab.com/glaucuslinux/radula)
-* [NotABug](https://notabug.org/glaucuslinux/radula)
 * [SourceHut](https://git.sr.ht/~glaucuslinux/radula)
