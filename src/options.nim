@@ -133,6 +133,7 @@ proc radula_behave_options*() =
 
             radula_behave_bootstrap_cross_prepare()
             radula_behave_bootstrap_cross_envenomate()
+            radula_behave_bootstrap_cross_backup()
 
             echo ""
             echo "cross complete"

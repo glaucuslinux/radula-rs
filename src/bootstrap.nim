@@ -22,6 +22,9 @@ proc radula_behave_bootstrap_clean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
 
+proc radula_behave_bootstrap_cross_backup*() =
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+
 proc radula_behave_bootstrap_cross_envenomate*() =
   radula_behave_envenomate([
     # Filesystem & Package Management
