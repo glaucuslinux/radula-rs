@@ -23,7 +23,7 @@ proc radula_behave_bootstrap_clean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
 
 proc radula_behave_bootstrap_cross_backup*() =
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_behave_bootstrap_cross_envenomate*() =
   radula_behave_envenomate([
@@ -328,7 +328,7 @@ proc radula_behave_bootstrap_release_iso*() =
 
 proc radula_behave_bootstrap_toolchain_backup*() =
   discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_behave_bootstrap_toolchain_envenomate*() =
   radula_behave_envenomate([
