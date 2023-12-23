@@ -127,7 +127,7 @@ const
   RADULA_CERAS_ZLIB_NG* = "zlib-ng"
   RADULA_CERAS_ZSTD* = "zstd"
 
-
+  RADULA_DIRECTORY_BACKUPS* = "bak"
   RADULA_DIRECTORY_BUILDS* = "bld"
   RADULA_DIRECTORY_CERATA* = "cerata"
   RADULA_DIRECTORY_CROSS* = "cross"
@@ -143,6 +143,7 @@ const
   RADULA_ENVIRONMENT_BOOTSTRAP* = "BOOTSTRAP"
   RADULA_ENVIRONMENT_CROSS_COMPILE* = "CROSS_COMPILE"
 
+  RADULA_ENVIRONMENT_DIRECTORY_BACKUPS* = "BAKD"
   RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES* = "SRCD"
   RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM* = "VNMD"
   RADULA_ENVIRONMENT_DIRECTORY_CERATA* = "CERD"
@@ -273,7 +274,7 @@ OPTIONS:
   radula [ -b | --behave ] =|: [ b | bootstrap ] [ OPTIONS ]
 
 OPTIONS:
-  c, clean       Clean up while preserving sources
+  c, clean       Clean up while preserving sources and backups
   d, distclean   Clean up everything
   h, help        Display this help message
   i, img         Release an IMG file of the glaucus system

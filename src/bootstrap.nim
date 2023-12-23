@@ -179,6 +179,8 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRIP, cross_compile & RADULA_TOOTH_STRIP)
 
 proc radula_behave_bootstrap_cross_prepare*() =
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
+
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
 
@@ -265,6 +267,7 @@ proc radula_behave_bootstrap_cross_release_img*() =
     # removeFile(img)
 
 proc radula_behave_bootstrap_distclean*() =
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
 
   radula_behave_bootstrap_clean()
@@ -279,6 +282,7 @@ proc radula_behave_bootstrap_environment*() =
 
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS, path)
 
+  putEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS, path / RADULA_DIRECTORY_BACKUPS)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES, path / RADULA_DIRECTORY_SOURCES)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA, path / RADULA_DIRECTORY_CERATA)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS, path / RADULA_DIRECTORY_CROSS)
@@ -289,6 +293,7 @@ proc radula_behave_bootstrap_environment*() =
   putEnv(RADULA_ENVIRONMENT_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN) / RADULA_PATH_USR / RADULA_PATH_BIN & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
 
 proc radula_behave_bootstrap_initialize*() =
+  createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
@@ -317,6 +322,10 @@ proc radula_behave_bootstrap_release_iso*() =
 
   # if status == 0:
     # removeFile(iso)
+
+proc radula_behave_bootstrap_toolchain_backup*() =
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_behave_bootstrap_toolchain_envenomate*() =
   radula_behave_envenomate([
