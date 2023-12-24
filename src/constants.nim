@@ -242,7 +242,7 @@ const
   RADULA_FILE_RADULA_LOCK* = "radula.lck"
 
 
-  RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+  RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
   RADULA_FLAGS_LINKER* = "-Wl,-O1 -Wl,-s -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu"
 
 
