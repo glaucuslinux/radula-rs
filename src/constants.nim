@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023, Firas Khalil Khana
+# Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
 # All constants are prefixed with `RADULA_`
@@ -302,7 +302,7 @@ OPTIONS:
 
   RADULA_HELP_VERSION* = """radula version 0.1.0
 
-Copyright (c) 2018-2023, Firas Khalil Khana
+Copyright (c) 2018-2024, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
 
