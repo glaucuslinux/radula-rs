@@ -10,9 +10,9 @@ import
   ../../src/bootstrap,
   ../../src/constants
 
-radula_behave_bootstrap_environment()
+radula_bootstrap_environment()
 
-radula_behave_bootstrap_cross_environment_pkg_config()
+radula_bootstrap_cross_environment_pkg_config()
 
 echo "PKG_CONFIG_LIBDIR               :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR)
 echo "PKG_CONFIG_PATH                 :: ", getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH)

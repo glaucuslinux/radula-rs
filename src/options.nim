@@ -13,7 +13,7 @@ import
   genome,
   teeth
 
-proc radula_behave_options*() =
+proc radula_options*() =
   if paramCount() < 1:
     echo RADULA_HELP
 
@@ -21,156 +21,162 @@ proc radula_behave_options*() =
 
   var p = initOptParser()
 
-  while true:
-    p.next()
+  p.next()
 
-    case p.kind
-    of cmdArgument, cmdEnd:
+  case p.kind
+  of cmdArgument, cmdEnd:
+    echo RADULA_HELP
+
+    quit(QuitFailure)
+  of cmdLongOption, cmdShortOption:
+    # Catch `Ctrl-C` and exit gracefully
+    setControlCHook(radula_abort)
+
+    # Check lock file
+    radula_lock()
+
+    case p.key
+    of "b", "bootstrap":
+      p.next()
+
+      case p.key
+      of "c", "clean":
+        radula_bootstrap_environment()
+        radula_bootstrap_toolchain_environment_directories()
+        radula_bootstrap_cross_environment_directories()
+
+        radula_bootstrap_clean()
+
+        echo "clean complete"
+      of "d", "distclean":
+        radula_bootstrap_environment()
+        radula_bootstrap_toolchain_environment_directories()
+        radula_bootstrap_cross_environment_directories()
+
+        radula_bootstrap_distclean()
+
+        echo "distclean complete"
+      of "h", "help":
+        echo RADULA_HELP_BOOTSTRAP
+      of "i", "img", "image":
+        radula_bootstrap_environment()
+
+        radula_teeth_environment()
+
+        radula_bootstrap_cross_release_img()
+
+        echo "img complete"
+      of "r", "release":
+        radula_bootstrap_environment()
+
+        radula_teeth_environment()
+
+        radula_bootstrap_release_iso()
+
+        echo "release complete"
+      of "s", "system":
+        radula_teeth_environment()
+
+        # Default to `x86-64`
+        radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
+
+        radula_flags_environment()
+
+        radula_bootstrap_system_environment_directories()
+        radula_bootstrap_system_environment_pkg_config()
+        radula_bootstrap_system_environment_teeth()
+
+        radula_bootstrap_system_prepare()
+        radula_bootstrap_system_envenomate()
+
+        echo ""
+        echo "system complete"
+      of "t", "toolchain":
+        radula_bootstrap_environment()
+
+        radula_teeth_environment()
+
+        # Default to `x86-64`
+        radula_genome_environment()
+
+        radula_bootstrap_toolchain_environment_directories()
+
+        # Needed for clean to work
+        radula_bootstrap_cross_environment_directories()
+
+        radula_bootstrap_clean()
+
+        radula_bootstrap_initialize()
+
+        radula_bootstrap_toolchain_prepare()
+        radula_bootstrap_toolchain_envenomate()
+        radula_bootstrap_toolchain_backup()
+
+        echo ""
+        echo "toolchain complete"
+      of "x", "cross":
+        radula_bootstrap_environment()
+
+        radula_teeth_environment()
+
+        # Default to `x86-64`
+        radula_genome_environment()
+
+        radula_flags_environment()
+
+        radula_bootstrap_cross_environment_directories()
+        radula_bootstrap_cross_environment_pkg_config()
+        radula_bootstrap_cross_environment_teeth()
+
+        radula_bootstrap_cross_prepare()
+        radula_bootstrap_cross_envenomate()
+        radula_bootstrap_cross_backup()
+
+        echo ""
+        echo "cross complete"
+      else:
+        echo RADULA_HELP_BOOTSTRAP
+
+        radula_exit(QuitFailure)
+    of "e", "envenomate":
+      p.next()
+
+      let cerata = remainingArgs(p)
+
+      case p.key
+      of "d", "decyst":
+        echo ""
+        echo "decyst complete"
+      of "h", "help":
+        echo RADULA_HELP_ENVENOMATE
+      of "i", "install":
+        echo ""
+        echo "install complete"
+      of "r", "remove":
+        echo ""
+        echo "remove complete"
+      of "s", "search":
+        echo ""
+        echo "search complete"
+      of "u", "upgrade":
+        echo ""
+        echo "upgrade complete"
+      else:
+        echo RADULA_HELP_ENVENOMATE
+
+        radula_exit(QuitFailure)
+    of "c", "ceras":
+      let cerata = remainingArgs(p)
+
+      if cerata.len() >= 1:
+        radula_ceras_print(cerata)
+    of "h", "help":
+      echo RADULA_HELP
+    of "v", "version":
+      echo RADULA_HELP_VERSION
+    else:
       echo RADULA_HELP
 
-      quit(QuitFailure)
-    of cmdLongOption, cmdShortOption:
-      case p.key
-      of "b", "behave":
-        # Catch `Ctrl-C` and exit gracefully
-        setControlCHook(radula_behave_abort)
+      radula_exit(QuitFailure)
 
-        # Check lock file
-        radula_behave_lock()
-
-        case p.val
-        of "b", "bootstrap":
-          p.next()
-
-          case p.key
-          of "c", "clean":
-            radula_behave_bootstrap_environment()
-            radula_behave_bootstrap_toolchain_environment_directories()
-            radula_behave_bootstrap_cross_environment_directories()
-
-            radula_behave_bootstrap_clean()
-
-            echo "clean complete"
-          of "d", "distclean":
-            radula_behave_bootstrap_environment()
-            radula_behave_bootstrap_toolchain_environment_directories()
-            radula_behave_bootstrap_cross_environment_directories()
-
-            radula_behave_bootstrap_distclean()
-
-            echo "distclean complete"
-          of "h", "help":
-            echo RADULA_HELP_BEHAVE_BOOTSTRAP
-          of "i", "img":
-            radula_behave_bootstrap_environment()
-
-            radula_behave_teeth_environment()
-
-            radula_behave_bootstrap_cross_release_img()
-
-            echo "img complete"
-          of "r", "release":
-            radula_behave_bootstrap_environment()
-
-            radula_behave_teeth_environment()
-
-            radula_behave_bootstrap_release_iso()
-
-            echo "release complete"
-          of "s", "system":
-            radula_behave_teeth_environment()
-
-            # Default to `x86-64`
-            radula_behave_genome_environment(RADULA_DIRECTORY_SYSTEM)
-
-            radula_behave_flags_environment()
-
-            radula_behave_bootstrap_system_environment_directories()
-            radula_behave_bootstrap_system_environment_pkg_config()
-            radula_behave_bootstrap_system_environment_teeth()
-
-            radula_behave_bootstrap_system_prepare()
-            radula_behave_bootstrap_system_envenomate()
-
-            echo ""
-            echo "system complete"
-          of "t", "toolchain":
-            radula_behave_bootstrap_environment()
-
-            radula_behave_teeth_environment()
-
-            # Default to `x86-64`
-            radula_behave_genome_environment()
-
-            radula_behave_bootstrap_toolchain_environment_directories()
-
-            # Needed for clean to work
-            radula_behave_bootstrap_cross_environment_directories()
-
-            radula_behave_bootstrap_clean()
-
-            radula_behave_bootstrap_initialize()
-
-            radula_behave_bootstrap_toolchain_prepare()
-            radula_behave_bootstrap_toolchain_envenomate()
-            radula_behave_bootstrap_toolchain_backup()
-
-            echo ""
-            echo "toolchain complete"
-          of "x", "cross":
-            radula_behave_bootstrap_environment()
-
-            radula_behave_teeth_environment()
-
-            # Default to `x86-64`
-            radula_behave_genome_environment()
-
-            radula_behave_flags_environment()
-
-            radula_behave_bootstrap_cross_environment_directories()
-            radula_behave_bootstrap_cross_environment_pkg_config()
-            radula_behave_bootstrap_cross_environment_teeth()
-
-            radula_behave_bootstrap_cross_prepare()
-            radula_behave_bootstrap_cross_envenomate()
-            radula_behave_bootstrap_cross_backup()
-
-            echo ""
-            echo "cross complete"
-          else:
-            echo RADULA_HELP_BEHAVE_BOOTSTRAP
-
-            radula_behave_exit(QuitFailure)
-        of "e", "envenomate":
-          echo RADULA_HELP_BEHAVE_ENVENOMATE
-        of "h", "help":
-          echo RADULA_HELP_BEHAVE
-        else:
-          echo RADULA_HELP_BEHAVE
-
-          radula_behave_exit(QuitFailure)
-
-        radula_behave_exit()
-      of "c", "ceras":
-        let cerata = remainingArgs(p)
-
-        if cerata.len() >= 1:
-          radula_behave_ceras_print(cerata)
-        else:
-          case p.val:
-          of "h", "help":
-            echo RADULA_HELP_CERAS
-          else:
-            echo RADULA_HELP_CERAS
-
-            quit(QuitFailure)
-      of "h", "help":
-        echo RADULA_HELP
-      of "v", "version":
-        echo RADULA_HELP_VERSION
-      else:
-        echo RADULA_HELP
-
-        quit(QuitFailure)
-
-      quit()
+    radula_exit()

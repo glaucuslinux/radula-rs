@@ -8,9 +8,9 @@ import
   ../../src/constants,
   ../../src/genome
 
-radula_behave_genome_environment()
+radula_genome_environment()
 
-radula_behave_bootstrap_system_environment_teeth()
+radula_bootstrap_system_environment_teeth()
 
 echo "AR             :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_ARCHIVER)
 echo "AS             :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_ASSEMBLER)

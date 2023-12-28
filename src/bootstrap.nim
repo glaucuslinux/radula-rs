@@ -15,18 +15,18 @@ import
   envenomate,
   teeth
 
-proc radula_behave_bootstrap_clean*() =
+proc radula_bootstrap_clean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN_BUILDS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
 
-proc radula_behave_bootstrap_cross_backup*() =
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+proc radula_bootstrap_cross_backup*() =
+  discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
-proc radula_behave_bootstrap_cross_envenomate*() =
-  radula_behave_envenomate([
+proc radula_bootstrap_cross_envenomate*() =
+  radula_envenomate([
     # Filesystem & Package Management
     RADULA_CERAS_HYDROSKELETON,
     RADULA_CERAS_CERATA,
@@ -134,7 +134,7 @@ proc radula_behave_bootstrap_cross_envenomate*() =
     RADULA_CERAS_LINUX
   ], RADULA_DIRECTORY_CROSS, false)
 
-proc radula_behave_bootstrap_cross_environment_directories*() =
+proc radula_bootstrap_cross_environment_directories*() =
   let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY) / RADULA_DIRECTORY_CROSS
 
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS, path)
@@ -145,7 +145,7 @@ proc radula_behave_bootstrap_cross_environment_directories*() =
   # cross log file
   putEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG, getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / RADULA_DIRECTORY_CROSS & CurDir & RADULA_DIRECTORY_LOGS)
 
-proc radula_behave_bootstrap_cross_environment_pkg_config*() =
+proc radula_bootstrap_cross_environment_pkg_config*() =
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_LIBDIR_PATH)
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH, getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR))
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
@@ -155,7 +155,7 @@ proc radula_behave_bootstrap_cross_environment_pkg_config*() =
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
-proc radula_behave_bootstrap_cross_environment_teeth*() =
+proc radula_bootstrap_cross_environment_teeth*() =
   let cross_compile = getEnv(RADULA_ENVIRONMENT_TUPLE_TARGET) & '-'
 
   putEnv(RADULA_ENVIRONMENT_CROSS_COMPILE, cross_compile)
@@ -181,8 +181,8 @@ proc radula_behave_bootstrap_cross_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRINGS, cross_compile & RADULA_TOOTH_STRINGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRIP, cross_compile & RADULA_TOOTH_STRIP)
 
-proc radula_behave_bootstrap_cross_prepare*() =
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
+proc radula_bootstrap_cross_prepare*() =
+  discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS) / RADULA_DIRECTORY_CROSS, getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS))
 
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_CROSS_BUILDS))
@@ -195,11 +195,11 @@ proc radula_behave_bootstrap_cross_prepare*() =
 
   removeFile(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
 
-proc radula_behave_bootstrap_cross_release_img*() =
+proc radula_bootstrap_cross_release_img*(compress = false) =
   if not isAdmin():
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"permission denied\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
-    radula_behave_exit(QuitFailure)
+    radula_exit(QuitFailure)
 
   # Default to `x86-64`
   let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}.img"
@@ -241,19 +241,19 @@ proc radula_behave_bootstrap_cross_release_img*() =
   # Remove `/lost+found` directory
   removeDir(mount / RADULA_PATH_LOST_FOUND)
 
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   let path = mount / RADULA_PATH_BOOT
 
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_IMG, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_IMG, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --boot-directory={mount / RADULA_PATH_BOOT} --target=i386-pc {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Generate initramfs
-  radula_behave_generate_initramfs(path, true)
+  radula_generate_initramfs(path, true)
 
   # Change ownerships
   discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -264,23 +264,24 @@ proc radula_behave_bootstrap_cross_release_img*() =
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Compress the IMG file
-  # let status = radula_behave_create_zstd(img)
+  if compress:
+    let status = radula_compress_zstd(img)
 
-  # if status == 0:
-    # removeFile(img)
+    if status == 0:
+      removeFile(img)
 
-proc radula_behave_bootstrap_distclean*() =
+proc radula_bootstrap_distclean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
 
-  radula_behave_bootstrap_clean()
+  radula_bootstrap_clean()
 
   # Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
   # `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS` and
   # `RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS` are removed
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
 
-proc radula_behave_bootstrap_environment*() =
+proc radula_bootstrap_environment*() =
   let path = parentDir(getCurrentDir())
 
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS, path)
@@ -295,13 +296,13 @@ proc radula_behave_bootstrap_environment*() =
 
   putEnv(RADULA_ENVIRONMENT_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN) / RADULA_PATH_USR / RADULA_PATH_BIN & ':' & getEnv(RADULA_ENVIRONMENT_PATH))
 
-proc radula_behave_bootstrap_initialize*() =
+proc radula_bootstrap_initialize*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
 
-proc radula_behave_bootstrap_release_iso*() =
+proc radula_bootstrap_release_iso*(compress = false) =
   # Default to `x86-64`
   let
     name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}"
@@ -312,26 +313,27 @@ proc radula_behave_bootstrap_release_iso*() =
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
-  discard radula_behave_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_ISO, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
+  discard radula_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_ISO, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS)
 
   # Generate initramfs
-  radula_behave_generate_initramfs(path, true)
+  radula_generate_initramfs(path, true)
 
   # Create a new ISO file
   discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid GLAUCUS")
 
   # Compress the ISO file
-  # let status = radula_behave_create_zstd(iso)
+  if compress:
+    let status = radula_compress_zstd(iso)
 
-  # if status == 0:
-    # removeFile(iso)
+    if status == 0:
+      removeFile(iso)
 
-proc radula_behave_bootstrap_toolchain_backup*() =
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-  discard radula_behave_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+proc radula_bootstrap_toolchain_backup*() =
+  discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+  discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
-proc radula_behave_bootstrap_toolchain_envenomate*() =
-  radula_behave_envenomate([
+proc radula_bootstrap_toolchain_envenomate*() =
+  radula_envenomate([
     RADULA_CERAS_MUSL_HEADERS,
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_GCC,
@@ -340,7 +342,7 @@ proc radula_behave_bootstrap_toolchain_envenomate*() =
     RADULA_CERAS_LIBSTDCXX_V3
   ], RADULA_DIRECTORY_TOOLCHAIN, false)
 
-proc radula_behave_bootstrap_toolchain_environment_directories*() =
+proc radula_bootstrap_toolchain_environment_directories*() =
   let path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY) / RADULA_DIRECTORY_TOOLCHAIN
 
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_TOOLCHAIN, path)
@@ -351,7 +353,7 @@ proc radula_behave_bootstrap_toolchain_environment_directories*() =
   # toolchain log file
   putEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG, getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / RADULA_DIRECTORY_TOOLCHAIN & CurDir & RADULA_DIRECTORY_LOGS)
 
-proc radula_behave_bootstrap_toolchain_prepare*() =
+proc radula_bootstrap_toolchain_prepare*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS))
 
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
@@ -363,15 +365,14 @@ proc radula_behave_bootstrap_toolchain_prepare*() =
 
   removeFile(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG))
 
-proc radula_behave_bootstrap_system_envenomate*() =
-  radula_behave_envenomate([
+proc radula_bootstrap_system_envenomate*() =
+  radula_envenomate([
     # Filesystem
     RADULA_CERAS_HYDROSKELETON,
 
     # Development
     RADULA_CERAS_CMAKE,
     RADULA_CERAS_GMP,
-    RADULA_CERAS_JSON_C,
     RADULA_CERAS_LIBFFI,
     RADULA_CERAS_MPFR,
     RADULA_CERAS_MPC,
@@ -484,7 +485,7 @@ proc radula_behave_bootstrap_system_envenomate*() =
     RADULA_CERAS_WLROOTS,
   ], RADULA_DIRECTORY_SYSTEM, false)
 
-proc radula_behave_bootstrap_system_environment_directories*() =
+proc radula_bootstrap_system_environment_directories*() =
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES, RADULA_PATH_RADULA_CACHE_SOURCES)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM, RADULA_PATH_RADULA_CACHE_VENOM)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA, RADULA_PATH_RADULA_CLUSTERS_GLAUCUS)
@@ -496,7 +497,7 @@ proc radula_behave_bootstrap_system_environment_directories*() =
   # system log file
   putEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG, getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / RADULA_DIRECTORY_SYSTEM & CurDir & RADULA_DIRECTORY_LOGS)
 
-proc radula_behave_bootstrap_system_environment_teeth*() =
+proc radula_bootstrap_system_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_BOOTSTRAP, "yes")
 
   putEnv(RADULA_ENVIRONMENT_TOOTH_ARCHIVER, RADULA_TOOTH_ARCHIVER)
@@ -520,7 +521,7 @@ proc radula_behave_bootstrap_system_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRINGS, RADULA_TOOTH_STRINGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRIP, RADULA_TOOTH_STRIP)
 
-proc radula_behave_bootstrap_system_environment_pkg_config*() =
+proc radula_bootstrap_system_environment_pkg_config*() =
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR, RADULA_PATH_PKG_CONFIG_LIBDIR_PATH)
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH, getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR))
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR, RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
@@ -530,7 +531,7 @@ proc radula_behave_bootstrap_system_environment_pkg_config*() =
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH, RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH, RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
-proc radula_behave_bootstrap_system_prepare*() =
+proc radula_bootstrap_system_prepare*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_BUILDS))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_BUILDS))
 

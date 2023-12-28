@@ -7,9 +7,9 @@ import
   ../../src/constants,
   ../../src/genome
 
-radula_behave_genome_environment()
+radula_genome_environment()
 
-radula_behave_flags_environment()
+radula_flags_environment()
 
 echo "CFLAGS    :: ", getEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER)
 echo "CXXFLAGS  :: ", getEnv(RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER)

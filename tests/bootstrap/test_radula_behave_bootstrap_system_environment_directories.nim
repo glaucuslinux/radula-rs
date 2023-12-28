@@ -7,7 +7,7 @@ import
   ../../src/bootstrap,
   ../../src/constants
 
-radula_behave_bootstrap_system_environment_directories()
+radula_bootstrap_system_environment_directories()
 
 echo "SRCD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES)
 echo "VNMD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM)

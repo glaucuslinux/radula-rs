@@ -10,9 +10,9 @@ import
   ../../src/bootstrap,
   ../../src/constants
 
-radula_behave_bootstrap_environment()
+radula_bootstrap_environment()
 
-radula_behave_bootstrap_toolchain_environment_directories()
+radula_bootstrap_toolchain_environment_directories()
 
 echo "TLCD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)
 

@@ -10,7 +10,7 @@ import
   ../../src/bootstrap,
   ../../src/constants
 
-radula_behave_bootstrap_environment()
+radula_bootstrap_environment()
 
 echo "GLAD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)
 

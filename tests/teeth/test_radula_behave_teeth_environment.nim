@@ -6,7 +6,7 @@ import std/os
 import ../../src/constants
 import ../../src/teeth
 
-radula_behave_teeth_environment()
+radula_teeth_environment()
 
 echo "AUTORECONF  :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF)
 echo "AWK         :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_AWK)

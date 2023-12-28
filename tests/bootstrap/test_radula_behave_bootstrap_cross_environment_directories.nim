@@ -10,9 +10,9 @@ import
   ../../src/bootstrap,
   ../../src/constants
 
-radula_behave_bootstrap_environment()
+radula_bootstrap_environment()
 
-radula_behave_bootstrap_cross_environment_directories()
+radula_bootstrap_cross_environment_directories()
 
 echo "CRSD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)
 

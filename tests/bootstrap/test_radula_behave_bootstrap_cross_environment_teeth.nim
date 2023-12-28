@@ -11,11 +11,11 @@ import
   ../../src/constants,
   ../../src/genome
 
-radula_behave_bootstrap_environment()
+radula_bootstrap_environment()
 
-radula_behave_genome_environment()
+radula_genome_environment()
 
-radula_behave_bootstrap_cross_environment_teeth()
+radula_bootstrap_cross_environment_teeth()
 
 echo "CROSS_COMPILE  :: ", getEnv(RADULA_ENVIRONMENT_CROSS_COMPILE)
 

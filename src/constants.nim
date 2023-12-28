@@ -44,8 +44,6 @@ const
   RADULA_CERAS_IPUTILS* = "iputils"
   RADULA_CERAS_ISL* = "isl"
 
-  RADULA_CERAS_JSON_C* = "json-c"
-
   RADULA_CERAS_KMOD* = "kmod"
 
   RADULA_CERAS_LBZIP2* = "lbzip2"
@@ -257,34 +255,27 @@ const
   radula [ OPTIONS ]
 
 OPTIONS:
-  -b, --behave   Perform a behavior
-  -c, --ceras    Display ceras information
-  -h, --help     Display this help message
-  -v, --version  Display current version number"""
+  -b, --bootstrap   Perform bootstrap behavior
+  -e, --envenomate  Perform envenomate behavior
+  -c, --ceras       Display ceras information
+  -h, --help        Display this help message
+  -v, --version     Display current version"""
 
-  RADULA_HELP_BEHAVE* = """USAGE:
-  radula [ -b | --behave ] =|: [ OPTIONS ]
-
-OPTIONS:
-  b, bootstrap   Perform bootstrap behavior
-  e, envenomate  Perform envenomate behavior
-  h, help        Display this help message"""
-
-  RADULA_HELP_BEHAVE_BOOTSTRAP* = """USAGE:
-  radula [ -b | --behave ] =|: [ b | bootstrap ] [ OPTIONS ]
+  RADULA_HELP_BOOTSTRAP* = """USAGE:
+  radula [ -b | --bootstrap ] [ OPTIONS ]
 
 OPTIONS:
   c, clean       Clean up while preserving sources and backups
   d, distclean   Clean up everything
   h, help        Display this help message
-  i, img         Release an IMG file of the glaucus system
+  i, img, image  Release an IMG file of the glaucus system
   r, release     Release an ISO file of the glaucus system
   s, system      Bootstrap a native glaucus system
   t, toolchain   Bootstrap a cross compiler toolchain
   x, cross       Bootstrap a cross compiled glaucus system"""
 
-  RADULA_HELP_BEHAVE_ENVENOMATE* = """USAGE:
-  radula [ -b | --behave ] =|: [ e | envenomate ] [ OPTIONS ] [ cerata ]
+  RADULA_HELP_ENVENOMATE* = """USAGE:
+  radula [ -e | --envenomate ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
   d, decyst      Remove cerata without preserving their cysts
@@ -293,12 +284,6 @@ OPTIONS:
   r, remove      Remove cerata while preserving their cysts
   s, search      Search for cerata within the cerata directory
   u, upgrade     Upgrade cerata"""
-
-  RADULA_HELP_CERAS* = """USAGE:
-  radula [ -c | --ceras ] =|: [ OPTIONS ] [ cerata ]
-
-OPTIONS:
-  h, help        Display this help message"""
 
   RADULA_HELP_VERSION* = """radula version 0.1.0
 
