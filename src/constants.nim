@@ -255,35 +255,35 @@ const
   radula [ OPTIONS ]
 
 OPTIONS:
-  -b, --bootstrap   Perform bootstrap behavior
-  -e, --envenomate  Perform envenomate behavior
-  -c, --ceras       Display ceras information
-  -h, --help        Display this help message
-  -v, --version     Display current version"""
+  -b, --bootstrap  Perform bootstrap behavior
+  -c, --ceras      Perform ceras behavior
+  -h, --help       Display this help message
+  -v, --version    Display current version"""
 
   RADULA_HELP_BOOTSTRAP* = """USAGE:
   radula [ -b | --bootstrap ] [ OPTIONS ]
 
 OPTIONS:
-  c, clean       Clean up while preserving sources and backups
-  d, distclean   Clean up everything
-  h, help        Display this help message
-  i, img, image  Release an IMG file of the glaucus system
-  r, release     Release an ISO file of the glaucus system
-  s, system      Bootstrap a native glaucus system
-  t, toolchain   Bootstrap a cross compiler toolchain
-  x, cross       Bootstrap a cross compiled glaucus system"""
+  c, clean         Clean up while preserving sources and backups
+  d, distclean     Clean up everything
+  h, help          Display this help message
+  i, img, image    Release an IMG file of the glaucus system
+  r, release       Release an ISO file of the glaucus system
+  s, system        Bootstrap a native glaucus system
+  t, toolchain     Bootstrap a cross compiler toolchain
+  x, cross         Bootstrap a cross compiled glaucus system"""
 
-  RADULA_HELP_ENVENOMATE* = """USAGE:
-  radula [ -e | --envenomate ] [ OPTIONS ] [ cerata ]
+  RADULA_HELP_CERAS* = """USAGE:
+  radula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-  d, decyst      Remove cerata without preserving their cysts
-  h, help        Display this help message
-  i, install     Install cerata from source
-  r, remove      Remove cerata while preserving their cysts
-  s, search      Search for cerata within the cerata directory
-  u, upgrade     Upgrade cerata"""
+  d, decyst        Remove cerata without preserving their cysts
+  h, help          Display this help message
+  i, install       Install cerata from source
+  p, print         Print cerata information
+  r, remove        Remove cerata while preserving their cysts
+  s, search        Search for cerata within the cerata directory
+  u, upgrade       Upgrade cerata"""
 
   RADULA_HELP_VERSION* = """radula version 0.1.0
 

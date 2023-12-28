@@ -138,7 +138,7 @@ proc radula_options*() =
         echo RADULA_HELP_BOOTSTRAP
 
         radula_exit(QuitFailure)
-    of "e", "envenomate":
+    of "c", "ceras":
       p.next()
 
       let cerata = remainingArgs(p)
@@ -148,10 +148,12 @@ proc radula_options*() =
         echo ""
         echo "decyst complete"
       of "h", "help":
-        echo RADULA_HELP_ENVENOMATE
+        echo RADULA_HELP_CERAS
       of "i", "install":
         echo ""
         echo "install complete"
+      of "p", "print":
+        radula_ceras_print(cerata)
       of "r", "remove":
         echo ""
         echo "remove complete"
@@ -162,14 +164,9 @@ proc radula_options*() =
         echo ""
         echo "upgrade complete"
       else:
-        echo RADULA_HELP_ENVENOMATE
+        echo RADULA_HELP_CERAS
 
         radula_exit(QuitFailure)
-    of "c", "ceras":
-      let cerata = remainingArgs(p)
-
-      if cerata.len() >= 1:
-        radula_ceras_print(cerata)
     of "h", "help":
       echo RADULA_HELP
     of "v", "version":
