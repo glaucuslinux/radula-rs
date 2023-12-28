@@ -11,8 +11,8 @@ import std/[
 ]
 
 import
+  ceras,
   constants,
-  envenomate,
   teeth
 
 proc radula_bootstrap_clean*() =
@@ -26,7 +26,7 @@ proc radula_bootstrap_cross_backup*() =
   discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_bootstrap_cross_envenomate*() =
-  radula_envenomate([
+  radula_ceras_envenomate([
     # Filesystem & Package Management
     RADULA_CERAS_HYDROSKELETON,
     RADULA_CERAS_CERATA,
@@ -333,7 +333,7 @@ proc radula_bootstrap_toolchain_backup*() =
   discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_bootstrap_toolchain_envenomate*() =
-  radula_envenomate([
+  radula_ceras_envenomate([
     RADULA_CERAS_MUSL_HEADERS,
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_GCC,
@@ -366,7 +366,7 @@ proc radula_bootstrap_toolchain_prepare*() =
   removeFile(getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG))
 
 proc radula_bootstrap_system_envenomate*() =
-  radula_envenomate([
+  radula_ceras_envenomate([
     # Filesystem
     RADULA_CERAS_HYDROSKELETON,
 
