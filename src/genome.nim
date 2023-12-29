@@ -9,9 +9,7 @@ import std/[
 
 import constants
 
-# This will be used regardless of the bootstrap behavior, so don't add `_bootstrap_`
-# to its name. Also, ensure `radula_genome_environment()` is run beforehand.
-proc radula_flags_environment*() =
+proc radula_genome_flags_environment*() =
   putEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER, RADULA_FLAGS_C_CXX_COMPILER)
   putEnv(RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER, RADULA_FLAGS_C_CXX_COMPILER)
   putEnv(RADULA_ENVIRONMENT_FLAGS_LINKER, RADULA_FLAGS_LINKER & ' ' & RADULA_FLAGS_C_CXX_COMPILER)
