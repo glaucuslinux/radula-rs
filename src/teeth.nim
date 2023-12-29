@@ -59,8 +59,6 @@ proc radula_teeth_environment*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_CHOWN, RADULA_TOOTH_CHOWN & ' ' & RADULA_TOOTH_CHMOD_CHOWN_FLAGS)
   # `flex` is the default lex implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_FLEX, RADULA_CERAS_FLEX)
-  # `mawk` is the default awk implementation
-  putEnv(RADULA_ENVIRONMENT_TOOTH_GAWK, RADULA_CERAS_MAWK)
   # `flex` is the default lex implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_LEX, RADULA_CERAS_FLEX)
   putEnv(RADULA_ENVIRONMENT_TOOTH_LN, RADULA_TOOTH_LN & ' ' & RADULA_TOOTH_LN_FLAGS)
