@@ -267,7 +267,7 @@ OPTIONS:
   c, clean         Clean up while preserving sources and backups
   d, distclean     Clean up everything
   h, help          Display this help message
-  i, img, image    Release an IMG file of the glaucus system
+  i, img           Release an IMG file of the glaucus system
   r, release       Release an ISO file of the glaucus system
   s, system        Bootstrap a native glaucus system
   t, toolchain     Bootstrap a cross compiler toolchain
@@ -277,13 +277,18 @@ OPTIONS:
   radula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-  d, decyst        Remove cerata without preserving their cysts
+  a, add           Add a cluster
+  c, clean         Clean up cache while preserving installed cerata
+  d, distclean     Clean up everything
   h, help          Display this help message
-  i, install       Install cerata from source
+  i, install       Install cerata
+  l, list          List installed cerata
+  n, new           Create new ceras
   p, print         Print cerata information
-  r, remove        Remove cerata while preserving their cysts
-  s, search        Search for cerata within the cerata directory
-  u, upgrade       Upgrade cerata"""
+  r, remove        Remove cerata
+  s, search        Search for cerata
+  u, upgrade       Upgrade cerata
+  y, sync          Synchronize clusters"""
 
   RADULA_HELP_VERSION* = """radula version 0.1.0
 
