@@ -105,7 +105,6 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
-    RADULA_CERAS_MANDOC,
     RADULA_CERAS_VIM,
 
     # Userland
@@ -472,7 +471,6 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_PCRE2,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
-    RADULA_CERAS_MANDOC,
     RADULA_CERAS_VIM,
 
     # Networking
@@ -495,12 +493,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_S6_BOOT_SCRIPTS,
 
     # Kernel
-    RADULA_CERAS_LINUX,
-
-    # Graphics
-    RADULA_CERAS_WAYLAND,
-    RADULA_CERAS_WAYLAND_PROTOCOLS,
-    RADULA_CERAS_WLROOTS,
+    RADULA_CERAS_LINUX
   ], RADULA_DIRECTORY_SYSTEM, false)
 
 proc radula_bootstrap_toolchain_backup*() =

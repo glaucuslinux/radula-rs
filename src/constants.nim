@@ -46,8 +46,6 @@ const
 
   RADULA_CERAS_KMOD* = "kmod"
 
-  RADULA_CERAS_LBZIP2* = "lbzip2"
-  RADULA_CERAS_LBZIP2_UTILS* = "lbzip2-utils"
   RADULA_CERAS_LESS* = "less"
   RADULA_CERAS_LIBARCHIVE* = "libarchive"
   RADULA_CERAS_LIBCAP* = "libcap"
@@ -65,7 +63,6 @@ const
 
   RADULA_CERAS_M4* = "m4"
   RADULA_CERAS_MAKE* = "make"
-  RADULA_CERAS_MANDOC* = "mandoc"
   RADULA_CERAS_MAWK* = "mawk"
   RADULA_CERAS_MDEVD* = "mdevd"
   RADULA_CERAS_MIMALLOC* = "mimalloc"
@@ -112,10 +109,7 @@ const
 
   RADULA_CERAS_VIM* = "vim"
 
-  RADULA_CERAS_WAYLAND* = "wayland"
-  RADULA_CERAS_WAYLAND_PROTOCOLS* = "wayland-protocols"
   RADULA_CERAS_WGET2* = "wget2"
-  RADULA_CERAS_WLROOTS* = "wlroots"
 
   RADULA_CERAS_XXHASH* = "xxhash"
   RADULA_CERAS_XZ* = "xz"
@@ -124,6 +118,7 @@ const
 
   RADULA_CERAS_ZLIB_NG* = "zlib-ng"
   RADULA_CERAS_ZSTD* = "zstd"
+
 
   RADULA_DIRECTORY_BACKUPS* = "bak"
   RADULA_DIRECTORY_BUILDS* = "bld"
@@ -321,10 +316,12 @@ Distributed under the terms of the ISC License"""
 
   RADULA_PATH_SHARE* = "share"
 
-  RADULA_PATH_RADULA_CLUSTERS_GLAUCUS* = "/var/db/radula/clusters/glaucus"
-  RADULA_PATH_RADULA_LOGS* = "/var/log/radula"
+  RADULA_PATH_RADULA_CACHE_BINARIES* = "/var/cache/radula/bin"
   RADULA_PATH_RADULA_CACHE_SOURCES* = "/var/cache/radula/src"
   RADULA_PATH_RADULA_CACHE_VENOM* = "/var/cache/radula/venom"
+  RADULA_PATH_RADULA_CLUSTERS_GLAUCUS* = "/var/db/radula/clusters/glaucus"
+  RADULA_PATH_RADULA_LIBRARY* = "/var/lib/radula"
+  RADULA_PATH_RADULA_LOGS* = "/var/log/radula"
   RADULA_PATH_RADULA_TEMPORARY_CROSS* = "/var/tmp/radula/cross"
   RADULA_PATH_RADULA_TEMPORARY_SYSTEM* = "/var/tmp/radula/system"
   RADULA_PATH_RADULA_TEMPORARY_TOOLCHAIN* = "/var/tmp/radula/toolchain"

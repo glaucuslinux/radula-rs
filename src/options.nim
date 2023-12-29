@@ -84,7 +84,7 @@ proc radula_options*() =
           radula_teeth_environment()
 
           # Default to `x86-64`
-          radula_genome_environment()
+          radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
           radula_genome_flags_environment()
 
           radula_bootstrap_system_environment_directories()
