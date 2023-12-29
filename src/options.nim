@@ -147,8 +147,6 @@ proc radula_options*() =
     of "c", "ceras":
       p.next()
 
-      let cerata = remainingArgs(p)
-
       case p.kind
       of cmdEnd:
         echo RADULA_HELP_CERAS
@@ -168,6 +166,7 @@ proc radula_options*() =
         of "h", "help":
           echo RADULA_HELP_CERAS
         of "i", "install":
+          radula_ceras_install(remainingArgs(p))
           echo ""
           echo "install complete"
         of "l", "list":
@@ -177,7 +176,7 @@ proc radula_options*() =
           echo ""
           echo "new complete"
         of "p", "print":
-          radula_ceras_print(cerata)
+          radula_ceras_print(remainingArgs(p))
         of "r", "remove":
           echo ""
           echo "remove complete"
