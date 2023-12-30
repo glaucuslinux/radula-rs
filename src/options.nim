@@ -54,14 +54,6 @@ proc radula_options*() =
           radula_bootstrap_clean()
 
           echo "clean complete"
-        of "d", "distclean":
-          radula_bootstrap_environment()
-          radula_bootstrap_toolchain_environment_directories()
-          radula_bootstrap_cross_environment_directories()
-
-          radula_bootstrap_distclean()
-
-          echo "distclean complete"
         of "h", "help":
           echo RADULA_HELP_BOOTSTRAP
         of "i", "img":
@@ -158,9 +150,6 @@ proc radula_options*() =
         of "c", "clean":
           echo ""
           echo "clean complete"
-        of "d", "distclean":
-          echo ""
-          echo "distclean complete"
         of "h", "help":
           echo RADULA_HELP_CERAS
         of "i", "install":

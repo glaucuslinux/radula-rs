@@ -258,8 +258,7 @@ OPTIONS:
   radula [ -b | --bootstrap ] [ OPTIONS ]
 
 OPTIONS:
-  c, clean         Clean up while preserving sources and backups
-  d, distclean     Clean up everything
+  c, clean         Clean cache
   h, help          Display this help message
   i, img           Release an IMG file of the glaucus system
   r, release       Release an ISO file of the glaucus system
@@ -272,12 +271,11 @@ OPTIONS:
 
 OPTIONS:
   a, add           Add a cluster
-  c, clean         Clean up cache while preserving installed cerata
-  d, distclean     Clean up everything
+  c, clean         Clean cache
   h, help          Display this help message
   i, install       Install cerata
   l, list          List installed cerata
-  n, new           Create new ceras
+  n, new           Create a new ceras
   p, print         Print cerata information
   r, remove        Remove cerata
   s, search        Search for cerata

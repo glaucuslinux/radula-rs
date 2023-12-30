@@ -269,17 +269,6 @@ proc radula_bootstrap_cross_release_img*(compress = false) =
     if status == 0:
       removeFile(img)
 
-proc radula_bootstrap_distclean*() =
-  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
-
-  radula_bootstrap_clean()
-
-  # Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
-  # `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS` and
-  # `RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS` are removed
-  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
-
 proc radula_bootstrap_environment*() =
   let path = parentDir(getCurrentDir())
 
