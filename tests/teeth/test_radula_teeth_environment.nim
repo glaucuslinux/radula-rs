@@ -14,7 +14,6 @@ echo "BISON       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_BISON)
 echo "CHMOD       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD)
 echo "CHOWN       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_CHOWN)
 echo "FLEX        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_FLEX)
-echo "GAWK        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_GAWK)
 echo "LEX         :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LEX)
 echo "LN          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LN)
 echo "MAKE        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE)
@@ -34,7 +33,6 @@ doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_BISON) == "byacc"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD) == "chmod -Rv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_CHOWN) == "chown -Rv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_FLEX) == "flex"
-doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_GAWK) == "mawk"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LEX) == "flex"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LN) == "ln -fnsv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE) == "make"
