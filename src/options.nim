@@ -148,6 +148,16 @@ proc radula_options*() =
           echo ""
           echo "clean complete"
         of "e", "envenomate":
+          radula_teeth_environment()
+
+          radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
+          radula_genome_flags_environment()
+
+          radula_bootstrap_system_environment_directories()
+          radula_bootstrap_system_environment_pkg_config()
+          radula_bootstrap_system_environment_teeth()
+
+          radula_bootstrap_system_prepare()
           radula_ceras_envenomate(remainingArgs(p))
           echo ""
           echo "envenomate complete"

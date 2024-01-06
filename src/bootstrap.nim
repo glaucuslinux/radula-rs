@@ -305,7 +305,7 @@ proc radula_bootstrap_release_iso*(compress = false) =
   radula_generate_initramfs(path, true)
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid GLAUCUS")
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid GLAUCUS {RADULA_TOOTH_SHELL_REDIRECTION}")
 
   # Compress the ISO file
   if compress:
