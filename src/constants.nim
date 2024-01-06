@@ -226,8 +226,6 @@ const
   RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024"
 
   RADULA_FILE_GRUB_CONF* = "grub.cfg"
-  RADULA_FILE_GRUB_CONF_IMG* = "grub.cfg.img"
-  RADULA_FILE_GRUB_CONF_ISO* = "grub.cfg.iso"
 
   RADULA_FILE_INITRAMFS_GLAUCUS* = "initramfs"
 
@@ -260,8 +258,7 @@ OPTIONS:
 OPTIONS:
   c, clean         Clean cache
   h, help          Display this help message
-  i, img           Release an IMG file of the glaucus system
-  r, release       Release an ISO file of the glaucus system
+  r, release       Release an IMG file of the glaucus system
   s, system        Bootstrap a native glaucus system
   t, toolchain     Bootstrap a cross compiler toolchain
   x, cross         Bootstrap a cross compiled glaucus system"""
@@ -381,7 +378,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_RM* = "rm"
   RADULA_TOOTH_RM_FLAGS* = "-frv"
   RADULA_TOOTH_RSYNC_FLAGS* = "-vaHAXSx"
-  RADULA_TOOTH_RSYNC_IMG_ISO_FLAGS* = "-vaHAXx"
+  RADULA_TOOTH_RSYNC_RELEASE_FLAGS* = "-vaHAXx"
 
   RADULA_TOOTH_SHELL_COMMAND_FLAGS* = "-c"
   RADULA_TOOTH_SHELL_REDIRECTION* = "> /dev/null 2>&1"

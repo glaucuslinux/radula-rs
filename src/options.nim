@@ -56,20 +56,12 @@ proc radula_options*() =
           echo "clean complete"
         of "h", "help":
           echo RADULA_HELP_BOOTSTRAP
-        of "i", "img":
-          radula_bootstrap_environment()
-
-          radula_teeth_environment()
-
-          radula_bootstrap_cross_release_img()
-
-          echo "img complete"
         of "r", "release":
           radula_bootstrap_environment()
 
           radula_teeth_environment()
 
-          radula_bootstrap_release_iso()
+          radula_bootstrap_cross_release()
 
           echo "release complete"
         of "s", "system":
