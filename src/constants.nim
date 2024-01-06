@@ -225,6 +225,8 @@ const
   RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024"
 
   RADULA_FILE_GRUB_CONF* = "grub.cfg"
+  RADULA_FILE_GRUB_CONF_IMG* = "grub.cfg.img"
+  RADULA_FILE_GRUB_CONF_ISO* = "grub.cfg.iso"
 
   RADULA_FILE_INITRAMFS_GLAUCUS* = "initramfs"
 
@@ -257,7 +259,8 @@ OPTIONS:
 OPTIONS:
   c, clean         Clean cache
   h, help          Display this help message
-  r, release       Release an IMG file of the glaucus system
+  i, img           Release an IMG file of the glaucus system
+  r, release       Release an ISO file of the glaucus system
   s, system        Bootstrap a native glaucus system
   t, toolchain     Bootstrap a cross compiler toolchain
   x, cross         Bootstrap a cross compiled glaucus system"""
