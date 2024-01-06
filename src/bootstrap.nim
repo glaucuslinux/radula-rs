@@ -149,8 +149,8 @@ proc radula_bootstrap_cross_environment_pkg_config*() =
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH, getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR))
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
 
-  # These environment variables are only `pkgconf` specific, but setting them
-  # won't do any harm...
+  # These environment variables are `pkgconf` specific, but setting them won't
+  # do any harm...
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
   putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
@@ -200,7 +200,6 @@ proc radula_bootstrap_cross_release_img*(compress = false) =
 
     radula_exit(QuitFailure)
 
-  # Default to `x86-64`
   let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}.img"
 
   # Create a new IMG file
@@ -291,7 +290,6 @@ proc radula_bootstrap_initialize*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY))
 
 proc radula_bootstrap_release_iso*(compress = false) =
-  # Default to `x86-64`
   let
     name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}"
     iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
@@ -328,6 +326,16 @@ proc radula_bootstrap_system_environment_directories*() =
   # system log file
   putEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG, getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / RADULA_DIRECTORY_SYSTEM & CurDir & RADULA_DIRECTORY_LOGS)
 
+proc radula_bootstrap_system_environment_pkg_config*() =
+  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR, RADULA_PATH_PKG_CONFIG_LIBDIR_PATH)
+  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH, getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR))
+  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR, RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+
+  # These environment variables are `pkgconf` specific, but setting them won't
+  # do any harm...
+  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH, RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
+  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH, RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
+
 proc radula_bootstrap_system_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_BOOTSTRAP, "yes")
 
@@ -351,16 +359,6 @@ proc radula_bootstrap_system_environment_teeth*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_SIZE, RADULA_TOOTH_SIZE)
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRINGS, RADULA_TOOTH_STRINGS)
   putEnv(RADULA_ENVIRONMENT_TOOTH_STRIP, RADULA_TOOTH_STRIP)
-
-proc radula_bootstrap_system_environment_pkg_config*() =
-  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR, RADULA_PATH_PKG_CONFIG_LIBDIR_PATH)
-  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_PATH, getEnv(RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR))
-  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR, RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-
-  # These environment variables are only `pkgconf` specific, but setting them
-  # won't do any harm...
-  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH, RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
-  putEnv(RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH, RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
 proc radula_bootstrap_system_prepare*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_BUILDS))

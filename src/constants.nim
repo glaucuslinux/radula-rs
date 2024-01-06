@@ -272,6 +272,7 @@ OPTIONS:
 OPTIONS:
   a, add           Add a cluster
   c, clean         Clean cache
+  e, envenomate    Envenomate cerata
   h, help          Display this help message
   i, install       Install cerata
   l, list          List installed cerata

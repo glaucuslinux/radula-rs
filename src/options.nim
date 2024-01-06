@@ -75,7 +75,6 @@ proc radula_options*() =
         of "s", "system":
           radula_teeth_environment()
 
-          # Default to `x86-64`
           radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
           radula_genome_flags_environment()
 
@@ -93,7 +92,6 @@ proc radula_options*() =
 
           radula_teeth_environment()
 
-          # Default to `x86-64`
           radula_genome_environment()
 
           radula_bootstrap_toolchain_environment_directories()
@@ -116,7 +114,6 @@ proc radula_options*() =
 
           radula_teeth_environment()
 
-          # Default to `x86-64`
           radula_genome_environment()
           radula_genome_flags_environment()
 
@@ -150,6 +147,10 @@ proc radula_options*() =
         of "c", "clean":
           echo ""
           echo "clean complete"
+        of "e", "envenomate":
+          radula_ceras_envenomate(remainingArgs(p))
+          echo ""
+          echo "envenomate complete"
         of "h", "help":
           echo RADULA_HELP_CERAS
         of "i", "install":
