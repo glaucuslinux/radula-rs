@@ -203,6 +203,7 @@ proc radula_bootstrap_environment*() =
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES, path / RADULA_DIRECTORY_SOURCES)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA, path / RADULA_DIRECTORY_CERATA)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS, path / RADULA_DIRECTORY_CROSS)
+  putEnv(RADULA_ENVIRONMENT_DIRECTORY_ISO, path / RADULA_DIRECTORY_ISO)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS, path / RADULA_DIRECTORY_LOGS)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY, path / RADULA_DIRECTORY_TEMPORARY)
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN, path / RADULA_DIRECTORY_TOOLCHAIN)
@@ -289,30 +290,27 @@ proc radula_bootstrap_release_img*(compress = false) =
     if status == 0:
       removeFile(img)
 
-proc radula_bootstrap_release_iso*(compress = false) =
+proc radula_bootstrap_release_iso*() =
   let
     name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}"
     iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
 
-    path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_BOOT
+    path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_ISO) / RADULA_PATH_BOOT
 
   # Install `grub` as the default bootloader
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_ISO))
   createDir(path / RADULA_CERAS_GRUB)
 
   discard radula_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_ISO, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_RELEASE_FLAGS)
 
   # Generate initramfs
-  radula_generate_initramfs(path, true)
+  discard execCmd(&"{RADULA_TOOTH_DRACUT} {RADULA_TOOTH_DRACUT_FLAGS} {path / RADULA_FILE_INITRAMFS_GLAUCUS}")
+
+  # Compress rootfs
+  discard execCmd(&"{RADULA_TOOTH_MKSQUASHFS} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} {path}/rootfs.squashfs -b 1M -comp {RADULA_CERAS_ZSTD} -Xcompression-level 22 {RADULA_TOOTH_MKSQUASHFS_FLAGS}")
 
   # Create a new ISO file
-  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS)} -volid GLAUCUS {RADULA_TOOTH_SHELL_REDIRECTION}")
-
-  # Compress the ISO file
-  if compress:
-    let status = radula_compress_zstd(iso)
-
-    if status == 0:
-      removeFile(iso)
+  discard execCmd(&"{RADULA_TOOTH_GRUB_MKRESCUE} {RADULA_TOOTH_GRUB_FLAGS} -v -o {iso} {getEnv(RADULA_ENVIRONMENT_DIRECTORY_ISO)} -volid GLAUCUS {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_bootstrap_system_environment_directories*() =
   putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES, RADULA_PATH_RADULA_CACHE_SOURCES)
