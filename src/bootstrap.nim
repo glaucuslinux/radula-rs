@@ -32,18 +32,10 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
 
-    # Headers
-    RADULA_CERAS_MUSL_UTILS,
-    RADULA_CERAS_LINUX_HEADERS,
-
-    # Init
-    RADULA_CERAS_SKALIBS,
-    RADULA_CERAS_EXECLINE,
-    RADULA_CERAS_MDEVD,
-    RADULA_CERAS_S6,
-
     # Compatibility
+    RADULA_CERAS_LINUX_HEADERS,
     RADULA_CERAS_MUSL_FTS,
+    RADULA_CERAS_MUSL_UTILS,
 
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
@@ -124,7 +116,11 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_UTIL_LINUX,
     RADULA_CERAS_E2FSPROGS,
 
-    # Services
+    # Init and Services
+    RADULA_CERAS_SKALIBS,
+    RADULA_CERAS_EXECLINE,
+    RADULA_CERAS_MDEVD,
+    RADULA_CERAS_S6,
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
     RADULA_CERAS_S6_BOOT_SCRIPTS,
@@ -265,15 +261,15 @@ proc radula_bootstrap_release_img*(compress = false) =
 
   let path = mount / RADULA_PATH_BOOT
 
+  # Generate initramfs
+  radula_generate_initramfs(path, true)
+
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)
 
   discard radula_rsync(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF_IMG, path / RADULA_CERAS_GRUB / RADULA_FILE_GRUB_CONF, RADULA_TOOTH_RSYNC_RELEASE_FLAGS)
 
   discard execCmd(&"{RADULA_TOOTH_GRUB_INSTALL} {RADULA_TOOTH_GRUB_FLAGS} --boot-directory={mount / RADULA_PATH_BOOT} --target=i386-pc {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
-
-  # Generate initramfs
-  radula_generate_initramfs(path, true)
 
   # Change ownerships
   discard execCmd(&"{RADULA_TOOTH_CHOWN} {RADULA_TOOTH_CHMOD_CHOWN_FLAGS} 0:0 {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -387,15 +383,9 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
 
-    # Headers
+    # Compatibility
     RADULA_CERAS_MUSL_UTILS,
     RADULA_CERAS_LINUX_HEADERS,
-
-    # Init
-    RADULA_CERAS_SKALIBS,
-    RADULA_CERAS_EXECLINE,
-    RADULA_CERAS_MDEVD,
-    RADULA_CERAS_S6,
 
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
@@ -472,7 +462,11 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_UTIL_LINUX,
     RADULA_CERAS_E2FSPROGS,
 
-    # Services
+    # Init and Services
+    RADULA_CERAS_SKALIBS,
+    RADULA_CERAS_EXECLINE,
+    RADULA_CERAS_MDEVD,
+    RADULA_CERAS_S6,
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
     RADULA_CERAS_S6_BOOT_SCRIPTS,
