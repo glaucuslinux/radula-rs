@@ -232,7 +232,10 @@ const
 
   RADULA_FILE_INITRAMFS_GLAUCUS* = "initramfs"
 
+  RADULA_FILE_KERNEL* = "vmlinuz"
+
   RADULA_FILE_RADULA_LOCK* = "radula.lck"
+  RADULA_FILE_ROOT_FILE_SYSTEM* = "rootfs.erofs"
 
 
   RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
@@ -343,8 +346,6 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_CXX_COMPILER* = "g++"
 
   RADULA_TOOTH_DD* = "dd"
-  RADULA_TOOTH_DRACUT* = "dracut"
-  RADULA_TOOTH_DRACUT_FLAGS* = "-f -m 'dmsquash-live kernel-modules' --no-early-microcode --aggressive-strip -q --ro-mnt --compress='zstd -22 --ultra -T0' --squash-compressor='zstd -22 --ultra -T0'"
 
   RADULA_TOOTH_GIT* = "git"
   RADULA_TOOTH_GIT_CHECKOUT_FLAGS* = "checkout"
@@ -364,8 +365,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_MKDIR_FLAGS* = "-dv"
   RADULA_TOOTH_MKE2FS* = "mke2fs"
   RADULA_TOOTH_MKE2FS_FLAGS* = "-qt"
-  RADULA_TOOTH_MKSQUASHFS* = "mksquashfs"
-  RADULA_TOOTH_MKSQUASHFS_FLAGS* = "-quiet -no-progress"
+  RADULA_TOOTH_MKFS_EROFS* = "mkfs.erofs"
   RADULA_TOOTH_MODPROBE* = "modprobe"
   RADULA_TOOTH_MOUNT* = "mount"
   RADULA_TOOTH_MV* = "mv"
