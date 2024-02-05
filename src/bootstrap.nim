@@ -219,7 +219,7 @@ proc radula_bootstrap_release_img*(compress = false) =
 
     radula_exit(QuitFailure)
 
-  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}.img"
+  let img = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
 
   # Create a new IMG file
   discard execCmd(&"{RADULA_TOOTH_DD} bs=1M count={RADULA_FILE_GLAUCUS_IMG_SIZE} if=/dev/zero of={img} {RADULA_TOOTH_SHELL_REDIRECTION}")
@@ -289,7 +289,7 @@ proc radula_bootstrap_release_img*(compress = false) =
 
 proc radula_bootstrap_release_iso*() =
   let
-    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64}-{now().format(\"YYYYMMdd\")}"
+    name = &"{RADULA_DIRECTORY_GLAUCUS}-{RADULA_CERAS_S6}-{RADULA_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}"
     iso = getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / &"{name}.iso"
 
     path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_ISO) / RADULA_PATH_BOOT
