@@ -32,10 +32,17 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
 
-    # Compatibility
+    # Headers
     RADULA_CERAS_LINUX_HEADERS,
-    RADULA_CERAS_MUSL_FTS,
     RADULA_CERAS_MUSL_UTILS,
+
+    # Init
+    RADULA_CERAS_SKALIBS,
+    RADULA_CERAS_NSSS,
+    RADULA_CERAS_EXECLINE,
+    RADULA_CERAS_MDEVD,
+    RADULA_CERAS_S6,
+    RADULA_CERAS_UTMPS,
 
     # Permissions & Capabilities
     RADULA_CERAS_ATTR,
@@ -66,7 +73,7 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_ZLIB_NG,
     RADULA_CERAS_PIGZ,
     RADULA_CERAS_ZSTD,
-    # RADULA_CERAS_LIBARCHIVE,
+    RADULA_CERAS_LIBARCHIVE,
 
     # Development
     RADULA_CERAS_AUTOCONF,
@@ -74,7 +81,7 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_BINUTILS,
     RADULA_CERAS_BYACC,
     RADULA_CERAS_FLEX,
-    # RADULA_CERAS_GCC,
+    RADULA_CERAS_GCC,
     RADULA_CERAS_GETTEXT_TINY,
     RADULA_CERAS_HELP2MAN,
     RADULA_CERAS_LIBTOOL,
@@ -82,10 +89,10 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
     RADULA_CERAS_MIMALLOC,
-    # RADULA_CERAS_MOLD,
+    RADULA_CERAS_MOLD,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
-    # RADULA_CERAS_MUON,
+    RADULA_CERAS_MUON,
     RADULA_CERAS_SAMURAI,
 
     # Synchronization
@@ -117,11 +124,7 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_UTIL_LINUX,
     RADULA_CERAS_E2FSPROGS,
 
-    # Init & Services
-    RADULA_CERAS_SKALIBS,
-    RADULA_CERAS_EXECLINE,
-    RADULA_CERAS_MDEVD,
-    RADULA_CERAS_S6,
+    # Services
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
     RADULA_CERAS_S6_BOOT_SCRIPTS,
@@ -468,9 +471,11 @@ proc radula_bootstrap_system_envenomate*() =
 
     # Init & Services
     RADULA_CERAS_SKALIBS,
+    RADULA_CERAS_NSSS,
     RADULA_CERAS_EXECLINE,
     RADULA_CERAS_MDEVD,
     RADULA_CERAS_S6,
+    RADULA_CERAS_UTMPS,
     RADULA_CERAS_S6_LINUX_INIT,
     RADULA_CERAS_S6_RC,
     RADULA_CERAS_S6_BOOT_SCRIPTS,

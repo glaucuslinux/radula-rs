@@ -71,11 +71,11 @@ const
   RADULA_CERAS_MPFR* = "mpfr"
   RADULA_CERAS_MUON* = "muon"
   RADULA_CERAS_MUSL* = "musl"
-  RADULA_CERAS_MUSL_FTS* = "musl-fts"
   RADULA_CERAS_MUSL_HEADERS* = "musl-headers"
   RADULA_CERAS_MUSL_UTILS* = "musl-utils"
 
   RADULA_CERAS_NETBSD_CURSES* = "netbsd-curses"
+  RADULA_CERAS_NSSS* = "nsss"
 
   RADULA_CERAS_OPENDOAS* = "opendoas"
 
@@ -107,6 +107,7 @@ const
 
   RADULA_CERAS_UGREP* = "ugrep"
   RADULA_CERAS_UTIL_LINUX* = "util-linux"
+  RADULA_CERAS_UTMPS* = "utmps"
 
   RADULA_CERAS_VIM* = "vim"
 
