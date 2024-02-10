@@ -321,8 +321,6 @@ Distributed under the terms of the ISC License"""
   RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "/usr/include"
   RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "/usr/lib"
 
-  RADULA_PATH_SHARE* = "share"
-
   RADULA_PATH_RADULA_CACHE_BINARIES* = "/var/cache/radula/bin"
   RADULA_PATH_RADULA_CACHE_SOURCES* = "/var/cache/radula/src"
   RADULA_PATH_RADULA_CACHE_VENOM* = "/var/cache/radula/venom"
@@ -333,7 +331,13 @@ Distributed under the terms of the ISC License"""
   RADULA_PATH_RADULA_TEMPORARY_SYSTEM* = "/var/tmp/radula/system"
   RADULA_PATH_RADULA_TEMPORARY_TOOLCHAIN* = "/var/tmp/radula/toolchain"
 
+  RADULA_PATH_SHARE* = "share"
+
   RADULA_PATH_USR* = "usr"
+
+  RADULA_PATH_VAR* = "var"
+
+  RADULA_PATH_WTMPD* = "wtmpd"
 
 
   RADULA_TOOTH_ARCHIVER* = "gcc-ar"
