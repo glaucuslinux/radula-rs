@@ -169,6 +169,7 @@ const
 
   RADULA_ENVIRONMENT_GENOME* = "ARCH"
   RADULA_ENVIRONMENT_GENOME_CERATA* = "CARCH"
+  RADULA_ENVIRONMENT_GENOME_PRETTY_NAME* = "PRETTY_NAME"
 
   RADULA_ENVIRONMENT_PATH* = "PATH"
 
@@ -241,8 +242,8 @@ const
   RADULA_FILE_ROOT_FILE_SYSTEM* = "rootfs.erofs"
 
 
-  RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fuse-ld=mold -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-  RADULA_FLAGS_LINKER* = "-Wl,-s,--as-needed,--compress-debug-sections=zstd,--gc-sections,--hash-style=gnu,-z,now,-z,noexecstack,-z,relro"
+  RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+  RADULA_FLAGS_LINKER* = "-fuse-ld=mold -Wl,-s,--as-needed,--compress-debug-sections=zstd,--gc-sections,--hash-style=gnu,-z,now,-z,noexecstack,-z,relro"
 
 
   RADULA_GENOME_TUPLE_TARGET_CROSS* = "-glaucus-linux-musl"
@@ -345,7 +346,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_AUTORECONF* = "autoreconf"
   RADULA_TOOTH_AUTORECONF_FLAGS* = "-vfis"
 
-  RADULA_TOOTH_C_CXX_COMPILER_LINKER* = "bfd"
+  RADULA_TOOTH_C_CXX_COMPILER_LINKER* = "mold"
   RADULA_TOOTH_C_CXX_PREPROCESSOR* = "-E"
   # Both `chmod` and `chown` use the same flags
   RADULA_TOOTH_CHMOD* = "chmod"
@@ -362,7 +363,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_GRUB_INSTALL* = "grub-install"
   RADULA_TOOTH_GRUB_MKRESCUE* = "grub-mkrescue"
 
-  RADULA_TOOTH_LINKER* = "ld.bfd"
+  RADULA_TOOTH_LINKER* = "ld.mold"
   RADULA_TOOTH_LN* = "ln"
   RADULA_TOOTH_LN_FLAGS* = "-fnsv"
   RADULA_TOOTH_LOSETUP* = "losetup"
