@@ -19,7 +19,6 @@ echo "MAKE        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE)
 echo "MAKEFLAGS   :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)
 echo "MKDIR       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR)
 echo "MKDIR_P     :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P)
-echo "MV          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MV)
 echo "PATCH       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_PATCH)
 echo "PKG_CONFIG  :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG)
 echo "RM          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_RM)
@@ -37,7 +36,6 @@ doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE) == "make"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS) == "-j4 -O"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR) == "/usr/bin/install -dv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P) == "/usr/bin/install -dv"
-doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MV) == "mv -v"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_PATCH) == "patch --no-backup-if-mismatch --verbose"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG) == "pkgconf"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_RM) == "rm -frv"
