@@ -88,10 +88,6 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
-    RADULA_CERAS_MIMALLOC,
-    RADULA_CERAS_MOLD,
-    RADULA_CERAS_PATCH,
-    RADULA_CERAS_PKGCONF,
     RADULA_CERAS_MUON,
     RADULA_CERAS_SAMURAI,
 
@@ -425,9 +421,6 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_M4,
     RADULA_CERAS_MAKE,
     RADULA_CERAS_MAWK,
-    RADULA_CERAS_MIMALLOC,
-    RADULA_CERAS_MOLD,
-    RADULA_CERAS_MUON,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
     RADULA_CERAS_SAMURAI,
@@ -480,7 +473,6 @@ proc radula_bootstrap_toolchain_envenomate*() =
   radula_ceras_envenomate([
     RADULA_CERAS_MUSL_HEADERS,
     RADULA_CERAS_BINUTILS,
-    RADULA_CERAS_MOLD,
     RADULA_CERAS_GCC,
     RADULA_CERAS_MUSL,
     RADULA_CERAS_LIBGCC,
