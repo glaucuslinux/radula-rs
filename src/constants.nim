@@ -320,9 +320,7 @@ Distributed under the terms of the ISC License"""
   RADULA_PATH_RADULA_CLUSTERS_GLAUCUS* = "/var/db/radula/clusters/glaucus"
   RADULA_PATH_RADULA_LIBRARY* = "/var/lib/radula"
   RADULA_PATH_RADULA_LOGS* = "/var/log/radula"
-  RADULA_PATH_RADULA_TEMPORARY_CROSS* = "/var/tmp/radula/cross"
-  RADULA_PATH_RADULA_TEMPORARY_SYSTEM* = "/var/tmp/radula/system"
-  RADULA_PATH_RADULA_TEMPORARY_TOOLCHAIN* = "/var/tmp/radula/toolchain"
+  RADULA_PATH_RADULA_TEMPORARY* = "/var/tmp/radula"
 
   RADULA_PATH_SHARE* = "share"
 
