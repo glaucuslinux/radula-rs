@@ -48,8 +48,6 @@ proc radula_options*() =
         case p.key
         of "c", "clean":
           radula_bootstrap_environment()
-          radula_bootstrap_toolchain_environment_directories()
-          radula_bootstrap_cross_environment_directories()
 
           radula_bootstrap_clean()
 
@@ -94,16 +92,10 @@ proc radula_options*() =
 
           radula_genome_environment()
 
-          radula_bootstrap_toolchain_environment_directories()
-
-          # Needed for clean to work
-          radula_bootstrap_cross_environment_directories()
-
           radula_bootstrap_clean()
 
           radula_bootstrap_initialize()
 
-          radula_bootstrap_toolchain_prepare()
           radula_bootstrap_toolchain_envenomate()
           radula_bootstrap_toolchain_backup()
 
@@ -117,7 +109,6 @@ proc radula_options*() =
           radula_genome_environment()
           radula_genome_flags_environment()
 
-          radula_bootstrap_cross_environment_directories()
           radula_bootstrap_cross_environment_pkg_config()
           radula_bootstrap_cross_environment_teeth()
 

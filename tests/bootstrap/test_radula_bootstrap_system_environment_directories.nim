@@ -28,7 +28,7 @@ doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM) == "/var/cache/radula/
 doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA) == "/var/db/radula/clusters/glaucus"
 doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) == "/var/log/radula"
 
-doassert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_BUILDS) == "/var/tmp/radula/system/bld"
-doassert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_SOURCES) == "/var/tmp/radula/system/src"
+doassert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_BUILDS) == "/var/tmp/radula/bld"
+doassert getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SYSTEM_SOURCES) == "/var/tmp/radula/src"
 
 doassert getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG) == "/var/log/radula/system.log"
