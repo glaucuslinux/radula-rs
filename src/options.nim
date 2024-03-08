@@ -48,7 +48,6 @@ proc radula_options*() =
         case p.key
         of "c", "clean":
           radula_bootstrap_environment()
-
           radula_bootstrap_clean()
 
           echo "clean complete"
@@ -56,30 +55,23 @@ proc radula_options*() =
           echo RADULA_HELP_BOOTSTRAP
         of "i", "img":
           radula_bootstrap_environment()
-
           radula_teeth_environment()
-
           radula_bootstrap_release_img()
 
           echo "img complete"
         of "r", "release":
           radula_bootstrap_environment()
-
           radula_teeth_environment()
-
           radula_bootstrap_release_iso()
 
           echo "release complete"
         of "s", "system":
           radula_teeth_environment()
-
           radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
           radula_genome_flags_environment()
-
           radula_bootstrap_system_environment_directories()
           radula_bootstrap_system_environment_pkg_config()
           radula_bootstrap_system_environment_teeth()
-
           radula_bootstrap_system_prepare()
           radula_bootstrap_system_envenomate()
 
@@ -87,15 +79,10 @@ proc radula_options*() =
           echo "system complete"
         of "t", "toolchain":
           radula_bootstrap_environment()
-
           radula_teeth_environment()
-
           radula_genome_environment()
-
           radula_bootstrap_clean()
-
           radula_bootstrap_initialize()
-
           radula_bootstrap_toolchain_envenomate()
           radula_bootstrap_toolchain_backup()
 
@@ -103,15 +90,11 @@ proc radula_options*() =
           echo "toolchain complete"
         of "x", "cross":
           radula_bootstrap_environment()
-
           radula_teeth_environment()
-
           radula_genome_environment()
           radula_genome_flags_environment()
-
           radula_bootstrap_cross_environment_pkg_config()
           radula_bootstrap_cross_environment_teeth()
-
           radula_bootstrap_cross_prepare()
           radula_bootstrap_cross_envenomate()
           radula_bootstrap_cross_backup()
@@ -140,22 +123,21 @@ proc radula_options*() =
           echo "clean complete"
         of "e", "envenomate":
           radula_teeth_environment()
-
           radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
           radula_genome_flags_environment()
-
           radula_bootstrap_system_environment_directories()
           radula_bootstrap_system_environment_pkg_config()
           radula_bootstrap_system_environment_teeth()
-
           radula_bootstrap_system_prepare()
           radula_ceras_envenomate(remainingArgs(p))
+
           echo ""
           echo "envenomate complete"
         of "h", "help":
           echo RADULA_HELP_CERAS
         of "i", "install":
           radula_ceras_install(remainingArgs(p))
+
           echo ""
           echo "install complete"
         of "l", "list":
