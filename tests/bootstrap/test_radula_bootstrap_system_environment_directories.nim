@@ -10,7 +10,6 @@ import
 radula_bootstrap_system_environment_directories()
 
 echo "SRCD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES)
-echo "VNMD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM)
 echo "CERD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA)
 echo "LOGD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS)
 
@@ -24,7 +23,6 @@ echo ""
 echo "SLOG  :: ", getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG)
 
 doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) == "/var/cache/radula/src"
-doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM) == "/var/cache/radula/venom"
 doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_CERATA) == "/var/db/radula/clusters/glaucus"
 doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) == "/var/log/radula"
 
