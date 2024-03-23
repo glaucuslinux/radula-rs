@@ -21,7 +21,6 @@ echo "MKDIR       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR)
 echo "MKDIR_P     :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P)
 echo "PATCH       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_PATCH)
 echo "PKG_CONFIG  :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG)
-echo "RM          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_RM)
 echo "RSYNC       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC)
 echo "YACC        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_YACC)
 
@@ -38,6 +37,5 @@ doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR) == "/usr/bin/install -dv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR_P) == "/usr/bin/install -dv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_PATCH) == "patch --no-backup-if-mismatch --verbose"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG) == "pkgconf"
-doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_RM) == "rm -frv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_RSYNC) == "rsync -vaHAXSx"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_YACC) == "byacc"
