@@ -50,7 +50,6 @@ proc radula_rsync*(source, destination: string, flags = RADULA_TOOTH_RSYNC_FLAGS
   execCmd(&"{RADULA_CERAS_RSYNC} {flags} {source} {destination} --delete {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_teeth_environment*() =
-  putEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF, RADULA_TOOTH_AUTORECONF & ' ' & RADULA_TOOTH_AUTORECONF_FLAGS)
   # `mawk` is the default awk implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_AWK, RADULA_CERAS_MAWK)
   # `byacc` is the default yacc implementation
