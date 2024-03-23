@@ -55,7 +55,6 @@ proc radula_teeth_environment*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_AWK, RADULA_CERAS_MAWK)
   # `byacc` is the default yacc implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_BISON, RADULA_CERAS_BYACC)
-  putEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD, RADULA_TOOTH_CHMOD & ' ' & RADULA_TOOTH_CHMOD_CHOWN_FLAGS)
   # `flex` is the default lex implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_FLEX, RADULA_CERAS_FLEX)
   # `flex` is the default lex implementation

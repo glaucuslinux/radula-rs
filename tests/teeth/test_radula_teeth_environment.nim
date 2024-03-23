@@ -11,7 +11,6 @@ radula_teeth_environment()
 echo "AUTORECONF  :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF)
 echo "AWK         :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_AWK)
 echo "BISON       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_BISON)
-echo "CHMOD       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD)
 echo "FLEX        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_FLEX)
 echo "LEX         :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LEX)
 echo "MAKE        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE)
@@ -24,7 +23,6 @@ echo "YACC        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_YACC)
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_AUTORECONF) == "autoreconf -vfis"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_AWK) == "mawk"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_BISON) == "byacc"
-doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD) == "chmod -Rv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_FLEX) == "flex"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LEX) == "flex"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE) == "make"
