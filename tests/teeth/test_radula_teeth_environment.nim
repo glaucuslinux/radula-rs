@@ -14,7 +14,6 @@ echo "BISON       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_BISON)
 echo "CHMOD       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD)
 echo "FLEX        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_FLEX)
 echo "LEX         :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LEX)
-echo "LN          :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_LN)
 echo "MAKE        :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE)
 echo "MAKEFLAGS   :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)
 echo "MKDIR       :: ", getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR)
@@ -30,7 +29,6 @@ doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_BISON) == "byacc"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_CHMOD) == "chmod -Rv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_FLEX) == "flex"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LEX) == "flex"
-doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_LN) == "ln -fnsv"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKE) == "make"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS) == "-j4 -O"
 doAssert getEnv(RADULA_ENVIRONMENT_TOOTH_MKDIR) == "/usr/bin/install -dv"
