@@ -26,14 +26,17 @@ proc radula_bootstrap_cross_backup*() =
 
 proc radula_bootstrap_cross_envenomate*() =
   radula_ceras_envenomate([
-    # Filesystem & Package Management
+    # Filesystem
     RADULA_CERAS_HYDROSKELETON,
+
+    # Package Management
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
 
-    # Headers
-    RADULA_CERAS_LINUX_HEADERS,
+    # Compatibility
+    RADULA_CERAS_MUSL_FTS,
     RADULA_CERAS_MUSL_UTILS,
+    RADULA_CERAS_LINUX_HEADERS,
 
     # Init
     RADULA_CERAS_SKALIBS,
@@ -89,10 +92,8 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
     RADULA_CERAS_MUON,
-    RADULA_CERAS_SAMURAI,
-
-    # Synchronization
     RADULA_CERAS_RSYNC,
+    RADULA_CERAS_SAMURAI,
 
     # Editors, Pagers and Shells
     RADULA_CERAS_NETBSD_CURSES,
@@ -101,6 +102,7 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
+    RADULA_CERAS_MANDOC,
     RADULA_CERAS_VIM,
 
     # Userland
@@ -363,6 +365,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_RADULA,
 
     # Compatibility
+    RADULA_CERAS_MUSL_FTS,
     RADULA_CERAS_MUSL_UTILS,
     RADULA_CERAS_LINUX_HEADERS,
 
@@ -411,10 +414,8 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_MAWK,
     RADULA_CERAS_PATCH,
     RADULA_CERAS_PKGCONF,
-    RADULA_CERAS_SAMURAI,
-
-    # Synchronization
     RADULA_CERAS_RSYNC,
+    RADULA_CERAS_SAMURAI,
 
     # Editors, Pagers and Shells
     RADULA_CERAS_NETBSD_CURSES,
@@ -422,6 +423,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_PCRE2,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
+    RADULA_CERAS_MANDOC,
     RADULA_CERAS_VIM,
 
     # Networking
