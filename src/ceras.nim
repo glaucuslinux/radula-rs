@@ -23,10 +23,8 @@ import
 
 # Check if the `ceras` source is extracted
 proc radula_ceras_extract_source*(file: string): bool =
-  for i in walkDir(parentDir(file)):
-    if i[1] != file:
-      return true
-  return false
+  if toSeq(walkDir(parentDir(file))).len > 1:
+    return true
 
 # Return the full path to the `ceras` file
 func radula_ceras_path*(nom: string): string =
@@ -83,7 +81,7 @@ proc radula_ceras_verify_source*(file, sum: string): bool =
   $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
 
 proc radula_ceras_stage*(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
-  # We only use `nom` and `ver` from the `ceras`file
+  # We only use `nom` and `ver` from `ceras`
   #
   # All phases need to be called sequentially to prevent the loss of the
   # current working directory...
