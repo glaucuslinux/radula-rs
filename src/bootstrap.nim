@@ -352,6 +352,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_HYDROSKELETON,
 
     # Development
+    RADULA_CERAS_MUSL,
     RADULA_CERAS_CMAKE,
     RADULA_CERAS_GMP,
     RADULA_CERAS_MPFR,
