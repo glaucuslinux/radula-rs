@@ -57,8 +57,8 @@ proc radula_ceras_print*(cerata: seq[string]) =
     echo &"{\"Version\":13} :: ", ceras{"cmt"}.getStr(ceras{"ver"}.getStr(NONE))
     echo &"{\"URL\":13} :: ", ceras{"url"}.getStr(NONE)
     echo &"{\"Checksum\":13} :: ", ceras{"sum"}.getStr(NONE)
-    echo &"{\"Concentrates\":13} :: ", ceras{"cnt"}.getStr(NONE)
-    echo &"{\"Cysts\":13} :: ", ceras{"cys"}.getStr(NONE)
+    echo &"{\"Dependencies\":13} :: ", ceras{"bld"}.getStr(NONE)
+    echo &"{\"Dependencies\":13} :: ", ceras{"run"}.getStr(NONE)
 
     echo ""
 
@@ -67,14 +67,14 @@ proc radula_ceras_print_header*() =
 
   styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
 
-# Resolve concentrates using topological sorting
-proc radula_ceras_resolve_concentrates*(nom: string, concentrates: var Table[string, seq[string]]) =
+# Resolve dependencies using topological sorting
+proc radula_ceras_resolve_dependencies*(nom: string, dependencies: var Table[string, seq[string]]) =
   # Don't use `{}` because we don't want an empty string "" in our Table
-  concentrates[nom] = try: radula_ceras_parse(nom)["cnt"].getStr().split() except CatchableError: @[]
+  dependencies[nom] = try: radula_ceras_parse(nom)["bld"].getStr().split() except CatchableError: @[]
 
-  if concentrates[nom].len() > 0:
-    for concentrate in concentrates[nom]:
-      radula_ceras_resolve_concentrates(concentrate, concentrates)
+  if dependencies[nom].len() > 0:
+    for dependency in dependencies[nom]:
+      radula_ceras_resolve_dependencies(dependency, dependencies)
 
 # Verify the `ceras` source
 proc radula_ceras_verify_source*(file, sum: string): bool =
@@ -249,7 +249,7 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
   var
     cerata = cerata.deduplicate()
 
-    concentrates: Table[string, seq[string]]
+    dependencies: Table[string, seq[string]]
 
     length: int
 
@@ -258,9 +258,9 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
   for nom in cerata:
     radula_ceras_exist(nom)
 
-    radula_ceras_resolve_concentrates(nom, concentrates)
+    radula_ceras_resolve_dependencies(nom, dependencies)
 
-  let cluster = toposort(concentrates)
+  let cluster = toposort(dependencies)
 
   length = cluster.len()
 
