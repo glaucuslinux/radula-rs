@@ -34,6 +34,7 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_RADULA,
 
     # Compatibility
+    RADULA_CERAS_MUSL_FTS,
     RADULA_CERAS_MUSL_UTILS,
     RADULA_CERAS_LINUX_HEADERS,
 
@@ -101,6 +102,7 @@ proc radula_bootstrap_cross_envenomate*() =
     RADULA_CERAS_BASH,
     RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
+    RADULA_CERAS_MANDOC,
     RADULA_CERAS_VIM,
 
     # Userland
@@ -357,6 +359,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_MPC,
     RADULA_CERAS_ISL,
     RADULA_CERAS_PERL,
+    RADULA_CERAS_TEXINFO,
 
     # Package Management
     RADULA_CERAS_IANA_ETC,

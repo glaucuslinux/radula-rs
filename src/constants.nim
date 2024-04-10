@@ -98,6 +98,7 @@ const
   RADULA_CERAS_SHADOW* = "shadow"
   RADULA_CERAS_SKALIBS* = "skalibs"
 
+  RADULA_CERAS_TEXINFO* = "texinfo"
   RADULA_CERAS_TOYBOX* = "toybox"
   RADULA_CERAS_TZCODE* = "tzcode"
   RADULA_CERAS_TZDATA* = "tzdata"
