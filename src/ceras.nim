@@ -57,7 +57,7 @@ proc radula_ceras_print*(cerata: seq[string]) =
     echo &"{\"Version\":13} :: ", ceras{"cmt"}.getStr(ceras{"ver"}.getStr(NONE))
     echo &"{\"URL\":13} :: ", ceras{"url"}.getStr(NONE)
     echo &"{\"Checksum\":13} :: ", ceras{"sum"}.getStr(NONE)
-    echo &"{\"Dependencies\":13} :: ", ceras{"bld"}.getStr(NONE)
+    echo &"{\"Dependencies\":13} :: ", ceras{"dep"}.getStr(NONE)
     echo &"{\"Dependencies\":13} :: ", ceras{"run"}.getStr(NONE)
 
     echo ""
@@ -70,7 +70,7 @@ proc radula_ceras_print_header*() =
 # Resolve dependencies using topological sorting
 proc radula_ceras_resolve_dependencies*(nom: string, dependencies: var Table[string, seq[string]]) =
   # Don't use `{}` because we don't want an empty string "" in our Table
-  dependencies[nom] = try: radula_ceras_parse(nom)["bld"].getStr().split() except CatchableError: @[]
+  dependencies[nom] = try: radula_ceras_parse(nom)["dep"].getStr().split() except CatchableError: @[]
 
   if dependencies[nom].len() > 0:
     for dependency in dependencies[nom]:
