@@ -217,6 +217,8 @@ const
   RADULA_FILE_RADULA_LOCK* = "radula.lck"
   RADULA_FILE_ROOT_FILE_SYSTEM* = "rootfs.erofs"
 
+  RADULA_FILE_SUM* = "sum"
+
 
   RADULA_FLAGS_C_CXX_COMPILER* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
   RADULA_FLAGS_LINKER* = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
