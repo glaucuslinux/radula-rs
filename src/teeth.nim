@@ -45,7 +45,7 @@ proc radula_generate_initramfs*(directory: string, bootstrap = false) =
 proc radula_generate_sum*(directory, sum: string) =
   var files: seq[string]
 
-  for file in walkDirRec(directory, relative = true):
+  for file in walkDirRec(directory, relative = true, skipSpecial = true):
     files.add(file)
 
   sort(files)
