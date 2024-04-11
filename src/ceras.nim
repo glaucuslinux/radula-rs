@@ -323,5 +323,5 @@ proc radula_ceras_install*(cerata: openArray[string]) =
   for nom in cerata:
     radula_ceras_exist(nom)
 
-    radula_ceras_resolve_dependencies(nom, dependencies)
-  radula_extract_archive_zstd(archive, directory)
+    # radula_ceras_resolve_dependencies(nom, dependencies)
+  # radula_extract_archive_zstd(archive, directory)
