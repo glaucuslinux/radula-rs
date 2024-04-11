@@ -6,6 +6,7 @@ import std/[
   os,
   osproc,
   strformat,
+  strutils,
   terminal,
   times
 ]
@@ -83,3 +84,10 @@ proc radula_teeth_environment*() =
   putEnv(RADULA_ENVIRONMENT_TOOTH_RADULA_RSYNC, RADULA_CERAS_RSYNC & ' ' & RADULA_TOOTH_RSYNC_FLAGS)
   # `byacc` is the default yacc implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
+
+proc radula_verify_sum*(sum: string) =
+  for line in lines(sum):
+    let line = line.split()
+
+    if $count[BLAKE3](try: readFile(line[1]) except CatchableError: "") != line[0]:
+      echo line[1], ": FAILED"
