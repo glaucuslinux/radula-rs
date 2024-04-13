@@ -1,5 +1,5 @@
 # radula
-glaucus's radula
+glaucus's package manager
 
 ## Community
 * [Discord](https://discord.gg/nDKNmNc)
