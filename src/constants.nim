@@ -10,6 +10,7 @@ const
   RADULA_CERAS_AUTOCONF* = "autoconf"
   RADULA_CERAS_AUTOMAKE* = "automake"
 
+  RADULA_CERAS_BASH* = "bash"
   RADULA_CERAS_BINUTILS* = "binutils"
   RADULA_CERAS_BOOSTER* = "booster"
   RADULA_CERAS_BYACC* = "byacc"
@@ -114,7 +115,6 @@ const
   RADULA_CERAS_XZ* = "xz"
 
   RADULA_CERAS_ZLIB_NG* = "zlib-ng"
-  RADULA_CERAS_ZSH* = "zsh"
   RADULA_CERAS_ZSTD* = "zstd"
 
 
@@ -356,6 +356,7 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_RSYNC_FLAGS* = "-vaHAXSx"
   RADULA_TOOTH_RSYNC_RELEASE_FLAGS* = "-vaHAXx"
 
+  RADULA_TOOTH_SHELL* = "sh"
   RADULA_TOOTH_SHELL_COMMAND_FLAGS* = "-c"
   RADULA_TOOTH_SHELL_REDIRECTION* = "> /dev/null 2>&1"
   RADULA_TOOTH_SIZE* = "size"
