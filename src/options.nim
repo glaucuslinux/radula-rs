@@ -149,6 +149,8 @@ proc radula_options*() =
         of "p", "print":
           radula_ceras_print(remainingArgs(p))
         of "r", "remove":
+          radula_ceras_remove(remainingArgs(p))
+
           echo ""
           echo "remove complete"
         of "s", "search":

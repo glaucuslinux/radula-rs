@@ -320,8 +320,72 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
     styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
 proc radula_ceras_install*(cerata: openArray[string]) =
+  var
+    cerata = cerata.deduplicate()
+
+    dependencies: Table[string, seq[string]]
+
+    length: int
+
   for nom in cerata:
     radula_ceras_exist(nom)
 
-    # radula_ceras_resolve_dependencies(nom, dependencies)
-  # radula_extract_archive_zstd(archive, directory)
+    radula_ceras_resolve_dependencies(nom, dependencies)
+
+  let cluster = toposort(dependencies)
+
+  length = cluster.len()
+
+  echo &"Install {length} cerata..."
+
+  radula_ceras_print_header()
+
+  for nom in cluster:
+    let
+      ceras = radula_ceras_parse(nom)
+
+      ver = ceras{"ver"}.getStr()
+      cmt = ceras{"cmt"}.getStr()
+
+      url = ceras{"url"}.getStr()
+
+    styledEcho fgMagenta, styleBright, &"{\"Install\":13} :+ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+    discard radula_extract_archive(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+
+    cursorUp 1
+    eraseLine()
+
+    styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+
+proc radula_ceras_remove*(cerata: openArray[string]) =
+  var
+    cerata = cerata.deduplicate()
+
+    dependencies: Table[string, seq[string]]
+
+    length: int
+
+  for nom in cerata:
+    radula_ceras_exist(nom)
+
+    radula_ceras_resolve_dependencies(nom, dependencies)
+
+  let cluster = toposort(dependencies)
+
+  length = cluster.len()
+
+  echo &"Remove {length} cerata..."
+
+  radula_ceras_print_header()
+
+  for nom in cluster:
+    let
+      ceras = radula_ceras_parse(nom)
+
+      ver = ceras{"ver"}.getStr()
+      cmt = ceras{"cmt"}.getStr()
+
+      url = ceras{"url"}.getStr()
+
+    styledEcho fgMagenta, styleBright, &"{\"Remove\":13} :- {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle

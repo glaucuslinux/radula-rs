@@ -352,7 +352,6 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_TEXINFO,
 
     # Package Management
-    RADULA_CERAS_IANA_ETC,
     RADULA_CERAS_CERATA,
     RADULA_CERAS_RADULA,
 
@@ -377,9 +376,9 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_DIFFUTILS,
     RADULA_CERAS_FILE,
     RADULA_CERAS_FINDUTILS,
+    RADULA_CERAS_GREP,
     RADULA_CERAS_SED,
     RADULA_CERAS_TOYBOX,
-    RADULA_CERAS_UGREP,
 
     # Compression
     RADULA_CERAS_BZIP2,
@@ -425,6 +424,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_WGET2,
 
     # Utilities
+    RADULA_CERAS_KBD,
     RADULA_CERAS_KMOD,
     RADULA_CERAS_LIBUDEV_ZERO,
     RADULA_CERAS_PROCPS_NG,

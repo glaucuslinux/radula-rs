@@ -38,11 +38,11 @@ const
   RADULA_CERAS_HELP2MAN* = "help2man"
   RADULA_CERAS_HYDROSKELETON* = "hydroskeleton"
 
-  RADULA_CERAS_IANA_ETC* = "iana-etc"
   RADULA_CERAS_IPROUTE2* = "iproute2"
   RADULA_CERAS_IPUTILS* = "iputils"
   RADULA_CERAS_ISL* = "isl"
 
+  RADULA_CERAS_KBD* = "kbd"
   RADULA_CERAS_KMOD* = "kmod"
 
   RADULA_CERAS_LESS* = "less"
@@ -103,7 +103,6 @@ const
   RADULA_CERAS_TZCODE* = "tzcode"
   RADULA_CERAS_TZDATA* = "tzdata"
 
-  RADULA_CERAS_UGREP* = "ugrep"
   RADULA_CERAS_UTIL_LINUX* = "util-linux"
   RADULA_CERAS_UTMPS* = "utmps"
 

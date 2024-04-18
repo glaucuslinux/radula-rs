@@ -24,9 +24,6 @@ proc radula_create_archive_zstd*(archive, directory: string): int =
 proc radula_extract_archive*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_extract_archive_zstd*(archive, directory: string): int =
-  execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_DECOMPRESS_FLAGS}' {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
-
 proc radula_exit*(status = 0) =
   remove_file(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK)
 
