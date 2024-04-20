@@ -154,6 +154,8 @@ proc radula_options*() =
           echo ""
           echo "remove complete"
         of "s", "search":
+          radula_ceras_search(remainingArgs(p))
+
           echo ""
           echo "search complete"
         of "u", "upgrade":

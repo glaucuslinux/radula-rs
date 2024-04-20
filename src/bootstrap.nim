@@ -238,7 +238,7 @@ proc radula_bootstrap_release_img*(compress = false) =
   let path = mount / RADULA_PATH_BOOT
 
   # Generate initramfs
-  radula_generate_initramfs(path, true)
+  discard radula_generate_initramfs(path, true)
 
   # Install `grub` as the default bootloader
   createDir(path / RADULA_CERAS_GRUB)

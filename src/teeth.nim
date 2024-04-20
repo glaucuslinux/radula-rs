@@ -36,8 +36,8 @@ proc radula_abort*() {.noconv.} =
 
   radula_exit(QuitFailure)
 
-proc radula_generate_initramfs*(directory: string, bootstrap = false) =
-  discard execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RADULA_FILE_INITRAMFS_GLAUCUS}")
+proc radula_generate_initramfs*(directory: string, bootstrap = false): int =
+  execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RADULA_FILE_INITRAMFS_GLAUCUS}")
 
 proc radula_generate_sum*(directory, sum: string) =
   var files: seq[string]

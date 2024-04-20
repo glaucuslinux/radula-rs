@@ -41,11 +41,7 @@ proc radula_ceras_exist*(nom: string) =
 proc radula_ceras_parse*(nom: string): TomlValueRef =
   parseFile(radula_ceras_path(nom))
 
-# Return the full path to the `ceras` source directory
-func radula_ceras_path_source*(nom: string): string =
-  RADULA_PATH_RADULA_CACHE_SOURCES / nom
-
-proc radula_ceras_print*(cerata: seq[string]) =
+proc radula_ceras_print*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
     radula_ceras_exist(nom)
 
@@ -88,7 +84,7 @@ proc radula_ceras_stage*(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM)
   execCmd(&"{RADULA_TOOTH_SHELL} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % [&">> {log} 2>&1"])
 
 # Swallow cerata
-proc radula_ceras_swallow*(cerata: seq[string]) =
+proc radula_ceras_swallow*(cerata: openArray[string]) =
   var
     clones: seq[(array[3, string], string)]
     downloads: seq[(array[5, string], string)]
@@ -112,7 +108,7 @@ proc radula_ceras_swallow*(cerata: seq[string]) =
       cmt = ceras{"cmt"}.getStr()
       sum = ceras{"sum"}.getStr()
 
-      path = radula_ceras_path_source(nom)
+      path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) / nom
       archive = path / lastPathPart(url)
 
     if dirExists(path):
@@ -351,12 +347,12 @@ proc radula_ceras_install*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Install\":13} :+ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    discard radula_extract_archive(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+    # let status = radula_extract_archive(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
 
     cursorUp 1
     eraseLine()
 
-    styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+    styledEcho fgGreen, &"{\"Install\":13}", fgDefault, " :+ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
 proc radula_ceras_remove*(cerata: openArray[string]) =
   var
@@ -389,3 +385,9 @@ proc radula_ceras_remove*(cerata: openArray[string]) =
       url = ceras{"url"}.getStr()
 
     styledEcho fgMagenta, styleBright, &"{\"Remove\":13} :- {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+proc radula_ceras_search*(cerata: openArray[string]) =
+  for file in walkDir(RADULA_PATH_RADULA_CACHE_SOURCES, relative = true):
+    for nom in cerata:
+      if nom in file[1]:
+        radula_ceras_print(cerata)
