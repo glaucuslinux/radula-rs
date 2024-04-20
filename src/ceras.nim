@@ -2,6 +2,7 @@
 # Distributed under the terms of the ISC License
 
 import std/[
+  algorithm,
   os,
   osproc,
   sequtils,
@@ -23,8 +24,7 @@ import
 
 # Check if the `ceras` source is extracted
 proc radula_ceras_extract_source*(file: string): bool =
-  if toSeq(walkDir(parentDir(file))).len > 1:
-    return true
+  toSeq(walkDir(parentDir(file))).len > 1
 
 # Return the full path to the `ceras` file
 func radula_ceras_path*(nom: string): string =
@@ -386,8 +386,14 @@ proc radula_ceras_remove*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Remove\":13} :- {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-proc radula_ceras_search*(cerata: openArray[string]) =
-  for file in walkDir(RADULA_PATH_RADULA_CACHE_SOURCES, relative = true):
-    for nom in cerata:
-      if nom in file[1]:
-        radula_ceras_print(cerata)
+proc radula_ceras_search*(pattern: openArray[string]) =
+  var cerata: seq[string]
+
+  for file in walkDir(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS, relative = true, skipSpecial = true):
+    for nom in pattern:
+      if nom.toLowerAscii() in file[1]:
+        cerata.add(file[1])
+
+  sort(cerata)
+
+  radula_ceras_print(cerata)
