@@ -229,16 +229,19 @@ const
   RADULA_GENOME_X86_64_V3* = "x86-64-v3"
 
 
-  RADULA_HELP* = """USAGE:
+  RADULA_HELP* = """
+USAGE:
   radula [ OPTIONS ]
 
 OPTIONS:
   -b, --bootstrap  Perform bootstrap behavior
   -c, --ceras      Perform ceras behavior
   -h, --help       Display this help message
-  -v, --version    Display current version"""
+  -v, --version    Display current version
+"""
 
-  RADULA_HELP_BOOTSTRAP* = """USAGE:
+  RADULA_HELP_BOOTSTRAP* = """
+USAGE:
   radula [ -b | --bootstrap ] [ OPTIONS ]
 
 OPTIONS:
@@ -248,9 +251,11 @@ OPTIONS:
   r, release       Release an ISO file of the glaucus system
   s, system        Bootstrap a native glaucus system
   t, toolchain     Bootstrap a cross compiler toolchain
-  x, cross         Bootstrap a cross compiled glaucus system"""
+  x, cross         Bootstrap a cross compiled glaucus system
+"""
 
-  RADULA_HELP_CERAS* = """USAGE:
+  RADULA_HELP_CERAS* = """
+USAGE:
   radula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
@@ -265,12 +270,15 @@ OPTIONS:
   r, remove        Remove cerata
   s, search        Search for cerata
   u, upgrade       Upgrade cerata
-  y, sync          Synchronize clusters"""
+  y, sync          Synchronize clusters
+"""
 
-  RADULA_HELP_VERSION* = """radula version 0.1.0
+  RADULA_HELP_VERSION* = """
+radula version 0.1.0
 
 Copyright (c) 2018-2024, Firas Khalil Khana
-Distributed under the terms of the ISC License"""
+Distributed under the terms of the ISC License
+"""
 
 
   RADULA_PATH_BIN* = "bin"
