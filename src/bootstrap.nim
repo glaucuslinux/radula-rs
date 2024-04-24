@@ -1,19 +1,9 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  os,
-  osproc,
-  strformat,
-  strutils,
-  terminal,
-  times
-]
-
 import
-  ceras,
-  constants,
-  teeth
+  std/[os, osproc, strformat, strutils, terminal, times],
+  ceras, constants, teeth
 
 proc radula_bootstrap_clean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS))
@@ -21,7 +11,7 @@ proc radula_bootstrap_clean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_BUILDS))
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
 
-proc radula_bootstrap_cross_backup*() =
+func radula_bootstrap_cross_backup*() =
   discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 
 proc radula_bootstrap_cross_envenomate*() =
@@ -447,7 +437,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_LINUX
   ], RADULA_DIRECTORY_SYSTEM, false)
 
-proc radula_bootstrap_toolchain_backup*() =
+func radula_bootstrap_toolchain_backup*() =
   discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
   discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS), getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
 

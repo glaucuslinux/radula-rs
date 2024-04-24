@@ -1,17 +1,9 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  os,
-  parseopt
-]
-
 import
-  bootstrap,
-  ceras,
-  constants,
-  genome,
-  teeth
+  std/[os, parseopt],
+  bootstrap, ceras, constants, genome, teeth
 
 proc radula_options*() =
   if paramCount() < 1:

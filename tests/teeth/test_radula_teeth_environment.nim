@@ -1,10 +1,9 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/os
-
-import ../../src/constants
-import ../../src/teeth
+import
+  std/os,
+  ../../src/[constants, teeth]
 
 radula_teeth_environment()
 

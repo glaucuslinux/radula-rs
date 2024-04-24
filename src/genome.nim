@@ -1,15 +1,9 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  os,
-  osproc,
-  strformat,
-  strutils,
-  times
-]
-
-import constants
+import
+  std/[os, osproc, strformat, strutils, times],
+  constants
 
 proc radula_genome_flags_environment*() =
   putEnv(RADULA_ENVIRONMENT_FLAGS_C_COMPILER, RADULA_FLAGS_C_CXX_COMPILER)

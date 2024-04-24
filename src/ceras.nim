@@ -1,44 +1,28 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  algorithm,
-  os,
-  osproc,
-  sequtils,
-  strformat,
-  strutils,
-  tables,
-  terminal,
-  times
-]
-
 import
-  constants,
-  teeth
-
-import
-  hashlib/misc/blake3,
-  parsetoml,
-  toposort
+  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
+  constants, teeth,
+  hashlib/misc/blake3, parsetoml, toposort
 
 # Check if the `ceras` source is extracted
-proc radula_ceras_extract_source*(file: string): bool =
+proc radula_ceras_extract_source(file: string): bool =
   toSeq(walkDir(parentDir(file))).len > 1
 
 # Return the full path to the `ceras` file
-func radula_ceras_path*(nom: string): string =
+func radula_ceras_path(nom: string): string =
   RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / nom / RADULA_FILE_CERAS
 
 # Check if the full path to the `ceras` file exists
-proc radula_ceras_exist*(nom: string) =
+proc radula_ceras_exist(nom: string) =
   if not fileExists(radula_ceras_path(nom)):
     styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
     radula_exit(QuitFailure)
 
 # Parse the `ceras` file
-proc radula_ceras_parse*(nom: string): TomlValueRef =
+proc radula_ceras_parse(nom: string): TomlValueRef =
   parseFile(radula_ceras_path(nom))
 
 proc radula_ceras_print*(cerata: openArray[string]) =
@@ -58,13 +42,13 @@ proc radula_ceras_print*(cerata: openArray[string]) =
 
     echo ""
 
-proc radula_ceras_print_header*() =
+proc radula_ceras_print_header() =
   echo ""
 
   styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
 
 # Resolve dependencies using topological sorting
-proc radula_ceras_resolve_dependencies*(nom: string, dependencies: var Table[string, seq[string]]) =
+proc radula_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]]) =
   # Don't use `{}` because we don't want an empty string "" in our Table
   dependencies[nom] = try: radula_ceras_parse(nom)["dep"].getStr().split() except CatchableError: @[]
 
@@ -73,10 +57,10 @@ proc radula_ceras_resolve_dependencies*(nom: string, dependencies: var Table[str
       radula_ceras_resolve_dependencies(dependency, dependencies)
 
 # Verify the `ceras` source
-proc radula_ceras_verify_source*(file, sum: string): bool =
+proc radula_ceras_verify_source(file, sum: string): bool =
   $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
 
-proc radula_ceras_stage*(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
+func radula_ceras_stage(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
   #
   # All phases need to be called sequentially to prevent the loss of the
@@ -84,7 +68,7 @@ proc radula_ceras_stage*(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM)
   execCmd(&"{RADULA_TOOTH_SHELL} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % [&">> {log} 2>&1"])
 
 # Swallow cerata
-proc radula_ceras_swallow*(cerata: openArray[string]) =
+proc radula_ceras_swallow(cerata: openArray[string]) =
   var
     clones: seq[(array[3, string], string)]
     downloads: seq[(array[5, string], string)]

@@ -1,11 +1,9 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/os
-
 import
-  ../../src/bootstrap,
-  ../../src/constants
+  std/os,
+  ../../src/[bootstrap, constants]
 
 radula_bootstrap_system_environment_directories()
 

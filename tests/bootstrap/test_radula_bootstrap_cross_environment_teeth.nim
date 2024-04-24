@@ -1,15 +1,9 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  os,
-  strutils
-]
-
 import
-  ../../src/bootstrap,
-  ../../src/constants,
-  ../../src/genome
+  std/[os, strutils],
+  ../../src/[bootstrap, constants, genome]
 
 radula_bootstrap_environment()
 

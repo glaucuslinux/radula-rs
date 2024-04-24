@@ -1,27 +1,18 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[
-  algorithm,
-  os,
-  osproc,
-  strformat,
-  strutils,
-  terminal,
-  times
-]
+import
+  std/[algorithm, os, osproc, strformat, strutils, terminal, times],
+  constants,
+  hashlib/misc/blake3
 
-import constants
-
-import hashlib/misc/blake3
-
-proc radula_compress_zstd*(file: string): int =
+func radula_compress_zstd*(file: string): int =
   execCmd(&"{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS} {file} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_create_archive_zstd*(archive, directory: string): int =
+func radula_create_archive_zstd*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} . {RADULA_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_extract_archive*(archive, directory: string): int =
+func radula_extract_archive*(archive, directory: string): int =
   execCmd(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_exit*(status = 0) =
@@ -36,7 +27,7 @@ proc radula_abort*() {.noconv.} =
 
   radula_exit(QuitFailure)
 
-proc radula_generate_initramfs*(directory: string, bootstrap = false): int =
+func radula_generate_initramfs*(directory: string, bootstrap = false): int =
   execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RADULA_FILE_INITRAMFS_GLAUCUS}")
 
 proc radula_generate_sum*(directory, sum: string) =
@@ -62,7 +53,7 @@ proc radula_lock*() =
   else:
     writeFile(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK, "")
 
-proc radula_rsync*(source, destination: string, flags = RADULA_TOOTH_RSYNC_FLAGS): int =
+func radula_rsync*(source, destination: string, flags = RADULA_TOOTH_RSYNC_FLAGS): int =
   execCmd(&"{RADULA_CERAS_RSYNC} {flags} {source} {destination} --delete {RADULA_TOOTH_SHELL_REDIRECTION}")
 
 proc radula_teeth_environment*() =
