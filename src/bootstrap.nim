@@ -17,7 +17,7 @@ func radula_bootstrap_cross_backup*() =
 proc radula_bootstrap_cross_envenomate*() =
   radula_ceras_envenomate([
     # Filesystem
-    RADULA_CERAS_HYDROSKELETON,
+    RADULA_CERAS_FILESYSTEM,
 
     # Package Management
     RADULA_CERAS_CERATA,
@@ -329,7 +329,7 @@ proc radula_bootstrap_system_prepare*() =
 proc radula_bootstrap_system_envenomate*() =
   radula_ceras_envenomate([
     # Filesystem
-    RADULA_CERAS_HYDROSKELETON,
+    RADULA_CERAS_FILESYSTEM,
 
     # Development
     RADULA_CERAS_MUSL,

@@ -65,7 +65,7 @@ func radula_ceras_stage(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM):
   #
   # All phases need to be called sequentially to prevent the loss of the
   # current working directory...
-  execCmd(&"{RADULA_TOOTH_SHELL} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % [&">> {log} 2>&1"])
+  execCmd(&"{RADULA_TOOTH_SHELL} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
 
 # Swallow cerata
 proc radula_ceras_swallow(cerata: openArray[string]) =

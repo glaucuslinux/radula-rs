@@ -26,6 +26,7 @@ const
   RADULA_CERAS_EXPAT* = "expat"
 
   RADULA_CERAS_FILE* = "file"
+  RADULA_CERAS_FILESYSTEM* = "filesystem"
   RADULA_CERAS_FINDUTILS* = "findutils"
   RADULA_CERAS_FLEX* = "flex"
 
@@ -36,7 +37,6 @@ const
   RADULA_CERAS_GRUB* = "grub"
 
   RADULA_CERAS_HELP2MAN* = "help2man"
-  RADULA_CERAS_HYDROSKELETON* = "hydroskeleton"
 
   RADULA_CERAS_IPROUTE2* = "iproute2"
   RADULA_CERAS_IPUTILS* = "iputils"
