@@ -107,9 +107,9 @@ proc radula_options*() =
         radula_exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
-        of "a", "add":
+        of "a", "append":
           echo ""
-          echo "add complete"
+          echo "append complete"
         of "c", "clean":
           echo ""
           echo "clean complete"

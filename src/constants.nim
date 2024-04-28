@@ -259,7 +259,7 @@ USAGE:
   radula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-  a, add           Add a cluster
+  a, append        Append a cluster
   c, clean         Clean cache
   e, envenomate    Envenomate cerata
   h, help          Display this help message
