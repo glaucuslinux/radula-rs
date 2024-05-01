@@ -73,6 +73,9 @@ proc radula_teeth_environment*() =
   # `byacc` is the default yacc implementation
   putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
 
+proc radula_verify_file*(file, sum: string): bool =
+  $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
+
 proc radula_verify_sum*(sum: string) =
   for line in lines(sum):
     let line = line.split()

@@ -149,6 +149,14 @@ proc radula_bootstrap_cross_prepare*() =
 
   removeFile(getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG))
 
+proc radula_bootstrap_distclean*() =
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
+
+  radula_bootstrap_clean()
+
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SOURCES))
+
 proc radula_bootstrap_environment*() =
   let path = parentDir(getCurrentDir())
 
@@ -178,7 +186,7 @@ proc radula_bootstrap_initialize*() =
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SOURCES))
   createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN))
 
-proc radula_bootstrap_release_img*(compress = false) =
+proc radula_bootstrap_release_img*() =
   if not isAdmin():
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"permission denied\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
@@ -225,6 +233,8 @@ proc radula_bootstrap_release_img*(compress = false) =
 
   discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CROSS) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RADULA_TOOTH_RSYNC_RELEASE_FLAGS)
 
+  discard radula_rsync(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) / RADULA_PATH_PKG_CONFIG_SYSROOT_DIR, mount / RADULA_PATH_RADULA_CACHE_SOURCES, RADULA_TOOTH_RSYNC_RELEASE_FLAGS)
+
   let path = mount / RADULA_PATH_BOOT
 
   # Generate initramfs
@@ -245,13 +255,6 @@ proc radula_bootstrap_release_img*(compress = false) =
   discard execCmd(&"{RADULA_TOOTH_UMOUNT} {RADULA_TOOTH_UMOUNT_FLAGS} {mount} {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_PARTX} -d {partition} {RADULA_TOOTH_SHELL_REDIRECTION}")
   discard execCmd(&"{RADULA_TOOTH_LOSETUP} -d {device} {RADULA_TOOTH_SHELL_REDIRECTION}")
-
-  # Compress the IMG file
-  if compress:
-    let status = radula_compress_zstd(img)
-
-    if status == 0:
-      removeFile(img)
 
 proc radula_bootstrap_release_iso*() =
   let

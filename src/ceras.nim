@@ -6,6 +6,17 @@ import
   constants, teeth,
   hashlib/misc/blake3, parsetoml, toposort
 
+proc radula_ceras_clean*() =
+  removeDir(RADULA_PATH_RADULA_CACHE_VENOM)
+  removeDir(RADULA_PATH_RADULA_LOGS)
+  removeDir(RADULA_PATH_RADULA_TEMPORARY)
+
+proc radula_ceras_distclean*() =
+  removeDir(RADULA_PATH_RADULA_CACHE_BINARIES)
+  removeDir(RADULA_PATH_RADULA_CACHE_SOURCES)
+
+  radula_ceras_clean()
+
 # Check if the `ceras` source is extracted
 proc radula_ceras_extract_source(file: string): bool =
   toSeq(walkDir(parentDir(file))).len > 1
@@ -37,7 +48,6 @@ proc radula_ceras_print*(cerata: openArray[string]) =
     echo &"{\"Version\":13} :: ", ceras{"cmt"}.getStr(ceras{"ver"}.getStr(NONE))
     echo &"{\"URL\":13} :: ", ceras{"url"}.getStr(NONE)
     echo &"{\"Checksum\":13} :: ", ceras{"sum"}.getStr(NONE)
-    echo &"{\"Dependencies\":13} :: ", ceras{"dep"}.getStr(NONE)
     echo &"{\"Dependencies\":13} :: ", ceras{"run"}.getStr(NONE)
 
     echo ""
@@ -48,17 +58,13 @@ proc radula_ceras_print_header() =
   styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
 
 # Resolve dependencies using topological sorting
-proc radula_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]]) =
+proc radula_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]], run = true) =
   # Don't use `{}` because we don't want an empty string "" in our Table
-  dependencies[nom] = try: radula_ceras_parse(nom)["dep"].getStr().split() except CatchableError: @[]
+  dependencies[nom] = try: radula_ceras_parse(nom)[if run: "run" else: "dep"].getStr().split() except CatchableError: @[]
 
   if dependencies[nom].len() > 0:
     for dependency in dependencies[nom]:
       radula_ceras_resolve_dependencies(dependency, dependencies)
-
-# Verify the `ceras` source
-proc radula_ceras_verify_source(file, sum: string): bool =
-  $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
 
 func radula_ceras_stage(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
@@ -99,7 +105,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
       if ver == "git":
         styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
       else:
-        if radula_ceras_verify_source(archive, sum):
+        if radula_verify_file(archive, sum):
           if not radula_ceras_extract_source(archive):
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
@@ -162,7 +168,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
 
         styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-        if radula_ceras_verify_source(archive, sum):
+        if radula_verify_file(archive, sum):
           cursorUp 1
           eraseLine()
 
@@ -225,7 +231,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
         cursorDown counter - i
     )
 
-proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true) =
+proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true, bootstrap = false) =
   var
     cerata = cerata.deduplicate()
 
@@ -238,7 +244,7 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
   for nom in cerata:
     radula_ceras_exist(nom)
 
-    radula_ceras_resolve_dependencies(nom, dependencies)
+    radula_ceras_resolve_dependencies(nom, dependencies, false)
 
   let cluster = toposort(dependencies)
 
@@ -272,7 +278,7 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
       of RADULA_DIRECTORY_CROSS:
         log = getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
       of RADULA_DIRECTORY_SYSTEM:
-        log = getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG)
+        log = if bootstrap: getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG) else: getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / nom & "." & RADULA_PATH_RADULA_LOGS
 
         putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC, RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC)
         createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
@@ -331,10 +337,15 @@ proc radula_ceras_install*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Install\":13} :+ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    # let status = radula_extract_archive(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+    let status = radula_extract_archive(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
 
     cursorUp 1
     eraseLine()
+
+    if status != 0:
+      styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+      radula_exit(QuitFailure)
 
     styledEcho fgGreen, &"{\"Install\":13}", fgDefault, " :+ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
@@ -368,7 +379,17 @@ proc radula_ceras_remove*(cerata: openArray[string]) =
 
       url = ceras{"url"}.getStr()
 
-    styledEcho fgMagenta, styleBright, &"{\"Remove\":13} :- {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+    styledEcho fgMagenta, styleBright, &"{\"Remove\":13} :- {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"remove\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+
+    let sum = RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_FILE_SUM
+
+    for line in lines(sum):
+      removeFile(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / line.split()[2])
+
+    cursorUp 1
+    eraseLine()
+
+    styledEcho fgGreen, &"{\"Remove\":13}", fgDefault, " :- ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
 proc radula_ceras_search*(pattern: openArray[string]) =
   var cerata: seq[string]

@@ -203,7 +203,7 @@ const
   RADULA_FILE_CERAS* = "ceras"
   RADULA_FILE_CONFIG_GUESS* = "config.guess"
 
-  RADULA_FILE_GLAUCUS_IMG_SIZE* = "1024"
+  RADULA_FILE_GLAUCUS_IMG_SIZE* = "16384"
 
   RADULA_FILE_GRUB_CONF* = "grub.cfg"
   RADULA_FILE_GRUB_CONF_IMG* = "grub.cfg.img"
@@ -247,6 +247,7 @@ USAGE:
 
 OPTIONS:
   c, clean         Clean cache
+  d, distclean     Clean everything
   h, help          Display this help message
   i, img           Release an IMG file of the glaucus system
   r, release       Release an ISO file of the glaucus system
@@ -261,6 +262,7 @@ USAGE:
 OPTIONS:
   a, append        Append a cluster
   c, clean         Clean cache
+  d, distclean     Clean everything
   e, envenomate    Envenomate cerata
   h, help          Display this help message
   i, install       Install cerata

@@ -43,6 +43,11 @@ proc radula_options*() =
           radula_bootstrap_clean()
 
           echo "clean complete"
+        of "d", "distclean":
+          radula_bootstrap_environment()
+          radula_bootstrap_clean()
+
+          echo "distclean complete"
         of "h", "help":
           echo RADULA_HELP_BOOTSTRAP
         of "i", "img":
@@ -111,8 +116,13 @@ proc radula_options*() =
           echo ""
           echo "append complete"
         of "c", "clean":
-          echo ""
+          radula_ceras_clean()
+
           echo "clean complete"
+        of "d", "distclean":
+          radula_ceras_distclean()
+
+          echo "distclean complete"
         of "e", "envenomate":
           radula_teeth_environment()
           radula_genome_environment(RADULA_DIRECTORY_SYSTEM)
