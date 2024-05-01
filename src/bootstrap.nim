@@ -403,6 +403,7 @@ proc radula_bootstrap_system_envenomate*() =
     RADULA_CERAS_LIBEDIT,
     RADULA_CERAS_PCRE2,
     RADULA_CERAS_BASH,
+    RADULA_CERAS_YASH,
     RADULA_CERAS_LESS,
     RADULA_CERAS_MANDOC,
     RADULA_CERAS_VIM,

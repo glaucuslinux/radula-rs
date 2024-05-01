@@ -113,6 +113,8 @@ const
   RADULA_CERAS_XXHASH* = "xxhash"
   RADULA_CERAS_XZ* = "xz"
 
+  RADULA_CERAS_YASH* = "yash"
+
   RADULA_CERAS_ZLIB_NG* = "zlib-ng"
   RADULA_CERAS_ZSTD* = "zstd"
 
