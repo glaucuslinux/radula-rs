@@ -347,7 +347,6 @@ proc radula_bootstrap_system_envenomate*() =
 
     # Compatibility
     RADULA_CERAS_MUSL_FTS,
-    RADULA_CERAS_MUSL_UTILS,
     RADULA_CERAS_LINUX_HEADERS,
 
     # Permissions & Capabilities
