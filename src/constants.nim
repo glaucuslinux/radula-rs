@@ -370,8 +370,8 @@ Distributed under the terms of the ISC License"""
   RADULA_TOOTH_STRIP* = "strip"
 
   RADULA_TOOTH_TAR* = "bsdtar"
-  RADULA_TOOTH_TAR_CREATE_FLAGS* = "-cvf"
-  RADULA_TOOTH_TAR_EXTRACT_FLAGS* = "-xmvf"
+  RADULA_TOOTH_TAR_CREATE_FLAGS* = "-cpvf"
+  RADULA_TOOTH_TAR_EXTRACT_FLAGS* = "-xmPvf"
 
   RADULA_TOOTH_UMOUNT* = "umount"
   RADULA_TOOTH_UMOUNT_FLAGS* = "-fqRv"
