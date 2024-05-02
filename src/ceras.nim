@@ -64,7 +64,7 @@ proc radula_ceras_resolve_dependencies(nom: string, dependencies: var Table[stri
 
   if dependencies[nom].len() > 0:
     for dependency in dependencies[nom]:
-      radula_ceras_resolve_dependencies(dependency, dependencies)
+      radula_ceras_resolve_dependencies(dependency, dependencies, if run: true else: false)
 
 func radula_ceras_stage(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
