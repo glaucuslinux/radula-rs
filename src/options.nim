@@ -45,7 +45,7 @@ proc radula_options*() =
           echo "clean complete"
         of "d", "distclean":
           radula_bootstrap_environment()
-          radula_bootstrap_clean()
+          radula_bootstrap_distclean()
 
           echo "distclean complete"
         of "h", "help":

@@ -151,11 +151,11 @@ proc radula_bootstrap_cross_prepare*() =
 
 proc radula_bootstrap_distclean*() =
   removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_BACKUPS))
-  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
 
   radula_bootstrap_clean()
 
-  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY_SOURCES))
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES))
+  removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS) / RADULA_DIRECTORY_TEMPORARY)
 
 proc radula_bootstrap_environment*() =
   let path = parentDir(getCurrentDir())
