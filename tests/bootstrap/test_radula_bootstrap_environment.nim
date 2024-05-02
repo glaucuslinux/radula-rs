@@ -22,11 +22,6 @@ echo "TLCD  :: ", getEnv(RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)
 
 echo ""
 
-echo "TLOG  :: ", getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
-echo "XLOG  :: ", getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
-
-echo ""
-
 echo "PATH  :: ", getEnv(RADULA_ENVIRONMENT_PATH)
 
 doAssert getEnv(RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).endsWith("glaucus")

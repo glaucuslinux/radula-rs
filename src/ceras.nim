@@ -231,13 +231,13 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
         cursorDown counter - i
     )
 
-proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true, bootstrap = false) =
+proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true) =
   var
     cerata = cerata.deduplicate()
 
     dependencies: Table[string, seq[string]]
 
-    length: int
+    length, status: int
 
     log: string
 
@@ -274,18 +274,21 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
 
     styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    case stage
-      of RADULA_DIRECTORY_CROSS:
-        log = getEnv(RADULA_ENVIRONMENT_FILE_CROSS_LOG)
-      of RADULA_DIRECTORY_SYSTEM:
-        log = if bootstrap: getEnv(RADULA_ENVIRONMENT_FILE_SYSTEM_LOG) else: getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / nom & CurDir & RADULA_DIRECTORY_LOGS
+    log = getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / nom & CurDir & RADULA_DIRECTORY_LOGS
 
-        putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC, RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC)
-        createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
-      of RADULA_DIRECTORY_TOOLCHAIN:
-        log = getEnv(RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)
+    if stage == RADULA_DIRECTORY_SYSTEM:
+      if fileExists(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}"):
+        cursorUp 1
+        eraseLine()
 
-    let status = radula_ceras_stage(log, nom, ver, stage)
+        styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+
+        continue
+
+      putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC, RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC)
+      createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+
+    status = radula_ceras_stage(log, nom, ver, stage)
 
     cursorUp 1
     eraseLine()
@@ -296,7 +299,7 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
       radula_exit(QuitFailure)
 
     if stage == RADULA_DIRECTORY_SYSTEM:
-      let status = radula_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+      status = radula_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
 
       if status == 0:
         radula_generate_sum(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC), RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_FILE_SUM)
