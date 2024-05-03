@@ -255,16 +255,18 @@ const
 
 
   RAD_HELP* = """
-USAGE:  rad [ OPTION ]
+USAGE:
+  rad [ OPTION ]
 
 OPTIONS:
-  -b, --bootstrap  Perform bootstrap behavior
-  -c, --ceras      Perform ceras behavior
+  -b, --bootstrap  Bootstrap glaucus
+  -c, --ceras      Manage cerata
   -h, --help       Display this help message
   -v, --version    Display current version"""
 
   RAD_HELP_BOOTSTRAP* = """
-USAGE:  rad [ -b | --bootstrap ] [ COMMAND ]
+USAGE:
+  rad [ -b | --bootstrap ] [ COMMAND ]
 
 COMMANDS:
   c, clean         Clean cache
@@ -272,12 +274,13 @@ COMMANDS:
   h, help          Display this help message
   i, img           Release an IMG file of the glaucus system
   r, release       Release an ISO file of the glaucus system
-  s, system        Bootstrap a native glaucus system
-  t, toolchain     Bootstrap a cross compiler toolchain
-  x, cross         Bootstrap a cross compiled glaucus system"""
+  s, system        Bootstrap native glaucus system
+  t, toolchain     Bootstrap toolchain
+  x, cross         Bootstrap cross compiled glaucus system"""
 
   RAD_HELP_CERAS* = """
-USAGE:  rad [ -c | --ceras ] [ COMMAND ] [ cerata ]
+USAGE:
+  rad [ -c | --ceras ] [ COMMAND ] [ cerata ]
 
 COMMANDS:
   a, append        Append a cluster
