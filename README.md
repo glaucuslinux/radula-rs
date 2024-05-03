@@ -1,5 +1,5 @@
 # rad
-glaucus's package manager
+glaucus package manager
 
 ## Community
 * [Discord](https://discord.gg/nDKNmNc)
