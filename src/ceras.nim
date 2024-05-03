@@ -52,7 +52,9 @@ proc radula_ceras_print*(cerata: openArray[string]) =
 
     echo ""
 
-proc radula_ceras_print_header() =
+proc radula_ceras_print_header(command: string, length: int) =
+  echo &"{command} {length} cerata..."
+
   echo ""
 
   styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
@@ -130,9 +132,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
   if length > 0:
     echo ""
 
-    echo &"Download, verify and extract {length} cerata..."
-
-    radula_ceras_print_header()
+    radula_ceras_print_header("Download, verify and extract", length)
 
     let cluster = downloads.unzip()[0]
 
@@ -198,9 +198,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
   if length > 0:
     echo ""
 
-    echo &"Clone and checkout {length} cerata..."
-
-    radula_ceras_print_header()
+    radula_ceras_print_header("Clone and checkout", length)
 
     let cluster = clones.unzip()[0]
 
@@ -231,39 +229,35 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
         cursorDown counter - i
     )
 
-proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true) =
-  var
-    cerata = cerata.deduplicate()
+proc radula_ceras_check*(cerata: openArray[string], run = true): seq[string] =
+  var dependencies: Table[string, seq[string]]
 
-    dependencies: Table[string, seq[string]]
-
-    length, status: int
-
-    log: string
-
-  for nom in cerata:
+  for nom in cerata.deduplicate():
     radula_ceras_exist(nom)
 
-    radula_ceras_resolve_dependencies(nom, dependencies, false)
+    radula_ceras_resolve_dependencies(nom, dependencies, if run: true else: false)
 
-  let cluster = toposort(dependencies)
+  topoSort(dependencies)
 
-  length = cluster.len()
+proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true) =
+  var
+    status: int
+    log: string
 
-  echo &"Swallow {length} cerata..."
+  let
+    cluster = radula_ceras_check(cerata, false)
+    length = cluster.len()
 
-  radula_ceras_print_header()
+  radula_ceras_print_header("Swallow", length)
 
   # Swallow cluster in parallel
   radula_ceras_swallow(cluster)
 
   echo ""
 
-  echo &"Envenomate {(if resolve: length else: cerata.len())} cerata..."
+  radula_ceras_print_header("Envenomate", if resolve: length else: cerata.len())
 
-  radula_ceras_print_header()
-
-  for nom in (if resolve: cluster else: cerata):
+  for nom in (if resolve: cluster else: cerata.toSeq()):
     let
       ceras = radula_ceras_parse(nom)
 
@@ -309,25 +303,11 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
     styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
 proc radula_ceras_install*(cerata: openArray[string]) =
-  var
-    cerata = cerata.deduplicate()
+  let
+    cluster = radula_ceras_check(cerata)
+    length = cluster.len()
 
-    dependencies: Table[string, seq[string]]
-
-    length: int
-
-  for nom in cerata:
-    radula_ceras_exist(nom)
-
-    radula_ceras_resolve_dependencies(nom, dependencies)
-
-  let cluster = toposort(dependencies)
-
-  length = cluster.len()
-
-  echo &"Install {length} cerata..."
-
-  radula_ceras_print_header()
+  radula_ceras_print_header("Install", length)
 
   for nom in cluster:
     let
@@ -353,25 +333,11 @@ proc radula_ceras_install*(cerata: openArray[string]) =
     styledEcho fgGreen, &"{\"Install\":13}", fgDefault, " :+ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
 proc radula_ceras_remove*(cerata: openArray[string]) =
-  var
-    cerata = cerata.deduplicate()
+  let
+    cluster = radula_ceras_check(cerata)
+    length = cluster.len()
 
-    dependencies: Table[string, seq[string]]
-
-    length: int
-
-  for nom in cerata:
-    radula_ceras_exist(nom)
-
-    radula_ceras_resolve_dependencies(nom, dependencies)
-
-  let cluster = toposort(dependencies)
-
-  length = cluster.len()
-
-  echo &"Remove {length} cerata..."
-
-  radula_ceras_print_header()
+  radula_ceras_print_header("Remove", length)
 
   for nom in cluster:
     let
