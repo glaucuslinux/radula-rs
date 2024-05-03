@@ -7,16 +7,16 @@ import
   hashlib/misc/blake3
 
 func rad_compress_zstd*(file: string): int =
-  execCmd(&"{RAD_CERAS_ZSTD} {RAD_TOOTH_ZSTD_COMPRESS_FLAGS} {file} {RAD_TOOTH_SHELL_REDIRECTION}")
+  execCmd(&"{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS} {file} {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
 
 func rad_create_archive_zstd*(archive, directory: string): int =
-  execCmd(&"{RAD_TOOTH_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_TOOTH_ZSTD_COMPRESS_FLAGS}' {RAD_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} . {RAD_TOOTH_SHELL_REDIRECTION}")
+  execCmd(&"{RAD_TOOTH_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS}' {RAD_FLAGS_TOOTH_TAR_CREATE} {archive} -C {directory} . {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
 
 func rad_extract_archive*(archive, directory: string): int =
-  execCmd(&"{RAD_TOOTH_TAR} {RAD_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RAD_TOOTH_SHELL_REDIRECTION}")
+  execCmd(&"{RAD_TOOTH_TAR} {RAD_FLAGS_TOOTH_TAR_EXTRACT} {archive} -C {directory} {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
 
 proc rad_exit*(status = 0) =
-  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIRECTORY_TEMPORARY / RAD_FILE_RAD_LOCK)
+  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK)
 
   quit(status)
 
@@ -28,7 +28,7 @@ proc rad_abort*() {.noconv.} =
   rad_exit(QuitFailure)
 
 func rad_generate_initramfs*(directory: string, bootstrap = false): int =
-  execCmd(&"{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RAD_FILE_INITRAMFS_GLAUCUS}")
+  execCmd(&"{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RAD_FILE_INITRAMFS}")
 
 proc rad_generate_sum*(directory, sum: string) =
   var files: seq[string]
@@ -46,32 +46,32 @@ proc rad_generate_sum*(directory, sum: string) =
   sum.close()
 
 proc rad_lock*() =
-  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIRECTORY_TEMPORARY / RAD_FILE_RAD_LOCK):
+  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK):
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"lock exists\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
     quit(QuitFailure)
   else:
-    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIRECTORY_TEMPORARY / RAD_FILE_RAD_LOCK, "")
+    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK, "")
 
-func rad_rsync*(source, destination: string, flags = RAD_TOOTH_RSYNC_FLAGS): int =
-  execCmd(&"{RAD_CERAS_RSYNC} {flags} {source} {destination} --delete {RAD_TOOTH_SHELL_REDIRECTION}")
+func rad_rsync*(source, destination: string, flags = RAD_FLAGS_TOOTH_RSYNC): int =
+  execCmd(&"{RAD_CERAS_RSYNC} {flags} {source} {destination} --delete {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
 
 proc rad_teeth_environment*() =
   # `mawk` is the default awk implementation
-  putEnv(RAD_ENVIRONMENT_TOOTH_AWK, RAD_CERAS_MAWK)
+  putEnv(RAD_ENV_TOOTH_AWK, RAD_CERAS_MAWK)
   # `byacc` is the default yacc implementation
-  putEnv(RAD_ENVIRONMENT_TOOTH_BISON, RAD_CERAS_BYACC)
+  putEnv(RAD_ENV_TOOTH_BISON, RAD_CERAS_BYACC)
   # `flex` is the default lex implementation
-  putEnv(RAD_ENVIRONMENT_TOOTH_FLEX, RAD_CERAS_FLEX)
-  putEnv(RAD_ENVIRONMENT_TOOTH_LEX, RAD_CERAS_FLEX)
+  putEnv(RAD_ENV_TOOTH_FLEX, RAD_CERAS_FLEX)
+  putEnv(RAD_ENV_TOOTH_LEX, RAD_CERAS_FLEX)
   # `make` and its flags
-  putEnv(RAD_ENVIRONMENT_TOOTH_MAKE, RAD_CERAS_MAKE)
-  putEnv(RAD_ENVIRONMENT_TOOTH_MAKEFLAGS, RAD_TOOTH_MAKEFLAGS)
+  putEnv(RAD_ENV_TOOTH_MAKE, RAD_CERAS_MAKE)
+  putEnv(RAD_ENV_TOOTH_MAKEFLAGS, RAD_FLAGS_TOOTH_MAKE)
   # `pkgconf` is the default pkg-config implementation
-  putEnv(RAD_ENVIRONMENT_TOOTH_PKG_CONFIG, RAD_CERAS_PKGCONF)
-  putEnv(RAD_ENVIRONMENT_TOOTH_RAD_RSYNC_FLAGS, RAD_TOOTH_RSYNC_FLAGS)
+  putEnv(RAD_ENV_TOOTH_PKG_CONFIG, RAD_CERAS_PKGCONF)
+  putEnv(RAD_ENV_TOOTH_RAD_RSYNC_FLAGS, RAD_FLAGS_TOOTH_RSYNC)
   # `byacc` is the default yacc implementation
-  putEnv(RAD_ENVIRONMENT_TOOTH_YACC, RAD_CERAS_BYACC)
+  putEnv(RAD_ENV_TOOTH_YACC, RAD_CERAS_BYACC)
 
 proc rad_verify_file*(file, sum: string): bool =
   $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum

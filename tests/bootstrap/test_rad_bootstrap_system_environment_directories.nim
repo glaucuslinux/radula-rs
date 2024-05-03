@@ -7,14 +7,14 @@ import
 
 rad_bootstrap_system_environment_directories()
 
-echo "SRCD  :: ", getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_SOURCES)
-echo "CERD  :: ", getEnv(RAD_ENVIRONMENT_DIRECTORY_CERATA)
-echo "LOGD  :: ", getEnv(RAD_ENVIRONMENT_DIRECTORY_LOGS)
-echo "TBLD  :: ", getEnv(RAD_ENVIRONMENT_DIRECTORY_TEMPORARY_BUILDS)
-echo "TSRC  :: ", getEnv(RAD_ENVIRONMENT_DIRECTORY_TEMPORARY_SOURCES)
+echo "SRCD  :: ", getEnv(RAD_ENV_DIR_SRCD)
+echo "CERD  :: ", getEnv(RAD_ENV_DIR_CERD)
+echo "LOGD  :: ", getEnv(RAD_ENV_DIR_LOGD)
+echo "TBLD  :: ", getEnv(RAD_ENV_DIR_TBLD)
+echo "TSRC  :: ", getEnv(RAD_ENV_DIR_TSRC)
 
-doAssert getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) == "/var/cache/rad/src"
-doAssert getEnv(RAD_ENVIRONMENT_DIRECTORY_CERATA) == "/var/lib/rad/clusters/glaucus"
-doAssert getEnv(RAD_ENVIRONMENT_DIRECTORY_LOGS) == "/var/log/rad"
-doassert getEnv(RAD_ENVIRONMENT_DIRECTORY_TEMPORARY_BUILDS) == "/var/tmp/rad/bld"
-doassert getEnv(RAD_ENVIRONMENT_DIRECTORY_TEMPORARY_SOURCES) == "/var/tmp/rad/src"
+doAssert getEnv(RAD_ENV_DIR_SRCD) == "/var/cache/rad/src"
+doAssert getEnv(RAD_ENV_DIR_CERD) == "/var/lib/rad/clusters/glaucus"
+doAssert getEnv(RAD_ENV_DIR_LOGD) == "/var/log/rad"
+doassert getEnv(RAD_ENV_DIR_TBLD) == "/var/tmp/rad/bld"
+doassert getEnv(RAD_ENV_DIR_TSRC) == "/var/tmp/rad/src"

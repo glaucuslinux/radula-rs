@@ -64,7 +64,7 @@ proc rad_options*() =
           echo "release complete"
         of "s", "system":
           rad_teeth_environment()
-          rad_genome_environment(RAD_DIRECTORY_SYSTEM)
+          rad_genome_environment(RAD_DIR_SYSTEM)
           rad_genome_flags_environment()
           rad_bootstrap_system_environment_directories()
           rad_bootstrap_system_environment_pkg_config()
@@ -125,7 +125,7 @@ proc rad_options*() =
           echo "distclean complete"
         of "e", "envenomate":
           rad_teeth_environment()
-          rad_genome_environment(RAD_DIRECTORY_SYSTEM)
+          rad_genome_environment(RAD_DIR_SYSTEM)
           rad_genome_flags_environment()
           rad_bootstrap_system_environment_directories()
           rad_bootstrap_system_environment_pkg_config()

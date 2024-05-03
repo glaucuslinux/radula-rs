@@ -7,12 +7,12 @@ import
   hashlib/misc/blake3, parsetoml, toposort
 
 proc rad_ceras_clean*() =
-  removeDir(RAD_PATH_RAD_LOGS)
-  removeDir(RAD_PATH_RAD_TEMPORARY)
+  removeDir(RAD_PATH_RAD_LOG)
+  removeDir(RAD_PATH_RAD_TMP)
 
 proc rad_ceras_distclean*() =
-  removeDir(RAD_PATH_RAD_CACHE_BINARIES)
-  removeDir(RAD_PATH_RAD_CACHE_SOURCES)
+  removeDir(RAD_PATH_RAD_CACHE_BIN)
+  removeDir(RAD_PATH_RAD_CACHE_SRC)
   removeDir(RAD_PATH_RAD_CACHE_VENOM)
 
   rad_ceras_clean()
@@ -23,7 +23,7 @@ proc rad_ceras_extract_source(file: string): bool =
 
 # Return the full path to the `ceras` file
 func rad_ceras_path(nom: string): string =
-  RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS / nom / RAD_FILE_CERAS
+  RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / nom / RAD_FILE_CERAS
 
 # Check if the full path to the `ceras` file exists
 proc rad_ceras_exist(nom: string) =
@@ -68,12 +68,12 @@ proc rad_ceras_resolve_dependencies(nom: string, dependencies: var Table[string,
     for dependency in dependencies[nom]:
       rad_ceras_resolve_dependencies(dependency, dependencies, if run: true else: false)
 
-func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIRECTORY_SYSTEM): int =
+func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIR_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
   #
   # All phases need to be called sequentially to prevent the loss of the
   # current working directory...
-  execCmd(&"{RAD_TOOTH_SHELL} {RAD_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
+  execCmd(&"{RAD_TOOTH_SHELL} {RAD_FLAGS_TOOTH_SHELL_COMMAND} 'nom={nom} ver={ver} . {RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
 
 # Swallow cerata
 proc rad_ceras_swallow(cerata: openArray[string]) =
@@ -100,7 +100,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
       cmt = ceras{"cmt"}.getStr()
       sum = ceras{"sum"}.getStr()
 
-      path = getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) / nom
+      path = getEnv(RAD_ENV_DIR_SRCD) / nom
       archive = path / lastPathPart(url)
 
     if dirExists(path):
@@ -123,7 +123,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
           downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
     else:
       if ver == "git":
-        clones &= ([nom, cmt, path], &"{RAD_TOOTH_GIT} {RAD_TOOTH_GIT_CLONE_FLAGS} {url} {path} -q && {RAD_TOOTH_GIT} -C {path} {RAD_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} -q")
+        clones &= ([nom, cmt, path], &"{RAD_TOOTH_GIT} {RAD_FLAGS_TOOTH_GIT_CLONE} {url} {path} -q && {RAD_TOOTH_GIT} -C {path} {RAD_FLAGS_TOOTH_GIT_CHECKOUT} {cmt} -q")
       else:
         downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
 
@@ -239,7 +239,7 @@ proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
 
   topoSort(dependencies)
 
-proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIRECTORY_SYSTEM, resolve = true) =
+proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
   var
     status: int
     log: string
@@ -268,10 +268,10 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIRECTORY_SYST
 
     styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    log = getEnv(RAD_ENVIRONMENT_DIRECTORY_LOGS) / nom & CurDir & RAD_DIRECTORY_LOGS
+    log = getEnv(RAD_ENV_DIR_LOGD) / nom & CurDir & RAD_DIR_LOG
 
-    if stage == RAD_DIRECTORY_SYSTEM:
-      if fileExists(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_ARCHIVE}"):
+    if stage == RAD_DIR_SYSTEM:
+      if fileExists(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}"):
         cursorUp 1
         eraseLine()
 
@@ -279,8 +279,8 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIRECTORY_SYST
 
         continue
 
-      putEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC, RAD_PATH_RAD_CACHE_VENOM / nom / RAD_DIRECTORY_SAC)
-      createDir(getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+      putEnv(RAD_ENV_DIR_SACD, RAD_PATH_RAD_CACHE_VENOM / nom / RAD_DIR_SAC)
+      createDir(getEnv(RAD_ENV_DIR_SACD))
 
     status = rad_ceras_stage(log, nom, ver, stage)
 
@@ -292,13 +292,13 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIRECTORY_SYST
 
       rad_exit(QuitFailure)
 
-    if stage == RAD_DIRECTORY_SYSTEM:
-      status = rad_create_archive_zstd(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_ARCHIVE}", getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+    if stage == RAD_DIR_SYSTEM:
+      status = rad_create_archive_zstd(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
 
       if status == 0:
-        rad_generate_sum(getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
+        rad_generate_sum(getEnv(RAD_ENV_DIR_SACD), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
 
-        removeDir(getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+        removeDir(getEnv(RAD_ENV_DIR_SACD))
 
     styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
@@ -320,7 +320,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Install\":13} :+ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    let status = rad_extract_archive(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_ARCHIVE}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
+    let status = rad_extract_archive(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
 
     cursorUp 1
     eraseLine()
@@ -363,7 +363,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
 proc rad_ceras_search*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for file in walkDir(RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS, relative = true, skipSpecial = true):
+  for file in walkDir(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS, relative = true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in file[1]:
         cerata.add(file[1])
