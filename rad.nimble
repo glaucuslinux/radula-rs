@@ -1,13 +1,13 @@
 # Package
 version      = "0.1.0"
 author       = "Firas Khalil Khana <firasuke@glaucuslinux.org>"
-description  = "glaucus's radula"
+description  = "glaucus's package manager"
 license      = "ISC"
 
 skipFiles    = @["LICENSE", "README.md"]
 srcDir       = "src"
 
-bin          = @["radula"]
+bin          = @["rad"]
 
 # Dependencies
 requires "hashlib >= 1.0.1"

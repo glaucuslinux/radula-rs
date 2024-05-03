@@ -4,4 +4,4 @@
 when isMainModule:
   import options
 
-  radula_options()
+  rad_options()

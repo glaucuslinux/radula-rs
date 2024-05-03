@@ -6,41 +6,41 @@ import
   constants, teeth,
   hashlib/misc/blake3, parsetoml, toposort
 
-proc radula_ceras_clean*() =
-  removeDir(RADULA_PATH_RADULA_LOGS)
-  removeDir(RADULA_PATH_RADULA_TEMPORARY)
+proc rad_ceras_clean*() =
+  removeDir(RAD_PATH_RAD_LOGS)
+  removeDir(RAD_PATH_RAD_TEMPORARY)
 
-proc radula_ceras_distclean*() =
-  removeDir(RADULA_PATH_RADULA_CACHE_BINARIES)
-  removeDir(RADULA_PATH_RADULA_CACHE_SOURCES)
-  removeDir(RADULA_PATH_RADULA_CACHE_VENOM)
+proc rad_ceras_distclean*() =
+  removeDir(RAD_PATH_RAD_CACHE_BINARIES)
+  removeDir(RAD_PATH_RAD_CACHE_SOURCES)
+  removeDir(RAD_PATH_RAD_CACHE_VENOM)
 
-  radula_ceras_clean()
+  rad_ceras_clean()
 
 # Check if the `ceras` source is extracted
-proc radula_ceras_extract_source(file: string): bool =
+proc rad_ceras_extract_source(file: string): bool =
   toSeq(walkDir(parentDir(file))).len > 1
 
 # Return the full path to the `ceras` file
-func radula_ceras_path(nom: string): string =
-  RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / nom / RADULA_FILE_CERAS
+func rad_ceras_path(nom: string): string =
+  RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS / nom / RAD_FILE_CERAS
 
 # Check if the full path to the `ceras` file exists
-proc radula_ceras_exist(nom: string) =
-  if not fileExists(radula_ceras_path(nom)):
+proc rad_ceras_exist(nom: string) =
+  if not fileExists(rad_ceras_path(nom)):
     styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:48}{\"nom\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    radula_exit(QuitFailure)
+    rad_exit(QuitFailure)
 
 # Parse the `ceras` file
-proc radula_ceras_parse(nom: string): TomlValueRef =
-  parseFile(radula_ceras_path(nom))
+proc rad_ceras_parse(nom: string): TomlValueRef =
+  parseFile(rad_ceras_path(nom))
 
-proc radula_ceras_print*(cerata: openArray[string]) =
+proc rad_ceras_print*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
-    radula_ceras_exist(nom)
+    rad_ceras_exist(nom)
 
-    let ceras = radula_ceras_parse(nom)
+    let ceras = rad_ceras_parse(nom)
 
     const NONE = ansiForegroundColorCode(fgRed) & "None" & ansiForegroundColorCode(fgDefault)
 
@@ -52,31 +52,31 @@ proc radula_ceras_print*(cerata: openArray[string]) =
 
     echo ""
 
-proc radula_ceras_print_header(command: string, length: int) =
+proc rad_ceras_print_header(command: string, length: int) =
   echo &"{command} {length} cerata..."
 
   echo ""
 
-  styledEcho styleBright, &"{\"Behavior\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
+  styledEcho styleBright, &"{\"Command\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
 
 # Resolve dependencies using topological sorting
-proc radula_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]], run = true) =
+proc rad_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]], run = true) =
   # Don't use `{}` because we don't want an empty string "" in our Table
-  dependencies[nom] = try: radula_ceras_parse(nom)[if run: "run" else: "bld"].getStr().split() except CatchableError: @[]
+  dependencies[nom] = try: rad_ceras_parse(nom)[if run: "run" else: "bld"].getStr().split() except CatchableError: @[]
 
   if dependencies[nom].len() > 0:
     for dependency in dependencies[nom]:
-      radula_ceras_resolve_dependencies(dependency, dependencies, if run: true else: false)
+      rad_ceras_resolve_dependencies(dependency, dependencies, if run: true else: false)
 
-func radula_ceras_stage(log, nom, ver: string, stage = RADULA_DIRECTORY_SYSTEM): int =
+func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIRECTORY_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
   #
   # All phases need to be called sequentially to prevent the loss of the
   # current working directory...
-  execCmd(&"{RADULA_TOOTH_SHELL} {RADULA_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RADULA_PATH_RADULA_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
+  execCmd(&"{RAD_TOOTH_SHELL} {RAD_TOOTH_SHELL_COMMAND_FLAGS} 'nom={nom} ver={ver} . {RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
 
 # Swallow cerata
-proc radula_ceras_swallow(cerata: openArray[string]) =
+proc rad_ceras_swallow(cerata: openArray[string]) =
   var
     clones: seq[(array[3, string], string)]
     downloads: seq[(array[5, string], string)]
@@ -85,7 +85,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
 
   for nom in cerata:
     let
-      ceras = radula_ceras_parse(nom)
+      ceras = rad_ceras_parse(nom)
 
       ver = ceras{"ver"}.getStr()
       url = ceras{"url"}.getStr()
@@ -100,18 +100,18 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
       cmt = ceras{"cmt"}.getStr()
       sum = ceras{"sum"}.getStr()
 
-      path = getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) / nom
+      path = getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_SOURCES) / nom
       archive = path / lastPathPart(url)
 
     if dirExists(path):
       if ver == "git":
         styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
       else:
-        if radula_verify_file(archive, sum):
-          if not radula_ceras_extract_source(archive):
+        if rad_verify_file(archive, sum):
+          if not rad_ceras_extract_source(archive):
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            discard radula_extract_archive(archive, path)
+            discard rad_extract_archive(archive, path)
 
             cursorUp 1
             eraseLine()
@@ -120,19 +120,19 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
         else:
           removeDir(path)
 
-          downloads &= ([nom, ver, sum, path, archive], &"{RADULA_CERAS_WGET2} -q -O {archive} -c -N {url}")
+          downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
     else:
       if ver == "git":
-        clones &= ([nom, cmt, path], &"{RADULA_TOOTH_GIT} {RADULA_TOOTH_GIT_CLONE_FLAGS} {url} {path} -q && {RADULA_TOOTH_GIT} -C {path} {RADULA_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} -q")
+        clones &= ([nom, cmt, path], &"{RAD_TOOTH_GIT} {RAD_TOOTH_GIT_CLONE_FLAGS} {url} {path} -q && {RAD_TOOTH_GIT} -C {path} {RAD_TOOTH_GIT_CHECKOUT_FLAGS} {cmt} -q")
       else:
-        downloads &= ([nom, ver, sum, path, archive], &"{RADULA_CERAS_WGET2} -q -O {archive} -c -N {url}")
+        downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
 
   length = downloads.len()
 
   if length > 0:
     echo ""
 
-    radula_ceras_print_header("Download, verify and extract", length)
+    rad_ceras_print_header("Download, verify and extract", length)
 
     let cluster = downloads.unzip()[0]
 
@@ -168,20 +168,20 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
 
         styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-        if radula_verify_file(archive, sum):
+        if rad_verify_file(archive, sum):
           cursorUp 1
           eraseLine()
 
           styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-          discard radula_extract_archive(archive, path)
+          discard rad_extract_archive(archive, path)
         else:
           cursorUp 1
           eraseLine()
 
           styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{ver:24}{\"sum\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-          radula_exit(QuitFailure)
+          rad_exit(QuitFailure)
 
         cursorUp 1
         eraseLine()
@@ -198,7 +198,7 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
   if length > 0:
     echo ""
 
-    radula_ceras_print_header("Clone and checkout", length)
+    rad_ceras_print_header("Clone and checkout", length)
 
     let cluster = clones.unzip()[0]
 
@@ -229,37 +229,37 @@ proc radula_ceras_swallow(cerata: openArray[string]) =
         cursorDown counter - i
     )
 
-proc radula_ceras_check*(cerata: openArray[string], run = true): seq[string] =
+proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
   var dependencies: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
-    radula_ceras_exist(nom)
+    rad_ceras_exist(nom)
 
-    radula_ceras_resolve_dependencies(nom, dependencies, if run: true else: false)
+    rad_ceras_resolve_dependencies(nom, dependencies, if run: true else: false)
 
   topoSort(dependencies)
 
-proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTORY_SYSTEM, resolve = true) =
+proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIRECTORY_SYSTEM, resolve = true) =
   var
     status: int
     log: string
 
   let
-    cluster = radula_ceras_check(cerata, false)
+    cluster = rad_ceras_check(cerata, false)
     length = cluster.len()
 
-  radula_ceras_print_header("Swallow", length)
+  rad_ceras_print_header("Swallow", length)
 
   # Swallow cluster in parallel
-  radula_ceras_swallow(cluster)
+  rad_ceras_swallow(cluster)
 
   echo ""
 
-  radula_ceras_print_header("Envenomate", if resolve: length else: cerata.len())
+  rad_ceras_print_header("Envenomate", if resolve: length else: cerata.len())
 
   for nom in (if resolve: cluster else: cerata.toSeq()):
     let
-      ceras = radula_ceras_parse(nom)
+      ceras = rad_ceras_parse(nom)
 
       ver = ceras{"ver"}.getStr()
       cmt = ceras{"cmt"}.getStr()
@@ -268,10 +268,10 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
 
     styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    log = getEnv(RADULA_ENVIRONMENT_DIRECTORY_LOGS) / nom & CurDir & RADULA_DIRECTORY_LOGS
+    log = getEnv(RAD_ENVIRONMENT_DIRECTORY_LOGS) / nom & CurDir & RAD_DIRECTORY_LOGS
 
-    if stage == RADULA_DIRECTORY_SYSTEM:
-      if fileExists(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}"):
+    if stage == RAD_DIRECTORY_SYSTEM:
+      if fileExists(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_ARCHIVE}"):
         cursorUp 1
         eraseLine()
 
@@ -279,10 +279,10 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
 
         continue
 
-      putEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC, RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_DIRECTORY_SAC)
-      createDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+      putEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC, RAD_PATH_RAD_CACHE_VENOM / nom / RAD_DIRECTORY_SAC)
+      createDir(getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
 
-    status = radula_ceras_stage(log, nom, ver, stage)
+    status = rad_ceras_stage(log, nom, ver, stage)
 
     cursorUp 1
     eraseLine()
@@ -290,28 +290,28 @@ proc radula_ceras_envenomate*(cerata: openArray[string], stage = RADULA_DIRECTOR
     if status != 0:
       styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-      radula_exit(QuitFailure)
+      rad_exit(QuitFailure)
 
-    if stage == RADULA_DIRECTORY_SYSTEM:
-      status = radula_create_archive_zstd(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+    if stage == RAD_DIRECTORY_SYSTEM:
+      status = rad_create_archive_zstd(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_ARCHIVE}", getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
 
       if status == 0:
-        radula_generate_sum(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC), RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_FILE_SUM)
+        rad_generate_sum(getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
 
-        removeDir(getEnv(RADULA_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
+        removeDir(getEnv(RAD_ENVIRONMENT_DIRECTORY_CACHE_VENOM_SAC))
 
     styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-proc radula_ceras_install*(cerata: openArray[string]) =
+proc rad_ceras_install*(cerata: openArray[string]) =
   let
-    cluster = radula_ceras_check(cerata)
+    cluster = rad_ceras_check(cerata)
     length = cluster.len()
 
-  radula_ceras_print_header("Install", length)
+  rad_ceras_print_header("Install", length)
 
   for nom in cluster:
     let
-      ceras = radula_ceras_parse(nom)
+      ceras = rad_ceras_parse(nom)
 
       ver = ceras{"ver"}.getStr()
       cmt = ceras{"cmt"}.getStr()
@@ -320,7 +320,7 @@ proc radula_ceras_install*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Install\":13} :+ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    let status = radula_extract_archive(RADULA_PATH_RADULA_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RADULA_FILE_ARCHIVE}", RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+    let status = rad_extract_archive(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_ARCHIVE}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
 
     cursorUp 1
     eraseLine()
@@ -328,20 +328,20 @@ proc radula_ceras_install*(cerata: openArray[string]) =
     if status != 0:
       styledEcho fgRed, styleBright, &"{\"Abort\":13} :! {nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-      radula_exit(QuitFailure)
+      rad_exit(QuitFailure)
 
     styledEcho fgGreen, &"{\"Install\":13}", fgDefault, " :+ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-proc radula_ceras_remove*(cerata: openArray[string]) =
+proc rad_ceras_remove*(cerata: openArray[string]) =
   let
-    cluster = radula_ceras_check(cerata)
+    cluster = rad_ceras_check(cerata)
     length = cluster.len()
 
-  radula_ceras_print_header("Remove", length)
+  rad_ceras_print_header("Remove", length)
 
   for nom in cluster:
     let
-      ceras = radula_ceras_parse(nom)
+      ceras = rad_ceras_parse(nom)
 
       ver = ceras{"ver"}.getStr()
       cmt = ceras{"cmt"}.getStr()
@@ -350,24 +350,24 @@ proc radula_ceras_remove*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Remove\":13} :- {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"remove\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    let sum = RADULA_PATH_RADULA_CACHE_VENOM / nom / RADULA_FILE_SUM
+    let sum = RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM
 
     for line in lines(sum):
-      removeFile(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / line.split()[2])
+      removeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / line.split()[2])
 
     cursorUp 1
     eraseLine()
 
     styledEcho fgGreen, &"{\"Remove\":13}", fgDefault, " :- ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
-proc radula_ceras_search*(pattern: openArray[string]) =
+proc rad_ceras_search*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for file in walkDir(RADULA_PATH_RADULA_CLUSTERS_GLAUCUS, relative = true, skipSpecial = true):
+  for file in walkDir(RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS, relative = true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in file[1]:
         cerata.add(file[1])
 
   sort(cerata)
 
-  radula_ceras_print(cerata)
+  rad_ceras_print(cerata)

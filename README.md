@@ -1,4 +1,4 @@
-# radula
+# rad
 glaucus's package manager
 
 ## Community
@@ -9,8 +9,8 @@ glaucus's package manager
 * [YouTube](https://www.youtube.com/@glaucuslinux)
 
 ## Mirrors
-* [Codeberg](https://codeberg.org/glaucuslinux/radula)
-* [Framagit](https://framagit.org/glaucuslinux/radula)
-* [GitHub](https://github.com/glaucuslinux/radula)
-* [GitLab](https://gitlab.com/glaucuslinux/radula)
-* [SourceHut](https://git.sr.ht/~glaucuslinux/radula)
+* [Codeberg](https://codeberg.org/glaucuslinux/rad)
+* [Framagit](https://framagit.org/glaucuslinux/rad)
+* [GitHub](https://github.com/glaucuslinux/rad)
+* [GitLab](https://gitlab.com/glaucuslinux/rad)
+* [SourceHut](https://git.sr.ht/~glaucuslinux/rad)

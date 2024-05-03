@@ -6,31 +6,31 @@ import
   constants,
   hashlib/misc/blake3
 
-func radula_compress_zstd*(file: string): int =
-  execCmd(&"{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS} {file} {RADULA_TOOTH_SHELL_REDIRECTION}")
+func rad_compress_zstd*(file: string): int =
+  execCmd(&"{RAD_CERAS_ZSTD} {RAD_TOOTH_ZSTD_COMPRESS_FLAGS} {file} {RAD_TOOTH_SHELL_REDIRECTION}")
 
-func radula_create_archive_zstd*(archive, directory: string): int =
-  execCmd(&"{RADULA_TOOTH_TAR} --use-compress-program '{RADULA_CERAS_ZSTD} {RADULA_TOOTH_ZSTD_COMPRESS_FLAGS}' {RADULA_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} . {RADULA_TOOTH_SHELL_REDIRECTION}")
+func rad_create_archive_zstd*(archive, directory: string): int =
+  execCmd(&"{RAD_TOOTH_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_TOOTH_ZSTD_COMPRESS_FLAGS}' {RAD_TOOTH_TAR_CREATE_FLAGS} {archive} -C {directory} . {RAD_TOOTH_SHELL_REDIRECTION}")
 
-func radula_extract_archive*(archive, directory: string): int =
-  execCmd(&"{RADULA_TOOTH_TAR} {RADULA_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RADULA_TOOTH_SHELL_REDIRECTION}")
+func rad_extract_archive*(archive, directory: string): int =
+  execCmd(&"{RAD_TOOTH_TAR} {RAD_TOOTH_TAR_EXTRACT_FLAGS} {archive} -C {directory} {RAD_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_exit*(status = 0) =
-  remove_file(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK)
+proc rad_exit*(status = 0) =
+  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIRECTORY_TEMPORARY / RAD_FILE_RAD_LOCK)
 
   quit(status)
 
-proc radula_abort*() {.noconv.} =
+proc rad_abort*() {.noconv.} =
   echo ""
 
   styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"interrupt received\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
-  radula_exit(QuitFailure)
+  rad_exit(QuitFailure)
 
-func radula_generate_initramfs*(directory: string, bootstrap = false): int =
-  execCmd(&"{RADULA_CERAS_BOOSTER} build --force --compression={RADULA_CERAS_ZSTD} --config={RADULA_PATH_RADULA_CLUSTERS_GLAUCUS / RADULA_CERAS_BOOSTER / RADULA_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RADULA_FILE_INITRAMFS_GLAUCUS}")
+func rad_generate_initramfs*(directory: string, bootstrap = false): int =
+  execCmd(&"{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIBRARY_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_CONF} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RAD_FILE_INITRAMFS_GLAUCUS}")
 
-proc radula_generate_sum*(directory, sum: string) =
+proc rad_generate_sum*(directory, sum: string) =
   var files: seq[string]
 
   for file in walkDirRec(directory, relative = true, skipSpecial = true):
@@ -45,38 +45,38 @@ proc radula_generate_sum*(directory, sum: string) =
 
   sum.close()
 
-proc radula_lock*() =
-  if fileExists(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK):
+proc rad_lock*() =
+  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIRECTORY_TEMPORARY / RAD_FILE_RAD_LOCK):
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"lock exists\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
     quit(QuitFailure)
   else:
-    writeFile(RADULA_PATH_PKG_CONFIG_SYSROOT_DIR / RADULA_DIRECTORY_TEMPORARY / RADULA_FILE_RADULA_LOCK, "")
+    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIRECTORY_TEMPORARY / RAD_FILE_RAD_LOCK, "")
 
-func radula_rsync*(source, destination: string, flags = RADULA_TOOTH_RSYNC_FLAGS): int =
-  execCmd(&"{RADULA_CERAS_RSYNC} {flags} {source} {destination} --delete {RADULA_TOOTH_SHELL_REDIRECTION}")
+func rad_rsync*(source, destination: string, flags = RAD_TOOTH_RSYNC_FLAGS): int =
+  execCmd(&"{RAD_CERAS_RSYNC} {flags} {source} {destination} --delete {RAD_TOOTH_SHELL_REDIRECTION}")
 
-proc radula_teeth_environment*() =
+proc rad_teeth_environment*() =
   # `mawk` is the default awk implementation
-  putEnv(RADULA_ENVIRONMENT_TOOTH_AWK, RADULA_CERAS_MAWK)
+  putEnv(RAD_ENVIRONMENT_TOOTH_AWK, RAD_CERAS_MAWK)
   # `byacc` is the default yacc implementation
-  putEnv(RADULA_ENVIRONMENT_TOOTH_BISON, RADULA_CERAS_BYACC)
+  putEnv(RAD_ENVIRONMENT_TOOTH_BISON, RAD_CERAS_BYACC)
   # `flex` is the default lex implementation
-  putEnv(RADULA_ENVIRONMENT_TOOTH_FLEX, RADULA_CERAS_FLEX)
-  putEnv(RADULA_ENVIRONMENT_TOOTH_LEX, RADULA_CERAS_FLEX)
+  putEnv(RAD_ENVIRONMENT_TOOTH_FLEX, RAD_CERAS_FLEX)
+  putEnv(RAD_ENVIRONMENT_TOOTH_LEX, RAD_CERAS_FLEX)
   # `make` and its flags
-  putEnv(RADULA_ENVIRONMENT_TOOTH_MAKE, RADULA_CERAS_MAKE)
-  putEnv(RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS, RADULA_TOOTH_MAKEFLAGS)
+  putEnv(RAD_ENVIRONMENT_TOOTH_MAKE, RAD_CERAS_MAKE)
+  putEnv(RAD_ENVIRONMENT_TOOTH_MAKEFLAGS, RAD_TOOTH_MAKEFLAGS)
   # `pkgconf` is the default pkg-config implementation
-  putEnv(RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG, RADULA_CERAS_PKGCONF)
-  putEnv(RADULA_ENVIRONMENT_TOOTH_RADULA_RSYNC_FLAGS, RADULA_TOOTH_RSYNC_FLAGS)
+  putEnv(RAD_ENVIRONMENT_TOOTH_PKG_CONFIG, RAD_CERAS_PKGCONF)
+  putEnv(RAD_ENVIRONMENT_TOOTH_RAD_RSYNC_FLAGS, RAD_TOOTH_RSYNC_FLAGS)
   # `byacc` is the default yacc implementation
-  putEnv(RADULA_ENVIRONMENT_TOOTH_YACC, RADULA_CERAS_BYACC)
+  putEnv(RAD_ENVIRONMENT_TOOTH_YACC, RAD_CERAS_BYACC)
 
-proc radula_verify_file*(file, sum: string): bool =
+proc rad_verify_file*(file, sum: string): bool =
   $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
 
-proc radula_verify_sum*(sum: string) =
+proc rad_verify_sum*(sum: string) =
   for line in lines(sum):
     let line = line.split()
 
