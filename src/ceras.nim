@@ -7,13 +7,13 @@ import
   hashlib/misc/blake3, parsetoml, toposort
 
 proc radula_ceras_clean*() =
-  removeDir(RADULA_PATH_RADULA_CACHE_VENOM)
   removeDir(RADULA_PATH_RADULA_LOGS)
   removeDir(RADULA_PATH_RADULA_TEMPORARY)
 
 proc radula_ceras_distclean*() =
   removeDir(RADULA_PATH_RADULA_CACHE_BINARIES)
   removeDir(RADULA_PATH_RADULA_CACHE_SOURCES)
+  removeDir(RADULA_PATH_RADULA_CACHE_VENOM)
 
   radula_ceras_clean()
 
@@ -60,7 +60,7 @@ proc radula_ceras_print_header() =
 # Resolve dependencies using topological sorting
 proc radula_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]], run = true) =
   # Don't use `{}` because we don't want an empty string "" in our Table
-  dependencies[nom] = try: radula_ceras_parse(nom)[if run: "run" else: "dep"].getStr().split() except CatchableError: @[]
+  dependencies[nom] = try: radula_ceras_parse(nom)[if run: "run" else: "bld"].getStr().split() except CatchableError: @[]
 
   if dependencies[nom].len() > 0:
     for dependency in dependencies[nom]:
