@@ -75,8 +75,8 @@ func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIR_SYSTEM): int =
   # current working directory...
   execCmd(&"{RAD_TOOTH_SHELL} {RAD_FLAGS_TOOTH_SHELL_COMMAND} 'nom={nom} ver={ver} . {RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
 
-# Swallow cerata
-proc rad_ceras_swallow(cerata: openArray[string]) =
+# Fetch cerata
+proc rad_ceras_fetch(cerata: openArray[string]) =
   var
     clones: seq[(array[3, string], string)]
     downloads: seq[(array[5, string], string)]
@@ -92,7 +92,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
 
     # Check for virtual cerata
     if url.isEmptyOrWhitespace():
-      styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+      styledEcho fgGreen, &"{\"Fetch\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
       continue
 
@@ -105,18 +105,18 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
 
     if dirExists(path):
       if ver == "git":
-        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+        styledEcho fgGreen, &"{\"Fetch\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
       else:
         if rad_verify_file(archive, sum):
           if not rad_ceras_extract_src(archive):
-            styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+            styledEcho fgMagenta, styleBright, &"{\"Fetch\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
             discard rad_extract_tar(archive, path)
 
             cursorUp 1
             eraseLine()
 
-          styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+          styledEcho fgGreen, &"{\"Fetch\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
         else:
           removeDir(path)
 
@@ -146,7 +146,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
 
           path = ceras[3]
 
-        styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+        styledEcho fgMagenta, styleBright, &"{\"Fetch\":13} :@ {nom:24}{ver:24}{\"download\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
         createDir(path)
 
@@ -166,13 +166,13 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
         cursorUp counter - i
         eraseLine()
 
-        styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+        styledEcho fgMagenta, styleBright, &"{\"Fetch\":13} :@ {nom:24}{ver:24}{\"verify\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
         if rad_verify_file(archive, sum):
           cursorUp 1
           eraseLine()
 
-          styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+          styledEcho fgMagenta, styleBright, &"{\"Fetch\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
           discard rad_extract_tar(archive, path)
         else:
@@ -186,7 +186,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
         cursorUp 1
         eraseLine()
 
-        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+        styledEcho fgGreen, &"{\"Fetch\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
         cursorDown counter - i
     )
@@ -210,7 +210,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
           nom = ceras[0]
           cmt = ceras[1]
 
-        styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{cmt:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+        styledEcho fgMagenta, styleBright, &"{\"Fetch\":13} :@ {nom:24}{cmt:24}{\"clone\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
         counter += 1
     , afterRunEvent =
@@ -224,7 +224,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
         cursorUp counter - i
         eraseLine()
 
-        styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+        styledEcho fgGreen, &"{\"Fetch\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
         cursorDown counter - i
     )
@@ -248,10 +248,10 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
     cluster = rad_ceras_check(cerata, false)
     length = cluster.len()
 
-  rad_ceras_print_header("Swallow", length)
+  rad_ceras_print_header("Fetch", length)
 
-  # Swallow cluster in parallel
-  rad_ceras_swallow(cluster)
+  # Fetch cluster in parallel
+  rad_ceras_fetch(cluster)
 
   echo ""
 

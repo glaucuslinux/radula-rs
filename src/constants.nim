@@ -255,8 +255,7 @@ const
 
 
   RAD_HELP* = """
-USAGE:
-  rad [ OPTIONS ]
+USAGE:  rad [ OPTION ]
 
 OPTIONS:
   -b, --bootstrap  Perform bootstrap behavior
@@ -265,8 +264,7 @@ OPTIONS:
   -v, --version    Display current version"""
 
   RAD_HELP_BOOTSTRAP* = """
-USAGE:
-  rad [ -b | --bootstrap ] [ COMMANDS ]
+USAGE:  rad [ -b | --bootstrap ] [ COMMAND ]
 
 COMMANDS:
   c, clean         Clean cache
@@ -279,8 +277,7 @@ COMMANDS:
   x, cross         Bootstrap a cross compiled glaucus system"""
 
   RAD_HELP_CERAS* = """
-USAGE:
-  rad [ -c | --ceras ] [ COMMANDS ] [ cerata ]
+USAGE:  rad [ -c | --ceras ] [ COMMAND ] [ cerata ]
 
 COMMANDS:
   a, append        Append a cluster
