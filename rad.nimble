@@ -9,7 +9,7 @@ srcDir       = "src"
 
 bin          = @["rad"]
 
-# Dependencies
+# Deps
 requires "hashlib >= 1.0.1"
 requires "nim >= 2.0.4"
 requires "parsetoml >= 0.7.1"

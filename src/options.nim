@@ -22,7 +22,7 @@ proc rad_options*() =
     quit(QuitFailure)
   of cmdLongOption, cmdShortOption:
     # Catch `Ctrl-C` and exit gracefully
-    setControlCHook(rad_abort)
+    setControlCHook(rad_interrupt)
 
     # Check lock file
     rad_lock()

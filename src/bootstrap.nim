@@ -2,7 +2,7 @@
 # Distributed under the terms of the ISC License
 
 import
-  std/[os, osproc, strformat, strutils, terminal, times],
+  std/[os, osproc, strformat, strutils, times],
   ceras, constants, teeth
 
 proc rad_bootstrap_clean*() =
@@ -185,9 +185,7 @@ proc rad_bootstrap_init*() =
 
 proc rad_bootstrap_release_img*() =
   if not isAdmin():
-    styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"permission denied\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
-
-    rad_exit(QuitFailure)
+    rad_abort(&"{\"permission denied\":48}{\"1\":13}")
 
   let img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
 

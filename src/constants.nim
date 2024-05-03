@@ -332,6 +332,7 @@ Distributed under the terms of the ISC License"""
   RAD_PATH_RAD_CACHE_SRC* = "/var/cache/rad/src"
   RAD_PATH_RAD_CACHE_VENOM* = "/var/cache/rad/venom"
   RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS* = "/var/lib/rad/clusters/glaucus"
+  RAD_PATH_RAD_LIB_LOCAL* = "/var/lib/rad/local"
   RAD_PATH_RAD_LOG* = "/var/log/rad"
   RAD_PATH_RAD_TMP* = "/var/tmp/rad"
 
