@@ -137,16 +137,16 @@ const
   RAD_ENV_CROSS_COMPILE* = "CROSS_COMPILE"
 
   RAD_ENV_DIR_BAKD* = "BAKD"
-  RAD_ENV_DIR_SRCD* = "SRCD"
-  RAD_ENV_DIR_SACD* = "SACD"
   RAD_ENV_DIR_CERD* = "CERD"
   RAD_ENV_DIR_CRSD* = "CRSD"
   RAD_ENV_DIR_GLAD* = "GLAD"
   RAD_ENV_DIR_ISOD* = "ISOD"
   RAD_ENV_DIR_LOGD* = "LOGD"
+  RAD_ENV_DIR_SACD* = "SACD"
+  RAD_ENV_DIR_SRCD* = "SRCD"
   RAD_ENV_DIR_TBLD* = "TBLD"
-  RAD_ENV_DIR_TSRC* = "TSRC"
   RAD_ENV_DIR_TLCD* = "TLCD"
+  RAD_ENV_DIR_TSRC* = "TSRC"
 
   RAD_ENV_FLAGS_CFLAGS* = "CFLAGS"
   RAD_ENV_FLAGS_CXXFLAGS* = "CXXFLAGS"
@@ -192,8 +192,6 @@ const
   RAD_ENV_TUPLE_TGT* = "TGT"
 
 
-  RAD_FILE_TAR_ZST* = ".tar.zst"
-
   RAD_FILE_BOOSTER_YAML* = "booster.yaml"
 
   RAD_FILE_CERAS* = "ceras"
@@ -213,6 +211,8 @@ const
   RAD_FILE_ROOTFS* = "rootfs.erofs"
 
   RAD_FILE_SUM* = "sum"
+
+  RAD_FILE_TAR_ZST* = ".tar.zst"
 
 
   RAD_FLAGS_CFLAGS* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
