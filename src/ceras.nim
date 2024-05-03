@@ -28,7 +28,7 @@ func rad_ceras_path(nom: string): string =
 # Check if the full path to the `ceras` file exists
 proc rad_ceras_exist(nom: string) =
   if not fileExists(rad_ceras_path(nom)):
-    rad_abort(&"{nom:48}{\"nom\":13}")
+    rad_abort(&"{nom:48}{\"nom\":8}")
 
 # Parse the `ceras` file
 proc rad_ceras_parse(nom: string): TomlValueRef =
@@ -50,14 +50,15 @@ proc rad_ceras_print*(cerata: openArray[string]) =
 
     echo ""
 
-proc rad_ceras_print_content(symbol: char, nom, ver, status: string) =
-  styledEcho fgMagenta, styleBright, &"{symbol}{symbol}{symbol}  :: {nom:24}{ver:24}{status:13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+proc rad_ceras_print_content(idx: int, nom, ver, status: string) =
+  styledEcho fgMagenta, styleBright, &"{idx + 1:<8}{nom:24}{ver:24}{status:8}{now().format(\"hh:mm tt\")}", resetStyle
 
-proc rad_ceras_print_footer(symbol: char, nom, ver, status: string) =
-  styledEcho fgGreen, &"{symbol}{symbol}{symbol}", fgDefault, "  :: ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{status:13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+proc rad_ceras_print_footer(idx: int, nom, ver, status: string) =
+  styledEcho fgGreen, &"{idx + 1:<8}", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
 
 proc rad_ceras_print_header() =
-  styledEcho styleBright, &"cmd  :: {\"nom\":24}{\"ver\":24}{\"status\":13}time", resetStyle
+  styledEcho styleBright, &"{\"idx\":8}{\"nom\":24}{\"ver\":24}{\"status\":8}time", resetStyle
+  styledEcho styleBright, "-".repeat(72), resetStyle
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
@@ -93,7 +94,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
     # Check for virtual cerata
     if url.isEmptyOrWhitespace():
-      rad_ceras_print_footer('@', nom, ver, &"{idx + 1}/{length}")
+      rad_ceras_print_footer(idx, nom, ver, "fetch")
 
       continue
 
@@ -106,18 +107,18 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
     if dirExists(path):
       if ver == "git":
-        rad_ceras_print_footer('@', nom, ver, &"{idx + 1}/{length}")
+        rad_ceras_print_footer(idx, nom, ver, "fetch")
       else:
         if rad_verify_file(archive, sum):
           if not rad_ceras_extract_src(archive):
-            rad_ceras_print_content('@', nom, ver, &"{idx + 1}/{length}")
+            rad_ceras_print_content(idx, nom, ver, "fetch")
 
             discard rad_extract_tar(archive, path)
 
             cursorUp 1
             eraseLine()
 
-          rad_ceras_print_footer('@', nom, ver, &"{idx + 1}/{length}")
+          rad_ceras_print_footer(idx, nom, ver, "fetch")
         else:
           removeDir(path)
 
@@ -147,7 +148,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
           path = ceras[3]
 
-        rad_ceras_print_content('@', nom, ver, &"{counter}/{length}")
+        rad_ceras_print_content(counter, nom, ver, "fetch")
 
         createDir(path)
 
@@ -167,25 +168,20 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
         cursorUp counter - i
         eraseLine()
 
-        rad_ceras_print_content('@', nom, ver, &"{counter}/{length}")
+        rad_ceras_print_content(counter, nom, ver, "fetch")
 
         if rad_verify_file(archive, sum):
-          cursorUp 1
-          eraseLine()
-
-          rad_ceras_print_content('@', nom, ver, &"{counter}/{length}")
-
           discard rad_extract_tar(archive, path)
         else:
           cursorUp 1
           eraseLine()
 
-          rad_abort(&"{nom:24}{ver:24}{\"sum\":13}")
+          rad_abort(&"{nom:24}{ver:24}{\"sum\":8}")
 
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer('@', nom, ver, &"{counter}/{length}")
+        rad_ceras_print_footer(counter, nom, ver, "fetch")
 
         cursorDown counter - i
     )
@@ -209,7 +205,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
           nom = ceras[0]
           cmt = ceras[1]
 
-        rad_ceras_print_content('@', nom, cmt, &"{counter}/{length}")
+        rad_ceras_print_content(counter, nom, cmt, "fetch")
 
         counter += 1
     , afterRunEvent =
@@ -223,7 +219,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
         cursorUp counter - i
         eraseLine()
 
-        rad_ceras_print_footer('@', nom, cmt, &"{counter}/{length}")
+        rad_ceras_print_footer(counter, nom, cmt, "fetch")
 
         cursorDown counter - i
     )
@@ -265,7 +261,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
 
       url = ceras{"url"}.getStr()
 
-    rad_ceras_print_content('~', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+    rad_ceras_print_content(idx, nom, if ver == "git": cmt else: ver, "build")
 
     log = getEnv(RAD_ENV_DIR_LOGD) / nom & CurDir & RAD_DIR_LOG
 
@@ -274,7 +270,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer('~', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+        rad_ceras_print_footer(idx, nom, if ver == "git": cmt else: ver, "build")
 
         continue
 
@@ -287,7 +283,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}")
+      rad_abort(&"{nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<8}")
 
     if stage == RAD_DIR_SYSTEM:
       status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
@@ -297,7 +293,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
 
         removeDir(getEnv(RAD_ENV_DIR_SACD))
 
-    rad_ceras_print_footer('~', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+    rad_ceras_print_footer(idx, nom, if ver == "git": cmt else: ver, "build")
 
 proc rad_ceras_install*(cerata: openArray[string]) =
   let
@@ -315,7 +311,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
 
       url = ceras{"url"}.getStr()
 
-    rad_ceras_print_content('+', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+    rad_ceras_print_content(idx, nom, if ver == "git": cmt else: ver, "install")
 
     let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
 
@@ -323,9 +319,9 @@ proc rad_ceras_install*(cerata: openArray[string]) =
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{nom:24}{(if ver == \"git\": cmt else: ver):24}{status:<13}")
+      rad_abort(&"{nom:24}{(if ver == \"git\": cmt else: ver):24}{status:8}")
 
-    rad_ceras_print_footer('+', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+    rad_ceras_print_footer(idx, nom, if ver == "git": cmt else: ver, "install")
 
 proc rad_ceras_remove*(cerata: openArray[string]) =
   let
@@ -343,7 +339,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
 
       url = ceras{"url"}.getStr()
 
-    rad_ceras_print_content('-', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+    rad_ceras_print_content(idx, nom, if ver == "git": cmt else: ver, "remove")
 
     let sum = RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM
 
@@ -353,7 +349,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
     cursorUp 1
     eraseLine()
 
-    rad_ceras_print_footer('-', nom, if ver == "git": cmt else: ver, &"{idx + 1}/{length}")
+    rad_ceras_print_footer(idx, nom, if ver == "git": cmt else: ver, "remove")
 
 proc rad_ceras_search*(pattern: openArray[string]) =
   var cerata: seq[string]

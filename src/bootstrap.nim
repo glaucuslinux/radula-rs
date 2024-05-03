@@ -185,7 +185,7 @@ proc rad_bootstrap_init*() =
 
 proc rad_bootstrap_release_img*() =
   if not isAdmin():
-    rad_abort(&"{\"permission denied\":48}{\"1\":13}")
+    rad_abort(&"{\"permission denied\":48}{\"1\":8}")
 
   let img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
 
