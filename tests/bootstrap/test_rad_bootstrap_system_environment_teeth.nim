@@ -5,9 +5,9 @@ import
   std/os,
   ../../src/[bootstrap, constants, genome]
 
-rad_genome_environment()
+rad_genome_env()
 
-rad_bootstrap_system_environment_teeth()
+rad_bootstrap_system_env_teeth()
 
 echo "AR             :: ", getEnv(RAD_ENV_TOOTH_AR)
 echo "AS             :: ", getEnv(RAD_ENV_TOOTH_AS)

@@ -5,10 +5,10 @@ import
   std/[os, strutils],
   ../../src/[constants, genome]
 
-rad_genome_environment()
+rad_genome_env()
 
 echo "ARCH    :: ", getEnv(RAD_ENV_GENOME_ARCH)
-echo "CARCH   :: ", getEnv(RAD_ENV_GENOME_ARCH_CERATA)
+echo "CARCH   :: ", getEnv(RAD_ENV_GENOME_CARCH)
 
 echo ""
 
@@ -16,7 +16,7 @@ echo "BLD     :: ", getEnv(RAD_ENV_TUPLE_BLD)
 echo "TGT     :: ", getEnv(RAD_ENV_TUPLE_TGT)
 
 doAssert getEnv(RAD_ENV_GENOME_ARCH) == "x86-64"
-doAssert getEnv(RAD_ENV_GENOME_ARCH_CERATA) == "x86-64-v3"
+doAssert getEnv(RAD_ENV_GENOME_CARCH) == "x86-64-v3"
 
 doAssert getEnv(RAD_ENV_TUPLE_BLD) == rad_genome_tuple()[0].strip()
 doAssert getEnv(RAD_ENV_TUPLE_TGT) == "x86_64-glaucus-linux-musl"

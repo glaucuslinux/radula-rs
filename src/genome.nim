@@ -5,7 +5,7 @@ import
   std/[os, osproc, strformat, strutils, times],
   constants
 
-proc rad_genome_flags_environment*() =
+proc rad_genome_flags_env*() =
   putEnv(RAD_ENV_FLAGS_CFLAGS, RAD_FLAGS_CFLAGS)
   putEnv(RAD_ENV_FLAGS_CXXFLAGS, RAD_FLAGS_CFLAGS)
   putEnv(RAD_ENV_FLAGS_LDFLAGS, RAD_FLAGS_LDFLAGS & ' ' & RAD_FLAGS_CFLAGS)
@@ -14,7 +14,7 @@ proc rad_genome_flags_environment*() =
 proc rad_genome_tuple*(): (string, int) =
   execCmdEx(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BINUTILS / RAD_FILE_CONFIG_GUESS)
 
-proc rad_genome_environment*(stage = RAD_DIR_CROSS) =
+proc rad_genome_env*(stage = RAD_DIR_CROSS) =
   putEnv(RAD_ENV_GENOME_ARCH, RAD_GENOME_X86_64)
   putEnv(RAD_ENV_GENOME_CARCH, RAD_GENOME_X86_64_V3)
   putEnv(RAD_ENV_GENOME_PRETTY_NAME, &"{RAD_DIR_GLAUCUS} {RAD_CERAS_S6} {RAD_GENOME_X86_64_V3} {now().format(\"YYYYMMdd\")}")

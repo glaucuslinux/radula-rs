@@ -17,8 +17,8 @@ proc rad_ceras_distclean*() =
 
   rad_ceras_clean()
 
-# Check if the `ceras` source is extracted
-proc rad_ceras_extract_source(file: string): bool =
+# Check if the `ceras` src is extracted
+proc rad_ceras_extract_src(file: string): bool =
   toSeq(walkDir(parentDir(file))).len > 1
 
 # Return the full path to the `ceras` file
@@ -59,14 +59,14 @@ proc rad_ceras_print_header(command: string, length: int) =
 
   styledEcho styleBright, &"{\"Command\":13} :: {\"Name\":24}{\"Version\":24}{\"Status\":13}Time", resetStyle
 
-# Resolve dependencies using topological sorting
-proc rad_ceras_resolve_dependencies(nom: string, dependencies: var Table[string, seq[string]], run = true) =
+# Resolve deps using topological sorting
+proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
   # Don't use `{}` because we don't want an empty string "" in our Table
-  dependencies[nom] = try: rad_ceras_parse(nom)[if run: "run" else: "bld"].getStr().split() except CatchableError: @[]
+  deps[nom] = try: rad_ceras_parse(nom)[if run: "run" else: "bld"].getStr().split() except CatchableError: @[]
 
-  if dependencies[nom].len() > 0:
-    for dependency in dependencies[nom]:
-      rad_ceras_resolve_dependencies(dependency, dependencies, if run: true else: false)
+  if deps[nom].len() > 0:
+    for dep in deps[nom]:
+      rad_ceras_resolve_deps(dep, deps, if run: true else: false)
 
 func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIR_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
@@ -108,10 +108,10 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
         styledEcho fgGreen, &"{\"Swallow\":13}", fgDefault, " :@ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{cmt:24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
       else:
         if rad_verify_file(archive, sum):
-          if not rad_ceras_extract_source(archive):
+          if not rad_ceras_extract_src(archive):
             styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-            discard rad_extract_archive(archive, path)
+            discard rad_extract_tar(archive, path)
 
             cursorUp 1
             eraseLine()
@@ -174,7 +174,7 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
 
           styledEcho fgMagenta, styleBright, &"{\"Swallow\":13} :@ {nom:24}{ver:24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-          discard rad_extract_archive(archive, path)
+          discard rad_extract_tar(archive, path)
         else:
           cursorUp 1
           eraseLine()
@@ -230,16 +230,16 @@ proc rad_ceras_swallow(cerata: openArray[string]) =
     )
 
 proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
-  var dependencies: Table[string, seq[string]]
+  var deps: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
     rad_ceras_exist(nom)
 
-    rad_ceras_resolve_dependencies(nom, dependencies, if run: true else: false)
+    rad_ceras_resolve_deps(nom, deps, if run: true else: false)
 
-  topoSort(dependencies)
+  topoSort(deps)
 
-proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
+proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
   var
     status: int
     log: string
@@ -255,7 +255,7 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, re
 
   echo ""
 
-  rad_ceras_print_header("Envenomate", if resolve: length else: cerata.len())
+  rad_ceras_print_header("Build", if resolve: length else: cerata.len())
 
   for nom in (if resolve: cluster else: cerata.toSeq()):
     let
@@ -266,7 +266,7 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, re
 
       url = ceras{"url"}.getStr()
 
-    styledEcho fgMagenta, styleBright, &"{\"Envenomate\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
+    styledEcho fgMagenta, styleBright, &"{\"Build\":13} :~ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"phase\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
     log = getEnv(RAD_ENV_DIR_LOGD) / nom & CurDir & RAD_DIR_LOG
 
@@ -275,7 +275,7 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, re
         cursorUp 1
         eraseLine()
 
-        styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+        styledEcho fgGreen, &"{\"Build\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
         continue
 
@@ -293,14 +293,14 @@ proc rad_ceras_envenomate*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, re
       rad_exit(QuitFailure)
 
     if stage == RAD_DIR_SYSTEM:
-      status = rad_create_archive_zstd(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
+      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
 
       if status == 0:
-        rad_generate_sum(getEnv(RAD_ENV_DIR_SACD), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
+        rad_gen_sum(getEnv(RAD_ENV_DIR_SACD), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
 
         removeDir(getEnv(RAD_ENV_DIR_SACD))
 
-    styledEcho fgGreen, &"{\"Envenomate\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
+    styledEcho fgGreen, &"{\"Build\":13}", fgDefault, " :~ ", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{(if ver == \"git\": cmt else: ver):24}", fgGreen, &"{\"complete\":13}", fgYellow, now().format("hh:mm:ss tt"), fgDefault
 
 proc rad_ceras_install*(cerata: openArray[string]) =
   let
@@ -320,7 +320,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
 
     styledEcho fgMagenta, styleBright, &"{\"Install\":13} :+ {nom:24}{(if ver == \"git\": cmt else: ver):24}{\"extract\":13}{now().format(\"hh:mm:ss tt\")}", resetStyle
 
-    let status = rad_extract_archive(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
+    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
 
     cursorUp 1
     eraseLine()

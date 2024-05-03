@@ -209,7 +209,7 @@ const
 
   RAD_FILE_KERNEL* = "vmlinuz"
 
-  RAD_FILE_RAD_LCK* = "rad.lck"
+  RAD_FILE_RAD_LOCK* = "rad.lock"
   RAD_FILE_ROOTFS* = "rootfs.erofs"
 
   RAD_FILE_SUM* = "sum"
@@ -219,6 +219,7 @@ const
   RAD_FLAGS_LDFLAGS* = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
 
   RAD_FLAGS_TOOTH_CHOWN* = "-Rv"
+  RAD_FLAGS_TOOTH_CPP* = "-E"
 
   RAD_FLAGS_TOOTH_GIT_CHECKOUT* = "checkout"
   RAD_FLAGS_TOOTH_GIT_CLONE* = "clone"
@@ -234,7 +235,7 @@ const
   RAD_FLAGS_TOOTH_RSYNC_RELEASE* = "-vaHAXx"
 
   RAD_FLAGS_TOOTH_SHELL_COMMAND* = "-c"
-  RAD_FLAGS_TOOTH_SHELL_REDIRECTION* = "> /dev/null 2>&1"
+  RAD_FLAGS_TOOTH_SHELL_REDIRECT* = "> /dev/null 2>&1"
 
   RAD_FLAGS_TOOTH_TAR_CREATE* = "-cpvf"
   RAD_FLAGS_TOOTH_TAR_EXTRACT* = "-xmPvf"
@@ -265,9 +266,9 @@ OPTIONS:
 
   RAD_HELP_BOOTSTRAP* = """
 USAGE:
-  rad [ -b | --bootstrap ] [ OPTIONS ]
+  rad [ -b | --bootstrap ] [ COMMANDS ]
 
-OPTIONS:
+COMMANDS:
   c, clean         Clean cache
   d, distclean     Clean everything
   h, help          Display this help message
@@ -279,13 +280,13 @@ OPTIONS:
 
   RAD_HELP_CERAS* = """
 USAGE:
-  rad [ -c | --ceras ] [ OPTIONS ] [ cerata ]
+  rad [ -c | --ceras ] [ COMMANDS ] [ cerata ]
 
-OPTIONS:
+COMMANDS:
   a, append        Append a cluster
+  b, build         Build cerata
   c, clean         Clean cache
   d, distclean     Clean everything
-  e, envenomate    Envenomate cerata
   h, help          Display this help message
   i, install       Install cerata
   l, list          List installed cerata
@@ -322,7 +323,7 @@ Distributed under the terms of the ISC License"""
 
   # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
   # automatically prefixed to PATH and LIBDIR)
-  RAD_PATH_PKG_CONFIG_LIBDIR_PATH* = "/usr/lib/pkgconfig"
+  RAD_PATH_PKG_CONFIG_LIBDIR* = "/usr/lib/pkgconfig"
   RAD_PATH_PKG_CONFIG_SYSROOT_DIR* = "/"
   RAD_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "/usr/include"
   RAD_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "/usr/lib"
@@ -346,7 +347,6 @@ Distributed under the terms of the ISC License"""
   RAD_TOOTH_AR* = "gcc-ar"
   RAD_TOOTH_AS* = "as"
 
-  RAD_TOOTH_CPP* = "-E"
   RAD_TOOTH_CHOWN* = "chown"
   RAD_TOOTH_CXX* = "g++"
 

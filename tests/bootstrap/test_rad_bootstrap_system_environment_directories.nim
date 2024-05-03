@@ -5,7 +5,7 @@ import
   std/os,
   ../../src/[bootstrap, constants]
 
-rad_bootstrap_system_environment_directories()
+rad_bootstrap_system_env_dir()
 
 echo "SRCD  :: ", getEnv(RAD_ENV_DIR_SRCD)
 echo "CERD  :: ", getEnv(RAD_ENV_DIR_CERD)

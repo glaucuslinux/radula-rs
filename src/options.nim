@@ -39,61 +39,61 @@ proc rad_options*() =
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
         of "c", "clean":
-          rad_bootstrap_environment()
+          rad_bootstrap_env()
           rad_bootstrap_clean()
 
           echo "clean complete"
         of "d", "distclean":
-          rad_bootstrap_environment()
+          rad_bootstrap_env()
           rad_bootstrap_distclean()
 
           echo "distclean complete"
         of "h", "help":
           echo RAD_HELP_BOOTSTRAP
         of "i", "img":
-          rad_bootstrap_environment()
-          rad_teeth_environment()
+          rad_bootstrap_env()
+          rad_teeth_env()
           rad_bootstrap_release_img()
 
           echo "img complete"
         of "r", "release":
-          rad_bootstrap_environment()
-          rad_teeth_environment()
+          rad_bootstrap_env()
+          rad_teeth_env()
           rad_bootstrap_release_iso()
 
           echo "release complete"
         of "s", "system":
-          rad_teeth_environment()
-          rad_genome_environment(RAD_DIR_SYSTEM)
-          rad_genome_flags_environment()
-          rad_bootstrap_system_environment_directories()
-          rad_bootstrap_system_environment_pkg_config()
-          rad_bootstrap_system_environment_teeth()
+          rad_teeth_env()
+          rad_genome_env(RAD_DIR_SYSTEM)
+          rad_genome_flags_env()
+          rad_bootstrap_system_env_dir()
+          rad_bootstrap_system_env_pkg_config()
+          rad_bootstrap_system_env_teeth()
           rad_bootstrap_system_prepare()
-          rad_bootstrap_system_envenomate()
+          rad_bootstrap_system_build()
 
           echo ""
           echo "system complete"
         of "t", "toolchain":
-          rad_bootstrap_environment()
-          rad_teeth_environment()
-          rad_genome_environment()
+          rad_bootstrap_env()
+          rad_teeth_env()
+          rad_genome_env()
           rad_bootstrap_clean()
-          rad_bootstrap_initialize()
-          rad_bootstrap_toolchain_envenomate()
+          rad_bootstrap_init()
+          rad_bootstrap_toolchain_build()
           rad_bootstrap_toolchain_backup()
 
           echo ""
           echo "toolchain complete"
         of "x", "cross":
-          rad_bootstrap_environment()
-          rad_teeth_environment()
-          rad_genome_environment()
-          rad_genome_flags_environment()
-          rad_bootstrap_cross_environment_pkg_config()
-          rad_bootstrap_cross_environment_teeth()
+          rad_bootstrap_env()
+          rad_teeth_env()
+          rad_genome_env()
+          rad_genome_flags_env()
+          rad_bootstrap_cross_env_pkg_config()
+          rad_bootstrap_cross_env_teeth()
           rad_bootstrap_cross_prepare()
-          rad_bootstrap_cross_envenomate()
+          rad_bootstrap_cross_build()
           rad_bootstrap_cross_backup()
 
           echo ""
@@ -115,6 +115,18 @@ proc rad_options*() =
         of "a", "append":
           echo ""
           echo "append complete"
+        of "b", "build":
+          rad_teeth_env()
+          rad_genome_env(RAD_DIR_SYSTEM)
+          rad_genome_flags_env()
+          rad_bootstrap_system_env_dir()
+          rad_bootstrap_system_env_pkg_config()
+          rad_bootstrap_system_env_teeth()
+          rad_bootstrap_system_prepare()
+          rad_ceras_build(remainingArgs(p))
+
+          echo ""
+          echo "build complete"
         of "c", "clean":
           rad_ceras_clean()
 
@@ -123,18 +135,6 @@ proc rad_options*() =
           rad_ceras_distclean()
 
           echo "distclean complete"
-        of "e", "envenomate":
-          rad_teeth_environment()
-          rad_genome_environment(RAD_DIR_SYSTEM)
-          rad_genome_flags_environment()
-          rad_bootstrap_system_environment_directories()
-          rad_bootstrap_system_environment_pkg_config()
-          rad_bootstrap_system_environment_teeth()
-          rad_bootstrap_system_prepare()
-          rad_ceras_envenomate(remainingArgs(p))
-
-          echo ""
-          echo "envenomate complete"
         of "h", "help":
           echo RAD_HELP_CERAS
         of "i", "install":

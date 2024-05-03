@@ -5,7 +5,7 @@ import
   std/os,
   ../../src/[constants, genome]
 
-rad_genome_flags_environment()
+rad_genome_flags_env()
 
 echo "CFLAGS    :: ", getEnv(RAD_ENV_FLAGS_CFLAGS)
 echo "CXXFLAGS  :: ", getEnv(RAD_ENV_FLAGS_CXXFLAGS)

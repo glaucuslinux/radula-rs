@@ -5,7 +5,7 @@ import
   std/os,
   ../../src/[constants, teeth]
 
-rad_teeth_environment()
+rad_teeth_env()
 
 echo "AWK                 :: ", getEnv(RAD_ENV_TOOTH_AWK)
 echo "BISON               :: ", getEnv(RAD_ENV_TOOTH_BISON)

@@ -5,11 +5,11 @@ import
   std/[os, strutils],
   ../../src/[bootstrap, constants, genome]
 
-rad_bootstrap_environment()
+rad_bootstrap_env()
 
-rad_genome_environment()
+rad_genome_env()
 
-rad_bootstrap_cross_environment_teeth()
+rad_bootstrap_cross_env_teeth()
 
 echo "CROSS_COMPILE  :: ", getEnv(RAD_ENV_CROSS_COMPILE)
 

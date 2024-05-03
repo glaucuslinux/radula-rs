@@ -6,17 +6,17 @@ import
   constants,
   hashlib/misc/blake3
 
-func rad_compress_zstd*(file: string): int =
-  execCmd(&"{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS} {file} {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
+func rad_compress_zst*(file: string): int =
+  execCmd(&"{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS} {file} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
 
-func rad_create_archive_zstd*(archive, directory: string): int =
-  execCmd(&"{RAD_TOOTH_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS}' {RAD_FLAGS_TOOTH_TAR_CREATE} {archive} -C {directory} . {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
+func rad_create_tar_zst*(archive, directory: string): int =
+  execCmd(&"{RAD_TOOTH_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS}' {RAD_FLAGS_TOOTH_TAR_CREATE} {archive} -C {directory} . {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
 
-func rad_extract_archive*(archive, directory: string): int =
-  execCmd(&"{RAD_TOOTH_TAR} {RAD_FLAGS_TOOTH_TAR_EXTRACT} {archive} -C {directory} {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
+func rad_extract_tar*(archive, directory: string): int =
+  execCmd(&"{RAD_TOOTH_TAR} {RAD_FLAGS_TOOTH_TAR_EXTRACT} {archive} -C {directory} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
 
 proc rad_exit*(status = 0) =
-  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK)
+  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK)
 
   quit(status)
 
@@ -27,10 +27,10 @@ proc rad_abort*() {.noconv.} =
 
   rad_exit(QuitFailure)
 
-func rad_generate_initramfs*(directory: string, bootstrap = false): int =
+func rad_gen_initramfs*(directory: string, bootstrap = false): int =
   execCmd(&"{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RAD_FILE_INITRAMFS}")
 
-proc rad_generate_sum*(directory, sum: string) =
+proc rad_gen_sum*(directory, sum: string) =
   var files: seq[string]
 
   for file in walkDirRec(directory, relative = true, skipSpecial = true):
@@ -46,17 +46,17 @@ proc rad_generate_sum*(directory, sum: string) =
   sum.close()
 
 proc rad_lock*() =
-  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK):
+  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK):
     styled_echo fg_red, style_bright, &"{\"Abort\":13} :! {\"lock exists\":48}{\"1\":13}{now().format(\"hh:mm:ss tt\")}", reset_style
 
     quit(QuitFailure)
   else:
-    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK, "")
+    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK, "")
 
-func rad_rsync*(source, destination: string, flags = RAD_FLAGS_TOOTH_RSYNC): int =
-  execCmd(&"{RAD_CERAS_RSYNC} {flags} {source} {destination} --delete {RAD_FLAGS_TOOTH_SHELL_REDIRECTION}")
+func rad_rsync*(src, dst: string, flags = RAD_FLAGS_TOOTH_RSYNC): int =
+  execCmd(&"{RAD_CERAS_RSYNC} {flags} {src} {dst} --delete {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
 
-proc rad_teeth_environment*() =
+proc rad_teeth_env*() =
   # `mawk` is the default awk implementation
   putEnv(RAD_ENV_TOOTH_AWK, RAD_CERAS_MAWK)
   # `byacc` is the default yacc implementation
