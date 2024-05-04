@@ -8,7 +8,7 @@ import
 
 type
   Ceras = object
-    nom, ver, cmt, url, sum, bld, run: string = RAD_PRINT_NIL
+    nom, ver, cmt, url, sum, bld, run = RAD_PRINT_NIL
 
 proc rad_ceras_clean*() =
   removeDir(RAD_PATH_RAD_LOG)
@@ -69,7 +69,17 @@ proc rad_ceras_print_header() =
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
   let ceras = rad_ceras_parse(nom)
 
-  deps[ceras.nom] = if run: ceras.run.split() else: ceras.bld.split()
+  deps[ceras.nom] =
+    if run:
+      if ceras.run != RAD_PRINT_NIL:
+        ceras.run.split()
+      else:
+        @[]
+    else:
+      if ceras.bld != RAD_PRINT_NIL:
+        ceras.bld.split()
+      else:
+        @[]
 
   if deps[nom].len() > 0:
     for dep in deps[nom]:
