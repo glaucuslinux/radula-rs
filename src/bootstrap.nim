@@ -11,9 +11,6 @@ proc rad_bootstrap_clean*() =
   removeDir(getEnv(RAD_ENV_DIR_TBLD))
   removeDir(getEnv(RAD_ENV_DIR_TLCD))
 
-func rad_bootstrap_cross_backup*() =
-  discard rad_rsync(getEnv(RAD_ENV_DIR_LOGD), getEnv(RAD_ENV_DIR_BAKD))
-
 proc rad_bootstrap_cross_build*() =
   rad_ceras_build([
     # Filesystem
@@ -183,7 +180,7 @@ proc rad_bootstrap_init*() =
 
 proc rad_bootstrap_release_img*() =
   if not isAdmin():
-    rad_abort(&"{\"permission denied\":48}{\"1\":8}")
+    rad_abort(&"{\"1\":8}{\"permission denied\":48}")
 
   let img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
 

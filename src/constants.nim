@@ -4,6 +4,8 @@
 # All constants are prefixed with `RAD_`
 # All constants are ordered alphabetically
 
+import std/[terminal]
+
 const
   RAD_CERAS_ACL* = "acl"
   RAD_CERAS_ATTR* = "attr"
@@ -343,6 +345,15 @@ Distributed under the terms of the ISC License"""
   RAD_PATH_VAR* = "var"
 
   RAD_PATH_WTMPD* = "wtmpd"
+
+
+  RAD_PRINT_BUILD* = "build"
+  RAD_PRINT_CLONE* = "clone"
+  RAD_PRINT_DOWNLOAD* = "dl"
+  RAD_PRINT_FETCH* = "fetch"
+  RAD_PRINT_INSTALL* = "install"
+  RAD_PRINT_NONE* = ansiForegroundColorCode(fgRed) & "None" & ansiForegroundColorCode(fgDefault)
+  RAD_PRINT_REMOVE* = "rm"
 
 
   RAD_TOOTH_AR* = "gcc-ar"

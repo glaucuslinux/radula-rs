@@ -94,7 +94,6 @@ proc rad_options*() =
           rad_bootstrap_cross_env_teeth()
           rad_bootstrap_cross_prepare()
           rad_bootstrap_cross_build()
-          rad_bootstrap_cross_backup()
 
           echo ""
           echo "cross complete"

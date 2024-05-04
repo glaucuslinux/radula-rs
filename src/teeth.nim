@@ -21,12 +21,12 @@ proc rad_exit*(status = 0) =
   quit(status)
 
 proc rad_abort*(err: string) =
-  styled_echo fg_red, style_bright, &"ABORT!  {err}{now().format(\"hh:mm tt\")}", reset_style
+  styled_echo fg_red, style_bright, &"{err}{\"abort\":8}{now().format(\"hh:mm tt\")}", reset_style
 
   rad_exit(QuitFailure)
 
 proc rad_interrupt*() {.noconv.} =
-  rad_abort(&"{\"interrupt received\":48}{\"1\":8}")
+  rad_abort(&"{\"1\":8}{\"interrupt received\":48}")
 
 func rad_gen_initramfs*(directory: string, bootstrap = false): int =
   execCmd(&"{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: \"--universal\" else: \"\")} --strip {directory / RAD_FILE_INITRAMFS}")
@@ -48,7 +48,7 @@ proc rad_gen_sum*(directory, sum: string) =
 
 proc rad_lock*() =
   if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK):
-    rad_abort(&"{\"lock exists\":48}{\"1\":8}")
+    rad_abort(&"{\"1\":8}{\"lock exists\":48}")
   else:
     writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK, "")
 
