@@ -4,7 +4,11 @@
 import
   std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
   constants, teeth,
-  hashlib/misc/blake3, parsetoml, toposort
+  hashlib/misc/blake3, toml_serialization, toposort
+
+type
+  Ceras = object
+    nom, ver, cmt, url, sum, bld, run: string = RAD_PRINT_NONE
 
 proc rad_ceras_clean*() =
   removeDir(RAD_PATH_RAD_LOG)
@@ -31,8 +35,8 @@ proc rad_ceras_exist(nom: string) =
     rad_abort(&"{\"nom\":8}{nom:48}")
 
 # Parse the `ceras` file
-proc rad_ceras_parse(nom: string): TomlValueRef =
-  parseFile(rad_ceras_path(nom))
+proc rad_ceras_parse(nom: string): Ceras =
+  Toml.loadFile(rad_ceras_path(nom), Ceras)
 
 proc rad_ceras_print*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
@@ -40,11 +44,13 @@ proc rad_ceras_print*(cerata: openArray[string]) =
 
     let ceras = rad_ceras_parse(nom)
 
-    styledEcho "nom  :: ", fgBlue, styleBright, nom, resetStyle
-    echo "ver  :: ", ceras{"cmt"}.getStr(ceras{"ver"}.getStr(RAD_PRINT_NONE))
-    echo "url  :: ", ceras{"url"}.getStr(RAD_PRINT_NONE)
-    echo "sum  :: ", ceras{"sum"}.getStr(RAD_PRINT_NONE)
-    echo "dep  :: ", ceras{"run"}.getStr(RAD_PRINT_NONE)
+    echo "nom  :: ", ceras.nom
+    echo "ver  :: ", ceras.ver
+    echo "cmt  :: ", ceras.cmt
+    echo "url  :: ", ceras.url
+    echo "sum  :: ", ceras.sum
+    echo "bld  :: ", ceras.bld
+    echo "run  :: ", ceras.run
 
     echo ""
 
@@ -52,17 +58,18 @@ proc rad_ceras_print_content(idx: int, nom, ver, status: string) =
   styledEcho fgMagenta, styleBright, &"{idx + 1:<8}{nom:24}{ver:24}{status:8}{now().format(\"hh:mm tt\")}", resetStyle
 
 proc rad_ceras_print_footer(idx: int, nom, ver, status: string) =
-  styledEcho fgGreen, &"{idx + 1:<8}", fgBlue, styleBright, &"{nom:24}", resetStyle, &"{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
+  styledEcho fgGreen, &"{idx + 1:<8}", resetStyle, &"{nom:24}{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
 
 proc rad_ceras_print_header() =
-  styledEcho styleBright, "-".repeat(72), resetStyle
+  styledEcho styleBright, '-'.repeat(72), resetStyle
   styledEcho styleBright, &"{\"idx\":8}{\"nom\":24}{\"ver\":24}{\"cmd\":8}eta", resetStyle
-  styledEcho styleBright, "-".repeat(72), resetStyle
+  styledEcho styleBright, '-'.repeat(72), resetStyle
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
-  # Don't use `{}` because we don't want an empty string "" in our Table
-  deps[nom] = try: rad_ceras_parse(nom)[if run: "run" else: RAD_DIR_BLD].getStr().split() except CatchableError: @[]
+  let ceras = rad_ceras_parse(nom)
+
+  deps[nom] = if run: ceras.run.split() else: ceras.bld.split()
 
   if deps[nom].len() > 0:
     for dep in deps[nom]:
@@ -97,45 +104,39 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
     let
       ceras = rad_ceras_parse(nom)
 
-      ver = ceras{"ver"}.getStr(RAD_PRINT_NONE)
-      url = ceras{"url"}.getStr()
-
     # Check for virtual cerata
-    if url.isEmptyOrWhitespace():
-      rad_ceras_print_footer(idx, nom, ver, RAD_PRINT_FETCH)
+    if ceras.url.isEmptyOrWhitespace():
+      rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
       continue
 
     let
-      cmt = ceras{"cmt"}.getStr()
-      sum = ceras{"sum"}.getStr()
-
-      path = getEnv(RAD_ENV_DIR_SRCD) / nom
-      archive = path / lastPathPart(url)
+      path = getEnv(RAD_ENV_DIR_SRCD) / ceras.nom
+      archive = path / lastPathPart(ceras.url)
 
     if dirExists(path):
-      if ver == RAD_TOOTH_GIT:
-        rad_ceras_print_footer(idx, nom, ver, RAD_PRINT_FETCH)
+      if ceras.ver == RAD_TOOTH_GIT:
+        rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
       else:
-        if rad_verify_file(archive, sum):
+        if rad_verify_file(archive, ceras.sum):
           if not rad_ceras_extract_src(archive):
-            rad_ceras_print_content(idx, nom, ver, RAD_PRINT_FETCH)
+            rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
             discard rad_extract_tar(archive, path)
 
             cursorUp 1
             eraseLine()
 
-          rad_ceras_print_footer(idx, nom, ver, RAD_PRINT_FETCH)
+          rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
         else:
           removeDir(path)
 
-          downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
+          downloads &= ([ceras.nom, ceras.ver, ceras.sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {ceras.url}")
     else:
-      if ver == RAD_TOOTH_GIT:
-        clones &= ([nom, cmt, path], &"{RAD_TOOTH_GIT} {RAD_FLAGS_TOOTH_GIT_CLONE} {url} {path} -q && {RAD_TOOTH_GIT} -C {path} {RAD_FLAGS_TOOTH_GIT_CHECKOUT} {cmt} -q")
+      if ceras.ver == RAD_TOOTH_GIT:
+        clones &= ([ceras.nom, ceras.cmt, path], &"{RAD_TOOTH_GIT} {RAD_FLAGS_TOOTH_GIT_CLONE} {ceras.url} {path} -q && {RAD_TOOTH_GIT} -C {path} {RAD_FLAGS_TOOTH_GIT_CHECKOUT} {ceras.cmt} -q")
       else:
-        downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
+        downloads &= ([ceras.nom, ceras.ver, ceras.sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {ceras.url}")
 
   var length = downloads.len()
 
@@ -228,9 +229,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
     )
 
 proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
-  let
-    cluster = rad_ceras_check(cerata, false)
-    length = cluster.len()
+  let cluster = rad_ceras_check(cerata, false)
 
   rad_ceras_print_header()
 
@@ -242,95 +241,73 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
   rad_ceras_print_header()
 
   for idx, nom in (if resolve: cluster else: cerata.toSeq()):
-    let
-      ceras = rad_ceras_parse(nom)
+    let ceras = rad_ceras_parse(nom)
 
-      ver = ceras{"ver"}.getStr(RAD_PRINT_NONE)
-      cmt = ceras{"cmt"}.getStr()
+    rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
 
-      url = ceras{"url"}.getStr()
-
-    rad_ceras_print_content(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_BUILD)
-
-    let log = getEnv(RAD_ENV_DIR_LOGD) / nom & CurDir & RAD_DIR_LOG
+    let log = getEnv(RAD_ENV_DIR_LOGD) / ceras.nom & CurDir & RAD_DIR_LOG
 
     if stage == RAD_DIR_SYSTEM:
-      if fileExists(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}"):
+      if fileExists(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOTH_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}"):
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_BUILD)
+        rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
 
         continue
 
-      putEnv(RAD_ENV_DIR_SACD, RAD_PATH_RAD_CACHE_VENOM / nom / RAD_DIR_SAC)
+      putEnv(RAD_ENV_DIR_SACD, RAD_PATH_RAD_CACHE_VENOM / ceras.nom / RAD_DIR_SAC)
       createDir(getEnv(RAD_ENV_DIR_SACD))
 
-    var status = rad_ceras_stage(log, nom, ver, stage)
+    var status = rad_ceras_stage(log, ceras.nom, ceras.ver, stage)
 
     cursorUp 1
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{status:<8}{nom:24}{(if ver == \"git\": cmt else: ver):24}")
+      rad_abort(&"{status:<8}{ceras.nom:24}{(if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver):24}")
 
     if stage == RAD_DIR_SYSTEM:
-      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
+      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOTH_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
 
       if status == 0:
         rad_gen_sum(getEnv(RAD_ENV_DIR_SACD), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
 
         removeDir(getEnv(RAD_ENV_DIR_SACD))
 
-    rad_ceras_print_footer(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_BUILD)
+    rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
 
 proc rad_ceras_install*(cerata: openArray[string]) =
-  let
-    cluster = rad_ceras_check(cerata)
-    length = cluster.len()
+  let cluster = rad_ceras_check(cerata)
 
   rad_ceras_print_header()
 
   for idx, nom in cluster:
-    let
-      ceras = rad_ceras_parse(nom)
+    let ceras = rad_ceras_parse(nom)
 
-      ver = ceras{"ver"}.getStr(RAD_PRINT_NONE)
-      cmt = ceras{"cmt"}.getStr()
+    rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_INSTALL)
 
-      url = ceras{"url"}.getStr()
-
-    rad_ceras_print_content(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_INSTALL)
-
-    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
+    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOTH_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
 
     cursorUp 1
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{status:8}{nom:24}{(if ver == \"git\": cmt else: ver):24}")
+      rad_abort(&"{status:8}{ceras.nom:24}{(if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver):24}")
 
-    rad_ceras_print_footer(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_INSTALL)
+    rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_INSTALL)
 
 proc rad_ceras_remove*(cerata: openArray[string]) =
-  let
-    cluster = rad_ceras_check(cerata)
-    length = cluster.len()
+  let cluster = rad_ceras_check(cerata)
 
   rad_ceras_print_header()
 
   for idx, nom in cluster:
-    let
-      ceras = rad_ceras_parse(nom)
+    let ceras = rad_ceras_parse(nom)
 
-      ver = ceras{"ver"}.getStr(RAD_PRINT_NONE)
-      cmt = ceras{"cmt"}.getStr()
+    rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_REMOVE)
 
-      url = ceras{"url"}.getStr()
-
-    rad_ceras_print_content(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_REMOVE)
-
-    let sum = RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM
+    let sum = RAD_PATH_RAD_CACHE_VENOM / ceras.nom / RAD_FILE_SUM
 
     for line in lines(sum):
       removeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / line.split()[2])
@@ -338,7 +315,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
     cursorUp 1
     eraseLine()
 
-    rad_ceras_print_footer(idx, nom, if ver == RAD_TOOTH_GIT: cmt else: ver, RAD_PRINT_REMOVE)
+    rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_REMOVE)
 
 proc rad_ceras_search*(pattern: openArray[string]) =
   var cerata: seq[string]
