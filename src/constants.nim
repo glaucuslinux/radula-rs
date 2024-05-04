@@ -347,11 +347,10 @@ Distributed under the terms of the ISC License"""
 
   RAD_PRINT_BUILD* = "build"
   RAD_PRINT_CLONE* = "clone"
-  RAD_PRINT_DOWNLOAD* = "dl"
   RAD_PRINT_FETCH* = "fetch"
   RAD_PRINT_INSTALL* = "install"
   RAD_PRINT_NIL* = "nil"
-  RAD_PRINT_REMOVE* = "rm"
+  RAD_PRINT_REMOVE* = "remove"
 
 
   RAD_TOOTH_AR* = "gcc-ar"

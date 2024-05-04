@@ -110,9 +110,10 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
     counter: int
 
+  rad_ceras_print_header()
+
   for idx, nom in cerata:
-    let
-      ceras = rad_ceras_parse(nom)
+    let ceras = rad_ceras_parse(nom)
 
     # Check for virtual cerata
     if ceras.url.isEmptyOrWhitespace():
@@ -167,7 +168,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
           path = ceras[3]
 
-        rad_ceras_print_content(idx, nom, ver, RAD_PRINT_DOWNLOAD)
+        rad_ceras_print_content(idx, nom, ver, RAD_PRINT_FETCH)
 
         createDir(path)
 
@@ -195,7 +196,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer(idx, nom, ver, RAD_PRINT_DOWNLOAD)
+        rad_ceras_print_footer(idx, nom, ver, RAD_PRINT_FETCH)
 
         cursorDown counter - idx
     )
@@ -230,7 +231,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
           nom = ceras[0]
           cmt = ceras[1]
 
-        cursorUp counter - idx
+        cursorUp 1
         eraseLine()
 
         rad_ceras_print_footer(idx, nom, cmt, RAD_PRINT_CLONE)
@@ -240,8 +241,6 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
 proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
   let cluster = rad_ceras_check(cerata, false)
-
-  rad_ceras_print_header()
 
   # Fetch cluster in parallel
   rad_ceras_fetch(cluster)
