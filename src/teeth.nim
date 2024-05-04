@@ -16,7 +16,7 @@ func rad_extract_tar*(archive, directory: string): int =
   execCmd(&"{RAD_TOOTH_TAR} {RAD_FLAGS_TOOTH_TAR_EXTRACT} {archive} -C {directory} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
 
 proc rad_exit*(status = 0) =
-  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK)
+  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK)
 
   quit(status)
 
@@ -46,11 +46,11 @@ proc rad_gen_sum*(directory, sum: string) =
 
   sum.close()
 
-proc rad_lock*() =
-  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK):
-    rad_abort(&"{\"1\":8}{\"lock exists\":48}")
+proc rad_lck*() =
+  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK):
+    rad_abort(&"{\"1\":8}{\"lck exists\":48}")
   else:
-    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LOCK, "")
+    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK, "")
 
 func rad_rsync*(src, dst: string, flags = RAD_FLAGS_TOOTH_RSYNC): int =
   execCmd(&"{RAD_CERAS_RSYNC} {flags} {src} {dst} --delete {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")

@@ -24,8 +24,8 @@ proc rad_options*() =
     # Catch `Ctrl-C` and exit gracefully
     setControlCHook(rad_interrupt)
 
-    # Check lock file
-    rad_lock()
+    # Check lck file
+    rad_lck()
 
     case p.key
     of "b", "bootstrap":

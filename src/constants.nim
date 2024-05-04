@@ -207,7 +207,7 @@ const
 
   RAD_FILE_KERNEL* = "vmlinuz"
 
-  RAD_FILE_RAD_LOCK* = "rad.lock"
+  RAD_FILE_RAD_LCK* = "rad.lck"
   RAD_FILE_ROOTFS* = "rootfs.erofs"
 
   RAD_FILE_SUM* = "sum"
@@ -350,7 +350,7 @@ Distributed under the terms of the ISC License"""
   RAD_PRINT_DOWNLOAD* = "dl"
   RAD_PRINT_FETCH* = "fetch"
   RAD_PRINT_INSTALL* = "install"
-  RAD_PRINT_NONE* = "None"
+  RAD_PRINT_NIL* = "nil"
   RAD_PRINT_REMOVE* = "rm"
 
 
