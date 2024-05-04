@@ -147,8 +147,6 @@ proc rad_bootstrap_cross_prepare*() =
   removeDir(getEnv(RAD_ENV_DIR_TBLD))
   createDir(getEnv(RAD_ENV_DIR_TBLD))
 
-  removeFile(getEnv(RAD_ENV_DIR_LOGD) / RAD_DIR_CROSS & CurDir & RAD_DIR_LOG)
-
 proc rad_bootstrap_distclean*() =
   removeDir(getEnv(RAD_ENV_DIR_BAKD))
 
@@ -434,7 +432,6 @@ proc rad_bootstrap_system_build*() =
 
 func rad_bootstrap_toolchain_backup*() =
   discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD), getEnv(RAD_ENV_DIR_BAKD))
-  discard rad_rsync(getEnv(RAD_ENV_DIR_LOGD), getEnv(RAD_ENV_DIR_BAKD))
 
 proc rad_bootstrap_toolchain_build*() =
   rad_ceras_build([

@@ -69,6 +69,16 @@ proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], r
     for dep in deps[nom]:
       rad_ceras_resolve_deps(dep, deps, if run: true else: false)
 
+proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
+  var deps: Table[string, seq[string]]
+
+  for nom in cerata.deduplicate():
+    rad_ceras_exist(nom)
+
+    rad_ceras_resolve_deps(nom, deps, if run: true else: false)
+
+  topoSort(deps)
+
 func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIR_SYSTEM): int =
   # We only use `nom` and `ver` from `ceras`
   #
@@ -83,7 +93,6 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
     downloads: seq[(array[5, string], string)]
 
     counter: int
-    length = cerata.len()
 
   for idx, nom in cerata:
     let
@@ -129,7 +138,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
       else:
         downloads &= ([nom, ver, sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {url}")
 
-  length = downloads.len()
+  var length = downloads.len()
 
   if length > 0:
     echo ""
@@ -139,24 +148,24 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
     let cluster = downloads.unzip()[0]
 
     discard execProcesses(downloads.unzip()[1], n = 5, beforeRunEvent =
-      proc (i: int) =
+      proc (idx: int) =
         let
-          ceras = cluster[i]
+          ceras = cluster[idx]
 
           nom = ceras[0]
           ver = ceras[1]
 
           path = ceras[3]
 
-        rad_ceras_print_content(counter, nom, ver, "fetch")
+        rad_ceras_print_content(idx, nom, ver, "fetch")
 
         createDir(path)
 
         counter += 1
     , afterRunEvent =
-      proc (i: int; p: Process) =
+      proc (idx: int; p: Process) =
         let
-          ceras = cluster[i]
+          ceras = cluster[idx]
 
           nom = ceras[0]
           ver = ceras[1]
@@ -164,11 +173,6 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
           path = ceras[3]
           archive = ceras[4]
-
-        cursorUp counter - i
-        eraseLine()
-
-        rad_ceras_print_content(counter, nom, ver, "fetch")
 
         if rad_verify_file(archive, sum):
           discard rad_extract_tar(archive, path)
@@ -181,9 +185,9 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer(counter, nom, ver, "fetch")
+        rad_ceras_print_footer(idx, nom, ver, "fetch")
 
-        cursorDown counter - i
+        cursorDown counter - idx
     )
 
   counter = 0
@@ -198,47 +202,33 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
     let cluster = clones.unzip()[0]
 
     discard execProcesses(clones.unzip()[1], n = 5, beforeRunEvent =
-      proc (i: int) =
+      proc (idx: int) =
         let
-          ceras = cluster[i]
+          ceras = cluster[idx]
 
           nom = ceras[0]
           cmt = ceras[1]
 
-        rad_ceras_print_content(counter, nom, cmt, "fetch")
+        rad_ceras_print_content(idx, nom, cmt, "fetch")
 
         counter += 1
     , afterRunEvent =
-      proc (i: int; p: Process) =
+      proc (idx: int; p: Process) =
         let
-          ceras = cluster[i]
+          ceras = cluster[idx]
 
           nom = ceras[0]
           cmt = ceras[1]
 
-        cursorUp counter - i
+        cursorUp counter - idx
         eraseLine()
 
         rad_ceras_print_footer(counter, nom, cmt, "fetch")
 
-        cursorDown counter - i
+        cursorDown counter - idx
     )
 
-proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
-  var deps: Table[string, seq[string]]
-
-  for nom in cerata.deduplicate():
-    rad_ceras_exist(nom)
-
-    rad_ceras_resolve_deps(nom, deps, if run: true else: false)
-
-  topoSort(deps)
-
 proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
-  var
-    status: int
-    log: string
-
   let
     cluster = rad_ceras_check(cerata, false)
     length = cluster.len()
@@ -263,7 +253,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
 
     rad_ceras_print_content(idx, nom, if ver == "git": cmt else: ver, "build")
 
-    log = getEnv(RAD_ENV_DIR_LOGD) / nom & CurDir & RAD_DIR_LOG
+    let log = getEnv(RAD_ENV_DIR_LOGD) / nom & CurDir & RAD_DIR_LOG
 
     if stage == RAD_DIR_SYSTEM:
       if fileExists(RAD_PATH_RAD_CACHE_VENOM / nom / &"{nom}{(if not url.isEmptyOrWhitespace(): '-' & ver else: \"\")}{(if ver == \"git\": '-' & cmt else: \"\")}{RAD_FILE_TAR_ZST}"):
@@ -277,7 +267,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve
       putEnv(RAD_ENV_DIR_SACD, RAD_PATH_RAD_CACHE_VENOM / nom / RAD_DIR_SAC)
       createDir(getEnv(RAD_ENV_DIR_SACD))
 
-    status = rad_ceras_stage(log, nom, ver, stage)
+    var status = rad_ceras_stage(log, nom, ver, stage)
 
     cursorUp 1
     eraseLine()
