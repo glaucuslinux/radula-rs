@@ -314,8 +314,6 @@ proc rad_bootstrap_system_prepare*() =
   # Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
   createDir(getEnv(RAD_ENV_DIR_TSRC))
 
-  removeFile(getEnv(RAD_ENV_DIR_LOGD) / RAD_DIR_SYSTEM & CurDir & RAD_DIR_LOG)
-
 proc rad_bootstrap_system_build*() =
   rad_ceras_build([
     # Filesystem

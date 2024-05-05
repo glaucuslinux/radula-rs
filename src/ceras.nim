@@ -61,9 +61,7 @@ proc rad_ceras_print_footer(idx: int, nom, ver, status: string) =
   styledEcho fgGreen, &"{idx + 1:<8}", resetStyle, &"{nom:24}{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
 
 proc rad_ceras_print_header() =
-  styledEcho styleBright, '-'.repeat(72), resetStyle
   styledEcho styleBright, &"{\"idx\":8}{\"nom\":24}{\"ver\":24}{\"cmd\":8}eta", resetStyle
-  styledEcho styleBright, '-'.repeat(72), resetStyle
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
@@ -302,7 +300,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{status:8}{ceras.nom:24}{(if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver):24}")
+      rad_abort(&"{status:<8}{ceras.nom:24}{(if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver):24}")
 
     rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOTH_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_INSTALL)
 
