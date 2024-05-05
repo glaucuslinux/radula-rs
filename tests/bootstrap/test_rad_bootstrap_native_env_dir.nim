@@ -5,11 +5,11 @@ import
   std/os,
   ../../src/[bootstrap, constants]
 
-rad_bootstrap_sys_env_dir()
+rad_bootstrap_native_env_dir()
 
-echo "SRCD  :: ", getEnv(RAD_ENV_DIR_SRCD)
 echo "CERD  :: ", getEnv(RAD_ENV_DIR_CERD)
 echo "LOGD  :: ", getEnv(RAD_ENV_DIR_LOGD)
+echo "SRCD  :: ", getEnv(RAD_ENV_DIR_SRCD)
 echo "TBLD  :: ", getEnv(RAD_ENV_DIR_TBLD)
 echo "TSRC  :: ", getEnv(RAD_ENV_DIR_TSRC)
 

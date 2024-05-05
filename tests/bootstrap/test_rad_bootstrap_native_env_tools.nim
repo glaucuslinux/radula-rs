@@ -7,7 +7,7 @@ import
 
 rad_arch_env()
 
-rad_bootstrap_sys_env_tools()
+rad_bootstrap_native_env_tools()
 
 echo "AR             :: ", getEnv(RAD_ENV_TOOL_AR)
 echo "AS             :: ", getEnv(RAD_ENV_TOOL_AS)

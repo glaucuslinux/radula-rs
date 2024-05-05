@@ -130,15 +130,12 @@ const
   RAD_DIR_BAK* = "bak"
   RAD_DIR_BLD* = "bld"
   RAD_DIR_CERATA* = "cerata"
-  RAD_DIR_CROSS* = "cross"
   RAD_DIR_GLAUCUS* = "glaucus"
   RAD_DIR_ISO* = "iso"
   RAD_DIR_LOG* = "log"
   RAD_DIR_SAC* = "sac"
   RAD_DIR_SRC* = "src"
-  RAD_DIR_SYS* = "sys"
   RAD_DIR_TMP* = "tmp"
-  RAD_DIR_TOOLCHAIN* = "toolchain"
 
 
   RAD_ENV_ARCH* = "ARCH"
@@ -276,8 +273,8 @@ COMMANDS:
   d, distclean     Clean everything
   h, help          Display this help message
   i, img           Release a glaucus IMG
+  n, native        Bootstrap native glaucus
   r, release       Release a glaucus ISO
-  s, sys           Bootstrap native glaucus
   t, toolchain     Bootstrap toolchain
   x, cross         Bootstrap cross glaucus"""
 
@@ -354,6 +351,11 @@ Distributed under the terms of the ISC License"""
   RAD_PRINT_INSTALL* = "install"
   RAD_PRINT_NIL* = "nil"
   RAD_PRINT_REMOVE* = "remove"
+
+
+  RAD_STAGE_CROSS* = "cross"
+  RAD_STAGE_NATIVE* = "native"
+  RAD_STAGE_TOOLCHAIN* = "toolchain"
 
 
   RAD_TOOL_AR* = "gcc-ar"

@@ -174,14 +174,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
         rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
-func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIR_SYS): int =
-  # We only use `nom` and `ver` from `ceras`
-  #
-  # All phases need to be called sequentially to prevent the loss of the
-  # current working dir...
-  execCmd(&"{RAD_TOOL_SHELL} {RAD_FLAGS_TOOL_SHELL_COMMAND} 'nom={nom} ver={ver} . {RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS}/{nom}/{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
-
-proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYS, resolve = true) =
+proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resolve = true) =
   let cluster = rad_ceras_check(cerata, false)
 
   # Fetch cluster in parallel
@@ -199,7 +192,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYS, resolve = 
 
     rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
 
-    if stage == RAD_DIR_SYS:
+    if stage == RAD_STAGE_NATIVE:
       if fileExists(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}"):
         cursorUp 1
         eraseLine()
@@ -211,7 +204,11 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYS, resolve = 
       putEnv(RAD_ENV_DIR_SACD, RAD_PATH_RAD_CACHE_VENOM / ceras.nom / RAD_DIR_SAC)
       createDir(getEnv(RAD_ENV_DIR_SACD))
 
-    var status = rad_ceras_stage(log, ceras.nom, ceras.ver, stage)
+    # We only use `nom` and `ver` from `ceras`
+    #
+    # All phases need to be called sequentially to prevent the loss of the
+    # current working dir...
+    var status = execCmd(&"{RAD_TOOL_SHELL} {RAD_FLAGS_TOOL_SHELL_COMMAND} 'nom={ceras.nom} ver={ceras.ver} . {RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS}/{ceras.nom}/build.{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
 
     cursorUp 1
     eraseLine()
@@ -219,7 +216,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYS, resolve = 
     if status != 0:
       rad_abort(&"{status:<8}{ceras.nom:24}{(if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver):24}")
 
-    if stage == RAD_DIR_SYS:
+    if stage == RAD_STAGE_NATIVE:
       status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
 
       if status == 0:
