@@ -102,12 +102,6 @@ func rad_ceras_stage(log, nom, ver: string, stage = RAD_DIR_SYSTEM): int =
 
 # Fetch cerata
 proc rad_ceras_fetch(cerata: openArray[string]) =
-  var
-    clones: seq[(array[3, string], string)]
-    downloads: seq[(array[5, string], string)]
-
-    counter: int
-
   rad_ceras_print_header()
 
   for idx, nom in cerata:
@@ -125,7 +119,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
     if dirExists(path):
       if ceras.ver == RAD_TOOTH_GIT:
-        rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
+        rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_FETCH)
       else:
         if rad_verify_file(archive, ceras.sum):
           if not rad_ceras_extract_src(archive):
@@ -138,104 +132,55 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
           rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
         else:
-          removeDir(path)
+          rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
-          downloads &= ([ceras.nom, ceras.ver, ceras.sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {ceras.url}")
+          removeDir(path)
+          createDir(path)
+
+          discard rad_download(archive, ceras.url)
+
+          if rad_verify_file(archive, ceras.sum):
+            discard rad_extract_tar(archive, path)
+          else:
+            cursorUp 1
+            eraseLine()
+
+            rad_abort(&"{\"sum\":8}{ceras.nom:24}{ceras.ver:24}")
+
+          cursorUp 1
+          eraseLine()
+
+          rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
     else:
       if ceras.ver == RAD_TOOTH_GIT:
-        clones &= ([ceras.nom, ceras.cmt, path], &"{RAD_TOOTH_GIT} {RAD_FLAGS_TOOTH_GIT_CLONE} {ceras.url} {path} -q && {RAD_TOOTH_GIT} -C {path} {RAD_FLAGS_TOOTH_GIT_CHECKOUT} {ceras.cmt} -q")
+        rad_ceras_print_content(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
+
+        discard rad_clone_repo(path, ceras.url)
+        discard rad_checkout_repo(ceras.cmt, path)
+
+        cursorUp 1
+        eraseLine()
+
+        rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
       else:
-        downloads &= ([ceras.nom, ceras.ver, ceras.sum, path, archive], &"{RAD_CERAS_WGET2} -q -O {archive} -c -N {ceras.url}")
-
-  var length = downloads.len()
-
-  if length > 0:
-    echo ""
-
-    rad_ceras_print_header()
-
-    let cluster = downloads.unzip()[0]
-
-    discard execProcesses(downloads.unzip()[1], n = 5, beforeRunEvent =
-      proc (idx: int) =
-        let
-          ceras = cluster[idx]
-
-          nom = ceras[0]
-          ver = ceras[1]
-
-          path = ceras[3]
-
-        rad_ceras_print_content(idx, nom, ver, RAD_PRINT_FETCH)
+        rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
         createDir(path)
 
-        counter += 1
-    , afterRunEvent =
-      proc (idx: int; p: Process) =
-        let
-          ceras = cluster[idx]
+        discard rad_download(archive, ceras.url)
 
-          nom = ceras[0]
-          ver = ceras[1]
-          sum = ceras[2]
-
-          path = ceras[3]
-          archive = ceras[4]
-
-        if rad_verify_file(archive, sum):
+        if rad_verify_file(archive, ceras.sum):
           discard rad_extract_tar(archive, path)
         else:
           cursorUp 1
           eraseLine()
 
-          rad_abort(&"{\"sum\":8}{nom:24}{ver:24}")
+          rad_abort(&"{\"sum\":8}{ceras.nom:24}{ceras.ver:24}")
 
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer(idx, nom, ver, RAD_PRINT_FETCH)
-
-        cursorDown counter - idx
-    )
-
-  counter = 0
-
-  length = clones.len()
-
-  if length > 0:
-    echo ""
-
-    rad_ceras_print_header()
-
-    let cluster = clones.unzip()[0]
-
-    discard execProcesses(clones.unzip()[1], n = 5, beforeRunEvent =
-      proc (idx: int) =
-        let
-          ceras = cluster[idx]
-
-          nom = ceras[0]
-          cmt = ceras[1]
-
-        rad_ceras_print_content(idx, nom, cmt, RAD_PRINT_CLONE)
-
-        counter += 1
-    , afterRunEvent =
-      proc (idx: int; p: Process) =
-        let
-          ceras = cluster[idx]
-
-          nom = ceras[0]
-          cmt = ceras[1]
-
-        cursorUp 1
-        eraseLine()
-
-        rad_ceras_print_footer(idx, nom, cmt, RAD_PRINT_CLONE)
-
-        cursorDown counter - idx
-    )
+        rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
 proc rad_ceras_build*(cerata: openArray[string], stage = RAD_DIR_SYSTEM, resolve = true) =
   let cluster = rad_ceras_check(cerata, false)

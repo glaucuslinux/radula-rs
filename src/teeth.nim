@@ -6,11 +6,20 @@ import
   constants,
   hashlib/misc/blake3
 
+proc rad_checkout_repo*(cmt, directory: string): int =
+  execCmd(&"{RAD_TOOTH_GIT} -C {directory} {RAD_FLAGS_TOOTH_GIT_CHECKOUT} {cmt} -q")
+
+proc rad_clone_repo*(directory, url: string): int =
+  execCmd(&"{RAD_TOOTH_GIT} {RAD_FLAGS_TOOTH_GIT_CLONE} {url} {directory} -q")
+
 func rad_compress_zst*(file: string): int =
   execCmd(&"{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS} {file} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
 
 func rad_create_tar_zst*(archive, directory: string): int =
   execCmd(&"{RAD_TOOTH_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOTH_ZSTD_COMPRESS}' {RAD_FLAGS_TOOTH_TAR_CREATE} {archive} -C {directory} . {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+
+proc rad_download*(file, url: string): int =
+  execCmd(&"{RAD_CERAS_WGET2} -q -O {file} -c -N {url}")
 
 func rad_extract_tar*(archive, directory: string): int =
   execCmd(&"{RAD_TOOTH_TAR} {RAD_FLAGS_TOOTH_TAR_EXTRACT} {archive} -C {directory} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
