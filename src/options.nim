@@ -52,13 +52,11 @@ proc rad_options*() =
           echo RAD_HELP_BOOTSTRAP
         of "i", "img":
           rad_bootstrap_env()
-          rad_tools_env()
           rad_bootstrap_release_img()
 
           echo "img complete"
         of "r", "release":
           rad_bootstrap_env()
-          rad_tools_env()
           rad_bootstrap_release_iso()
 
           echo "release complete"
