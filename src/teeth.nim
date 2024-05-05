@@ -51,7 +51,7 @@ proc rad_gen_sum*(directory, sum: string) =
   let sum = open(sum, fmWrite)
 
   for file in files:
-    sum.writeLine(&"{count[BLAKE3](try: readFile(directory / file) except CatchableError: \"\")}  {file}")
+    sum.writeLine(&"{count[BLAKE3](readFile(directory / file))}  {file}")
 
   sum.close()
 
@@ -82,11 +82,11 @@ proc rad_teeth_env*() =
   putEnv(RAD_ENV_TOOTH_YACC, RAD_CERAS_BYACC)
 
 proc rad_verify_file*(file, sum: string): bool =
-  $count[BLAKE3](try: readFile(file) except CatchableError: "") == sum
+  $count[BLAKE3](readFile(file)) == sum
 
 proc rad_verify_sum*(sum: string) =
   for line in lines(sum):
     let line = line.split()
 
-    if $count[BLAKE3](try: readFile(line[1]) except CatchableError: "") != line[0]:
+    if $count[BLAKE3](readFile(line[1])) != line[0]:
       echo line[1], ": FAILED"
