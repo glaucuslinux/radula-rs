@@ -5,6 +5,14 @@
 # All constants are ordered alphabetically
 
 const
+  RAD_ARCH_TUPLE_TGT* = "-pc-linux-musl"
+  RAD_ARCH_TUPLE_TGT_CROSS* = "-glaucus-linux-musl"
+
+  RAD_ARCH_X86_64* = "x86-64"
+  RAD_ARCH_X86_64_LINUX* = "x86_64"
+  RAD_ARCH_X86_64_V3* = "x86-64-v3"
+
+
   RAD_CERAS_ACL* = "acl"
   RAD_CERAS_ATTR* = "attr"
   RAD_CERAS_AUTOCONF* = "autoconf"
@@ -128,12 +136,17 @@ const
   RAD_DIR_LOG* = "log"
   RAD_DIR_SAC* = "sac"
   RAD_DIR_SRC* = "src"
-  RAD_DIR_SYSTEM* = "system"
+  RAD_DIR_SYS* = "sys"
   RAD_DIR_TMP* = "tmp"
   RAD_DIR_TOOLCHAIN* = "toolchain"
 
 
+  RAD_ENV_ARCH* = "ARCH"
+
   RAD_ENV_BOOTSTRAP* = "BOOTSTRAP"
+
+  RAD_ENV_CARCH* = "CARCH"
+
   RAD_ENV_CROSS_COMPILE* = "CROSS_COMPILE"
 
   RAD_ENV_DIR_BAKD* = "BAKD"
@@ -152,10 +165,6 @@ const
   RAD_ENV_FLAGS_CXXFLAGS* = "CXXFLAGS"
   RAD_ENV_FLAGS_LDFLAGS* = "LDFLAGS"
 
-  RAD_ENV_GENOME_ARCH* = "ARCH"
-  RAD_ENV_GENOME_CARCH* = "CARCH"
-  RAD_ENV_GENOME_PRETTY_NAME* = "PRETTY_NAME"
-
   RAD_ENV_PATH* = "PATH"
 
   RAD_ENV_PKG_CONFIG_LIBDIR* = "PKG_CONFIG_LIBDIR"
@@ -164,29 +173,31 @@ const
   RAD_ENV_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "PKG_CONFIG_SYSTEM_INCLUDE_PATH"
   RAD_ENV_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "PKG_CONFIG_SYSTEM_LIBRARY_PATH"
 
-  RAD_ENV_TOOTH_AR* = "AR"
-  RAD_ENV_TOOTH_AS* = "AS"
-  RAD_ENV_TOOTH_AWK* = "AWK"
-  RAD_ENV_TOOTH_BISON* = "BISON"
-  RAD_ENV_TOOTH_CC* = "CC"
-  RAD_ENV_TOOTH_CPP* = "CPP"
-  RAD_ENV_TOOTH_CXX* = "CXX"
-  RAD_ENV_TOOTH_CXXCPP* = "CXXCPP"
-  RAD_ENV_TOOTH_FLEX* = "FLEX"
-  RAD_ENV_TOOTH_HOSTCC* = "HOSTCC"
-  RAD_ENV_TOOTH_LEX* = "LEX"
-  RAD_ENV_TOOTH_MAKE* = "MAKE"
-  RAD_ENV_TOOTH_MAKEFLAGS* = "MAKEFLAGS"
-  RAD_ENV_TOOTH_NM* = "NM"
-  RAD_ENV_TOOTH_OBJCOPY* = "OBJCOPY"
-  RAD_ENV_TOOTH_OBJDUMP* = "OBJDUMP"
-  RAD_ENV_TOOTH_PKG_CONFIG* = "PKG_CONFIG"
-  RAD_ENV_TOOTH_RAD_RSYNC_FLAGS* = "RAD_RSYNC_FLAGS"
-  RAD_ENV_TOOTH_RANLIB* = "RANLIB"
-  RAD_ENV_TOOTH_READELF* = "READELF"
-  RAD_ENV_TOOTH_SIZE* = "SIZE"
-  RAD_ENV_TOOTH_STRIP* = "STRIP"
-  RAD_ENV_TOOTH_YACC* = "YACC"
+  RAD_ENV_PRETTY_NAME* = "PRETTY_NAME"
+
+  RAD_ENV_TOOL_AR* = "AR"
+  RAD_ENV_TOOL_AS* = "AS"
+  RAD_ENV_TOOL_AWK* = "AWK"
+  RAD_ENV_TOOL_BISON* = "BISON"
+  RAD_ENV_TOOL_CC* = "CC"
+  RAD_ENV_TOOL_CPP* = "CPP"
+  RAD_ENV_TOOL_CXX* = "CXX"
+  RAD_ENV_TOOL_CXXCPP* = "CXXCPP"
+  RAD_ENV_TOOL_FLEX* = "FLEX"
+  RAD_ENV_TOOL_HOSTCC* = "HOSTCC"
+  RAD_ENV_TOOL_LEX* = "LEX"
+  RAD_ENV_TOOL_MAKE* = "MAKE"
+  RAD_ENV_TOOL_MAKEFLAGS* = "MAKEFLAGS"
+  RAD_ENV_TOOL_NM* = "NM"
+  RAD_ENV_TOOL_OBJCOPY* = "OBJCOPY"
+  RAD_ENV_TOOL_OBJDUMP* = "OBJDUMP"
+  RAD_ENV_TOOL_PKG_CONFIG* = "PKG_CONFIG"
+  RAD_ENV_TOOL_RAD_RSYNC_FLAGS* = "RAD_RSYNC_FLAGS"
+  RAD_ENV_TOOL_RANLIB* = "RANLIB"
+  RAD_ENV_TOOL_READELF* = "READELF"
+  RAD_ENV_TOOL_SIZE* = "SIZE"
+  RAD_ENV_TOOL_STRIP* = "STRIP"
+  RAD_ENV_TOOL_YACC* = "YACC"
 
   RAD_ENV_TUPLE_BLD* = "BLD"
   RAD_ENV_TUPLE_TGT* = "TGT"
@@ -218,40 +229,32 @@ const
   RAD_FLAGS_CFLAGS* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
   RAD_FLAGS_LDFLAGS* = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
 
-  RAD_FLAGS_TOOTH_CHOWN* = "-Rv"
-  RAD_FLAGS_TOOTH_CPP* = "-E"
+  RAD_FLAGS_TOOL_CHOWN* = "-Rv"
+  RAD_FLAGS_TOOL_CPP* = "-E"
 
-  RAD_FLAGS_TOOTH_GIT_CHECKOUT* = "checkout"
-  RAD_FLAGS_TOOTH_GIT_CLONE* = "clone"
+  RAD_FLAGS_TOOL_GIT_CHECKOUT* = "checkout"
+  RAD_FLAGS_TOOL_GIT_CLONE* = "clone"
 
-  RAD_FLAGS_TOOTH_GRUB* = "--compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none"
+  RAD_FLAGS_TOOL_GRUB* = "--compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none"
 
-  RAD_FLAGS_TOOTH_MAKE* = "-j4 -O"
-  RAD_FLAGS_TOOTH_MKE2FS* = "-qt"
+  RAD_FLAGS_TOOL_MAKE* = "-j4 -O"
+  RAD_FLAGS_TOOL_MKE2FS* = "-qt"
 
-  RAD_FLAGS_TOOTH_PARTED* = "-s"
+  RAD_FLAGS_TOOL_PARTED* = "-s"
 
-  RAD_FLAGS_TOOTH_RSYNC* = "-vaHAXSx"
-  RAD_FLAGS_TOOTH_RSYNC_RELEASE* = "-vaHAXx"
+  RAD_FLAGS_TOOL_RSYNC* = "-vaHAXSx"
+  RAD_FLAGS_TOOL_RSYNC_RELEASE* = "-vaHAXx"
 
-  RAD_FLAGS_TOOTH_SHELL_COMMAND* = "-c"
-  RAD_FLAGS_TOOTH_SHELL_REDIRECT* = "> /dev/null 2>&1"
+  RAD_FLAGS_TOOL_SHELL_COMMAND* = "-c"
+  RAD_FLAGS_TOOL_SHELL_REDIRECT* = "> /dev/null 2>&1"
 
-  RAD_FLAGS_TOOTH_TAR_CREATE* = "-cpvf"
-  RAD_FLAGS_TOOTH_TAR_EXTRACT* = "-xmPvf"
+  RAD_FLAGS_TOOL_TAR_CREATE* = "-cpvf"
+  RAD_FLAGS_TOOL_TAR_EXTRACT* = "-xmPvf"
 
-  RAD_FLAGS_TOOTH_UMOUNT* = "-fqRv"
+  RAD_FLAGS_TOOL_UMOUNT* = "-fqRv"
 
-  RAD_FLAGS_TOOTH_ZSTD_COMPRESS* = "-22 --ultra -T0 --long"
-  RAD_FLAGS_TOOTH_ZSTD_DECOMPRESS* = "-d -T0 --long"
-
-
-  RAD_GENOME_TUPLE_TGT_CROSS* = "-glaucus-linux-musl"
-  RAD_GENOME_TUPLE_TGT_SYSTEM* = "-pc-linux-musl"
-
-  RAD_GENOME_X86_64* = "x86-64"
-  RAD_GENOME_X86_64_LINUX* = "x86_64"
-  RAD_GENOME_X86_64_V3* = "x86-64-v3"
+  RAD_FLAGS_TOOL_ZSTD_COMPRESS* = "-22 --ultra -T0 --long"
+  RAD_FLAGS_TOOL_ZSTD_DECOMPRESS* = "-d -T0 --long"
 
 
   RAD_HELP* = """
@@ -272,11 +275,11 @@ COMMANDS:
   c, clean         Clean cache
   d, distclean     Clean everything
   h, help          Display this help message
-  i, img           Release an IMG file of the glaucus system
-  r, release       Release an ISO file of the glaucus system
-  s, system        Bootstrap native glaucus system
+  i, img           Release a glaucus IMG
+  r, release       Release a glaucus ISO
+  s, sys           Bootstrap native glaucus
   t, toolchain     Bootstrap toolchain
-  x, cross         Bootstrap cross compiled glaucus system"""
+  x, cross         Bootstrap cross glaucus"""
 
   RAD_HELP_CERAS* = """
 USAGE:
@@ -353,41 +356,41 @@ Distributed under the terms of the ISC License"""
   RAD_PRINT_REMOVE* = "remove"
 
 
-  RAD_TOOTH_AR* = "gcc-ar"
-  RAD_TOOTH_AS* = "as"
+  RAD_TOOL_AR* = "gcc-ar"
+  RAD_TOOL_AS* = "as"
 
-  RAD_TOOTH_CHOWN* = "chown"
-  RAD_TOOTH_CXX* = "g++"
+  RAD_TOOL_CHOWN* = "chown"
+  RAD_TOOL_CXX* = "g++"
 
-  RAD_TOOTH_DD* = "dd"
+  RAD_TOOL_DD* = "dd"
 
-  RAD_TOOTH_GIT* = "git"
-  RAD_TOOTH_GRUB_INSTALL* = "grub-install"
-  RAD_TOOTH_GRUB_MKRESCUE* = "grub-mkrescue"
+  RAD_TOOL_GIT* = "git"
+  RAD_TOOL_GRUB_INSTALL* = "grub-install"
+  RAD_TOOL_GRUB_MKRESCUE* = "grub-mkrescue"
 
-  RAD_TOOTH_LOSETUP* = "losetup"
+  RAD_TOOL_LOSETUP* = "losetup"
 
   # Full path is being used here to not overlap with the install() function in stage files
-  RAD_TOOTH_MKE2FS* = "mke2fs"
-  RAD_TOOTH_MKFS_EROFS* = "mkfs.erofs"
-  RAD_TOOTH_MODPROBE* = "modprobe"
-  RAD_TOOTH_MOUNT* = "mount"
+  RAD_TOOL_MKE2FS* = "mke2fs"
+  RAD_TOOL_MKFS_EROFS* = "mkfs.erofs"
+  RAD_TOOL_MODPROBE* = "modprobe"
+  RAD_TOOL_MOUNT* = "mount"
 
-  RAD_TOOTH_NM* = "gcc-nm"
+  RAD_TOOL_NM* = "gcc-nm"
 
-  RAD_TOOTH_OBJCOPY* = "objcopy"
-  RAD_TOOTH_OBJDUMP* = "objdump"
+  RAD_TOOL_OBJCOPY* = "objcopy"
+  RAD_TOOL_OBJDUMP* = "objdump"
 
-  RAD_TOOTH_PARTED* = "parted"
-  RAD_TOOTH_PARTX* = "partx"
+  RAD_TOOL_PARTED* = "parted"
+  RAD_TOOL_PARTX* = "partx"
 
-  RAD_TOOTH_RANLIB* = "gcc-ranlib"
-  RAD_TOOTH_READELF* = "readelf"
+  RAD_TOOL_RANLIB* = "gcc-ranlib"
+  RAD_TOOL_READELF* = "readelf"
 
-  RAD_TOOTH_SHELL* = "sh"
-  RAD_TOOTH_SIZE* = "size"
-  RAD_TOOTH_STRIP* = "strip"
+  RAD_TOOL_SHELL* = "sh"
+  RAD_TOOL_SIZE* = "size"
+  RAD_TOOL_STRIP* = "strip"
 
-  RAD_TOOTH_TAR* = "bsdtar"
+  RAD_TOOL_TAR* = "bsdtar"
 
-  RAD_TOOTH_UMOUNT* = "umount"
+  RAD_TOOL_UMOUNT* = "umount"

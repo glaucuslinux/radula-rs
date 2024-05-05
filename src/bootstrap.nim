@@ -3,7 +3,7 @@
 
 import
   std/[os, osproc, strformat, strutils, times],
-  ceras, constants, teeth
+  cerata, constants, tools
 
 proc rad_bootstrap_clean*() =
   removeDir(getEnv(RAD_ENV_DIR_CRSD))
@@ -118,25 +118,25 @@ proc rad_bootstrap_cross_env_pkg_config*() =
   putEnv(RAD_ENV_PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
   putEnv(RAD_ENV_PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
-proc rad_bootstrap_cross_env_teeth*() =
+proc rad_bootstrap_cross_env_tools*() =
   let cross_compile = getEnv(RAD_ENV_TUPLE_TGT) & '-'
 
   putEnv(RAD_ENV_CROSS_COMPILE, cross_compile)
 
-  putEnv(RAD_ENV_TOOTH_AR, cross_compile & RAD_TOOTH_AR)
-  putEnv(RAD_ENV_TOOTH_AS, cross_compile & RAD_TOOTH_AS)
-  putEnv(RAD_ENV_TOOTH_CC, cross_compile & RAD_CERAS_GCC)
-  putEnv(RAD_ENV_TOOTH_CPP, cross_compile & RAD_CERAS_GCC & ' ' & RAD_FLAGS_TOOTH_CPP)
-  putEnv(RAD_ENV_TOOTH_CXX, cross_compile & RAD_TOOTH_CXX)
-  putEnv(RAD_ENV_TOOTH_CXXCPP, cross_compile & RAD_TOOTH_CXX & ' ' & RAD_FLAGS_TOOTH_CPP)
-  putEnv(RAD_ENV_TOOTH_HOSTCC, RAD_CERAS_GCC)
-  putEnv(RAD_ENV_TOOTH_NM, cross_compile & RAD_TOOTH_NM)
-  putEnv(RAD_ENV_TOOTH_OBJCOPY, cross_compile & RAD_TOOTH_OBJCOPY)
-  putEnv(RAD_ENV_TOOTH_OBJDUMP, cross_compile & RAD_TOOTH_OBJDUMP)
-  putEnv(RAD_ENV_TOOTH_RANLIB, cross_compile & RAD_TOOTH_RANLIB)
-  putEnv(RAD_ENV_TOOTH_READELF, cross_compile & RAD_TOOTH_READELF)
-  putEnv(RAD_ENV_TOOTH_SIZE, cross_compile & RAD_TOOTH_SIZE)
-  putEnv(RAD_ENV_TOOTH_STRIP, cross_compile & RAD_TOOTH_STRIP)
+  putEnv(RAD_ENV_TOOL_AR, cross_compile & RAD_TOOL_AR)
+  putEnv(RAD_ENV_TOOL_AS, cross_compile & RAD_TOOL_AS)
+  putEnv(RAD_ENV_TOOL_CC, cross_compile & RAD_CERAS_GCC)
+  putEnv(RAD_ENV_TOOL_CPP, cross_compile & RAD_CERAS_GCC & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_CXX, cross_compile & RAD_TOOL_CXX)
+  putEnv(RAD_ENV_TOOL_CXXCPP, cross_compile & RAD_TOOL_CXX & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_HOSTCC, RAD_CERAS_GCC)
+  putEnv(RAD_ENV_TOOL_NM, cross_compile & RAD_TOOL_NM)
+  putEnv(RAD_ENV_TOOL_OBJCOPY, cross_compile & RAD_TOOL_OBJCOPY)
+  putEnv(RAD_ENV_TOOL_OBJDUMP, cross_compile & RAD_TOOL_OBJDUMP)
+  putEnv(RAD_ENV_TOOL_RANLIB, cross_compile & RAD_TOOL_RANLIB)
+  putEnv(RAD_ENV_TOOL_READELF, cross_compile & RAD_TOOL_READELF)
+  putEnv(RAD_ENV_TOOL_SIZE, cross_compile & RAD_TOOL_SIZE)
+  putEnv(RAD_ENV_TOOL_STRIP, cross_compile & RAD_TOOL_STRIP)
 
 proc rad_bootstrap_cross_prepare*() =
   discard rad_rsync(getEnv(RAD_ENV_DIR_BAKD) / RAD_DIR_CROSS, getEnv(RAD_ENV_DIR_GLAD))
@@ -158,11 +158,11 @@ proc rad_bootstrap_env*() =
   putEnv(RAD_ENV_DIR_GLAD, path)
 
   putEnv(RAD_ENV_DIR_BAKD, path / RAD_DIR_BAK)
-  putEnv(RAD_ENV_DIR_SRCD, path / RAD_DIR_SRC)
   putEnv(RAD_ENV_DIR_CERD, path / RAD_DIR_CERATA)
   putEnv(RAD_ENV_DIR_CRSD, path / RAD_DIR_CROSS)
   putEnv(RAD_ENV_DIR_ISOD, path / RAD_DIR_ISO)
   putEnv(RAD_ENV_DIR_LOGD, path / RAD_DIR_LOG)
+  putEnv(RAD_ENV_DIR_SRCD, path / RAD_DIR_SRC)
   putEnv(RAD_ENV_DIR_TBLD, path / RAD_DIR_TMP / RAD_DIR_BLD)
   putEnv(RAD_ENV_DIR_TSRC, path / RAD_DIR_TMP / RAD_DIR_SRC)
   putEnv(RAD_ENV_DIR_TLCD, path / RAD_DIR_TOOLCHAIN)
@@ -172,8 +172,8 @@ proc rad_bootstrap_env*() =
 proc rad_bootstrap_init*() =
   createDir(getEnv(RAD_ENV_DIR_BAKD))
   createDir(getEnv(RAD_ENV_DIR_CRSD))
-  createDir(getEnv(RAD_ENV_DIR_SRCD))
   createDir(getEnv(RAD_ENV_DIR_LOGD))
+  createDir(getEnv(RAD_ENV_DIR_SRCD))
   createDir(getEnv(RAD_ENV_DIR_TBLD))
   createDir(getEnv(RAD_ENV_DIR_TSRC))
   createDir(getEnv(RAD_ENV_DIR_TLCD))
@@ -182,74 +182,73 @@ proc rad_bootstrap_release_img*() =
   if not isAdmin():
     rad_abort(&"{\"1\":8}{\"permission denied\":48}")
 
-  let img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
-
-  # Create a new IMG file
-  discard execCmd(&"{RAD_TOOTH_DD} bs=1M count={RAD_FILE_GLAUCUS_IMG_SIZE} if=/dev/zero of={img} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-
-  # Partition the IMG file
-  discard execCmd(&"{RAD_TOOTH_PARTED} {RAD_FLAGS_TOOTH_PARTED} {img} mklabel msdos {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-  discard execCmd(&"{RAD_TOOTH_PARTED} {RAD_FLAGS_TOOTH_PARTED} -a none {img} mkpart primary ext4 1 {RAD_FILE_GLAUCUS_IMG_SIZE} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-  discard execCmd(&"{RAD_TOOTH_PARTED} {RAD_FLAGS_TOOTH_PARTED} -a none {img} set 1 boot on {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-
-  # Load the `loop` module
-  discard execCmd(&"{RAD_TOOTH_MODPROBE} loop {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-
-  # Detach all used loop devices
-  discard execCmd(&"{RAD_TOOTH_LOSETUP} -D {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-
-  # Find the first unused loop device
   let
-    device = execCmdEx(&"{RAD_TOOTH_LOSETUP} -f")[0].strip()
+    img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
+
+    # Find the first unused loop device
+    device = execCmdEx(&"{RAD_TOOL_LOSETUP} -f")[0].strip()
+
     partition = device & "p1"
 
+    mount = RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_PATH_MNT / RAD_DIR_GLAUCUS
+
+    path = mount / RAD_PATH_BOOT
+
+  # Create a new IMG file
+  discard execCmd(&"{RAD_TOOL_DD} bs=1M count={RAD_FILE_GLAUCUS_IMG_SIZE} if=/dev/zero of={img} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+
+  # Partition the IMG file
+  discard execCmd(&"{RAD_TOOL_PARTED} {RAD_FLAGS_TOOL_PARTED} {img} mklabel msdos {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_PARTED} {RAD_FLAGS_TOOL_PARTED} -a none {img} mkpart primary ext4 1 {RAD_FILE_GLAUCUS_IMG_SIZE} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_PARTED} {RAD_FLAGS_TOOL_PARTED} -a none {img} set 1 boot on {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+
+  # Load the `loop` module
+  discard execCmd(&"{RAD_TOOL_MODPROBE} loop {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+
+  # Detach all used loop devices
+  discard execCmd(&"{RAD_TOOL_LOSETUP} -D {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+
   # Associate the first unused loop device with the IMG file
-  discard execCmd(&"{RAD_TOOTH_LOSETUP} {device} {img} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_LOSETUP} {device} {img} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
   # Notify the kernel about the new partition on the IMG file
-  discard execCmd(&"{RAD_TOOTH_PARTX} -a {device} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_PARTX} -a {device} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
-  # Create an `ext4` file system in the partition
-  discard execCmd(&"{RAD_TOOTH_MKE2FS} {RAD_FLAGS_TOOTH_MKE2FS} ext4 {partition}")
-
-  let mount = RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_PATH_MNT / RAD_DIR_GLAUCUS
+  # Create an `ext4` filesystem in the partition
+  discard execCmd(&"{RAD_TOOL_MKE2FS} {RAD_FLAGS_TOOL_MKE2FS} ext4 {partition}")
 
   createDir(mount)
 
-  discard execCmd(&"{RAD_TOOTH_MOUNT} {partition} {mount} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_MOUNT} {partition} {mount} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
-  # Remove `/lost+found` directory
+  # Remove `/lost+found` dir
   removeDir(mount / RAD_PATH_LOST_FOUND)
 
-  discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RAD_FLAGS_TOOTH_RSYNC_RELEASE)
+  discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RAD_FLAGS_TOOL_RSYNC_RELEASE)
 
-  discard rad_rsync(getEnv(RAD_ENV_DIR_SRCD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR, mount / RAD_PATH_RAD_CACHE_SRC, RAD_FLAGS_TOOTH_RSYNC_RELEASE)
+  discard rad_rsync(getEnv(RAD_ENV_DIR_SRCD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR, mount / RAD_PATH_RAD_CACHE_SRC, RAD_FLAGS_TOOL_RSYNC_RELEASE)
 
-  let path = mount / RAD_PATH_BOOT
-
-  # Generate initramfs
   discard rad_gen_initramfs(path, true)
 
   # Install `grub` as the default bootloader
   createDir(path / RAD_CERAS_GRUB)
 
-  discard rad_rsync(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_GRUB / RAD_FILE_GRUB_CFG_IMG, path / RAD_CERAS_GRUB / RAD_FILE_GRUB_CFG, RAD_FLAGS_TOOTH_RSYNC_RELEASE)
+  discard rad_rsync(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_GRUB / RAD_FILE_GRUB_CFG_IMG, path / RAD_CERAS_GRUB / RAD_FILE_GRUB_CFG, RAD_FLAGS_TOOL_RSYNC_RELEASE)
 
-  discard execCmd(&"{RAD_TOOTH_GRUB_INSTALL} {RAD_FLAGS_TOOTH_GRUB} --boot-directory={mount / RAD_PATH_BOOT} --target=i386-pc {device} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_GRUB_INSTALL} {RAD_FLAGS_TOOL_GRUB} --boot-directory={mount / RAD_PATH_BOOT} --target=i386-pc {device} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
   # Change ownerships
-  discard execCmd(&"{RAD_TOOTH_CHOWN} {RAD_FLAGS_TOOTH_CHOWN} 0:0 {mount} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-  discard execCmd(&"{RAD_TOOTH_CHOWN} {RAD_FLAGS_TOOTH_CHOWN} 20:20 {mount / RAD_PATH_VAR / RAD_DIR_LOG / RAD_PATH_WTMPD} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_CHOWN} {RAD_FLAGS_TOOL_CHOWN} 0:0 {mount} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_CHOWN} {RAD_FLAGS_TOOL_CHOWN} 20:20 {mount / RAD_PATH_VAR / RAD_DIR_LOG / RAD_PATH_WTMPD} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
   # Clean up
-  discard execCmd(&"{RAD_TOOTH_UMOUNT} {RAD_FLAGS_TOOTH_UMOUNT} {mount} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-  discard execCmd(&"{RAD_TOOTH_PARTX} -d {partition} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
-  discard execCmd(&"{RAD_TOOTH_LOSETUP} -d {device} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_UMOUNT} {RAD_FLAGS_TOOL_UMOUNT} {mount} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_PARTX} -d {partition} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_LOSETUP} -d {device} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
 proc rad_bootstrap_release_iso*() =
   let
-    name = &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_GENOME_X86_64_V3}-{now().format(\"YYYYMMdd\")}"
-    iso = getEnv(RAD_ENV_DIR_GLAD) / &"{name}.iso"
+    iso = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.iso"
 
     path = getEnv(RAD_ENV_DIR_ISOD) / RAD_PATH_BOOT
 
@@ -259,19 +258,18 @@ proc rad_bootstrap_release_iso*() =
 
   discard rad_rsync(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_GRUB / RAD_FILE_GRUB_CFG_ISO, path / RAD_CERAS_GRUB / RAD_FILE_GRUB_CFG)
 
-  # Generate initramfs
   discard rad_rsync(getEnv(RAD_ENV_DIR_GLAD) / RAD_FILE_INITRAMFS, path)
 
   # Compress rootfs
-  discard execCmd(&"{RAD_TOOTH_MKFS_EROFS} {path / RAD_FILE_ROOTFS} {getEnv(RAD_ENV_DIR_CRSD)} {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_MKFS_EROFS} {path / RAD_FILE_ROOTFS} {getEnv(RAD_ENV_DIR_CRSD)} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
   # Copy kernel
   discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_BOOT / RAD_FILE_KERNEL, path)
 
   # Create a new ISO file
-  discard execCmd(&"{RAD_TOOTH_GRUB_MKRESCUE} {RAD_FLAGS_TOOTH_GRUB} -v -o {iso} {getEnv(RAD_ENV_DIR_ISOD)} -volid GLAUCUS {RAD_FLAGS_TOOTH_SHELL_REDIRECT}")
+  discard execCmd(&"{RAD_TOOL_GRUB_MKRESCUE} {RAD_FLAGS_TOOL_GRUB} -v -o {iso} {getEnv(RAD_ENV_DIR_ISOD)} -volid GLAUCUS {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
-proc rad_bootstrap_system_env_dir*() =
+proc rad_bootstrap_sys_env_dir*() =
   putEnv(RAD_ENV_DIR_SRCD, RAD_PATH_RAD_CACHE_SRC)
   putEnv(RAD_ENV_DIR_CERD, RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS)
   putEnv(RAD_ENV_DIR_LOGD, RAD_PATH_RAD_LOG)
@@ -279,7 +277,7 @@ proc rad_bootstrap_system_env_dir*() =
   putEnv(RAD_ENV_DIR_TBLD, RAD_PATH_RAD_TMP / RAD_DIR_BLD)
   putEnv(RAD_ENV_DIR_TSRC, RAD_PATH_RAD_TMP / RAD_DIR_SRC)
 
-proc rad_bootstrap_system_env_pkg_config*() =
+proc rad_bootstrap_sys_env_pkg_config*() =
   putEnv(RAD_ENV_PKG_CONFIG_LIBDIR, RAD_PATH_PKG_CONFIG_LIBDIR)
   putEnv(RAD_ENV_PKG_CONFIG_PATH, getEnv(RAD_ENV_PKG_CONFIG_LIBDIR))
   putEnv(RAD_ENV_PKG_CONFIG_SYSROOT_DIR, RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
@@ -289,32 +287,32 @@ proc rad_bootstrap_system_env_pkg_config*() =
   putEnv(RAD_ENV_PKG_CONFIG_SYSTEM_INCLUDE_PATH, RAD_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
   putEnv(RAD_ENV_PKG_CONFIG_SYSTEM_LIBRARY_PATH, RAD_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
 
-proc rad_bootstrap_system_env_teeth*() =
+proc rad_bootstrap_sys_env_tools*() =
   putEnv(RAD_ENV_BOOTSTRAP, "yes")
 
-  putEnv(RAD_ENV_TOOTH_AR, RAD_TOOTH_AR)
-  putEnv(RAD_ENV_TOOTH_AS, RAD_TOOTH_AS)
-  putEnv(RAD_ENV_TOOTH_CC, RAD_CERAS_GCC)
-  putEnv(RAD_ENV_TOOTH_CPP, RAD_CERAS_GCC & ' ' & RAD_FLAGS_TOOTH_CPP)
-  putEnv(RAD_ENV_TOOTH_CXX, RAD_TOOTH_CXX)
-  putEnv(RAD_ENV_TOOTH_CXXCPP, RAD_TOOTH_CXX & ' ' & RAD_FLAGS_TOOTH_CPP)
-  putEnv(RAD_ENV_TOOTH_HOSTCC, RAD_CERAS_GCC)
-  putEnv(RAD_ENV_TOOTH_NM, RAD_TOOTH_NM)
-  putEnv(RAD_ENV_TOOTH_OBJCOPY, RAD_TOOTH_OBJCOPY)
-  putEnv(RAD_ENV_TOOTH_OBJDUMP, RAD_TOOTH_OBJDUMP)
-  putEnv(RAD_ENV_TOOTH_RANLIB, RAD_TOOTH_RANLIB)
-  putEnv(RAD_ENV_TOOTH_READELF, RAD_TOOTH_READELF)
-  putEnv(RAD_ENV_TOOTH_SIZE, RAD_TOOTH_SIZE)
-  putEnv(RAD_ENV_TOOTH_STRIP, RAD_TOOTH_STRIP)
+  putEnv(RAD_ENV_TOOL_AR, RAD_TOOL_AR)
+  putEnv(RAD_ENV_TOOL_AS, RAD_TOOL_AS)
+  putEnv(RAD_ENV_TOOL_CC, RAD_CERAS_GCC)
+  putEnv(RAD_ENV_TOOL_CPP, RAD_CERAS_GCC & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_CXX, RAD_TOOL_CXX)
+  putEnv(RAD_ENV_TOOL_CXXCPP, RAD_TOOL_CXX & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_HOSTCC, RAD_CERAS_GCC)
+  putEnv(RAD_ENV_TOOL_NM, RAD_TOOL_NM)
+  putEnv(RAD_ENV_TOOL_OBJCOPY, RAD_TOOL_OBJCOPY)
+  putEnv(RAD_ENV_TOOL_OBJDUMP, RAD_TOOL_OBJDUMP)
+  putEnv(RAD_ENV_TOOL_RANLIB, RAD_TOOL_RANLIB)
+  putEnv(RAD_ENV_TOOL_READELF, RAD_TOOL_READELF)
+  putEnv(RAD_ENV_TOOL_SIZE, RAD_TOOL_SIZE)
+  putEnv(RAD_ENV_TOOL_STRIP, RAD_TOOL_STRIP)
 
-proc rad_bootstrap_system_prepare*() =
+proc rad_bootstrap_sys_prepare*() =
   removeDir(getEnv(RAD_ENV_DIR_TBLD))
   createDir(getEnv(RAD_ENV_DIR_TBLD))
 
-  # Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
+  # Create the `src` dir if it doesn't exist, but don't remove it if it does exist!
   createDir(getEnv(RAD_ENV_DIR_TSRC))
 
-proc rad_bootstrap_system_build*() =
+proc rad_bootstrap_sys_build*() =
   rad_ceras_build([
     # Filesystem
     RAD_CERAS_FILESYSTEM,
@@ -423,7 +421,7 @@ proc rad_bootstrap_system_build*() =
 
     # Kernel
     RAD_CERAS_LINUX
-  ], RAD_DIR_SYSTEM, false)
+  ], RAD_DIR_SYS, false)
 
 func rad_bootstrap_toolchain_backup*() =
   discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD), getEnv(RAD_ENV_DIR_BAKD))

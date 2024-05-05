@@ -3,7 +3,7 @@
 
 import
   std/[os, parseopt],
-  bootstrap, ceras, constants, genome, teeth
+  arch, bootstrap, cerata, constants, tools
 
 proc rad_options*() =
   if paramCount() < 1:
@@ -52,32 +52,32 @@ proc rad_options*() =
           echo RAD_HELP_BOOTSTRAP
         of "i", "img":
           rad_bootstrap_env()
-          rad_teeth_env()
+          rad_tools_env()
           rad_bootstrap_release_img()
 
           echo "img complete"
         of "r", "release":
           rad_bootstrap_env()
-          rad_teeth_env()
+          rad_tools_env()
           rad_bootstrap_release_iso()
 
           echo "release complete"
-        of "s", "system":
-          rad_teeth_env()
-          rad_genome_env(RAD_DIR_SYSTEM)
-          rad_genome_flags_env()
-          rad_bootstrap_system_env_dir()
-          rad_bootstrap_system_env_pkg_config()
-          rad_bootstrap_system_env_teeth()
-          rad_bootstrap_system_prepare()
-          rad_bootstrap_system_build()
+        of "s", "sys":
+          rad_tools_env()
+          rad_arch_env(RAD_DIR_SYS)
+          rad_arch_flags_env()
+          rad_bootstrap_sys_env_dir()
+          rad_bootstrap_sys_env_pkg_config()
+          rad_bootstrap_sys_env_tools()
+          rad_bootstrap_sys_prepare()
+          rad_bootstrap_sys_build()
 
           echo ""
-          echo "system complete"
+          echo "sys complete"
         of "t", "toolchain":
           rad_bootstrap_env()
-          rad_teeth_env()
-          rad_genome_env()
+          rad_tools_env()
+          rad_arch_env()
           rad_bootstrap_clean()
           rad_bootstrap_init()
           rad_bootstrap_toolchain_build()
@@ -87,11 +87,11 @@ proc rad_options*() =
           echo "toolchain complete"
         of "x", "cross":
           rad_bootstrap_env()
-          rad_teeth_env()
-          rad_genome_env()
-          rad_genome_flags_env()
+          rad_tools_env()
+          rad_arch_env()
+          rad_arch_flags_env()
           rad_bootstrap_cross_env_pkg_config()
-          rad_bootstrap_cross_env_teeth()
+          rad_bootstrap_cross_env_tools()
           rad_bootstrap_cross_prepare()
           rad_bootstrap_cross_build()
 
@@ -115,13 +115,13 @@ proc rad_options*() =
           echo ""
           echo "append complete"
         of "b", "build":
-          rad_teeth_env()
-          rad_genome_env(RAD_DIR_SYSTEM)
-          rad_genome_flags_env()
-          rad_bootstrap_system_env_dir()
-          rad_bootstrap_system_env_pkg_config()
-          rad_bootstrap_system_env_teeth()
-          rad_bootstrap_system_prepare()
+          rad_tools_env()
+          rad_arch_env(RAD_DIR_SYS)
+          rad_arch_flags_env()
+          rad_bootstrap_sys_env_dir()
+          rad_bootstrap_sys_env_pkg_config()
+          rad_bootstrap_sys_env_tools()
+          rad_bootstrap_sys_prepare()
           rad_ceras_build(remainingArgs(p))
 
           echo ""

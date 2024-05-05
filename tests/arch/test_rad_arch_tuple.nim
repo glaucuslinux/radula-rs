@@ -3,6 +3,6 @@
 
 import
   std/strutils,
-  ../../src/genome
+  ../../src/arch
 
-doAssert rad_genome_tuple()[0].strip().startsWith("x86_64-pc-linux-")
+doAssert rad_arch_tuple()[0].strip().startsWith("x86_64-pc-linux-")

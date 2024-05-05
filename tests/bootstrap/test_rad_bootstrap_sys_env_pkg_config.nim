@@ -5,7 +5,7 @@ import
   std/os,
   ../../src/[bootstrap, constants]
 
-rad_bootstrap_system_env_pkg_config()
+rad_bootstrap_sys_env_pkg_config()
 
 echo "PKG_CONFIG_LIBDIR               :: ", getEnv(RAD_ENV_PKG_CONFIG_LIBDIR)
 echo "PKG_CONFIG_PATH                 :: ", getEnv(RAD_ENV_PKG_CONFIG_PATH)

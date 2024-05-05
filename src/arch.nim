@@ -1,0 +1,23 @@
+# Copyright (c) 2018-2024, Firas Khalil Khana
+# Distributed under the terms of the ISC License
+
+import
+  std/[os, osproc, strformat, strutils, times],
+  constants
+
+# Return tuple from `config.guess`
+proc rad_arch_tuple*(): (string, int) =
+  execCmdEx(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BINUTILS / RAD_FILE_CONFIG_GUESS)
+
+proc rad_arch_env*(stage = RAD_DIR_CROSS) =
+  putEnv(RAD_ENV_ARCH, RAD_ARCH_X86_64)
+  putEnv(RAD_ENV_CARCH, RAD_ARCH_X86_64_V3)
+  putEnv(RAD_ENV_PRETTY_NAME, &"{RAD_DIR_GLAUCUS} {RAD_CERAS_S6} {RAD_ARCH_X86_64_V3} {now().format(\"YYYYMMdd\")}")
+
+  putEnv(RAD_ENV_TUPLE_BLD, rad_arch_tuple()[0].strip())
+  putEnv(RAD_ENV_TUPLE_TGT, RAD_ARCH_X86_64_LINUX & (if stage == RAD_DIR_CROSS: RAD_ARCH_TUPLE_TGT_CROSS else: RAD_ARCH_TUPLE_TGT))
+
+proc rad_arch_flags_env*() =
+  putEnv(RAD_ENV_FLAGS_CFLAGS, RAD_FLAGS_CFLAGS)
+  putEnv(RAD_ENV_FLAGS_CXXFLAGS, RAD_FLAGS_CFLAGS)
+  putEnv(RAD_ENV_FLAGS_LDFLAGS, RAD_FLAGS_LDFLAGS & ' ' & RAD_FLAGS_CFLAGS)
