@@ -61,7 +61,7 @@ proc rad_ceras_print_footer(idx: int, nom, ver, status: string) =
   styledEcho fgGreen, &"{idx + 1:<8}", resetStyle, &"{nom:24}{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
 
 proc rad_ceras_print_header() =
-  styledEcho styleBright, &"{\"idx\":8}{\"nom\":24}{\"ver\":24}{\"cmd\":8}eta", resetStyle
+  styledEcho styleBright, &"{\"idx\":8}{\"nom\":24}{\"ver\":24}{\"cmd\":8}fin", resetStyle
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
@@ -102,34 +102,64 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
     let ceras = rad_ceras_parse(nom)
 
     # Check for virtual cerata
-    if ceras.url.isEmptyOrWhitespace():
+    case ceras.url
+    of RAD_PRINT_NIL:
       rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
+    else:
+      let
+        path = getEnv(RAD_ENV_DIR_SRCD) / ceras.nom
+        archive = path / lastPathPart(ceras.url)
 
-      continue
+      if dirExists(path):
+        case ceras.ver
+        of RAD_TOOL_GIT:
+          rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_FETCH)
+        else:
+          if rad_verify_file(archive, ceras.sum):
+            if not rad_ceras_check_extract_src(archive):
+              rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
-    let
-      path = getEnv(RAD_ENV_DIR_SRCD) / ceras.nom
-      archive = path / lastPathPart(ceras.url)
+              discard rad_extract_tar(archive, path)
 
-    if dirExists(path):
-      case ceras.ver
-      of RAD_TOOL_GIT:
-        rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_FETCH)
-      else:
-        if rad_verify_file(archive, ceras.sum):
-          if not rad_ceras_check_extract_src(archive):
+              cursorUp 1
+              eraseLine()
+
+            rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
+          else:
             rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
-            discard rad_extract_tar(archive, path)
+            removeDir(path)
+            createDir(path)
+
+            discard rad_download_file(archive, ceras.url)
+
+            if rad_verify_file(archive, ceras.sum):
+              discard rad_extract_tar(archive, path)
+            else:
+              cursorUp 1
+              eraseLine()
+
+              rad_abort(&"{\"sum\":8}{ceras.nom:24}{ceras.ver:24}")
 
             cursorUp 1
             eraseLine()
 
-          rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
+            rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
+      else:
+        case ceras.ver
+        of RAD_TOOL_GIT:
+          rad_ceras_print_content(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
+
+          discard rad_clone_repo(path, ceras.url)
+          discard rad_checkout_repo(ceras.cmt, path)
+
+          cursorUp 1
+          eraseLine()
+
+          rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
         else:
           rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
-          removeDir(path)
           createDir(path)
 
           discard rad_download_file(archive, ceras.url)
@@ -146,37 +176,6 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
           eraseLine()
 
           rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
-    else:
-      case ceras.ver
-      of RAD_TOOL_GIT:
-        rad_ceras_print_content(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
-
-        discard rad_clone_repo(path, ceras.url)
-        discard rad_checkout_repo(ceras.cmt, path)
-
-        cursorUp 1
-        eraseLine()
-
-        rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
-      else:
-        rad_ceras_print_content(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
-
-        createDir(path)
-
-        discard rad_download_file(archive, ceras.url)
-
-        if rad_verify_file(archive, ceras.sum):
-          discard rad_extract_tar(archive, path)
-        else:
-          cursorUp 1
-          eraseLine()
-
-          rad_abort(&"{\"sum\":8}{ceras.nom:24}{ceras.ver:24}")
-
-        cursorUp 1
-        eraseLine()
-
-        rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
 
 proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resolve = true) =
   let cluster = rad_ceras_check(cerata, false)
