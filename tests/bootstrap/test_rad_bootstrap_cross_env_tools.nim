@@ -5,10 +5,8 @@ import
   std/[os, strutils],
   ../../src/[arch, bootstrap, constants]
 
-rad_bootstrap_env()
-
 rad_arch_env()
-
+rad_bootstrap_env()
 rad_bootstrap_cross_env_tools()
 
 echo "CROSS_COMPILE  :: ", getEnv(RAD_ENV_CROSS_COMPILE)

@@ -5,7 +5,7 @@ import
   std/os,
   ../../src/[arch, constants]
 
-rad_arch_flags_env()
+rad_arch_env_flags()
 
 echo "CFLAGS    :: ", getEnv(RAD_ENV_FLAGS_CFLAGS)
 echo "CXXFLAGS  :: ", getEnv(RAD_ENV_FLAGS_CXXFLAGS)

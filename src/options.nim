@@ -56,9 +56,9 @@ proc rad_options*() =
 
           echo "img complete"
         of "n", "native":
-          rad_tools_env()
           rad_arch_env(RAD_STAGE_NATIVE)
-          rad_arch_flags_env()
+          rad_arch_env_flags()
+          rad_tools_env()
           rad_bootstrap_native_env_dir()
           rad_bootstrap_native_env_pkg_config()
           rad_bootstrap_native_env_tools()
@@ -73,9 +73,9 @@ proc rad_options*() =
 
           echo "release complete"
         of "t", "toolchain":
-          rad_bootstrap_env()
-          rad_tools_env()
           rad_arch_env()
+          rad_tools_env()
+          rad_bootstrap_env()
           rad_bootstrap_clean()
           rad_bootstrap_init()
           rad_bootstrap_toolchain_build()
@@ -84,10 +84,10 @@ proc rad_options*() =
           echo ""
           echo "toolchain complete"
         of "x", "cross":
-          rad_bootstrap_env()
-          rad_tools_env()
           rad_arch_env()
-          rad_arch_flags_env()
+          rad_arch_env_flags()
+          rad_tools_env()
+          rad_bootstrap_env()
           rad_bootstrap_cross_env_pkg_config()
           rad_bootstrap_cross_env_tools()
           rad_bootstrap_cross_prepare()
@@ -113,9 +113,9 @@ proc rad_options*() =
           echo ""
           echo "append complete"
         of "b", "build":
-          rad_tools_env()
           rad_arch_env(RAD_STAGE_NATIVE)
-          rad_arch_flags_env()
+          rad_arch_env_flags()
+          rad_tools_env()
           rad_bootstrap_native_env_dir()
           rad_bootstrap_native_env_pkg_config()
           rad_bootstrap_native_env_tools()

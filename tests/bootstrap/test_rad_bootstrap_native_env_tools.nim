@@ -6,7 +6,6 @@ import
   ../../src/[arch, bootstrap, constants]
 
 rad_arch_env()
-
 rad_bootstrap_native_env_tools()
 
 echo "AR             :: ", getEnv(RAD_ENV_TOOL_AR)

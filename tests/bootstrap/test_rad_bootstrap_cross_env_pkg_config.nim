@@ -6,7 +6,6 @@ import
   ../../src/[bootstrap, constants]
 
 rad_bootstrap_env()
-
 rad_bootstrap_cross_env_pkg_config()
 
 echo "PKG_CONFIG_LIBDIR               :: ", getEnv(RAD_ENV_PKG_CONFIG_LIBDIR)

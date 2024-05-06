@@ -5,8 +5,8 @@
 # All constants are ordered alphabetically
 
 const
-  RAD_ARCH_TUPLE_TGT* = "-pc-linux-musl"
   RAD_ARCH_TUPLE_TGT_CROSS* = "-glaucus-linux-musl"
+  RAD_ARCH_TUPLE_TGT_NATIVE* = "-pc-linux-musl"
 
   RAD_ARCH_X86_64* = "x86-64"
   RAD_ARCH_X86_64_LINUX* = "x86_64"
@@ -215,7 +215,7 @@ const
   RAD_FILE_KERNEL* = "vmlinuz"
 
   RAD_FILE_RAD_LCK* = "rad.lck"
-  RAD_FILE_ROOTFS* = "rootfs.erofs"
+  RAD_FILE_ROOTFS* = "rootfs"
 
   RAD_FILE_SUM* = "sum"
 
