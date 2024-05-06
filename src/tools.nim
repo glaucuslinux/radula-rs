@@ -6,10 +6,10 @@ import
   constants,
   hashlib/misc/blake3
 
-proc rad_checkout_repo*(cmt, dir: string): int =
+proc rad_checkout_repo*(dir, cmt: string): int =
   execCmd(&"{git} -C {dir} {GIT_CHECKOUT} {cmt} -q")
 
-proc rad_clone_repo*(dir, url: string): int =
+proc rad_clone_repo*(url, dir: string): int =
   execCmd(&"{git} {GIT_CLONE} {url} {dir} -q")
 
 func rad_compress_zst*(file: string): int =

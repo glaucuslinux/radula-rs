@@ -5,8 +5,8 @@ type
   RAD_ARCH* = enum
     glaucus
 
-    TUPLE_TGT_CROSS = "-glaucus-linux-musl"
-    TUPLE_TGT_NATIVE = "-pc-linux-musl"
+    TUPLE_CROSS = "-glaucus-linux-musl"
+    TUPLE_NATIVE = "-pc-linux-musl"
 
     X86_64 = "x86-64"
     X86_64_LINUX = "x86_64"
@@ -142,10 +142,11 @@ type
     # ARCH
     ARCH
     BOOTSTRAP
-    BLD
     CARCH
     CROSS_COMPILE
     PRETTY_NAME
+
+    BLD
     TGT
 
     # DIR
@@ -155,7 +156,6 @@ type
     GLAD
     ISOD
     LOGD
-    PATH
     SACD
     SRCD
     TBLD
@@ -166,6 +166,9 @@ type
     CFLAGS
     CXXFLAGS
     LDFLAGS
+
+    # PATHS
+    PATH
 
     # PKG_CONFIG
     PKG_CONFIG_LIBDIR
@@ -202,24 +205,17 @@ type
 
   RAD_FILES* = enum
     booster_yaml = "booster.yaml"
-
     ceras
     config_guess = "config.guess"
-
-    glaucus_img_size = "16384"
     grub_cfg = "grub.cfg"
     grub_cfg_img = "grub.cfg.img"
     grub_cfg_iso = "grub.cfg.iso"
-
+    img_size = "16384"
     initramfs
-
     kernel = "vmlinuz"
-
     rad_lck = "rad.lck"
     rootfs
-
     sum
-
     tar_zst = ".tar.zst"
 
 
@@ -227,30 +223,22 @@ type
     CFLAGS = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
     LDFLAGS = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
 
+    # TOOLS
     CHOWN = "-Rv"
     CPP = "-E"
-
     GIT_CHECKOUT = "checkout"
     GIT_CLONE = "clone"
-
     GRUB = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
-
     MAKE = "-j4 -O"
     MKE2FS = "-qt"
-
     PARTED = "-s"
-
     RSYNC = "-vaHAXSx"
     RSYNC_RELEASE = "-vaHAXx"
-
     SHELL_COMMAND = "-c"
     SHELL_REDIRECT = "> /dev/null 2>&1"
-
     TAR_CREATE = "-cpvf"
     TAR_EXTRACT = "-xmPvf"
-
     UMOUNT = "-fqRv"
-
     ZSTD_COMPRESS = "-22 --ultra -T0 --long"
     ZSTD_DECOMPRESS = "-d -T0 --long"
 
@@ -307,22 +295,22 @@ Distributed under the terms of the ISC License"""
 
 
   RAD_PATHS* = enum
+    # FHS
     bin
     boot
-
     doc
-
     etc
-
     info
-
     lib
     lib64
     lost_found = "lost+found"
-
     man
     mnt
     modules
+    share
+    usr
+    VAR = "var"
+    wtmpd
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
     # automatically prefixed to PATH and LIBDIR)
@@ -330,6 +318,7 @@ Distributed under the terms of the ISC License"""
     PKG_CONFIG_SYSTEM_INCLUDE_PATH = "/usr/include"
     PKG_CONFIG_SYSTEM_LIBRARY_PATH = "/usr/lib"
 
+    # RAD
     RAD_CACHE_BIN = "/var/cache/rad/bin"
     RAD_CACHE_SRC = "/var/cache/rad/src"
     RAD_CACHE_VENOM = "/var/cache/rad/venom"
@@ -337,14 +326,6 @@ Distributed under the terms of the ISC License"""
     RAD_LIB_LOCAL = "/var/lib/rad/local"
     RAD_LOG = "/var/log/rad"
     RAD_TMP = "/var/tmp/rad"
-
-    share
-
-    usr
-
-    VAR = "var"
-
-    wtmpd
 
 
   RAD_PRINT* = enum
@@ -365,38 +346,26 @@ Distributed under the terms of the ISC License"""
   RAD_TOOLS* = enum
     ar = "gcc-ar"
     AS = "as"
-
     chown
     cxx = "g++"
-
     dd
-
     git
     grub_install = "grub-install"
     grub_mkrescue = "grub-mkrescue"
-
     losetup
-
     mke2fs
     mkfs_erofs = "mkfs.erofs"
     modprobe
     mount
-
     nm = "gcc-nm"
-
     objcopy
     objdump
-
     parted
     partx
-
     ranlib = "gcc-ranlib"
     readelf
-
     sh
     size
     strip
-
     tar = "bsdtar"
-
     umount

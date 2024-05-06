@@ -81,8 +81,8 @@ proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], r
       else:
         ceras.bld.split()
 
-  if deps[nom].len() > 0:
-    for dep in deps[nom]:
+  if deps[ceras.nom].len() > 0:
+    for dep in deps[ceras.nom]:
       rad_ceras_resolve_deps(dep, deps, if run: true else: false)
 
 proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
@@ -150,8 +150,8 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
         of $git:
           rad_ceras_print_content(idx, ceras.nom, ceras.cmt, $clone)
 
-          discard rad_clone_repo(path, ceras.url)
-          discard rad_checkout_repo(ceras.cmt, path)
+          discard rad_clone_repo(ceras.url, path)
+          discard rad_checkout_repo(path, ceras.cmt)
 
           cursorUp 1
           eraseLine()

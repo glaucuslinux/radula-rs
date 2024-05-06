@@ -126,9 +126,9 @@ proc rad_bootstrap_cross_env_tools*() =
   putEnv($AR, cross_compile & $ar)
   putEnv($RAD_ENV.AS, cross_compile & $RAD_TOOLS.AS)
   putEnv($CC, cross_compile & $gcc)
-  putEnv($RAD_ENV.CPP, &"{cross_compile}{gcc} {RAD_FLAGS.CPP}")
+  putEnv($RAD_ENV.CPP, &"{getEnv($CC)} {RAD_FLAGS.CPP}")
   putEnv($CXX, cross_compile & $cxx)
-  putEnv($CXXCPP, &"{cross_compile}{cxx} {RAD_FLAGS.CPP}")
+  putEnv($CXXCPP, &"{getEnv($CXX)} {RAD_FLAGS.CPP}")
   putEnv($HOSTCC, $gcc)
   putEnv($NM, cross_compile & $nm)
   putEnv($OBJCOPY, cross_compile & $objcopy)
@@ -187,7 +187,7 @@ proc rad_bootstrap_native_env_dir*() =
 
 proc rad_bootstrap_native_env_pkg_config*() =
   putEnv($RAD_ENV.PKG_CONFIG_LIBDIR, $RAD_PATHS.PKG_CONFIG_LIBDIR)
-  putEnv($PKG_CONFIG_PATH, getEnv($RAD_ENV.PKG_CONFIG_LIBDIR))
+  putEnv($PKG_CONFIG_PATH, $RAD_PATHS.PKG_CONFIG_LIBDIR)
   putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
 
   # These env variables are `pkgconf` specific, but setting them won't
@@ -343,16 +343,14 @@ proc rad_bootstrap_release_img*() =
 
     partition = device & "p1"
 
-    mount = DirSep & $mnt / $glaucus
-
-    path = mount / $boot
+    path = DirSep & $mnt / $glaucus
 
   # Create a new IMG file
-  discard execCmd(&"{dd} bs=1M count={glaucus_img_size} if=/dev/zero of={img} {SHELL_REDIRECT}")
+  discard execCmd(&"{dd} bs=1M count={img_size} if=/dev/zero of={img} {SHELL_REDIRECT}")
 
   # Partition the IMG file
   discard execCmd(&"{parted} {PARTED} {img} mklabel msdos {SHELL_REDIRECT}")
-  discard execCmd(&"{parted} {PARTED} -a none {img} mkpart primary ext4 1 {glaucus_img_size} {SHELL_REDIRECT}")
+  discard execCmd(&"{parted} {PARTED} -a none {img} mkpart primary ext4 1 {img_size} {SHELL_REDIRECT}")
   discard execCmd(&"{parted} {PARTED} -a none {img} set 1 boot on {SHELL_REDIRECT}")
 
   # Load the `loop` module
@@ -370,32 +368,32 @@ proc rad_bootstrap_release_img*() =
   # Create an `ext4` filesystem in the partition
   discard execCmd(&"{mke2fs} {MKE2FS} ext4 {partition}")
 
-  createDir(mount)
+  createDir(path)
 
-  discard execCmd(&"{mount} {partition} {mount} {SHELL_REDIRECT}")
+  discard execCmd(&"{mount} {partition} {path} {SHELL_REDIRECT}")
 
   # Remove `/lost+found` dir
-  removeDir(mount / $lost_found)
+  removeDir(path / $lost_found)
 
-  discard rad_rsync(getEnv($CRSD) & DirSep, mount, RSYNC_RELEASE)
+  discard rad_rsync(getEnv($CRSD) & DirSep, path, RSYNC_RELEASE)
 
-  discard rad_rsync(getEnv($SRCD) & DirSep, mount / $RAD_CACHE_SRC, RSYNC_RELEASE)
+  discard rad_rsync(getEnv($SRCD) & DirSep, path / $RAD_CACHE_SRC, RSYNC_RELEASE)
 
-  discard rad_gen_initramfs(path, true)
+  discard rad_gen_initramfs(path / $boot, true)
 
   # Install `grub` as the default bootloader
-  createDir(path / $grub)
+  createDir(path / $boot / $grub)
 
-  discard rad_rsync($RAD_LIB_CLUSTERS_GLAUCUS / $grub / $grub_cfg_img, path / $grub / $grub_cfg, RSYNC_RELEASE)
+  discard rad_rsync($RAD_LIB_CLUSTERS_GLAUCUS / $grub / $grub_cfg_img, path / $boot / $grub / $grub_cfg, RSYNC_RELEASE)
 
-  discard execCmd(&"{grub_install} {GRUB} --boot-directory={mount / $boot} --target=i386-pc {device} {SHELL_REDIRECT}")
+  discard execCmd(&"{grub_install} {GRUB} --boot-directory={path / $boot} --target=i386-pc {device} {SHELL_REDIRECT}")
 
   # Change ownerships
-  discard execCmd(&"{chown} {CHOWN} 0:0 {mount} {SHELL_REDIRECT}")
-  discard execCmd(&"{chown} {CHOWN} 20:20 {mount / $VAR / $log / $wtmpd} {SHELL_REDIRECT}")
+  discard execCmd(&"{chown} {CHOWN} 0:0 {path} {SHELL_REDIRECT}")
+  discard execCmd(&"{chown} {CHOWN} 20:20 {path / $VAR / $log / $wtmpd} {SHELL_REDIRECT}")
 
   # Clean up
-  discard execCmd(&"{umount} {UMOUNT} {mount} {SHELL_REDIRECT}")
+  discard execCmd(&"{umount} {UMOUNT} {path} {SHELL_REDIRECT}")
   discard execCmd(&"{partx} -d {partition} {SHELL_REDIRECT}")
   discard execCmd(&"{losetup} -d {device} {SHELL_REDIRECT}")
 
@@ -420,7 +418,7 @@ proc rad_bootstrap_release_iso*() =
   discard rad_rsync(getEnv($CRSD) / $boot / $kernel, path)
 
   # Create a new ISO file
-  discard execCmd(&"{grub_mkrescue} {GRUB} -v -o {iso} {getEnv($ISOD)} -volid GLAUCUS {SHELL_REDIRECT}")
+  discard execCmd(&"{grub_mkrescue} {GRUB} -v -o {iso} {getEnv($ISOD)} -volid {glaucus} {SHELL_REDIRECT}")
 
 func rad_bootstrap_toolchain_backup*() =
   discard rad_rsync(getEnv($CRSD), getEnv($BAKD))

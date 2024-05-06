@@ -18,9 +18,9 @@ proc rad_arch_env*(stage = native) =
   putEnv($TGT, $X86_64_LINUX & $(
     case stage
     of native:
-      TUPLE_TGT_NATIVE
+      TUPLE_NATIVE
     else:
-      TUPLE_TGT_CROSS
+      TUPLE_CROSS
   ))
 
 proc rad_arch_env_flags*() =
