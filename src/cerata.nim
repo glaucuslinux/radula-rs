@@ -55,13 +55,13 @@ proc rad_ceras_print*(cerata: openArray[string]) =
     echo ""
 
 proc rad_ceras_print_content(idx: int, nom, ver, status: string) =
-  styledEcho &"""{fgMagenta}{styleBright}{idx + 1:<8}{nom:24}{ver:24}{status:8}{now().format("hh:mm tt")}{resetStyle}"""
+  styledEcho fgMagenta, styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{status:8}{now().format("hh:mm tt")}""", resetStyle
 
 proc rad_ceras_print_footer(idx: int, nom, ver, status: string) =
-  styledEcho &"""{fgGreen}{idx + 1:<8}{resetStyle}{nom:24}{ver:24}{fgGreen}{status:8}{fgYellow}(now().format("hh:mm tt")){fgDefault}"""
+  styledEcho fgGreen, &"{idx + 1:<8}", resetStyle, &"{nom:24}{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
 
 proc rad_ceras_print_header() =
-  styledEcho &"""{styleBright}{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin{resetStyle}"""
+  styledEcho styleBright, &"""{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin""", resetStyle
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =

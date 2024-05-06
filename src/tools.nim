@@ -30,7 +30,7 @@ func rad_extract_tar*(archive, dir: string): int =
   execCmd(&"{RAD_TOOL_TAR} {RAD_FLAGS_TOOL_TAR_EXTRACT} {archive} -C {dir} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
 proc rad_abort*(err: string) =
-  styled_echo &"""{fgRed}{styleBright}{err}{"abort":8}{now().format("hh:mm tt")}{resetStyle}"""
+  styled_echo fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", reset_style
 
   rad_exit(QuitFailure)
 
