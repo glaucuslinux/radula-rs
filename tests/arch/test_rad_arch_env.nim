@@ -5,7 +5,7 @@ import
   std/[os, strutils],
   ../../src/[arch, constants]
 
-rad_arch_env()
+rad_arch_env(RAD_STAGE_CROSS)
 
 echo "ARCH    :: ", getEnv(RAD_ENV_ARCH)
 echo "CARCH   :: ", getEnv(RAD_ENV_CARCH)

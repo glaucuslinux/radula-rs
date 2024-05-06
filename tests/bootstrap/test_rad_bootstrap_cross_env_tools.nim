@@ -5,7 +5,7 @@ import
   std/[os, strutils],
   ../../src/[arch, bootstrap, constants]
 
-rad_arch_env()
+rad_arch_env(RAD_STAGE_CROSS)
 rad_bootstrap_env()
 rad_bootstrap_cross_env_tools()
 

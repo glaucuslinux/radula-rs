@@ -9,7 +9,7 @@ import
 proc rad_arch_tuple*(): (string, int) =
   execCmdEx(RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BINUTILS / RAD_FILE_CONFIG_GUESS)
 
-proc rad_arch_env*(stage = RAD_STAGE_CROSS) =
+proc rad_arch_env*(stage = RAD_STAGE_NATIVE) =
   putEnv(RAD_ENV_ARCH, RAD_ARCH_X86_64)
   putEnv(RAD_ENV_CARCH, RAD_ARCH_X86_64_V3)
   putEnv(RAD_ENV_PRETTY_NAME, &"{RAD_GLAUCUS} {RAD_CERAS_S6} {RAD_ARCH_X86_64_V3} {now().format(\"YYYYMMdd\")}")
@@ -17,10 +17,10 @@ proc rad_arch_env*(stage = RAD_STAGE_CROSS) =
   putEnv(RAD_ENV_TUPLE_BLD, rad_arch_tuple()[0].strip())
   putEnv(RAD_ENV_TUPLE_TGT, RAD_ARCH_X86_64_LINUX & (
     case stage
-    of RAD_STAGE_CROSS:
-      RAD_ARCH_TUPLE_TGT_CROSS
-    else:
+    of RAD_STAGE_NATIVE:
       RAD_ARCH_TUPLE_TGT_NATIVE
+    else:
+      RAD_ARCH_TUPLE_TGT_CROSS
   ))
 
 proc rad_arch_env_flags*() =
