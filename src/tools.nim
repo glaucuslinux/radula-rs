@@ -22,7 +22,7 @@ proc rad_download_file*(file, url: string): int =
   execCmd(&"{RAD_CERAS_WGET2} -q -O {file} -c -N {url}")
 
 proc rad_exit*(status = 0) =
-  remove_file(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK)
+  remove_file(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK)
 
   quit(status)
 
@@ -56,10 +56,10 @@ proc rad_interrupt*() {.noconv.} =
   rad_abort(&"{\"1\":8}{\"interrupt received\":48}")
 
 proc rad_lck*() =
-  if fileExists(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK):
+  if fileExists(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK):
     rad_abort(&"{\"1\":8}{\"lck exists\":48}")
   else:
-    writeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_DIR_TMP / RAD_FILE_RAD_LCK, "")
+    writeFile(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK, "")
 
 func rad_rsync*(src, dest: string, flags = RAD_FLAGS_TOOL_RSYNC): int =
   execCmd(&"{RAD_CERAS_RSYNC} {flags} {src} {dest} --delete {RAD_FLAGS_TOOL_SHELL_REDIRECT}")

@@ -35,4 +35,4 @@ doAssert getEnv(RAD_ENV_DIR_TBLD).endsWith("tmp/bld")
 doAssert getEnv(RAD_ENV_DIR_TSRC).endsWith("tmp/src")
 doAssert getEnv(RAD_ENV_DIR_TLCD).endsWith("toolchain")
 
-doAssert getEnv(RAD_ENV_PATH).split(':')[0].endsWith("toolchain/usr/bin")
+doAssert getEnv(RAD_ENV_PATH).split(PathSep)[0].endsWith("toolchain/usr/bin")

@@ -109,7 +109,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
       path = getEnv(RAD_ENV_DIR_SRCD) / ceras.nom
       archive = path / lastPathPart(ceras.url)
 
-    if dirExists(path):
+    if existsOrCreateDir(path):
       if ceras.ver == RAD_TOOL_GIT:
         rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_FETCH)
       else:
@@ -236,7 +236,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
 
     rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_INSTALL)
 
-    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
+    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if not ceras.url.isEmptyOrWhitespace(): '-' & ceras.ver else: \"\")}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", $DirSep)
 
     cursorUp 1
     eraseLine()
@@ -259,7 +259,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
     let sum = RAD_PATH_RAD_CACHE_VENOM / ceras.nom / RAD_FILE_SUM
 
     for line in lines(sum):
-      removeFile(RAD_PATH_PKG_CONFIG_SYSROOT_DIR / line.split()[2])
+      removeFile(DirSep & line.split()[2])
 
     cursorUp 1
     eraseLine()

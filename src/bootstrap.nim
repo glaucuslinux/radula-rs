@@ -111,7 +111,7 @@ proc rad_bootstrap_cross_build*() =
 proc rad_bootstrap_cross_env_pkg_config*() =
   putEnv(RAD_ENV_PKG_CONFIG_LIBDIR, getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_LIBDIR)
   putEnv(RAD_ENV_PKG_CONFIG_PATH, getEnv(RAD_ENV_PKG_CONFIG_LIBDIR))
-  putEnv(RAD_ENV_PKG_CONFIG_SYSROOT_DIR, getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
+  putEnv(RAD_ENV_PKG_CONFIG_SYSROOT_DIR, getEnv(RAD_ENV_DIR_CRSD) & DirSep)
 
   # These env variables are `pkgconf` specific, but setting them won't
   # do any harm...
@@ -167,7 +167,7 @@ proc rad_bootstrap_env*() =
   putEnv(RAD_ENV_DIR_TSRC, path / RAD_DIR_TMP / RAD_DIR_SRC)
   putEnv(RAD_ENV_DIR_TLCD, path / RAD_STAGE_TOOLCHAIN)
 
-  putEnv(RAD_ENV_PATH, getEnv(RAD_ENV_DIR_TLCD) / RAD_PATH_USR / RAD_PATH_BIN & ':' & getEnv(RAD_ENV_PATH))
+  putEnv(RAD_ENV_PATH, getEnv(RAD_ENV_DIR_TLCD) / RAD_PATH_USR / RAD_PATH_BIN & PathSep & getEnv(RAD_ENV_PATH))
 
 proc rad_bootstrap_init*() =
   createDir(getEnv(RAD_ENV_DIR_BAKD))
@@ -188,7 +188,7 @@ proc rad_bootstrap_native_env_dir*() =
 proc rad_bootstrap_native_env_pkg_config*() =
   putEnv(RAD_ENV_PKG_CONFIG_LIBDIR, RAD_PATH_PKG_CONFIG_LIBDIR)
   putEnv(RAD_ENV_PKG_CONFIG_PATH, getEnv(RAD_ENV_PKG_CONFIG_LIBDIR))
-  putEnv(RAD_ENV_PKG_CONFIG_SYSROOT_DIR, RAD_PATH_PKG_CONFIG_SYSROOT_DIR)
+  putEnv(RAD_ENV_PKG_CONFIG_SYSROOT_DIR, $DirSep)
 
   # These env variables are `pkgconf` specific, but setting them won't
   # do any harm...
@@ -336,14 +336,14 @@ proc rad_bootstrap_release_img*() =
     rad_abort(&"{\"1\":8}{\"permission denied\":48}")
 
   let
-    img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
+    img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
 
     # Find the first unused loop device
     device = execCmdEx(&"{RAD_TOOL_LOSETUP} -f")[0].strip()
 
     partition = device & "p1"
 
-    mount = RAD_PATH_PKG_CONFIG_SYSROOT_DIR / RAD_PATH_MNT / RAD_DIR_GLAUCUS
+    mount = DirSep & RAD_PATH_MNT / RAD_GLAUCUS
 
     path = mount / RAD_PATH_BOOT
 
@@ -377,9 +377,9 @@ proc rad_bootstrap_release_img*() =
   # Remove `/lost+found` dir
   removeDir(mount / RAD_PATH_LOST_FOUND)
 
-  discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR, mount, RAD_FLAGS_TOOL_RSYNC_RELEASE)
+  discard rad_rsync(getEnv(RAD_ENV_DIR_CRSD) & DirSep, mount, RAD_FLAGS_TOOL_RSYNC_RELEASE)
 
-  discard rad_rsync(getEnv(RAD_ENV_DIR_SRCD) / RAD_PATH_PKG_CONFIG_SYSROOT_DIR, mount / RAD_PATH_RAD_CACHE_SRC, RAD_FLAGS_TOOL_RSYNC_RELEASE)
+  discard rad_rsync(getEnv(RAD_ENV_DIR_SRCD) & DirSep, mount / RAD_PATH_RAD_CACHE_SRC, RAD_FLAGS_TOOL_RSYNC_RELEASE)
 
   discard rad_gen_initramfs(path, true)
 
@@ -401,7 +401,7 @@ proc rad_bootstrap_release_img*() =
 
 proc rad_bootstrap_release_iso*() =
   let
-    iso = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_DIR_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.iso"
+    iso = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.iso"
 
     path = getEnv(RAD_ENV_DIR_ISOD) / RAD_PATH_BOOT
 

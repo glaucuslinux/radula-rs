@@ -130,7 +130,6 @@ const
   RAD_DIR_BAK* = "bak"
   RAD_DIR_BLD* = "bld"
   RAD_DIR_CERATA* = "cerata"
-  RAD_DIR_GLAUCUS* = "glaucus"
   RAD_DIR_ISO* = "iso"
   RAD_DIR_LOG* = "log"
   RAD_DIR_SAC* = "sac"
@@ -254,6 +253,9 @@ const
   RAD_FLAGS_TOOL_ZSTD_DECOMPRESS* = "-d -T0 --long"
 
 
+  RAD_GLAUCUS* = "glaucus"
+
+
   RAD_HELP* = """
 USAGE:
   rad [ OPTION ]
@@ -324,7 +326,6 @@ Distributed under the terms of the ISC License"""
   # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
   # automatically prefixed to PATH and LIBDIR)
   RAD_PATH_PKG_CONFIG_LIBDIR* = "/usr/lib/pkgconfig"
-  RAD_PATH_PKG_CONFIG_SYSROOT_DIR* = "/"
   RAD_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "/usr/include"
   RAD_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "/usr/lib"
 
