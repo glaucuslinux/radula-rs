@@ -22,7 +22,7 @@ proc rad_download_file*(file, url: string): int =
   execCmd(&"{RAD_CERAS_WGET2} -q -O {file} -c -N {url}")
 
 proc rad_exit*(status = 0) =
-  remove_file(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK)
+  removeFile(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK)
 
   quit(status)
 

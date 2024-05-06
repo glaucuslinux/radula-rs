@@ -15,7 +15,13 @@ proc rad_arch_env*(stage = RAD_STAGE_CROSS) =
   putEnv(RAD_ENV_PRETTY_NAME, &"{RAD_GLAUCUS} {RAD_CERAS_S6} {RAD_ARCH_X86_64_V3} {now().format(\"YYYYMMdd\")}")
 
   putEnv(RAD_ENV_TUPLE_BLD, rad_arch_tuple()[0].strip())
-  putEnv(RAD_ENV_TUPLE_TGT, RAD_ARCH_X86_64_LINUX & (if stage == RAD_STAGE_CROSS: RAD_ARCH_TUPLE_TGT_CROSS else: RAD_ARCH_TUPLE_TGT_NATIVE))
+  putEnv(RAD_ENV_TUPLE_TGT, RAD_ARCH_X86_64_LINUX & (
+    case stage
+    of RAD_STAGE_CROSS:
+      RAD_ARCH_TUPLE_TGT_CROSS
+    else:
+      RAD_ARCH_TUPLE_TGT_NATIVE
+  ))
 
 proc rad_arch_env_flags*() =
   putEnv(RAD_ENV_FLAGS_CFLAGS, RAD_FLAGS_CFLAGS)

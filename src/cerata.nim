@@ -110,7 +110,8 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
       archive = path / lastPathPart(ceras.url)
 
     if dirExists(path):
-      if ceras.ver == RAD_TOOL_GIT:
+      case ceras.ver
+      of RAD_TOOL_GIT:
         rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, RAD_PRINT_FETCH)
       else:
         if rad_verify_file(archive, ceras.sum):
@@ -144,7 +145,8 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
 
           rad_ceras_print_footer(idx, ceras.nom, ceras.ver, RAD_PRINT_FETCH)
     else:
-      if ceras.ver == RAD_TOOL_GIT:
+      case ceras.ver
+      of RAD_TOOL_GIT:
         rad_ceras_print_content(idx, ceras.nom, ceras.cmt, RAD_PRINT_CLONE)
 
         discard rad_clone_repo(path, ceras.url)
@@ -189,14 +191,33 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resol
 
       log = getEnv(RAD_ENV_DIR_LOGD) / ceras.nom & CurDir & RAD_DIR_LOG
 
-    rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
+    rad_ceras_print_content(idx, ceras.nom,
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        ceras.cmt
+      else:
+        ceras.ver
+    , RAD_PRINT_BUILD)
 
-    if stage == RAD_STAGE_NATIVE:
-      if fileExists(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): \"\" else: '-' & ceras.ver)}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}"):
+    case stage
+    of RAD_STAGE_NATIVE:
+      if fileExists(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): "" else: '-' & ceras.ver)}{(
+        case ceras.ver
+        of RAD_TOOL_GIT:
+          '-' & ceras.cmt
+        else:
+          ""
+      )}{RAD_FILE_TAR_ZST}"""):
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
+        rad_ceras_print_footer(idx, ceras.nom,
+          case ceras.ver
+          of RAD_TOOL_GIT:
+            ceras.cmt
+          else:
+            ceras.ver
+        , RAD_PRINT_BUILD)
 
         continue
 
@@ -213,17 +234,36 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resol
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{status:<8}{ceras.nom:24}{(if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver):24}")
+      rad_abort(&"""{status:<8}{ceras.nom:24}{(
+        case ceras.ver
+        of RAD_TOOL_GIT:
+          ceras.cmt
+        else:
+          ceras.ver
+      ):24}""")
 
-    if stage == RAD_STAGE_NATIVE:
-      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): \"\" else: '-' & ceras.ver)}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", getEnv(RAD_ENV_DIR_SACD))
+    case stage
+    of RAD_STAGE_NATIVE:
+      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): "" else: '-' & ceras.ver)}{(
+        case ceras.ver
+        of RAD_TOOL_GIT:
+          '-' & ceras.cmt
+        else:
+          ""
+      )}{RAD_FILE_TAR_ZST}""", getEnv(RAD_ENV_DIR_SACD))
 
       if status == 0:
         rad_gen_sum(getEnv(RAD_ENV_DIR_SACD), RAD_PATH_RAD_CACHE_VENOM / nom / RAD_FILE_SUM)
 
         removeDir(getEnv(RAD_ENV_DIR_SACD))
 
-    rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_BUILD)
+    rad_ceras_print_footer(idx, ceras.nom,
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        ceras.cmt
+      else:
+        ceras.ver
+    , RAD_PRINT_BUILD)
 
 proc rad_ceras_install*(cerata: openArray[string]) =
   let cluster = rad_ceras_check(cerata)
@@ -233,17 +273,41 @@ proc rad_ceras_install*(cerata: openArray[string]) =
   for idx, nom in cluster:
     let ceras = rad_ceras_parse(nom)
 
-    rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_INSTALL)
+    rad_ceras_print_content(idx, ceras.nom,
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        ceras.cmt
+      else:
+        ceras.ver
+    , RAD_PRINT_INSTALL)
 
-    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): \"\" else: '-' & ceras.ver)}{(if ceras.ver == RAD_TOOL_GIT: '-' & ceras.cmt else: \"\")}{RAD_FILE_TAR_ZST}", $DirSep)
+    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): "" else: '-' & ceras.ver)}{(
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        '-' & ceras.cmt
+      else:
+        ""
+    )}{RAD_FILE_TAR_ZST}""", $DirSep)
 
     cursorUp 1
     eraseLine()
 
     if status != 0:
-      rad_abort(&"{status:<8}{ceras.nom:24}{(if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver):24}")
+      rad_abort(&"""{status:<8}{ceras.nom:24}{(
+        case ceras.ver
+        of RAD_TOOL_GIT:
+          ceras.cmt
+        else:
+          ceras.ver
+      ):24}""")
 
-    rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_INSTALL)
+    rad_ceras_print_footer(idx, ceras.nom,
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        ceras.cmt
+      else:
+        ceras.ver
+    , RAD_PRINT_INSTALL)
 
 proc rad_ceras_remove*(cerata: openArray[string]) =
   let cluster = rad_ceras_check(cerata)
@@ -253,7 +317,13 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
   for idx, nom in cluster:
     let ceras = rad_ceras_parse(nom)
 
-    rad_ceras_print_content(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_REMOVE)
+    rad_ceras_print_content(idx, ceras.nom,
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        ceras.cmt
+      else:
+        ceras.ver
+    , RAD_PRINT_REMOVE)
 
     let sum = RAD_PATH_RAD_CACHE_VENOM / ceras.nom / RAD_FILE_SUM
 
@@ -263,7 +333,13 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
     cursorUp 1
     eraseLine()
 
-    rad_ceras_print_footer(idx, ceras.nom, if ceras.ver == RAD_TOOL_GIT: ceras.cmt else: ceras.ver, RAD_PRINT_REMOVE)
+    rad_ceras_print_footer(idx, ceras.nom,
+      case ceras.ver
+      of RAD_TOOL_GIT:
+        ceras.cmt
+      else:
+        ceras.ver
+    , RAD_PRINT_REMOVE)
 
 proc rad_ceras_search*(pattern: openArray[string]) =
   var cerata: seq[string]
