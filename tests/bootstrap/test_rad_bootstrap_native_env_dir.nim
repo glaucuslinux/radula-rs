@@ -7,14 +7,14 @@ import
 
 rad_bootstrap_native_env_dir()
 
-echo "CERD  :: ", getEnv(RAD_ENV_DIR_CERD)
-echo "LOGD  :: ", getEnv(RAD_ENV_DIR_LOGD)
-echo "SRCD  :: ", getEnv(RAD_ENV_DIR_SRCD)
-echo "TBLD  :: ", getEnv(RAD_ENV_DIR_TBLD)
-echo "TSRC  :: ", getEnv(RAD_ENV_DIR_TSRC)
+echo "CERD  :: ", getEnv($CERD)
+echo "LOGD  :: ", getEnv($LOGD)
+echo "SRCD  :: ", getEnv($SRCD)
+echo "TBLD  :: ", getEnv($TBLD)
+echo "TSRC  :: ", getEnv($TSRC)
 
-doAssert getEnv(RAD_ENV_DIR_SRCD) == "/var/cache/rad/src"
-doAssert getEnv(RAD_ENV_DIR_CERD) == "/var/lib/rad/clusters/glaucus"
-doAssert getEnv(RAD_ENV_DIR_LOGD) == "/var/log/rad"
-doassert getEnv(RAD_ENV_DIR_TBLD) == "/var/tmp/rad/bld"
-doassert getEnv(RAD_ENV_DIR_TSRC) == "/var/tmp/rad/src"
+doAssert getEnv($SRCD) == "/var/cache/rad/src"
+doAssert getEnv($CERD) == "/var/lib/rad/clusters/glaucus"
+doAssert getEnv($LOGD) == "/var/log/rad"
+doassert getEnv($TBLD) == "/var/tmp/rad/bld"
+doassert getEnv($TSRC) == "/var/tmp/rad/src"

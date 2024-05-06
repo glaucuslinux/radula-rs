@@ -7,32 +7,32 @@ import
 
 rad_bootstrap_env()
 
-echo "GLAD  :: ", getEnv(RAD_ENV_DIR_GLAD)
+echo "GLAD  :: ", getEnv($GLAD)
 
 echo ""
 
-echo "BAKD  :: ", getEnv(RAD_ENV_DIR_BAKD)
-echo "CERD  :: ", getEnv(RAD_ENV_DIR_CERD)
-echo "CRSD  :: ", getEnv(RAD_ENV_DIR_CRSD)
-echo "LOGD  :: ", getEnv(RAD_ENV_DIR_LOGD)
-echo "SRCD  :: ", getEnv(RAD_ENV_DIR_SRCD)
-echo "TBLD  :: ", getEnv(RAD_ENV_DIR_TBLD)
-echo "TSRC  :: ", getEnv(RAD_ENV_DIR_TSRC)
-echo "TLCD  :: ", getEnv(RAD_ENV_DIR_TLCD)
+echo "BAKD  :: ", getEnv($BAKD)
+echo "CERD  :: ", getEnv($CERD)
+echo "CRSD  :: ", getEnv($CRSD)
+echo "LOGD  :: ", getEnv($LOGD)
+echo "SRCD  :: ", getEnv($SRCD)
+echo "TBLD  :: ", getEnv($TBLD)
+echo "TSRC  :: ", getEnv($TSRC)
+echo "TLCD  :: ", getEnv($TLCD)
 
 echo ""
 
-echo "PATH  :: ", getEnv(RAD_ENV_PATH)
+echo "PATH  :: ", getEnv($PATH)
 
-doAssert getEnv(RAD_ENV_DIR_GLAD).endsWith("glaucus")
+doAssert getEnv($GLAD).endsWith("glaucus")
 
-doAssert getEnv(RAD_ENV_DIR_BAKD).endsWith("bak")
-doAssert getEnv(RAD_ENV_DIR_CERD).endsWith("cerata")
-doAssert getEnv(RAD_ENV_DIR_CRSD).endsWith("cross")
-doAssert getEnv(RAD_ENV_DIR_LOGD).endsWith("log")
-doAssert getEnv(RAD_ENV_DIR_SRCD).endsWith("src")
-doAssert getEnv(RAD_ENV_DIR_TBLD).endsWith("tmp/bld")
-doAssert getEnv(RAD_ENV_DIR_TSRC).endsWith("tmp/src")
-doAssert getEnv(RAD_ENV_DIR_TLCD).endsWith("toolchain")
+doAssert getEnv($BAKD).endsWith("bak")
+doAssert getEnv($CERD).endsWith("cerata")
+doAssert getEnv($CRSD).endsWith("cross")
+doAssert getEnv($LOGD).endsWith("log")
+doAssert getEnv($SRCD).endsWith("src")
+doAssert getEnv($TBLD).endsWith("tmp/bld")
+doAssert getEnv($TSRC).endsWith("tmp/src")
+doAssert getEnv($TLCD).endsWith("toolchain")
 
-doAssert getEnv(RAD_ENV_PATH).split(PathSep)[0].endsWith("toolchain/usr/bin")
+doAssert getEnv($PATH).split(PathSep)[0].endsWith("toolchain/usr/bin")

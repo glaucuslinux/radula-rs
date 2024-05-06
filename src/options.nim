@@ -7,7 +7,7 @@ import
 
 proc rad_options*() =
   if paramCount() < 1:
-    echo RAD_HELP
+    echo RAD
 
     quit(QuitFailure)
 
@@ -17,7 +17,7 @@ proc rad_options*() =
 
   case p.kind
   of cmdArgument, cmdEnd:
-    echo RAD_HELP
+    echo RAD
 
     quit(QuitFailure)
   of cmdLongOption, cmdShortOption:
@@ -33,7 +33,7 @@ proc rad_options*() =
 
       case p.kind
       of cmdEnd:
-        echo RAD_HELP_BOOTSTRAP
+        echo RAD_HELP.BOOTSTRAP
 
         rad_exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
@@ -49,7 +49,7 @@ proc rad_options*() =
 
           echo "distclean complete"
         of "h", "help":
-          echo RAD_HELP_BOOTSTRAP
+          echo RAD_HELP.BOOTSTRAP
         of "i", "img":
           rad_bootstrap_env()
           rad_bootstrap_release_img()
@@ -73,7 +73,7 @@ proc rad_options*() =
 
           echo "release complete"
         of "t", "toolchain":
-          rad_arch_env(RAD_STAGE_TOOLCHAIN)
+          rad_arch_env(toolchain)
           rad_tools_env()
           rad_bootstrap_env()
           rad_bootstrap_clean()
@@ -84,7 +84,7 @@ proc rad_options*() =
           echo ""
           echo "toolchain complete"
         of "x", "cross":
-          rad_arch_env(RAD_STAGE_CROSS)
+          rad_arch_env(cross)
           rad_arch_env_flags()
           rad_tools_env()
           rad_bootstrap_env()
@@ -96,15 +96,15 @@ proc rad_options*() =
           echo ""
           echo "cross complete"
         else:
-          echo RAD_HELP_BOOTSTRAP
+          echo RAD_HELP.BOOTSTRAP
 
           rad_exit(QuitFailure)
-    of "c", "ceras":
+    of "c", "cerata":
       p.next()
 
       case p.kind
       of cmdEnd:
-        echo RAD_HELP_CERAS
+        echo RAD_HELP.CERATA
 
         rad_exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
@@ -133,7 +133,7 @@ proc rad_options*() =
 
           echo "distclean complete"
         of "h", "help":
-          echo RAD_HELP_CERAS
+          echo RAD_HELP.CERATA
         of "i", "install":
           rad_ceras_install(remainingArgs(p))
 
@@ -163,15 +163,15 @@ proc rad_options*() =
           echo ""
           echo "sync complete"
         else:
-          echo RAD_HELP_CERAS
+          echo RAD_HELP.CERATA
 
           rad_exit(QuitFailure)
     of "h", "help":
-      echo RAD_HELP
+      echo RAD
     of "v", "version":
-      echo RAD_HELP_VERSION
+      echo VERSION
     else:
-      echo RAD_HELP
+      echo RAD
 
       rad_exit(QuitFailure)
 

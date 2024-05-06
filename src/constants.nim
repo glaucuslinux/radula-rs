@@ -1,272 +1,272 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-# All constants are prefixed with `RAD_`
-# All constants are ordered alphabetically
-
-const
-  RAD_ARCH_TUPLE_TGT_CROSS* = "-glaucus-linux-musl"
-  RAD_ARCH_TUPLE_TGT_NATIVE* = "-pc-linux-musl"
-
-  RAD_ARCH_X86_64* = "x86-64"
-  RAD_ARCH_X86_64_LINUX* = "x86_64"
-  RAD_ARCH_X86_64_V3* = "x86-64-v3"
-
-
-  RAD_CERAS_ACL* = "acl"
-  RAD_CERAS_ATTR* = "attr"
-  RAD_CERAS_AUTOCONF* = "autoconf"
-  RAD_CERAS_AUTOMAKE* = "automake"
-
-  RAD_CERAS_BASH* = "bash"
-  RAD_CERAS_BINUTILS* = "binutils"
-  RAD_CERAS_BOOSTER* = "booster"
-  RAD_CERAS_BYACC* = "byacc"
-  RAD_CERAS_BZIP2* = "bzip2"
-
-  RAD_CERAS_CERATA* = "cerata"
-  RAD_CERAS_CMAKE* = "cmake"
-
-  RAD_CERAS_DIFFUTILS* = "diffutils"
-
-  RAD_CERAS_E2FSPROGS* = "e2fsprogs"
-  RAD_CERAS_EXECLINE* = "execline"
-  RAD_CERAS_EXPAT* = "expat"
-
-  RAD_CERAS_FILE* = "file"
-  RAD_CERAS_FILESYSTEM* = "filesystem"
-  RAD_CERAS_FINDUTILS* = "findutils"
-  RAD_CERAS_FLEX* = "flex"
-
-  RAD_CERAS_GCC* = "gcc"
-  RAD_CERAS_GETTEXT_TINY* = "gettext-tiny"
-  RAD_CERAS_GMP* = "gmp"
-  RAD_CERAS_GREP* = "grep"
-  RAD_CERAS_GRUB* = "grub"
-
-  RAD_CERAS_HELP2MAN* = "help2man"
-
-  RAD_CERAS_IPROUTE2* = "iproute2"
-  RAD_CERAS_IPUTILS* = "iputils"
-  RAD_CERAS_ISL* = "isl"
-
-  RAD_CERAS_KBD* = "kbd"
-  RAD_CERAS_KMOD* = "kmod"
-
-  RAD_CERAS_LESS* = "less"
-  RAD_CERAS_LIBARCHIVE* = "libarchive"
-  RAD_CERAS_LIBCAP* = "libcap"
-  RAD_CERAS_LIBCAP_NG* = "libcap-ng"
-  RAD_CERAS_LIBEDIT* = "libedit"
-  RAD_CERAS_LIBGCC* = "libgcc"
-  RAD_CERAS_LIBRESSL* = "libressl"
-  RAD_CERAS_LIBSTDCXX_V3* = "libstdc++-v3"
-  RAD_CERAS_LIBTOOL* = "libtool"
-  RAD_CERAS_LIBUDEV_ZERO* = "libudev-zero"
-  RAD_CERAS_LINUX* = "linux"
-  RAD_CERAS_LINUX_HEADERS* = "linux-headers"
-  RAD_CERAS_LZ4* = "lz4"
-
-  RAD_CERAS_M4* = "m4"
-  RAD_CERAS_MAKE* = "make"
-  RAD_CERAS_MANDOC* = "mandoc"
-  RAD_CERAS_MAWK* = "mawk"
-  RAD_CERAS_MDEVD* = "mdevd"
-  RAD_CERAS_MPC* = "mpc"
-  RAD_CERAS_MPFR* = "mpfr"
-  RAD_CERAS_MUON* = "muon"
-  RAD_CERAS_MUSL* = "musl"
-  RAD_CERAS_MUSL_FTS* = "musl-fts"
-  RAD_CERAS_MUSL_HEADERS* = "musl-headers"
-  RAD_CERAS_MUSL_UTILS* = "musl-utils"
-
-  RAD_CERAS_NETBSD_CURSES* = "netbsd-curses"
-  RAD_CERAS_NSSS* = "nsss"
-
-  RAD_CERAS_OPENDOAS* = "opendoas"
-
-  RAD_CERAS_PATCH* = "patch"
-  RAD_CERAS_PCRE2* = "pcre2"
-  RAD_CERAS_PERL* = "perl"
-  RAD_CERAS_PIGZ* = "pigz"
-  RAD_CERAS_PKGCONF* = "pkgconf"
-  RAD_CERAS_PROCPS_NG* = "procps-ng"
-  RAD_CERAS_PSMISC* = "psmisc"
-
-  RAD_CERAS_RAD* = "rad"
-  RAD_CERAS_RSYNC* = "rsync"
-
-  RAD_CERAS_S6* = "s6"
-  RAD_CERAS_S6_BOOT_SCRIPTS* = "s6-boot-scripts"
-  RAD_CERAS_S6_LINUX_INIT* = "s6-linux-init"
-  RAD_CERAS_S6_RC* = "s6-rc"
-  RAD_CERAS_SAMURAI* = "samurai"
-  RAD_CERAS_SDHCP* = "sdhcp"
-  RAD_CERAS_SED* = "sed"
-  RAD_CERAS_SHADOW* = "shadow"
-  RAD_CERAS_SKALIBS* = "skalibs"
-
-  RAD_CERAS_TEXINFO* = "texinfo"
-  RAD_CERAS_TOYBOX* = "toybox"
-  RAD_CERAS_TZCODE* = "tzcode"
-  RAD_CERAS_TZDATA* = "tzdata"
-
-  RAD_CERAS_UTIL_LINUX* = "util-linux"
-  RAD_CERAS_UTMPS* = "utmps"
-
-  RAD_CERAS_VIM* = "vim"
-
-  RAD_CERAS_WGET2* = "wget2"
-
-  RAD_CERAS_XXHASH* = "xxhash"
-  RAD_CERAS_XZ* = "xz"
-
-  RAD_CERAS_YASH* = "yash"
-
-  RAD_CERAS_ZLIB_NG* = "zlib-ng"
-  RAD_CERAS_ZSTD* = "zstd"
-
-
-  RAD_DIR_BAK* = "bak"
-  RAD_DIR_BLD* = "bld"
-  RAD_DIR_CERATA* = "cerata"
-  RAD_DIR_ISO* = "iso"
-  RAD_DIR_LOG* = "log"
-  RAD_DIR_SAC* = "sac"
-  RAD_DIR_SRC* = "src"
-  RAD_DIR_TMP* = "tmp"
-
-
-  RAD_ENV_ARCH* = "ARCH"
-
-  RAD_ENV_BOOTSTRAP* = "BOOTSTRAP"
-
-  RAD_ENV_CARCH* = "CARCH"
-
-  RAD_ENV_CROSS_COMPILE* = "CROSS_COMPILE"
-
-  RAD_ENV_DIR_BAKD* = "BAKD"
-  RAD_ENV_DIR_CERD* = "CERD"
-  RAD_ENV_DIR_CRSD* = "CRSD"
-  RAD_ENV_DIR_GLAD* = "GLAD"
-  RAD_ENV_DIR_ISOD* = "ISOD"
-  RAD_ENV_DIR_LOGD* = "LOGD"
-  RAD_ENV_DIR_SACD* = "SACD"
-  RAD_ENV_DIR_SRCD* = "SRCD"
-  RAD_ENV_DIR_TBLD* = "TBLD"
-  RAD_ENV_DIR_TLCD* = "TLCD"
-  RAD_ENV_DIR_TSRC* = "TSRC"
-
-  RAD_ENV_FLAGS_CFLAGS* = "CFLAGS"
-  RAD_ENV_FLAGS_CXXFLAGS* = "CXXFLAGS"
-  RAD_ENV_FLAGS_LDFLAGS* = "LDFLAGS"
-
-  RAD_ENV_PATH* = "PATH"
-
-  RAD_ENV_PKG_CONFIG_LIBDIR* = "PKG_CONFIG_LIBDIR"
-  RAD_ENV_PKG_CONFIG_PATH* = "PKG_CONFIG_PATH"
-  RAD_ENV_PKG_CONFIG_SYSROOT_DIR* = "PKG_CONFIG_SYSROOT_DIR"
-  RAD_ENV_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "PKG_CONFIG_SYSTEM_INCLUDE_PATH"
-  RAD_ENV_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "PKG_CONFIG_SYSTEM_LIBRARY_PATH"
-
-  RAD_ENV_PRETTY_NAME* = "PRETTY_NAME"
-
-  RAD_ENV_TOOL_AR* = "AR"
-  RAD_ENV_TOOL_AS* = "AS"
-  RAD_ENV_TOOL_AWK* = "AWK"
-  RAD_ENV_TOOL_BISON* = "BISON"
-  RAD_ENV_TOOL_CC* = "CC"
-  RAD_ENV_TOOL_CPP* = "CPP"
-  RAD_ENV_TOOL_CXX* = "CXX"
-  RAD_ENV_TOOL_CXXCPP* = "CXXCPP"
-  RAD_ENV_TOOL_FLEX* = "FLEX"
-  RAD_ENV_TOOL_HOSTCC* = "HOSTCC"
-  RAD_ENV_TOOL_LEX* = "LEX"
-  RAD_ENV_TOOL_MAKE* = "MAKE"
-  RAD_ENV_TOOL_MAKEFLAGS* = "MAKEFLAGS"
-  RAD_ENV_TOOL_NM* = "NM"
-  RAD_ENV_TOOL_OBJCOPY* = "OBJCOPY"
-  RAD_ENV_TOOL_OBJDUMP* = "OBJDUMP"
-  RAD_ENV_TOOL_PKG_CONFIG* = "PKG_CONFIG"
-  RAD_ENV_TOOL_RAD_RSYNC_FLAGS* = "RAD_RSYNC_FLAGS"
-  RAD_ENV_TOOL_RANLIB* = "RANLIB"
-  RAD_ENV_TOOL_READELF* = "READELF"
-  RAD_ENV_TOOL_SIZE* = "SIZE"
-  RAD_ENV_TOOL_STRIP* = "STRIP"
-  RAD_ENV_TOOL_YACC* = "YACC"
-
-  RAD_ENV_TUPLE_BLD* = "BLD"
-  RAD_ENV_TUPLE_TGT* = "TGT"
-
-
-  RAD_FILE_BOOSTER_YAML* = "booster.yaml"
-
-  RAD_FILE_CERAS* = "ceras"
-  RAD_FILE_CONFIG_GUESS* = "config.guess"
-
-  RAD_FILE_GLAUCUS_IMG_SIZE* = "16384"
-
-  RAD_FILE_GRUB_CFG* = "grub.cfg"
-  RAD_FILE_GRUB_CFG_IMG* = "grub.cfg.img"
-  RAD_FILE_GRUB_CFG_ISO* = "grub.cfg.iso"
-
-  RAD_FILE_INITRAMFS* = "initramfs"
-
-  RAD_FILE_KERNEL* = "vmlinuz"
-
-  RAD_FILE_RAD_LCK* = "rad.lck"
-  RAD_FILE_ROOTFS* = "rootfs"
-
-  RAD_FILE_SUM* = "sum"
-
-  RAD_FILE_TAR_ZST* = ".tar.zst"
-
-
-  RAD_FLAGS_CFLAGS* = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-  RAD_FLAGS_LDFLAGS* = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
-
-  RAD_FLAGS_TOOL_CHOWN* = "-Rv"
-  RAD_FLAGS_TOOL_CPP* = "-E"
-
-  RAD_FLAGS_TOOL_GIT_CHECKOUT* = "checkout"
-  RAD_FLAGS_TOOL_GIT_CLONE* = "clone"
-
-  RAD_FLAGS_TOOL_GRUB* = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
-
-  RAD_FLAGS_TOOL_MAKE* = "-j4 -O"
-  RAD_FLAGS_TOOL_MKE2FS* = "-qt"
-
-  RAD_FLAGS_TOOL_PARTED* = "-s"
-
-  RAD_FLAGS_TOOL_RSYNC* = "-vaHAXSx"
-  RAD_FLAGS_TOOL_RSYNC_RELEASE* = "-vaHAXx"
-
-  RAD_FLAGS_TOOL_SHELL_COMMAND* = "-c"
-  RAD_FLAGS_TOOL_SHELL_REDIRECT* = "> /dev/null 2>&1"
-
-  RAD_FLAGS_TOOL_TAR_CREATE* = "-cpvf"
-  RAD_FLAGS_TOOL_TAR_EXTRACT* = "-xmPvf"
-
-  RAD_FLAGS_TOOL_UMOUNT* = "-fqRv"
-
-  RAD_FLAGS_TOOL_ZSTD_COMPRESS* = "-22 --ultra -T0 --long"
-  RAD_FLAGS_TOOL_ZSTD_DECOMPRESS* = "-d -T0 --long"
-
-
-  RAD_GLAUCUS* = "glaucus"
-
-
-  RAD_HELP* = """
+type
+  RAD_ARCH* = enum
+    glaucus
+
+    TUPLE_TGT_CROSS = "-glaucus-linux-musl"
+    TUPLE_TGT_NATIVE = "-pc-linux-musl"
+
+    X86_64 = "x86-64"
+    X86_64_LINUX = "x86_64"
+    X86_64_V3 = "x86-64-v3"
+
+
+  RAD_CERATA* = enum
+    acl
+    attr
+    autoconf
+    automake
+
+    bash
+    binutils
+    booster
+    byacc
+    bzip2
+
+    CERATA = "cerata"
+    cmake
+
+    diffutils
+
+    e2fsprogs
+    execline
+    expat
+
+    file
+    filesystem
+    findutils
+    flex
+
+    gcc
+    gettext_tiny = "gettext-tiny"
+    gmp
+    grep
+    grub
+
+    help2man
+
+    iproute2
+    iputils
+    isl
+
+    kbd
+    kmod
+
+    less
+    libarchive
+    libcap
+    libcap_ng = "libcap-ng"
+    libedit
+    libgcc
+    libressl
+    libstdcxx_v3 = "libstdc++-v3"
+    libtool
+    libudev_zero = "libudev-zero"
+    linux
+    linux_headers = "linux-headers"
+    lz4
+
+    m4
+    make
+    mandoc
+    mawk
+    mdevd
+    mpc
+    mpfr
+    muon
+    musl
+    musl_fts = "musl-fts"
+    musl_headers = "musl-headers"
+    musl_utils = "musl-utils"
+
+    netbsd_curses = "netbsd-curses"
+    nsss
+
+    opendoas
+
+    patch
+    pcre2
+    perl
+    pigz
+    pkgconf
+    procps_ng = "procps-ng"
+    psmisc
+
+    rad
+    rsync
+
+    s6
+    s6_boot_scripts = "s6-boot-scripts"
+    s6_linux_init = "s6-linux-init"
+    s6_rc = "s6-rc"
+    samurai
+    sdhcp
+    sed
+    shadow
+    skalibs
+
+    texinfo
+    toybox
+    tzcode
+    tzdata
+
+    util_linux = "util-linux"
+    utmps
+
+    vim
+
+    wget2
+
+    xxhash
+    xz
+
+    yash
+
+    zlib_ng = "zlib-ng"
+    zstd
+
+
+  RAD_DIRS* = enum
+    bak
+    bld
+    iso
+    log
+    sac
+    src
+    tmp
+
+
+  RAD_ENV* = enum
+    # ARCH
+    ARCH
+    BOOTSTRAP
+    BLD
+    CARCH
+    CROSS_COMPILE
+    PRETTY_NAME
+    TGT
+
+    # DIR
+    BAKD
+    CERD
+    CRSD
+    GLAD
+    ISOD
+    LOGD
+    PATH
+    SACD
+    SRCD
+    TBLD
+    TLCD
+    TSRC
+
+    # FLAGS
+    CFLAGS
+    CXXFLAGS
+    LDFLAGS
+
+    # PKG_CONFIG
+    PKG_CONFIG_LIBDIR
+    PKG_CONFIG_PATH
+    PKG_CONFIG_SYSROOT_DIR
+    PKG_CONFIG_SYSTEM_INCLUDE_PATH
+    PKG_CONFIG_SYSTEM_LIBRARY_PATH
+
+    # TOOLS
+    AR
+    AS
+    AWK
+    BISON
+    CC
+    CPP
+    CXX
+    CXXCPP
+    FLEX
+    HOSTCC
+    LEX
+    MAKE
+    MAKEFLAGS
+    NM
+    OBJCOPY
+    OBJDUMP
+    PKG_CONFIG
+    RAD_RSYNC_FLAGS
+    RANLIB
+    READELF
+    SIZE
+    STRIP
+    YACC
+
+
+  RAD_FILES* = enum
+    booster_yaml = "booster.yaml"
+
+    ceras
+    config_guess = "config.guess"
+
+    glaucus_img_size = "16384"
+    grub_cfg = "grub.cfg"
+    grub_cfg_img = "grub.cfg.img"
+    grub_cfg_iso = "grub.cfg.iso"
+
+    initramfs
+
+    kernel = "vmlinuz"
+
+    rad_lck = "rad.lck"
+    rootfs
+
+    sum
+
+    tar_zst = ".tar.zst"
+
+
+  RAD_FLAGS* = enum
+    CFLAGS = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+    LDFLAGS = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
+
+    CHOWN = "-Rv"
+    CPP = "-E"
+
+    GIT_CHECKOUT = "checkout"
+    GIT_CLONE = "clone"
+
+    GRUB = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
+
+    MAKE = "-j4 -O"
+    MKE2FS = "-qt"
+
+    PARTED = "-s"
+
+    RSYNC = "-vaHAXSx"
+    RSYNC_RELEASE = "-vaHAXx"
+
+    SHELL_COMMAND = "-c"
+    SHELL_REDIRECT = "> /dev/null 2>&1"
+
+    TAR_CREATE = "-cpvf"
+    TAR_EXTRACT = "-xmPvf"
+
+    UMOUNT = "-fqRv"
+
+    ZSTD_COMPRESS = "-22 --ultra -T0 --long"
+    ZSTD_DECOMPRESS = "-d -T0 --long"
+
+
+  RAD_HELP* = enum
+    RAD = """
 USAGE:
   rad [ OPTION ]
 
 OPTIONS:
   -b, --bootstrap  Bootstrap glaucus
-  -c, --ceras      Manage cerata
+  -c, --cerata     Manage cerata
   -h, --help       Display this help message
   -v, --version    Display current version"""
 
-  RAD_HELP_BOOTSTRAP* = """
+    BOOTSTRAP = """
 USAGE:
   rad [ -b | --bootstrap ] [ COMMAND ]
 
@@ -280,9 +280,9 @@ COMMANDS:
   t, toolchain     Bootstrap toolchain
   x, cross         Bootstrap cross glaucus"""
 
-  RAD_HELP_CERAS* = """
+    CERATA = """
 USAGE:
-  rad [ -c | --ceras ] [ COMMAND ] [ cerata ]
+  rad [ -c | --cerata ] [ COMMAND ] [ cerata ]
 
 COMMANDS:
   a, append        Append a cluster
@@ -299,101 +299,104 @@ COMMANDS:
   u, upgrade       Upgrade cerata
   y, sync          Synchronize clusters"""
 
-  RAD_HELP_VERSION* = """
+    VERSION = """
 rad version 0.1.0
 
 Copyright (c) 2018-2024, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
 
-  RAD_PATH_BIN* = "bin"
-  RAD_PATH_BOOT* = "boot"
+  RAD_PATHS* = enum
+    bin
+    boot
 
-  RAD_PATH_DOC* = "doc"
+    doc
 
-  RAD_PATH_ETC* = "etc"
+    etc
 
-  RAD_PATH_INFO* = "info"
+    info
 
-  RAD_PATH_LIB* = "lib"
-  RAD_PATH_LIB64* = "lib64"
-  RAD_PATH_LOST_FOUND* = "lost+found"
+    lib
+    lib64
+    lost_found = "lost+found"
 
-  RAD_PATH_MAN* = "man"
-  RAD_PATH_MNT* = "mnt"
-  RAD_PATH_MODULES* = "modules"
+    man
+    mnt
+    modules
 
-  # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
-  # automatically prefixed to PATH and LIBDIR)
-  RAD_PATH_PKG_CONFIG_LIBDIR* = "/usr/lib/pkgconfig"
-  RAD_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH* = "/usr/include"
-  RAD_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH* = "/usr/lib"
+    # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
+    # automatically prefixed to PATH and LIBDIR)
+    PKG_CONFIG_LIBDIR = "/usr/lib/pkgconfig"
+    PKG_CONFIG_SYSTEM_INCLUDE_PATH = "/usr/include"
+    PKG_CONFIG_SYSTEM_LIBRARY_PATH = "/usr/lib"
 
-  RAD_PATH_RAD_CACHE_BIN* = "/var/cache/rad/bin"
-  RAD_PATH_RAD_CACHE_SRC* = "/var/cache/rad/src"
-  RAD_PATH_RAD_CACHE_VENOM* = "/var/cache/rad/venom"
-  RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS* = "/var/lib/rad/clusters/glaucus"
-  RAD_PATH_RAD_LIB_LOCAL* = "/var/lib/rad/local"
-  RAD_PATH_RAD_LOG* = "/var/log/rad"
-  RAD_PATH_RAD_TMP* = "/var/tmp/rad"
+    RAD_CACHE_BIN = "/var/cache/rad/bin"
+    RAD_CACHE_SRC = "/var/cache/rad/src"
+    RAD_CACHE_VENOM = "/var/cache/rad/venom"
+    RAD_LIB_CLUSTERS_GLAUCUS = "/var/lib/rad/clusters/glaucus"
+    RAD_LIB_LOCAL = "/var/lib/rad/local"
+    RAD_LOG = "/var/log/rad"
+    RAD_TMP = "/var/tmp/rad"
 
-  RAD_PATH_SHARE* = "share"
+    share
 
-  RAD_PATH_USR* = "usr"
+    usr
 
-  RAD_PATH_VAR* = "var"
+    VAR = "var"
 
-  RAD_PATH_WTMPD* = "wtmpd"
-
-
-  RAD_PRINT_BUILD* = "build"
-  RAD_PRINT_CLONE* = "clone"
-  RAD_PRINT_FETCH* = "fetch"
-  RAD_PRINT_INSTALL* = "install"
-  RAD_PRINT_NIL* = "nil"
-  RAD_PRINT_REMOVE* = "remove"
+    wtmpd
 
 
-  RAD_STAGE_CROSS* = "cross"
-  RAD_STAGE_NATIVE* = "native"
-  RAD_STAGE_TOOLCHAIN* = "toolchain"
+  RAD_PRINT* = enum
+    build
+    clone
+    fetch
+    install
+    NIL = "nil"
+    remove
 
 
-  RAD_TOOL_AR* = "gcc-ar"
-  RAD_TOOL_AS* = "as"
+  RAD_STAGES* = enum
+    cross
+    native
+    toolchain
 
-  RAD_TOOL_CHOWN* = "chown"
-  RAD_TOOL_CXX* = "g++"
 
-  RAD_TOOL_DD* = "dd"
+  RAD_TOOLS* = enum
+    ar = "gcc-ar"
+    AS = "as"
 
-  RAD_TOOL_GIT* = "git"
-  RAD_TOOL_GRUB_INSTALL* = "grub-install"
-  RAD_TOOL_GRUB_MKRESCUE* = "grub-mkrescue"
+    chown
+    cxx = "g++"
 
-  RAD_TOOL_LOSETUP* = "losetup"
+    dd
 
-  # Full path is being used here to not overlap with the install() function in stage files
-  RAD_TOOL_MKE2FS* = "mke2fs"
-  RAD_TOOL_MKFS_EROFS* = "mkfs.erofs"
-  RAD_TOOL_MODPROBE* = "modprobe"
-  RAD_TOOL_MOUNT* = "mount"
+    git
+    grub_install = "grub-install"
+    grub_mkrescue = "grub-mkrescue"
 
-  RAD_TOOL_NM* = "gcc-nm"
+    losetup
 
-  RAD_TOOL_OBJCOPY* = "objcopy"
-  RAD_TOOL_OBJDUMP* = "objdump"
+    mke2fs
+    mkfs_erofs = "mkfs.erofs"
+    modprobe
+    mount
 
-  RAD_TOOL_PARTED* = "parted"
-  RAD_TOOL_PARTX* = "partx"
+    nm = "gcc-nm"
 
-  RAD_TOOL_RANLIB* = "gcc-ranlib"
-  RAD_TOOL_READELF* = "readelf"
+    objcopy
+    objdump
 
-  RAD_TOOL_SHELL* = "sh"
-  RAD_TOOL_SIZE* = "size"
-  RAD_TOOL_STRIP* = "strip"
+    parted
+    partx
 
-  RAD_TOOL_TAR* = "bsdtar"
+    ranlib = "gcc-ranlib"
+    readelf
 
-  RAD_TOOL_UMOUNT* = "umount"
+    sh
+    size
+    strip
+
+    tar = "bsdtar"
+
+    umount
