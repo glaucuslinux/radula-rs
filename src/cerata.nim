@@ -12,7 +12,7 @@ type
 
 # Check if the `ceras` src is extracted
 proc rad_ceras_check_extract_src(file: string): bool =
-  toSeq(walkDir(parentDir(file))).len > 1
+  walkDir(parentDir(file)).toSeq().len() > 1
 
 proc rad_ceras_clean*() =
   removeDir(RAD_PATH_RAD_LOG)
