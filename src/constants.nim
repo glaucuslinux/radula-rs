@@ -231,7 +231,7 @@ const
   RAD_FLAGS_TOOL_GIT_CHECKOUT* = "checkout"
   RAD_FLAGS_TOOL_GIT_CLONE* = "clone"
 
-  RAD_FLAGS_TOOL_GRUB* = "--compress=no --fonts=\"\" --locales=\"\" --themes=\"\" -v --core-compress=none"
+  RAD_FLAGS_TOOL_GRUB* = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
 
   RAD_FLAGS_TOOL_MAKE* = "-j4 -O"
   RAD_FLAGS_TOOL_MKE2FS* = "-qt"

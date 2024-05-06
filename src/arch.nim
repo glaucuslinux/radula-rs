@@ -12,7 +12,7 @@ proc rad_arch_tuple*(): (string, int) =
 proc rad_arch_env*(stage = RAD_STAGE_NATIVE) =
   putEnv(RAD_ENV_ARCH, RAD_ARCH_X86_64)
   putEnv(RAD_ENV_CARCH, RAD_ARCH_X86_64_V3)
-  putEnv(RAD_ENV_PRETTY_NAME, &"{RAD_GLAUCUS} {RAD_CERAS_S6} {RAD_ARCH_X86_64_V3} {now().format(\"YYYYMMdd\")}")
+  putEnv(RAD_ENV_PRETTY_NAME, &"""{RAD_GLAUCUS} {RAD_CERAS_S6} {RAD_ARCH_X86_64_V3} {now().format("YYYYMMdd")}""")
 
   putEnv(RAD_ENV_TUPLE_BLD, rad_arch_tuple()[0].strip())
   putEnv(RAD_ENV_TUPLE_TGT, RAD_ARCH_X86_64_LINUX & (
@@ -26,4 +26,4 @@ proc rad_arch_env*(stage = RAD_STAGE_NATIVE) =
 proc rad_arch_env_flags*() =
   putEnv(RAD_ENV_FLAGS_CFLAGS, RAD_FLAGS_CFLAGS)
   putEnv(RAD_ENV_FLAGS_CXXFLAGS, RAD_FLAGS_CFLAGS)
-  putEnv(RAD_ENV_FLAGS_LDFLAGS, RAD_FLAGS_LDFLAGS & ' ' & RAD_FLAGS_CFLAGS)
+  putEnv(RAD_ENV_FLAGS_LDFLAGS, &"{RAD_FLAGS_LDFLAGS} {RAD_FLAGS_CFLAGS}")

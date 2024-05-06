@@ -126,9 +126,9 @@ proc rad_bootstrap_cross_env_tools*() =
   putEnv(RAD_ENV_TOOL_AR, cross_compile & RAD_TOOL_AR)
   putEnv(RAD_ENV_TOOL_AS, cross_compile & RAD_TOOL_AS)
   putEnv(RAD_ENV_TOOL_CC, cross_compile & RAD_CERAS_GCC)
-  putEnv(RAD_ENV_TOOL_CPP, cross_compile & RAD_CERAS_GCC & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_CPP, &"{cross_compile}{RAD_CERAS_GCC} {RAD_FLAGS_TOOL_CPP}")
   putEnv(RAD_ENV_TOOL_CXX, cross_compile & RAD_TOOL_CXX)
-  putEnv(RAD_ENV_TOOL_CXXCPP, cross_compile & RAD_TOOL_CXX & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_CXXCPP, &"{cross_compile}{RAD_TOOL_CXX} {RAD_FLAGS_TOOL_CPP}")
   putEnv(RAD_ENV_TOOL_HOSTCC, RAD_CERAS_GCC)
   putEnv(RAD_ENV_TOOL_NM, cross_compile & RAD_TOOL_NM)
   putEnv(RAD_ENV_TOOL_OBJCOPY, cross_compile & RAD_TOOL_OBJCOPY)
@@ -167,7 +167,7 @@ proc rad_bootstrap_env*() =
   putEnv(RAD_ENV_DIR_TSRC, path / RAD_DIR_TMP / RAD_DIR_SRC)
   putEnv(RAD_ENV_DIR_TLCD, path / RAD_STAGE_TOOLCHAIN)
 
-  putEnv(RAD_ENV_PATH, getEnv(RAD_ENV_DIR_TLCD) / RAD_PATH_USR / RAD_PATH_BIN & PathSep & getEnv(RAD_ENV_PATH))
+  putEnv(RAD_ENV_PATH, getEnv(RAD_ENV_DIR_TLCD) / RAD_PATH_USR / &"{RAD_PATH_BIN}{PathSep}{getEnv(RAD_ENV_PATH)}")
 
 proc rad_bootstrap_init*() =
   createDir(getEnv(RAD_ENV_DIR_BAKD))
@@ -201,9 +201,9 @@ proc rad_bootstrap_native_env_tools*() =
   putEnv(RAD_ENV_TOOL_AR, RAD_TOOL_AR)
   putEnv(RAD_ENV_TOOL_AS, RAD_TOOL_AS)
   putEnv(RAD_ENV_TOOL_CC, RAD_CERAS_GCC)
-  putEnv(RAD_ENV_TOOL_CPP, RAD_CERAS_GCC & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_CPP, &"{RAD_CERAS_GCC} {RAD_FLAGS_TOOL_CPP}")
   putEnv(RAD_ENV_TOOL_CXX, RAD_TOOL_CXX)
-  putEnv(RAD_ENV_TOOL_CXXCPP, RAD_TOOL_CXX & ' ' & RAD_FLAGS_TOOL_CPP)
+  putEnv(RAD_ENV_TOOL_CXXCPP, &"{RAD_TOOL_CXX} {RAD_FLAGS_TOOL_CPP}")
   putEnv(RAD_ENV_TOOL_HOSTCC, RAD_CERAS_GCC)
   putEnv(RAD_ENV_TOOL_NM, RAD_TOOL_NM)
   putEnv(RAD_ENV_TOOL_OBJCOPY, RAD_TOOL_OBJCOPY)
@@ -333,10 +333,10 @@ proc rad_bootstrap_native_build*() =
 
 proc rad_bootstrap_release_img*() =
   if not isAdmin():
-    rad_abort(&"{\"1\":8}{\"permission denied\":48}")
+    rad_abort(&"""{"1":8}{"permission denied":48}""")
 
   let
-    img = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.img"
+    img = getEnv(RAD_ENV_DIR_GLAD) / &"""{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format("YYYYMMdd")}.img"""
 
     # Find the first unused loop device
     device = execCmdEx(&"{RAD_TOOL_LOSETUP} -f")[0].strip()
@@ -401,7 +401,7 @@ proc rad_bootstrap_release_img*() =
 
 proc rad_bootstrap_release_iso*() =
   let
-    iso = getEnv(RAD_ENV_DIR_GLAD) / &"{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format(\"YYYYMMdd\")}.iso"
+    iso = getEnv(RAD_ENV_DIR_GLAD) / &"""{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format("YYYYMMdd")}.iso"""
 
     path = getEnv(RAD_ENV_DIR_ISOD) / RAD_PATH_BOOT
 

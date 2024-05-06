@@ -30,12 +30,12 @@ func rad_extract_tar*(archive, dir: string): int =
   execCmd(&"{RAD_TOOL_TAR} {RAD_FLAGS_TOOL_TAR_EXTRACT} {archive} -C {dir} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
 proc rad_abort*(err: string) =
-  styled_echo fg_red, style_bright, &"{err}{\"abort\":8}{now().format(\"hh:mm tt\")}", reset_style
+  styled_echo &"""{fgRed}{styleBright}{err}{"abort":8}{now().format("hh:mm tt")}{resetStyle}"""
 
   rad_exit(QuitFailure)
 
 func rad_gen_initramfs*(dir: string, bootstrap = false): int =
-  execCmd(&"{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: \"--universal\" else: \"\")} --strip {dir / RAD_FILE_INITRAMFS}")
+  execCmd(&"""{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: "--universal" else: "")} --strip {dir / RAD_FILE_INITRAMFS}""")
 
 proc rad_gen_sum*(dir, sum: string) =
   var files: seq[string]
@@ -53,11 +53,11 @@ proc rad_gen_sum*(dir, sum: string) =
   sum.close()
 
 proc rad_interrupt*() {.noconv.} =
-  rad_abort(&"{\"1\":8}{\"interrupt received\":48}")
+  rad_abort(&"""{"1":8}{"interrupt received":48}""")
 
 proc rad_lck*() =
   if fileExists(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK):
-    rad_abort(&"{\"1\":8}{\"lck exists\":48}")
+    rad_abort(&"""{"1":8}{"lck exists":48}""")
   else:
     writeFile(DirSep & RAD_DIR_TMP / RAD_FILE_RAD_LCK, "")
 

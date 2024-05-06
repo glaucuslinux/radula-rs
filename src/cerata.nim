@@ -32,7 +32,7 @@ func rad_ceras_path(nom: string): string =
 # Check if the `ceras` file exists
 proc rad_ceras_check_exist(nom: string) =
   if not fileExists(rad_ceras_path(nom)):
-    rad_abort(&"{\"nom\":8}{nom:48}")
+    rad_abort(&"""{"nom":8}{nom:48}""")
 
 # Parse the `ceras` file
 proc rad_ceras_parse(nom: string): Ceras =
@@ -55,13 +55,13 @@ proc rad_ceras_print*(cerata: openArray[string]) =
     echo ""
 
 proc rad_ceras_print_content(idx: int, nom, ver, status: string) =
-  styledEcho fgMagenta, styleBright, &"{idx + 1:<8}{nom:24}{ver:24}{status:8}{now().format(\"hh:mm tt\")}", resetStyle
+  styledEcho &"""{fgMagenta}{styleBright}{idx + 1:<8}{nom:24}{ver:24}{status:8}{now().format("hh:mm tt")}{resetStyle}"""
 
 proc rad_ceras_print_footer(idx: int, nom, ver, status: string) =
-  styledEcho fgGreen, &"{idx + 1:<8}", resetStyle, &"{nom:24}{ver:24}", fgGreen, &"{status:8}", fgYellow, now().format("hh:mm tt"), fgDefault
+  styledEcho &"""{fgGreen}{idx + 1:<8}{resetStyle}{nom:24}{ver:24}{fgGreen}{status:8}{fgYellow}(now().format("hh:mm tt")){fgDefault}"""
 
 proc rad_ceras_print_header() =
-  styledEcho styleBright, &"{\"idx\":8}{\"nom\":24}{\"ver\":24}{\"cmd\":8}fin", resetStyle
+  styledEcho &"""{styleBright}{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin{resetStyle}"""
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
@@ -139,7 +139,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
               cursorUp 1
               eraseLine()
 
-              rad_abort(&"{\"sum\":8}{ceras.nom:24}{ceras.ver:24}")
+              rad_abort(&"""{"sum":8}{ceras.nom:24}{ceras.ver:24}""")
 
             cursorUp 1
             eraseLine()
@@ -170,7 +170,7 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
             cursorUp 1
             eraseLine()
 
-            rad_abort(&"{\"sum\":8}{ceras.nom:24}{ceras.ver:24}")
+            rad_abort(&"""{"sum":8}{ceras.nom:24}{ceras.ver:24}""")
 
           cursorUp 1
           eraseLine()
@@ -190,7 +190,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resol
     let
       ceras = rad_ceras_parse(nom)
 
-      log = getEnv(RAD_ENV_DIR_LOGD) / ceras.nom & CurDir & RAD_DIR_LOG
+      log = getEnv(RAD_ENV_DIR_LOGD) / &"{ceras.nom}{CurDir}{RAD_DIR_LOG}"
 
     rad_ceras_print_content(idx, ceras.nom,
       case ceras.ver
@@ -202,7 +202,13 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resol
 
     case stage
     of RAD_STAGE_NATIVE:
-      if fileExists(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): "" else: '-' & ceras.ver)}{(
+      if fileExists(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(
+        case ceras.url
+        of RAD_PRINT_NIL:
+          ""
+        else:
+          '-' & ceras.ver
+      )}{(
         case ceras.ver
         of RAD_TOOL_GIT:
           '-' & ceras.cmt
@@ -245,7 +251,13 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resol
 
     case stage
     of RAD_STAGE_NATIVE:
-      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): "" else: '-' & ceras.ver)}{(
+      status = rad_create_tar_zst(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(
+        case ceras.url
+        of RAD_PRINT_NIL:
+          ""
+        else:
+          '-' & ceras.ver
+      )}{(
         case ceras.ver
         of RAD_TOOL_GIT:
           '-' & ceras.cmt
@@ -282,7 +294,13 @@ proc rad_ceras_install*(cerata: openArray[string]) =
         ceras.ver
     , RAD_PRINT_INSTALL)
 
-    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(if ceras.url.isEmptyOrWhitespace(): "" else: '-' & ceras.ver)}{(
+    let status = rad_extract_tar(RAD_PATH_RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(
+      case ceras.url
+      of RAD_PRINT_NIL:
+        ""
+      else:
+        '-' & ceras.ver
+    )}{(
       case ceras.ver
       of RAD_TOOL_GIT:
         '-' & ceras.cmt
