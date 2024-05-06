@@ -336,7 +336,7 @@ proc rad_bootstrap_release_img*() =
     rad_abort(&"""{"1":8}{"permission denied":48}""")
 
   let
-    img = getEnv(RAD_ENV_DIR_GLAD) / &"""{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format("YYYYMMdd")}.img"""
+    img = getEnv(RAD_ENV_DIR_GLAD) / &"""{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format("YYYYMMdd")}{CurDir}img"""
 
     # Find the first unused loop device
     device = execCmdEx(&"{RAD_TOOL_LOSETUP} -f")[0].strip()
@@ -401,7 +401,7 @@ proc rad_bootstrap_release_img*() =
 
 proc rad_bootstrap_release_iso*() =
   let
-    iso = getEnv(RAD_ENV_DIR_GLAD) / &"""{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format("YYYYMMdd")}.iso"""
+    iso = getEnv(RAD_ENV_DIR_GLAD) / &"""{RAD_GLAUCUS}-{RAD_CERAS_S6}-{RAD_ARCH_X86_64_V3}-{now().format("YYYYMMdd")}{CurDir}{RAD_DIR_ISO}"""
 
     path = getEnv(RAD_ENV_DIR_ISOD) / RAD_PATH_BOOT
 

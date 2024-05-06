@@ -235,7 +235,14 @@ proc rad_ceras_build*(cerata: openArray[string], stage = RAD_STAGE_NATIVE, resol
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...
-    var status = execCmd(&"{RAD_TOOL_SHELL} {RAD_FLAGS_TOOL_SHELL_COMMAND} 'nom={ceras.nom} ver={ceras.ver} . {RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS}/{ceras.nom}/build.{stage} && ceras_prepare $1 && ceras_configure $1 && ceras_build $1 && ceras_check $1 && ceras_install $1'" % &">> {log} 2>&1")
+    var status = execCmd(&"""
+      {RAD_TOOL_SHELL} {RAD_FLAGS_TOOL_SHELL_COMMAND} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS}{DirSep}{ceras.nom}{DirSep}{RAD_PRINT_BUILD}{CurDir}{stage} &&
+      ceras_prepare $1 &&
+      ceras_configure $1 &&
+      ceras_build $1 &&
+      ceras_check $1 &&
+      ceras_install $1'
+    """ % &">> {log} 2>&1")
 
     cursorUp 1
     eraseLine()

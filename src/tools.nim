@@ -16,7 +16,7 @@ func rad_compress_zst*(file: string): int =
   execCmd(&"{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOL_ZSTD_COMPRESS} {file} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
 func rad_create_tar_zst*(archive, dir: string): int =
-  execCmd(&"{RAD_TOOL_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOL_ZSTD_COMPRESS}' {RAD_FLAGS_TOOL_TAR_CREATE} {archive} -C {dir} . {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
+  execCmd(&"{RAD_TOOL_TAR} --use-compress-program '{RAD_CERAS_ZSTD} {RAD_FLAGS_TOOL_ZSTD_COMPRESS}' {RAD_FLAGS_TOOL_TAR_CREATE} {archive} -C {dir} {CurDir} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
 proc rad_download_file*(file, url: string): int =
   execCmd(&"{RAD_CERAS_WGET2} -q -O {file} -c -N {url}")
@@ -30,12 +30,12 @@ func rad_extract_tar*(archive, dir: string): int =
   execCmd(&"{RAD_TOOL_TAR} {RAD_FLAGS_TOOL_TAR_EXTRACT} {archive} -C {dir} {RAD_FLAGS_TOOL_SHELL_REDIRECT}")
 
 proc rad_abort*(err: string) =
-  styled_echo fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", reset_style
+  styled_echo fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", resetStyle
 
   rad_exit(QuitFailure)
 
 func rad_gen_initramfs*(dir: string, bootstrap = false): int =
-  execCmd(&"""{RAD_CERAS_BOOSTER} build --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: "--universal" else: "")} --strip {dir / RAD_FILE_INITRAMFS}""")
+  execCmd(&"""{RAD_CERAS_BOOSTER} {RAD_PRINT_BUILD} --force --compression={RAD_CERAS_ZSTD} --config={RAD_PATH_RAD_LIB_CLUSTERS_GLAUCUS / RAD_CERAS_BOOSTER / RAD_FILE_BOOSTER_YAML} {(if bootstrap: "--universal" else: "")} --strip {dir / RAD_FILE_INITRAMFS}""")
 
 proc rad_gen_sum*(dir, sum: string) =
   var files: seq[string]
