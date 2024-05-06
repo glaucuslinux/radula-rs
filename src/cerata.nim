@@ -69,15 +69,17 @@ proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], r
 
   deps[ceras.nom] =
     if run:
-      if ceras.run != RAD_PRINT_NIL:
+      case ceras.run
+      of RAD_PRINT_NIL:
+        @[]
+      else:
         ceras.run.split()
-      else:
-        @[]
     else:
-      if ceras.bld != RAD_PRINT_NIL:
-        ceras.bld.split()
-      else:
+      case ceras.bld
+      of RAD_PRINT_NIL:
         @[]
+      else:
+        ceras.bld.split()
 
   if deps[nom].len() > 0:
     for dep in deps[nom]:
