@@ -149,7 +149,7 @@ type
     BLD
     TGT
 
-    # DIR
+    # DIRS
     BAKD
     CERD
     CRSD
@@ -221,14 +221,12 @@ type
 
   RAD_FLAGS* = enum
     CFLAGS = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-    LDFLAGS = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
-
-    # TOOLS
     CHOWN = "-Rv"
     CPP = "-E"
     GIT_CHECKOUT = "checkout"
     GIT_CLONE = "clone"
     GRUB = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
+    LDFLAGS = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
     MAKE = "-j4 -O"
     MKE2FS = "-qt"
     PARTED = "-s"
@@ -295,7 +293,7 @@ Distributed under the terms of the ISC License"""
 
 
   RAD_PATHS* = enum
-    # FHS
+    # FILESYSTEM
     bin
     boot
     doc

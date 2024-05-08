@@ -65,21 +65,16 @@ proc rad_ceras_print_header() =
 
 # Resolve deps using topological sorting
 proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
-  let ceras = rad_ceras_parse(nom)
+  let
+    ceras = rad_ceras_parse(nom)
+    dep = if run: ceras.run else: ceras.bld
 
   deps[ceras.nom] =
-    if run:
-      case ceras.run
-      of $NIL:
-        @[]
-      else:
-        ceras.run.split()
+    case dep
+    of $NIL:
+      @[]
     else:
-      case ceras.bld
-      of $NIL:
-        @[]
-      else:
-        ceras.bld.split()
+      ceras.run.split()
 
   if deps[ceras.nom].len() > 0:
     for dep in deps[ceras.nom]:
