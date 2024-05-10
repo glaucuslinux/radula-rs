@@ -350,7 +350,7 @@ proc releaseImg*() =
 
   # Partition the IMG file
   discard execCmd(&"{parted} {Parted} {img} mklabel msdos {shellRedirect}")
-  discard execCmd(&"{parted} {Parted} -a none {img} mkpart primary ext4 1 {img_size} {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} -a none {img} mkpart primary ext4 1 {imgSize} {shellRedirect}")
   discard execCmd(&"{parted} {Parted} -a none {img} set 1 boot on {shellRedirect}")
 
   # Load the `loop` module
@@ -373,13 +373,13 @@ proc releaseImg*() =
   discard execCmd(&"{mount} {partition} {path} {shellRedirect}")
 
   # Remove `/lost+found` dir
-  removeDir(path / $lost_found)
+  removeDir(path / $lostFound)
 
   discard rsync(getEnv($CRSD) & DirSep, path, rsyncRelease)
 
   discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
 
-  discard gen_initramfs(path / $boot, true)
+  discard genInitramfs(path / $boot, true)
 
   # Install `grub` as the default bootloader
   createDir(path / $boot / $grub)

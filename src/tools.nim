@@ -22,7 +22,7 @@ proc downloadFile*(file, url: string): int =
   execCmd(&"{wget2} -q -O {file} -c -N {url}")
 
 proc exit*(status = 0) =
-  removeFile(DirSep & $tmp / $rad_lck)
+  removeFile(DirSep & $tmp / $radLck)
 
   quit(status)
 
@@ -30,12 +30,12 @@ func extractTar*(archive, dir: string): int =
   execCmd(&"{tar} {tarExtract} {archive} -C {dir} {shellRedirect}")
 
 proc abort*(err: string) =
-  styled_echo fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", resetStyle
+  styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", resetStyle
 
   exit(QuitFailure)
 
 func genInitramfs*(dir: string, bootstrap = false): int =
-  execCmd(&"""{booster} {build} --force --compression={zstd} --config={$radLibClustersGlaucus / $booster / $booster_yaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}""")
+  execCmd(&"""{booster} {build} --force --compression={zstd} --config={$radLibClustersGlaucus / $booster / $boosterYaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}""")
 
 proc genSum*(dir, sum: string) =
   var files: seq[string]
@@ -56,10 +56,10 @@ proc interrupt*() {.noconv.} =
   abort(&"""{"1":8}{"interrupt received":48}""")
 
 proc lock*() =
-  if fileExists(DirSep & $tmp / $rad_lck):
+  if fileExists(DirSep & $tmp / $radLck):
     abort(&"""{"1":8}{"lck exists":48}""")
   else:
-    writeFile(DirSep & $tmp / $rad_lck, "")
+    writeFile(DirSep & $tmp / $radLck, "")
 
 func rsync*(src, dest: string, flags = RSYNC): int =
   execCmd(&"{radCerata.rsync} {flags} {src} {dest} --delete {shellRedirect}")

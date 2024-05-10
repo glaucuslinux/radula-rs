@@ -351,7 +351,7 @@ Distributed under the terms of the ISC License"""
     grubMkrescue = "grub-mkrescue"
     losetup
     mke2fs
-    mkfs_erofs = "mkfs.erofs"
+    mkfsErofs = "mkfs.erofs"
     modprobe
     mount
     nm = "gcc-nm"

@@ -209,7 +209,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
           '-' & ceras.cmt
         else:
           ""
-      )}{tar_zst}"""):
+      )}{tarZst}"""):
         cursorUp 1
         eraseLine()
 
@@ -232,11 +232,11 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     # current working dir...
     var status = execCmd(&"""
       {sh} {shellCommand} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {radLibClustersGlaucus}{DirSep}{ceras.nom}{DirSep}{build}{CurDir}{stage} &&
-      ceras_prepare $1 &&
-      ceras_configure $1 &&
-      ceras_build $1 &&
-      ceras_check $1 &&
-      ceras_install $1'
+      cerasPrepare $1 &&
+      cerasConfigure $1 &&
+      cerasBuild $1 &&
+      cerasCheck $1 &&
+      cerasInstall $1'
     """ % &">> {log} 2>&1")
 
     cursorUp 1
@@ -265,7 +265,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
           '-' & ceras.cmt
         else:
           ""
-      )}{tar_zst}""", getEnv($SACD))
+      )}{tarZst}""", getEnv($SACD))
 
       if status == 0:
         genSum(getEnv($SACD), $radCacheVenom / ceras.nom / $sum)
@@ -308,7 +308,7 @@ proc installCerata*(cerata: openArray[string]) =
         '-' & ceras.cmt
       else:
         ""
-    )}{tar_zst}""", $DirSep)
+    )}{tarZst}""", $DirSep)
 
     cursorUp 1
     eraseLine()
