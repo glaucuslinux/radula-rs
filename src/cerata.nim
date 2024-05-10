@@ -182,10 +182,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
   printHeader()
 
   for idx, nom in (if resolve: cluster else: cerata.toSeq()):
-    let
-      ceras = parseCeras(nom)
-
-      log = getEnv($LOGD) / &"{ceras.nom}{CurDir}{log}"
+    let ceras = parseCeras(nom)
 
     printContent(idx, ceras.nom,
       case ceras.ver
@@ -237,7 +234,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       cerasBuild $1 &&
       cerasCheck $1 &&
       cerasInstall $1'
-    """ % &">> {log} 2>&1")
+    """ % &">> {getEnv($LOGD)}{ceras.nom}{CurDir}{log} 2>&1")
 
     cursorUp 1
     eraseLine()
