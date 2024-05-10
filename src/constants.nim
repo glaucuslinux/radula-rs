@@ -2,18 +2,18 @@
 # Distributed under the terms of the ISC License
 
 type
-  RAD_ARCH* = enum
+  radArch* = enum
     glaucus
 
-    TUPLE_CROSS = "-glaucus-linux-musl"
-    TUPLE_NATIVE = "-pc-linux-musl"
+    tupleCross = "-glaucus-linux-musl"
+    tupleNative = "-pc-linux-musl"
 
-    X86_64 = "x86-64"
-    X86_64_LINUX = "x86_64"
-    X86_64_V3 = "x86-64-v3"
+    x86_64 = "x86-64"
+    x86_64Linux= "x86_64"
+    x86_64_v3 = "x86-64-v3"
 
 
-  RAD_CERATA* = enum
+  radCerata* = enum
     acl
     attr
     autoconf
@@ -25,7 +25,7 @@ type
     byacc
     bzip2
 
-    CERATA = "cerata"
+    cerata = "cerata"
     cmake
 
     diffutils
@@ -40,7 +40,7 @@ type
     flex
 
     gcc
-    gettext_tiny = "gettext-tiny"
+    gettextTiny = "gettext-tiny"
     gmp
     grep
     grub
@@ -57,15 +57,15 @@ type
     less
     libarchive
     libcap
-    libcap_ng = "libcap-ng"
+    libcapNg = "libcap-ng"
     libedit
     libgcc
     libressl
-    libstdcxx_v3 = "libstdc++-v3"
+    libstdcxxV3 = "libstdc++-v3"
     libtool
-    libudev_zero = "libudev-zero"
+    libudevZero = "libudev-zero"
     linux
-    linux_headers = "linux-headers"
+    linuxHeaders = "linux-headers"
     lz4
 
     m4
@@ -77,11 +77,11 @@ type
     mpfr
     muon
     musl
-    musl_fts = "musl-fts"
-    musl_headers = "musl-headers"
-    musl_utils = "musl-utils"
+    muslFts = "musl-fts"
+    muslHeaders = "musl-headers"
+    muslUtils = "musl-utils"
 
-    netbsd_curses = "netbsd-curses"
+    netbsdCurses = "netbsd-curses"
     nsss
 
     opendoas
@@ -91,16 +91,16 @@ type
     perl
     pigz
     pkgconf
-    procps_ng = "procps-ng"
+    procpsNg = "procps-ng"
     psmisc
 
     rad
     rsync
 
     s6
-    s6_boot_scripts = "s6-boot-scripts"
-    s6_linux_init = "s6-linux-init"
-    s6_rc = "s6-rc"
+    s6BootScripts = "s6-boot-scripts"
+    s6LinuxInit = "s6-linux-init"
+    s6Rc = "s6-rc"
     samurai
     sdhcp
     sed
@@ -112,7 +112,7 @@ type
     tzcode
     tzdata
 
-    util_linux = "util-linux"
+    utilLinux = "util-linux"
     utmps
 
     vim
@@ -124,11 +124,11 @@ type
 
     yash
 
-    zlib_ng = "zlib-ng"
+    zlibNg = "zlib-ng"
     zstd
 
 
-  RAD_DIRS* = enum
+  radDirs* = enum
     bak
     bld
     iso
@@ -138,7 +138,7 @@ type
     tmp
 
 
-  RAD_ENV* = enum
+  radEnv* = enum
     # ARCH
     ARCH
     BOOTSTRAP
@@ -167,7 +167,6 @@ type
     CXXFLAGS
     LDFLAGS
 
-    # PATHS
     PATH
 
     # PKG_CONFIG
@@ -203,46 +202,46 @@ type
     YACC
 
 
-  RAD_FILES* = enum
-    booster_yaml = "booster.yaml"
+  radFiles* = enum
+    boosterYaml = "booster.yaml"
     ceras
-    config_guess = "config.guess"
-    grub_cfg = "grub.cfg"
-    grub_cfg_img = "grub.cfg.img"
-    grub_cfg_iso = "grub.cfg.iso"
-    img_size = "16384"
+    configGuess = "config.guess"
+    grubCfg = "grub.cfg"
+    grubCfgImg = "grub.cfg.img"
+    grubCfgIso = "grub.cfg.iso"
+    imgSize = "16384"
     initramfs
     kernel = "vmlinuz"
-    rad_lck = "rad.lck"
+    radLck = "rad.lck"
     rootfs
     sum
-    tar_zst = ".tar.zst"
+    tarZst = ".tar.zst"
 
 
-  RAD_FLAGS* = enum
-    CFLAGS = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-    CHOWN = "-Rv"
-    CPP = "-E"
-    GIT_CHECKOUT = "checkout"
-    GIT_CLONE = "clone"
-    GRUB = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
-    LDFLAGS = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
-    MAKE = "-j4 -O"
-    MKE2FS = "-qt"
-    PARTED = "-s"
-    RSYNC = "-vaHAXSx"
-    RSYNC_RELEASE = "-vaHAXx"
-    SHELL_COMMAND = "-c"
-    SHELL_REDIRECT = "> /dev/null 2>&1"
-    TAR_CREATE = "-cpvf"
-    TAR_EXTRACT = "-xmPvf"
-    UMOUNT = "-fqRv"
-    ZSTD_COMPRESS = "-22 --ultra -T0 --long"
-    ZSTD_DECOMPRESS = "-d -T0 --long"
+  radFlags* = enum
+    cflags = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+    Chown = "-Rv"
+    cpp = "-E"
+    gitCheckout = "checkout"
+    gitClone = "clone"
+    Grub = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
+    ldflags = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
+    Make = "-j4 -O"
+    Mke2fs = "-qt"
+    Parted = "-s"
+    Rsync = "-vaHAXSx"
+    rsyncRelease = "-vaHAXx"
+    shellCommand = "-c"
+    shellRedirect = "> /dev/null 2>&1"
+    tarCreate = "-cpvf"
+    tarExtract = "-xmPvf"
+    Umount = "-fqRv"
+    zstdCompress = "-22 --ultra -T0 --long"
+    zstdDecompress = "-d -T0 --long"
 
 
-  RAD_HELP* = enum
-    RAD = """
+  radHelp* = enum
+    Rad = """
 USAGE:
   rad [ OPTION ]
 
@@ -252,7 +251,7 @@ OPTIONS:
   -h, --help       Display this help message
   -v, --version    Display current version"""
 
-    BOOTSTRAP = """
+    bootstrap = """
 USAGE:
   rad [ -b | --bootstrap ] [ COMMAND ]
 
@@ -266,7 +265,7 @@ COMMANDS:
   t, toolchain     Bootstrap toolchain
   x, cross         Bootstrap cross glaucus"""
 
-    CERATA = """
+    Cerata = """
 USAGE:
   rad [ -c | --cerata ] [ COMMAND ] [ cerata ]
 
@@ -285,14 +284,14 @@ COMMANDS:
   u, upgrade       Upgrade cerata
   y, sync          Synchronize clusters"""
 
-    VERSION = """
+    version = """
 rad version 0.1.0
 
 Copyright (c) 2018-2024, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
 
-  RAD_PATHS* = enum
+  radPaths* = enum
     # FILESYSTEM
     bin
     boot
@@ -301,55 +300,55 @@ Distributed under the terms of the ISC License"""
     info
     lib
     lib64
-    lost_found = "lost+found"
+    lostFound = "lost+found"
     man
     mnt
     modules
     share
     usr
-    VAR = "var"
+    Var = "var"
     wtmpd
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
     # automatically prefixed to PATH and LIBDIR)
-    PKG_CONFIG_LIBDIR = "/usr/lib/pkgconfig"
-    PKG_CONFIG_SYSTEM_INCLUDE_PATH = "/usr/include"
-    PKG_CONFIG_SYSTEM_LIBRARY_PATH = "/usr/lib"
+    pkgConfigLibdir = "/usr/lib/pkgconfig"
+    pkgConfigSystemIncludePath = "/usr/include"
+    pkgConfigSystemLibraryPath = "/usr/lib"
 
     # RAD
-    RAD_CACHE_BIN = "/var/cache/rad/bin"
-    RAD_CACHE_SRC = "/var/cache/rad/src"
-    RAD_CACHE_VENOM = "/var/cache/rad/venom"
-    RAD_LIB_CLUSTERS_GLAUCUS = "/var/lib/rad/clusters/glaucus"
-    RAD_LIB_LOCAL = "/var/lib/rad/local"
-    RAD_LOG = "/var/log/rad"
-    RAD_TMP = "/var/tmp/rad"
+    radCacheBin = "/var/cache/rad/bin"
+    radCacheSrc = "/var/cache/rad/src"
+    radCacheVenom = "/var/cache/rad/venom"
+    radLibClustersGlaucus = "/var/lib/rad/clusters/glaucus"
+    radLibLocal = "/var/lib/rad/local"
+    radLog = "/var/log/rad"
+    radTmp = "/var/tmp/rad"
 
 
-  RAD_PRINT* = enum
+  radPrint* = enum
     build
     clone
     fetch
     install
-    NIL = "nil"
+    Nil = "nil"
     remove
 
 
-  RAD_STAGES* = enum
+  radStages* = enum
     cross
     native
     toolchain
 
 
-  RAD_TOOLS* = enum
+  radTools* = enum
     ar = "gcc-ar"
-    AS = "as"
+    As = "as"
     chown
     cxx = "g++"
     dd
     git
-    grub_install = "grub-install"
-    grub_mkrescue = "grub-mkrescue"
+    grubInstall = "grub-install"
+    grubMkrescue = "grub-mkrescue"
     losetup
     mke2fs
     mkfs_erofs = "mkfs.erofs"

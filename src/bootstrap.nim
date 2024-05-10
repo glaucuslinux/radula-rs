@@ -5,25 +5,25 @@ import
   std/[os, osproc, strformat, strutils, times],
   cerata, constants, tools
 
-proc rad_bootstrap_clean*() =
+proc cleanBootstrap*() =
   removeDir(getEnv($CRSD))
   removeDir(getEnv($LOGD))
   removeDir(getEnv($TBLD))
   removeDir(getEnv($TLCD))
 
-proc rad_bootstrap_cross_build*() =
-  rad_ceras_build([
+proc buildCross*() =
+  buildCerata([
     # Filesystem
     $filesystem,
 
     # Package Management
-    $RAD_CERATA.CERATA,
+    $radCerata.cerata,
     $rad,
 
     # Compatibility
-    $musl_fts,
-    $musl_utils,
-    $linux_headers,
+    $muslFts,
+    $muslUtils,
+    $linuxHeaders,
 
     # Init
     $skalibs,
@@ -37,7 +37,7 @@ proc rad_bootstrap_cross_build*() =
     $attr,
     $acl,
     $libcap,
-    $libcap_ng,
+    $libcapNg,
     $shadow,
 
     # Hashing
@@ -58,7 +58,7 @@ proc rad_bootstrap_cross_build*() =
     $bzip2,
     $lz4,
     $xz,
-    $zlib_ng,
+    $zlibNg,
     $pigz,
     $zstd,
     $libarchive,
@@ -70,7 +70,7 @@ proc rad_bootstrap_cross_build*() =
     $byacc,
     $flex,
     $gcc,
-    $gettext_tiny,
+    $gettextTiny,
     $help2man,
     $libtool,
     $m4,
@@ -83,7 +83,7 @@ proc rad_bootstrap_cross_build*() =
     $samurai,
 
     # Editors, Pagers and Shells
-    $netbsd_curses,
+    $netbsdCurses,
     $libedit,
     $pcre2,
     $bash,
@@ -93,72 +93,72 @@ proc rad_bootstrap_cross_build*() =
 
     # Utilities
     $kmod,
-    $libudev_zero,
-    $procps_ng,
+    $libudevZero,
+    $procpsNg,
     $psmisc,
-    $util_linux,
+    $utilLinux,
     $e2fsprogs,
 
     # Services
-    $s6_linux_init,
-    $s6_rc,
-    $s6_boot_scripts,
+    $s6LinuxInit,
+    $s6Rc,
+    $s6BootScripts,
 
     # Kernel
     $linux
   ], $cross, false)
 
-proc rad_bootstrap_cross_env_pkg_config*() =
-  putEnv($RAD_ENV.PKG_CONFIG_LIBDIR, getEnv($CRSD) / $RAD_PATHS.PKG_CONFIG_LIBDIR)
-  putEnv($PKG_CONFIG_PATH, getEnv($RAD_ENV.PKG_CONFIG_LIBDIR))
+proc setEnvCrossPkgConfig*() =
+  putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
   putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
 
   # These env variables are `pkgconf` specific, but setting them won't
   # do any harm...
-  putEnv($RAD_ENV.PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $RAD_PATHS.PKG_CONFIG_SYSTEM_INCLUDE_PATH)
-  putEnv($RAD_ENV.PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $RAD_PATHS.PKG_CONFIG_SYSTEM_LIBRARY_PATH)
+  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
+  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
 
-proc rad_bootstrap_cross_env_tools*() =
-  let cross_compile = getEnv($TGT) & '-'
+proc setEnvCrossTools*() =
+  let crossCompile = getEnv($TGT) & '-'
 
-  putEnv($CROSS_COMPILE, cross_compile)
+  putEnv($CROSS_COMPILE, crossCompile)
 
-  putEnv($AR, cross_compile & $ar)
-  putEnv($RAD_ENV.AS, cross_compile & $RAD_TOOLS.AS)
-  putEnv($CC, cross_compile & $gcc)
-  putEnv($RAD_ENV.CPP, &"{getEnv($CC)} {RAD_FLAGS.CPP}")
-  putEnv($CXX, cross_compile & $cxx)
-  putEnv($CXXCPP, &"{getEnv($CXX)} {RAD_FLAGS.CPP}")
+  putEnv($AR, crossCompile & $ar)
+  putEnv($radEnv.AS, crossCompile & $radTools.AS)
+  putEnv($CC, crossCompile & $gcc)
+  putEnv($radEnv.CPP, &"{getEnv($CC)} {cpp}")
+  putEnv($CXX, crossCompile & $cxx)
+  putEnv($CXXCPP, &"{getEnv($CXX)} {cpp}")
   putEnv($HOSTCC, $gcc)
-  putEnv($NM, cross_compile & $nm)
-  putEnv($OBJCOPY, cross_compile & $objcopy)
-  putEnv($OBJDUMP, cross_compile & $objdump)
-  putEnv($RANLIB, cross_compile & $ranlib)
-  putEnv($READELF, cross_compile & $readelf)
-  putEnv($SIZE, cross_compile & $size)
-  putEnv($STRIP, cross_compile & $strip)
+  putEnv($NM, crossCompile & $nm)
+  putEnv($OBJCOPY, crossCompile & $objcopy)
+  putEnv($OBJDUMP, crossCompile & $objdump)
+  putEnv($RANLIB, crossCompile & $ranlib)
+  putEnv($READELF, crossCompile & $readelf)
+  putEnv($SIZE, crossCompile & $size)
+  putEnv($STRIP, crossCompile & $strip)
 
-proc rad_bootstrap_cross_prepare*() =
-  discard rad_rsync(getEnv($BAKD) / $cross, getEnv($GLAD))
+proc prepareCross*() =
+  discard rsync(getEnv($BAKD) / $cross, getEnv($GLAD))
 
   removeDir(getEnv($TBLD))
   createDir(getEnv($TBLD))
 
-proc rad_bootstrap_distclean*() =
+proc distcleanBootstrap*() =
   removeDir(getEnv($BAKD))
 
-  rad_bootstrap_clean()
+  cleanBootstrap()
 
   removeDir(getEnv($SRCD))
   removeDir(getEnv($GLAD) / $tmp)
 
-proc rad_bootstrap_env*() =
+proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())
 
   putEnv($GLAD, path)
 
   putEnv($BAKD, path / $bak)
-  putEnv($CERD, path / $RAD_CERATA.CERATA)
+  putEnv($CERD, path / $radCerata.cerata)
   putEnv($CRSD, path / $cross)
   putEnv($ISOD, path / $iso)
   putEnv($LOGD, path / $log)
@@ -169,7 +169,7 @@ proc rad_bootstrap_env*() =
 
   putEnv($PATH, getEnv($TLCD) / $usr / &"{bin}{PathSep}{getEnv($PATH)}")
 
-proc rad_bootstrap_init*() =
+proc init*() =
   createDir(getEnv($BAKD))
   createDir(getEnv($CRSD))
   createDir(getEnv($LOGD))
@@ -178,32 +178,32 @@ proc rad_bootstrap_init*() =
   createDir(getEnv($TSRC))
   createDir(getEnv($TLCD))
 
-proc rad_bootstrap_native_env_dir*() =
-  putEnv($SRCD, $RAD_CACHE_SRC)
-  putEnv($CERD, $RAD_LIB_CLUSTERS_GLAUCUS)
-  putEnv($LOGD, $RAD_LOG)
-  putEnv($TBLD, $RAD_TMP / $bld)
-  putEnv($TSRC, $RAD_TMP / $src)
+proc setEnvNativeDirs*() =
+  putEnv($SRCD, $radCacheSrc)
+  putEnv($CERD, $radLibClustersGlaucus)
+  putEnv($LOGD, $radLog)
+  putEnv($TBLD, $radTmp / $bld)
+  putEnv($TSRC, $radTmp / $src)
 
-proc rad_bootstrap_native_env_pkg_config*() =
-  putEnv($RAD_ENV.PKG_CONFIG_LIBDIR, $RAD_PATHS.PKG_CONFIG_LIBDIR)
-  putEnv($PKG_CONFIG_PATH, $RAD_PATHS.PKG_CONFIG_LIBDIR)
+proc setEnvNativePkgConfig*() =
+  putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
   putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
 
   # These env variables are `pkgconf` specific, but setting them won't
   # do any harm...
-  putEnv($RAD_ENV.PKG_CONFIG_SYSTEM_INCLUDE_PATH, $RAD_PATHS.PKG_CONFIG_SYSTEM_INCLUDE_PATH)
-  putEnv($RAD_ENV.PKG_CONFIG_SYSTEM_LIBRARY_PATH, $RAD_PATHS.PKG_CONFIG_SYSTEM_LIBRARY_PATH)
+  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, $pkgConfigSystemIncludePath)
+  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
 
-proc rad_bootstrap_native_env_tools*() =
-  putEnv($RAD_ENV.BOOTSTRAP, "yes")
+proc setEnvNativeTools*() =
+  putEnv($radEnv.BOOTSTRAP, "yes")
 
   putEnv($AR, $ar)
-  putEnv($RAD_ENV.AS, $RAD_TOOLS.AS)
+  putEnv($radEnv.AS, $radTools.As)
   putEnv($CC, $gcc)
-  putEnv($RAD_ENV.CPP, &"{gcc} {RAD_FLAGS.CPP}")
+  putEnv($radEnv.CPP, &"{gcc} {cpp}")
   putEnv($CXX, $cxx)
-  putEnv($CXXCPP, &"{cxx} {RAD_FLAGS.CPP}")
+  putEnv($CXXCPP, &"{cxx} {cpp}")
   putEnv($HOSTCC, $gcc)
   putEnv($NM, $nm)
   putEnv($OBJCOPY, $objcopy)
@@ -213,15 +213,15 @@ proc rad_bootstrap_native_env_tools*() =
   putEnv($SIZE, $size)
   putEnv($STRIP, $strip)
 
-proc rad_bootstrap_native_prepare*() =
+proc prepareNative*() =
   removeDir(getEnv($TBLD))
   createDir(getEnv($TBLD))
 
   # Create the `src` dir if it doesn't exist, but don't remove it if it does exist!
   createDir(getEnv($TSRC))
 
-proc rad_bootstrap_native_build*() =
-  rad_ceras_build([
+proc buildNative*() =
+  buildCerata([
     # Filesystem
     $filesystem,
 
@@ -236,18 +236,18 @@ proc rad_bootstrap_native_build*() =
     $texinfo,
 
     # Package Management
-    $RAD_CERATA.CERATA,
+    $radCerata.cerata,
     $rad,
 
     # Compatibility
-    $musl_fts,
-    $linux_headers,
+    $muslFts,
+    $linuxHeaders,
 
     # Permissions & Capabilities
     $attr,
     $acl,
     $libcap,
-    $libcap_ng,
+    $libcapNg,
     $opendoas,
     $shadow,
 
@@ -267,7 +267,7 @@ proc rad_bootstrap_native_build*() =
     $bzip2,
     $lz4,
     $xz,
-    $zlib_ng,
+    $zlibNg,
     $pigz,
     $zstd,
     $libarchive,
@@ -280,7 +280,7 @@ proc rad_bootstrap_native_build*() =
     $expat,
     $flex,
     $gcc,
-    $gettext_tiny,
+    $gettextTiny,
     $help2man,
     $libtool,
     $m4,
@@ -292,7 +292,7 @@ proc rad_bootstrap_native_build*() =
     $samurai,
 
     # Editors, Pagers and Shells
-    $netbsd_curses,
+    $netbsdCurses,
     $libedit,
     $pcre2,
     $bash,
@@ -310,10 +310,10 @@ proc rad_bootstrap_native_build*() =
     # Utilities
     $kbd,
     $kmod,
-    $libudev_zero,
-    $procps_ng,
+    $libudevZero,
+    $procpsNg,
     $psmisc,
-    $util_linux,
+    $utilLinux,
     $e2fsprogs,
 
     # Init & Services
@@ -323,20 +323,20 @@ proc rad_bootstrap_native_build*() =
     $mdevd,
     $s6,
     $utmps,
-    $s6_linux_init,
-    $s6_rc,
-    $s6_boot_scripts,
+    $s6LinuxInit,
+    $s6Rc,
+    $s6BootScripts,
 
     # Kernel
     $linux
   ], $native, false)
 
-proc rad_bootstrap_release_img*() =
+proc releaseImg*() =
   if not isAdmin():
-    rad_abort(&"""{"1":8}{"permission denied":48}""")
+    abort(&"""{"1":8}{"permission denied":48}""")
 
   let
-    img = getEnv($GLAD) / &"""{glaucus}-{s6}-{X86_64_V3}-{now().format("YYYYMMdd")}{CurDir}img"""
+    img = getEnv($GLAD) / &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}img"""
 
     # Find the first unused loop device
     device = execCmdEx(&"{losetup} -f")[0].strip()
@@ -346,60 +346,60 @@ proc rad_bootstrap_release_img*() =
     path = DirSep & $mnt / $glaucus
 
   # Create a new IMG file
-  discard execCmd(&"{dd} bs=1M count={img_size} if=/dev/zero of={img} {SHELL_REDIRECT}")
+  discard execCmd(&"{dd} bs=1M count={imgSize} if=/dev/zero of={img} {shellRedirect}")
 
   # Partition the IMG file
-  discard execCmd(&"{parted} {PARTED} {img} mklabel msdos {SHELL_REDIRECT}")
-  discard execCmd(&"{parted} {PARTED} -a none {img} mkpart primary ext4 1 {img_size} {SHELL_REDIRECT}")
-  discard execCmd(&"{parted} {PARTED} -a none {img} set 1 boot on {SHELL_REDIRECT}")
+  discard execCmd(&"{parted} {Parted} {img} mklabel msdos {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} -a none {img} mkpart primary ext4 1 {img_size} {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} -a none {img} set 1 boot on {shellRedirect}")
 
   # Load the `loop` module
-  discard execCmd(&"{modprobe} loop {SHELL_REDIRECT}")
+  discard execCmd(&"{modprobe} loop {shellRedirect}")
 
   # Detach all used loop devices
-  discard execCmd(&"{losetup} -D {SHELL_REDIRECT}")
+  discard execCmd(&"{losetup} -D {shellRedirect}")
 
   # Associate the first unused loop device with the IMG file
-  discard execCmd(&"{losetup} {device} {img} {SHELL_REDIRECT}")
+  discard execCmd(&"{losetup} {device} {img} {shellRedirect}")
 
   # Notify the kernel about the new partition on the IMG file
-  discard execCmd(&"{partx} -a {device} {SHELL_REDIRECT}")
+  discard execCmd(&"{partx} -a {device} {shellRedirect}")
 
   # Create an `ext4` filesystem in the partition
-  discard execCmd(&"{mke2fs} {MKE2FS} ext4 {partition}")
+  discard execCmd(&"{mke2fs} {Mke2fs} ext4 {partition}")
 
   createDir(path)
 
-  discard execCmd(&"{mount} {partition} {path} {SHELL_REDIRECT}")
+  discard execCmd(&"{mount} {partition} {path} {shellRedirect}")
 
   # Remove `/lost+found` dir
   removeDir(path / $lost_found)
 
-  discard rad_rsync(getEnv($CRSD) & DirSep, path, RSYNC_RELEASE)
+  discard rsync(getEnv($CRSD) & DirSep, path, rsyncRelease)
 
-  discard rad_rsync(getEnv($SRCD) & DirSep, path / $RAD_CACHE_SRC, RSYNC_RELEASE)
+  discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
 
-  discard rad_gen_initramfs(path / $boot, true)
+  discard gen_initramfs(path / $boot, true)
 
   # Install `grub` as the default bootloader
   createDir(path / $boot / $grub)
 
-  discard rad_rsync($RAD_LIB_CLUSTERS_GLAUCUS / $grub / $grub_cfg_img, path / $boot / $grub / $grub_cfg, RSYNC_RELEASE)
+  discard rsync($radLibClustersGlaucus / $grub / $grubCfgImg, path / $boot / $grub / $grubCfg, rsyncRelease)
 
-  discard execCmd(&"{grub_install} {GRUB} --boot-directory={path / $boot} --target=i386-pc {device} {SHELL_REDIRECT}")
+  discard execCmd(&"{grubInstall} {Grub} --boot-directory={path / $boot} --target=i386-pc {device} {shellRedirect}")
 
   # Change ownerships
-  discard execCmd(&"{chown} {CHOWN} 0:0 {path} {SHELL_REDIRECT}")
-  discard execCmd(&"{chown} {CHOWN} 20:20 {path / $VAR / $log / $wtmpd} {SHELL_REDIRECT}")
+  discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
+  discard execCmd(&"{chown} {Chown} 20:20 {path / $VAR / $log / $wtmpd} {shellRedirect}")
 
   # Clean up
-  discard execCmd(&"{umount} {UMOUNT} {path} {SHELL_REDIRECT}")
-  discard execCmd(&"{partx} -d {partition} {SHELL_REDIRECT}")
-  discard execCmd(&"{losetup} -d {device} {SHELL_REDIRECT}")
+  discard execCmd(&"{umount} {Umount} {path} {shellRedirect}")
+  discard execCmd(&"{partx} -d {partition} {shellRedirect}")
+  discard execCmd(&"{losetup} -d {device} {shellRedirect}")
 
-proc rad_bootstrap_release_iso*() =
+proc releaseIso*() =
   let
-    iso = getEnv($GLAD) / &"""{glaucus}-{s6}-{X86_64_V3}-{now().format("YYYYMMdd")}{CurDir}{iso}"""
+    iso = getEnv($GLAD) / &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}{iso}"""
 
     path = getEnv($ISOD) / $boot
 
@@ -407,28 +407,28 @@ proc rad_bootstrap_release_iso*() =
   removeDir(getEnv($ISOD))
   createDir(path / $grub)
 
-  discard rad_rsync($RAD_LIB_CLUSTERS_GLAUCUS / $grub / $grub_cfg_iso, path / $grub / $grub_cfg)
+  discard rsync($radLibClustersGlaucus / $grub / $grubCfgIso, path / $grub / $grubCfg)
 
-  discard rad_rsync(getEnv($GLAD) / $initramfs, path)
+  discard rsync(getEnv($GLAD) / $initramfs, path)
 
   # Compress rootfs
-  discard execCmd(&"{mkfs_erofs} {path / $rootfs} {getEnv($CRSD)} {SHELL_REDIRECT}")
+  discard execCmd(&"{mkfsErofs} {path / $rootfs} {getEnv($CRSD)} {shellRedirect}")
 
   # Copy kernel
-  discard rad_rsync(getEnv($CRSD) / $boot / $kernel, path)
+  discard rsync(getEnv($CRSD) / $boot / $kernel, path)
 
   # Create a new ISO file
-  discard execCmd(&"{grub_mkrescue} {GRUB} -v -o {iso} {getEnv($ISOD)} -volid {glaucus} {SHELL_REDIRECT}")
+  discard execCmd(&"{grubMkrescue} {Grub} -v -o {iso} {getEnv($ISOD)} -volid {glaucus} {shellRedirect}")
 
-func rad_bootstrap_toolchain_backup*() =
-  discard rad_rsync(getEnv($CRSD), getEnv($BAKD))
+func backupToolchain*() =
+  discard rsync(getEnv($CRSD), getEnv($BAKD))
 
-proc rad_bootstrap_toolchain_build*() =
-  rad_ceras_build([
-    $musl_headers,
+proc buildToolchain*() =
+  buildCerata([
+    $muslHeaders,
     $binutils,
     $gcc,
     $musl,
     $libgcc,
-    $libstdcxx_v3
+    $libstdcxxV3
   ], $toolchain, false)

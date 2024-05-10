@@ -11,38 +11,38 @@ type
     nom, ver, cmt, url, sum, bld, run = $NIL
 
 # Check if the `ceras` src is extracted
-proc rad_ceras_check_extract_src(file: string): bool =
+proc checkExtractSrc(file: string): bool =
   walkDir(parentDir(file)).toSeq().len() > 1
 
-proc rad_ceras_clean*() =
-  removeDir($RAD_LOG)
-  removeDir($RAD_TMP)
+proc cleanCerata*() =
+  removeDir($radLog)
+  removeDir($radTmp)
 
-proc rad_ceras_distclean*() =
-  removeDir($RAD_CACHE_BIN)
-  removeDir($RAD_CACHE_SRC)
-  removeDir($RAD_CACHE_VENOM)
+proc distcleanCerata*() =
+  removeDir($radCacheBin)
+  removeDir($radCacheSrc)
+  removeDir($radCacheVenom)
 
-  rad_ceras_clean()
+  cleanCerata()
 
 # Return the full path to the `ceras` file
-proc rad_ceras_path(nom: string): string =
-  $RAD_LIB_CLUSTERS_GLAUCUS / nom / $ceras
+proc getCerasPath(nom: string): string =
+  $radLibClustersGlaucus / nom / $ceras
 
 # Check if the `ceras` file exists
-proc rad_ceras_check_exist(nom: string) =
-  if not fileExists(rad_ceras_path(nom)):
-    rad_abort(&"""{"nom":8}{nom:48}""")
+proc checkCerasExist(nom: string) =
+  if not fileExists(getCerasPath(nom)):
+    abort(&"""{"nom":8}{nom:48}""")
 
 # Parse the `ceras` file
-proc rad_ceras_parse(nom: string): Ceras =
-  Toml.loadFile(rad_ceras_path(nom), Ceras)
+proc parseCeras(nom: string): Ceras =
+  Toml.loadFile(getCerasPath(nom), Ceras)
 
-proc rad_ceras_print*(cerata: openArray[string]) =
+proc printCerata*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
-    rad_ceras_check_exist(nom)
+    checkCerasExist(nom)
 
-    let ceras = rad_ceras_parse(nom)
+    let ceras = parseCeras(nom)
 
     echo "nom  :: ", ceras.nom
     echo "ver  :: ", ceras.ver
@@ -54,19 +54,19 @@ proc rad_ceras_print*(cerata: openArray[string]) =
 
     echo ""
 
-proc rad_ceras_print_content(idx: int, nom, ver, cmd: string) =
+proc printContent(idx: int, nom, ver, cmd: string) =
   styledEcho fgMagenta, styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}""", resetStyle
 
-proc rad_ceras_print_footer(idx: int, nom, ver, cmd: string) =
+proc printFooter(idx: int, nom, ver, cmd: string) =
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
 
-proc rad_ceras_print_header() =
+proc printHeader() =
   echo &"""{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin"""
 
 # Resolve deps using topological sorting
-proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], run = true) =
+proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) =
   let
-    ceras = rad_ceras_parse(nom)
+    ceras = parseCeras(nom)
     dep = if run: ceras.run else: ceras.bld
 
   deps[ceras.nom] =
@@ -74,32 +74,32 @@ proc rad_ceras_resolve_deps(nom: string, deps: var Table[string, seq[string]], r
     of $NIL:
       @[]
     else:
-      ceras.run.split()
+      dep.split()
 
   if deps[ceras.nom].len() > 0:
     for dep in deps[ceras.nom]:
-      rad_ceras_resolve_deps(dep, deps, if run: true else: false)
+      resolveDeps(dep, deps, if run: true else: false)
 
-proc rad_ceras_check*(cerata: openArray[string], run = true): seq[string] =
+proc checkCerata*(cerata: openArray[string], run = true): seq[string] =
   var deps: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
-    rad_ceras_check_exist(nom)
+    checkCerasExist(nom)
 
-    rad_ceras_resolve_deps(nom, deps, if run: true else: false)
+    resolveDeps(nom, deps, if run: true else: false)
 
   topoSort(deps)
 
-proc rad_ceras_fetch(cerata: openArray[string]) =
-  rad_ceras_print_header()
+proc fetchCerata(cerata: openArray[string]) =
+  printHeader()
 
   for idx, nom in cerata:
-    let ceras = rad_ceras_parse(nom)
+    let ceras = parseCeras(nom)
 
     # Check for virtual cerata
     case ceras.url
     of $NIL:
-      rad_ceras_print_footer(idx, ceras.nom, ceras.ver, $fetch)
+      printFooter(idx, ceras.nom, ceras.ver, $fetch)
     else:
       let
         path = getEnv($SRCD) / ceras.nom
@@ -108,86 +108,86 @@ proc rad_ceras_fetch(cerata: openArray[string]) =
       if dirExists(path):
         case ceras.ver
         of $git:
-          rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, $fetch)
+          printFooter(idx, ceras.nom, ceras.cmt, $fetch)
         else:
-          if rad_verify_file(archive, ceras.sum):
-            if not rad_ceras_check_extract_src(archive):
-              rad_ceras_print_content(idx, ceras.nom, ceras.ver, $fetch)
+          if verifyFile(archive, ceras.sum):
+            if not checkExtractSrc(archive):
+              printContent(idx, ceras.nom, ceras.ver, $fetch)
 
-              discard rad_extract_tar(archive, path)
+              discard extractTar(archive, path)
 
               cursorUp 1
               eraseLine()
 
-            rad_ceras_print_footer(idx, ceras.nom, ceras.ver, $fetch)
+            printFooter(idx, ceras.nom, ceras.ver, $fetch)
           else:
-            rad_ceras_print_content(idx, ceras.nom, ceras.ver, $fetch)
+            printContent(idx, ceras.nom, ceras.ver, $fetch)
 
             removeDir(path)
             createDir(path)
 
-            discard rad_download_file(archive, ceras.url)
+            discard downloadFile(archive, ceras.url)
 
-            if rad_verify_file(archive, ceras.sum):
-              discard rad_extract_tar(archive, path)
+            if verifyFile(archive, ceras.sum):
+              discard extractTar(archive, path)
             else:
               cursorUp 1
               eraseLine()
 
-              rad_abort(&"""{"sum":8}{ceras.nom:24}{ceras.ver:24}""")
+              abort(&"""{"sum":8}{ceras.nom:24}{ceras.ver:24}""")
 
             cursorUp 1
             eraseLine()
 
-            rad_ceras_print_footer(idx, ceras.nom, ceras.ver, $fetch)
+            printFooter(idx, ceras.nom, ceras.ver, $fetch)
       else:
         case ceras.ver
         of $git:
-          rad_ceras_print_content(idx, ceras.nom, ceras.cmt, $clone)
+          printContent(idx, ceras.nom, ceras.cmt, $clone)
 
-          discard rad_clone_repo(ceras.url, path)
-          discard rad_checkout_repo(path, ceras.cmt)
+          discard gitCloneRepo(ceras.url, path)
+          discard gitCheckoutRepo(path, ceras.cmt)
 
           cursorUp 1
           eraseLine()
 
-          rad_ceras_print_footer(idx, ceras.nom, ceras.cmt, $clone)
+          printFooter(idx, ceras.nom, ceras.cmt, $clone)
         else:
-          rad_ceras_print_content(idx, ceras.nom, ceras.ver, $fetch)
+          printContent(idx, ceras.nom, ceras.ver, $fetch)
 
           createDir(path)
 
-          discard rad_download_file(archive, ceras.url)
+          discard downloadFile(archive, ceras.url)
 
-          if rad_verify_file(archive, ceras.sum):
-            discard rad_extract_tar(archive, path)
+          if verifyFile(archive, ceras.sum):
+            discard extractTar(archive, path)
           else:
             cursorUp 1
             eraseLine()
 
-            rad_abort(&"""{"sum":8}{ceras.nom:24}{ceras.ver:24}""")
+            abort(&"""{"sum":8}{ceras.nom:24}{ceras.ver:24}""")
 
           cursorUp 1
           eraseLine()
 
-          rad_ceras_print_footer(idx, ceras.nom, ceras.ver, $fetch)
+          printFooter(idx, ceras.nom, ceras.ver, $fetch)
 
-proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true) =
-  let cluster = rad_ceras_check(cerata, false)
+proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
+  let cluster = checkCerata(cerata, false)
 
-  rad_ceras_fetch(cluster)
+  fetchCerata(cluster)
 
   echo ""
 
-  rad_ceras_print_header()
+  printHeader()
 
   for idx, nom in (if resolve: cluster else: cerata.toSeq()):
     let
-      ceras = rad_ceras_parse(nom)
+      ceras = parseCeras(nom)
 
       log = getEnv($LOGD) / &"{ceras.nom}{CurDir}{log}"
 
-    rad_ceras_print_content(idx, ceras.nom,
+    printContent(idx, ceras.nom,
       case ceras.ver
       of $git:
         ceras.cmt
@@ -197,7 +197,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
 
     case stage
     of $native:
-      if fileExists($RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(
+      if fileExists($radCacheVenom / ceras.nom / &"""{ceras.nom}{(
         case ceras.url
         of $NIL:
           ""
@@ -213,7 +213,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
         cursorUp 1
         eraseLine()
 
-        rad_ceras_print_footer(idx, ceras.nom,
+        printFooter(idx, ceras.nom,
           case ceras.ver
           of $git:
             ceras.cmt
@@ -223,7 +223,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
 
         continue
 
-      putEnv($SACD, $RAD_CACHE_VENOM / ceras.nom / $sac)
+      putEnv($SACD, $radCacheVenom / ceras.nom / $sac)
       createDir(getEnv($SACD))
 
     # We only use `nom` and `ver` from `ceras`
@@ -231,7 +231,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...
     var status = execCmd(&"""
-      {sh} {SHELL_COMMAND} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {RAD_LIB_CLUSTERS_GLAUCUS}{DirSep}{ceras.nom}{DirSep}{build}{CurDir}{stage} &&
+      {sh} {shellCommand} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {radLibClustersGlaucus}{DirSep}{ceras.nom}{DirSep}{build}{CurDir}{stage} &&
       ceras_prepare $1 &&
       ceras_configure $1 &&
       ceras_build $1 &&
@@ -243,7 +243,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
     eraseLine()
 
     if status != 0:
-      rad_abort(&"""{status:<8}{ceras.nom:24}{(
+      abort(&"""{status:<8}{ceras.nom:24}{(
         case ceras.ver
         of $git:
           ceras.cmt
@@ -253,7 +253,7 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
 
     case stage
     of $native:
-      status = rad_create_tar_zst($RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(
+      status = createTarZst($radCacheVenom / ceras.nom / &"""{ceras.nom}{(
         case ceras.url
         of $NIL:
           ""
@@ -268,11 +268,11 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
       )}{tar_zst}""", getEnv($SACD))
 
       if status == 0:
-        rad_gen_sum(getEnv($SACD), $RAD_CACHE_VENOM / ceras.nom / $sum)
+        genSum(getEnv($SACD), $radCacheVenom / ceras.nom / $sum)
 
         removeDir(getEnv($SACD))
 
-    rad_ceras_print_footer(idx, ceras.nom,
+    printFooter(idx, ceras.nom,
       case ceras.ver
       of $git:
         ceras.cmt
@@ -280,15 +280,15 @@ proc rad_ceras_build*(cerata: openArray[string], stage = $native, resolve = true
         ceras.ver
     , $build)
 
-proc rad_ceras_install*(cerata: openArray[string]) =
-  let cluster = rad_ceras_check(cerata)
+proc installCerata*(cerata: openArray[string]) =
+  let cluster = checkCerata(cerata)
 
-  rad_ceras_print_header()
+  printHeader()
 
   for idx, nom in cluster:
-    let ceras = rad_ceras_parse(nom)
+    let ceras = parseCeras(nom)
 
-    rad_ceras_print_content(idx, ceras.nom,
+    printContent(idx, ceras.nom,
       case ceras.ver
       of $git:
         ceras.cmt
@@ -296,7 +296,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
         ceras.ver
     , $install)
 
-    let status = rad_extract_tar($RAD_CACHE_VENOM / ceras.nom / &"""{ceras.nom}{(
+    let status = extractTar($radCacheVenom / ceras.nom / &"""{ceras.nom}{(
       case ceras.url
       of $NIL:
         ""
@@ -314,7 +314,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
     eraseLine()
 
     if status != 0:
-      rad_abort(&"""{status:<8}{ceras.nom:24}{(
+      abort(&"""{status:<8}{ceras.nom:24}{(
         case ceras.ver
         of $git:
           ceras.cmt
@@ -322,7 +322,7 @@ proc rad_ceras_install*(cerata: openArray[string]) =
           ceras.ver
       ):24}""")
 
-    rad_ceras_print_footer(idx, ceras.nom,
+    printFooter(idx, ceras.nom,
       case ceras.ver
       of $git:
         ceras.cmt
@@ -330,15 +330,15 @@ proc rad_ceras_install*(cerata: openArray[string]) =
         ceras.ver
     , $install)
 
-proc rad_ceras_remove*(cerata: openArray[string]) =
-  let cluster = rad_ceras_check(cerata)
+proc removeCerata*(cerata: openArray[string]) =
+  let cluster = checkCerata(cerata)
 
-  rad_ceras_print_header()
+  printHeader()
 
   for idx, nom in cluster:
-    let ceras = rad_ceras_parse(nom)
+    let ceras = parseCeras(nom)
 
-    rad_ceras_print_content(idx, ceras.nom,
+    printContent(idx, ceras.nom,
       case ceras.ver
       of $git:
         ceras.cmt
@@ -346,7 +346,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
         ceras.ver
     , $remove)
 
-    let sum = $RAD_CACHE_VENOM / ceras.nom / $sum
+    let sum = $radCacheVenom / ceras.nom / $sum
 
     for line in lines(sum):
       removeFile(DirSep & line.split()[2])
@@ -354,7 +354,7 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
     cursorUp 1
     eraseLine()
 
-    rad_ceras_print_footer(idx, ceras.nom,
+    printFooter(idx, ceras.nom,
       case ceras.ver
       of $git:
         ceras.cmt
@@ -362,14 +362,14 @@ proc rad_ceras_remove*(cerata: openArray[string]) =
         ceras.ver
     , $remove)
 
-proc rad_ceras_search*(pattern: openArray[string]) =
+proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for file in walkDir($RAD_LIB_CLUSTERS_GLAUCUS, relative = true, skipSpecial = true):
+  for file in walkDir($radLibClustersGlaucus, relative = true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in file[1]:
         cerata.add(file[1])
 
   sort(cerata)
 
-  rad_ceras_print(cerata)
+  printCerata(cerata)

@@ -4,4 +4,4 @@
 when isMainModule:
   import options
 
-  rad_options()
+  options()

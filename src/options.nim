@@ -5,7 +5,7 @@ import
   std/[os, parseopt],
   arch, bootstrap, cerata, constants, tools
 
-proc rad_options*() =
+proc options*() =
   if paramCount() < 1:
     echo RAD
 
@@ -22,10 +22,10 @@ proc rad_options*() =
     quit(QuitFailure)
   of cmdLongOption, cmdShortOption:
     # Catch `Ctrl-C` and exit gracefully
-    setControlCHook(rad_interrupt)
+    setControlCHook(interrupt)
 
     # Check lck file
-    rad_lck()
+    lock()
 
     case p.key
     of "b", "bootstrap":
@@ -33,109 +33,114 @@ proc rad_options*() =
 
       case p.kind
       of cmdEnd:
-        echo RAD_HELP.BOOTSTRAP
+        echo radHelp.bootstrap
 
-        rad_exit(QuitFailure)
+        exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
         of "c", "clean":
-          rad_bootstrap_env()
-          rad_bootstrap_clean()
+          setEnvBootstrap()
+          cleanBootstrap()
 
           echo "clean complete"
         of "d", "distclean":
-          rad_bootstrap_env()
-          rad_bootstrap_distclean()
+          setEnvBootstrap()
+          distcleanBootstrap()
 
           echo "distclean complete"
         of "h", "help":
-          echo RAD_HELP.BOOTSTRAP
+          echo radHelp.bootstrap
         of "i", "img":
-          rad_bootstrap_env()
-          rad_bootstrap_release_img()
+          setEnvBootstrap()
+          releaseImg()
 
           echo "img complete"
         of "n", "native":
-          rad_arch_env()
-          rad_arch_env_flags()
-          rad_tools_env()
-          rad_bootstrap_native_env_dir()
-          rad_bootstrap_native_env_pkg_config()
-          rad_bootstrap_native_env_tools()
-          rad_bootstrap_native_prepare()
-          rad_bootstrap_native_build()
+          setEnvArch()
+          setEnvFlags()
+          setEnvTools()
+          setEnvNativeDirs()
+          setEnvNativePkgConfig()
+          setEnvNativeTools()
+
+          prepareNative()
+          buildNative()
 
           echo ""
           echo "native complete"
         of "r", "release":
-          rad_bootstrap_env()
-          rad_bootstrap_release_iso()
+          setEnvBootstrap()
+          releaseIso()
 
           echo "release complete"
         of "t", "toolchain":
-          rad_arch_env(toolchain)
-          rad_tools_env()
-          rad_bootstrap_env()
-          rad_bootstrap_clean()
-          rad_bootstrap_init()
-          rad_bootstrap_toolchain_build()
-          rad_bootstrap_toolchain_backup()
+          setEnvArch(toolchain)
+          setEnvBootstrap()
+          setEnvTools()
+
+          cleanBootstrap()
+          init()
+
+          buildToolchain()
+          backupToolchain()
 
           echo ""
           echo "toolchain complete"
         of "x", "cross":
-          rad_arch_env(cross)
-          rad_arch_env_flags()
-          rad_tools_env()
-          rad_bootstrap_env()
-          rad_bootstrap_cross_env_pkg_config()
-          rad_bootstrap_cross_env_tools()
-          rad_bootstrap_cross_prepare()
-          rad_bootstrap_cross_build()
+          setEnvArch(cross)
+          setEnvBootstrap()
+          setEnvFlags()
+          setEnvTools()
+          setEnvCrossPkgConfig()
+          setEnvCrossTools()
+
+          prepareCross()
+          buildCross()
 
           echo ""
           echo "cross complete"
         else:
-          echo RAD_HELP.BOOTSTRAP
+          echo radHelp.bootstrap
 
-          rad_exit(QuitFailure)
+          exit(QuitFailure)
     of "c", "cerata":
       p.next()
 
       case p.kind
       of cmdEnd:
-        echo RAD_HELP.CERATA
+        echo Cerata
 
-        rad_exit(QuitFailure)
+        exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
         of "a", "append":
           echo ""
           echo "append complete"
         of "b", "build":
-          rad_arch_env()
-          rad_arch_env_flags()
-          rad_tools_env()
-          rad_bootstrap_native_env_dir()
-          rad_bootstrap_native_env_pkg_config()
-          rad_bootstrap_native_env_tools()
-          rad_bootstrap_native_prepare()
-          rad_ceras_build(remainingArgs(p))
+          setEnvArch()
+          setEnvFlags()
+          setEnvTools()
+          setEnvNativeDirs()
+          setEnvNativePkgConfig()
+          setEnvNativeTools()
+
+          prepareNative()
+          buildCerata(remainingArgs(p))
 
           echo ""
           echo "build complete"
         of "c", "clean":
-          rad_ceras_clean()
+          cleanCerata()
 
           echo "clean complete"
         of "d", "distclean":
-          rad_ceras_distclean()
+          distcleanCerata()
 
           echo "distclean complete"
         of "h", "help":
-          echo RAD_HELP.CERATA
+          echo Cerata
         of "i", "install":
-          rad_ceras_install(remainingArgs(p))
+          installCerata(remainingArgs(p))
 
           echo ""
           echo "install complete"
@@ -146,14 +151,14 @@ proc rad_options*() =
           echo ""
           echo "new complete"
         of "p", "print":
-          rad_ceras_print(remainingArgs(p))
+          printCerata(remainingArgs(p))
         of "r", "remove":
-          rad_ceras_remove(remainingArgs(p))
+          removeCerata(remainingArgs(p))
 
           echo ""
           echo "remove complete"
         of "s", "search":
-          rad_ceras_search(remainingArgs(p))
+          searchCerata(remainingArgs(p))
 
           echo "search complete"
         of "u", "upgrade":
@@ -163,16 +168,16 @@ proc rad_options*() =
           echo ""
           echo "sync complete"
         else:
-          echo RAD_HELP.CERATA
+          echo Cerata
 
-          rad_exit(QuitFailure)
+          exit(QuitFailure)
     of "h", "help":
-      echo RAD
+      echo Rad
     of "v", "version":
-      echo VERSION
+      echo version
     else:
-      echo RAD
+      echo Rad
 
-      rad_exit(QuitFailure)
+      exit(QuitFailure)
 
-    rad_exit()
+    exit()
