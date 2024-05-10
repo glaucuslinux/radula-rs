@@ -21,7 +21,7 @@ proc exit*(status = 0) =
   quit(status)
 
 proc abort*(err: string) =
-  styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", resetStyle
+  styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
 
   exit(QuitFailure)
 

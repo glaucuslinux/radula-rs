@@ -44,18 +44,18 @@ proc printCerata*(cerata: openArray[string]) =
 
     let ceras = parseCeras(nom)
 
-    echo "nom  :: ", ceras.nom
-    echo "ver  :: ", ceras.ver
-    echo "cmt  :: ", ceras.cmt
-    echo "url  :: ", ceras.url
-    echo "sum  :: ", ceras.sum
-    echo "bld  :: ", ceras.bld
-    echo "run  :: ", ceras.run
+    echo &"nom  :: {ceras.nom}"
+    echo &"ver  :: {ceras.ver}"
+    echo &"cmt  :: {ceras.cmt}"
+    echo &"url  :: {ceras.url}"
+    echo &"sum  :: {ceras.sum}"
+    echo &"bld  :: {ceras.bld}"
+    echo &"run  :: {ceras.run}"
 
     echo ""
 
 proc printContent(idx: int, nom, ver, cmd: string) =
-  styledEcho fgMagenta, styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}""", resetStyle
+  styledEcho fgMagenta, styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
 
 proc printFooter(idx: int, nom, ver, cmd: string) =
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
@@ -236,9 +236,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       cerasInstall $1'
     """ % &">> {getEnv($LOGD) / ceras.nom}{CurDir}{log} 2>&1")
 
-    cursorUp 1
-    eraseLine()
-
     if status != 0:
       abort(&"""{status:<8}{ceras.nom:24}{(
         case ceras.ver
@@ -268,6 +265,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         genSum(getEnv($SACD), $radCacheLocal / ceras.nom / $sum)
 
         removeDir(getEnv($SACD))
+
+    cursorUp 1
+    eraseLine()
 
     printFooter(idx, ceras.nom,
       case ceras.ver
@@ -307,9 +307,6 @@ proc installCerata*(cerata: openArray[string]) =
         ""
     )}{tarZst}""", $DirSep)
 
-    cursorUp 1
-    eraseLine()
-
     if status != 0:
       abort(&"""{status:<8}{ceras.nom:24}{(
         case ceras.ver
@@ -319,6 +316,15 @@ proc installCerata*(cerata: openArray[string]) =
           ceras.ver
       ):24}""")
 
+    createDir($radLibLocal / ceras.nom)
+
+    writeFile($radLibLocal / ceras.nom / "ver", ceras.ver)
+
+    discard rsync($radCacheLocal / ceras.nom / $sum, $radLibLocal / ceras.nom)
+
+    cursorUp 1
+    eraseLine()
+
     printFooter(idx, ceras.nom,
       case ceras.ver
       of $git:
@@ -326,6 +332,9 @@ proc installCerata*(cerata: openArray[string]) =
       else:
         ceras.ver
     , $install)
+
+proc listCerata*() =
+  printCerata(walkDir($radLibLocal, relative = true, skipSpecial = true).toSeq().unzip()[1])
 
 proc removeCerata*(cerata: openArray[string]) =
   let cluster = checkCerata(cerata)
@@ -362,10 +371,10 @@ proc removeCerata*(cerata: openArray[string]) =
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for file in walkDir($radLibClustersCerata, relative = true, skipSpecial = true):
+  for ceras in walkDir($radLibClustersCerata, relative = true, skipSpecial = true):
     for nom in pattern:
-      if nom.toLowerAscii() in file[1]:
-        cerata.add(file[1])
+      if nom.toLowerAscii() in ceras[1]:
+        cerata.add(ceras[1])
 
   if cerata.len() == 0:
     exit(QuitFailure)

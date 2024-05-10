@@ -145,8 +145,7 @@ proc options*() =
           echo ""
           echo "install complete"
         of "l", "list":
-          echo ""
-          echo "list complete"
+          listCerata()
         of "n", "new":
           echo ""
           echo "new complete"
@@ -159,8 +158,6 @@ proc options*() =
           echo "remove complete"
         of "s", "search":
           searchCerata(remainingArgs(p))
-
-          echo "search complete"
         of "u", "upgrade":
           echo ""
           echo "upgrade complete"
