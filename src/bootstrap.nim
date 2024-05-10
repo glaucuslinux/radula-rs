@@ -5,11 +5,8 @@ import
   std/[os, osproc, strformat, strutils, times],
   cerata, constants, tools
 
-proc cleanBootstrap*() =
-  removeDir(getEnv($CRSD))
-  removeDir(getEnv($LOGD))
-  removeDir(getEnv($TBLD))
-  removeDir(getEnv($TLCD))
+func backupToolchain*() =
+  discard rsync(getEnv($CRSD), getEnv($BAKD))
 
 proc buildCross*() =
   buildCerata([
@@ -107,118 +104,6 @@ proc buildCross*() =
     # Kernel
     $linux
   ], $cross, false)
-
-proc setEnvCrossPkgConfig*() =
-  putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
-  putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
-  putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
-
-  # These env variables are `pkgconf` specific, but setting them won't
-  # do any harm...
-  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
-  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
-
-proc setEnvCrossTools*() =
-  let crossCompile = getEnv($TGT) & '-'
-
-  putEnv($CROSS_COMPILE, crossCompile)
-
-  putEnv($AR, crossCompile & $ar)
-  putEnv($radEnv.AS, crossCompile & $radTools.As)
-  putEnv($CC, crossCompile & $gcc)
-  putEnv($radEnv.CPP, &"{getEnv($CC)} {cpp}")
-  putEnv($CXX, crossCompile & $cxx)
-  putEnv($CXXCPP, &"{getEnv($CXX)} {cpp}")
-  putEnv($HOSTCC, $gcc)
-  putEnv($NM, crossCompile & $nm)
-  putEnv($OBJCOPY, crossCompile & $objcopy)
-  putEnv($OBJDUMP, crossCompile & $objdump)
-  putEnv($RANLIB, crossCompile & $ranlib)
-  putEnv($READELF, crossCompile & $readelf)
-  putEnv($SIZE, crossCompile & $size)
-  putEnv($STRIP, crossCompile & $strip)
-
-proc prepareCross*() =
-  discard rsync(getEnv($BAKD) / $cross, getEnv($GLAD))
-
-  removeDir(getEnv($TBLD))
-  createDir(getEnv($TBLD))
-
-proc distcleanBootstrap*() =
-  removeDir(getEnv($BAKD))
-
-  cleanBootstrap()
-
-  removeDir(getEnv($SRCD))
-  removeDir(getEnv($GLAD) / $tmp)
-
-proc setEnvBootstrap*() =
-  let path = parentDir(getCurrentDir())
-
-  putEnv($GLAD, path)
-
-  putEnv($BAKD, path / $bak)
-  putEnv($CERD, path / $radCerata.cerata)
-  putEnv($CRSD, path / $cross)
-  putEnv($ISOD, path / $iso)
-  putEnv($LOGD, path / $log)
-  putEnv($SRCD, path / $src)
-  putEnv($TBLD, path / $tmp / $bld)
-  putEnv($TSRC, path / $tmp / $src)
-  putEnv($TLCD, path / $toolchain)
-
-  putEnv($PATH, getEnv($TLCD) / $usr / &"{bin}{PathSep}{getEnv($PATH)}")
-
-proc init*() =
-  createDir(getEnv($BAKD))
-  createDir(getEnv($CRSD))
-  createDir(getEnv($LOGD))
-  createDir(getEnv($SRCD))
-  createDir(getEnv($TBLD))
-  createDir(getEnv($TSRC))
-  createDir(getEnv($TLCD))
-
-proc setEnvNativeDirs*() =
-  putEnv($SRCD, $radCacheSrc)
-  putEnv($CERD, $radLibClustersGlaucus)
-  putEnv($LOGD, $radLog)
-  putEnv($TBLD, $radTmp / $bld)
-  putEnv($TSRC, $radTmp / $src)
-
-proc setEnvNativePkgConfig*() =
-  putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)
-  putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
-  putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
-
-  # These env variables are `pkgconf` specific, but setting them won't
-  # do any harm...
-  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, $pkgConfigSystemIncludePath)
-  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
-
-proc setEnvNativeTools*() =
-  putEnv($radEnv.BOOTSTRAP, "yes")
-
-  putEnv($AR, $ar)
-  putEnv($radEnv.AS, $radTools.As)
-  putEnv($CC, $gcc)
-  putEnv($radEnv.CPP, &"{gcc} {cpp}")
-  putEnv($CXX, $cxx)
-  putEnv($CXXCPP, &"{cxx} {cpp}")
-  putEnv($HOSTCC, $gcc)
-  putEnv($NM, $nm)
-  putEnv($OBJCOPY, $objcopy)
-  putEnv($OBJDUMP, $objdump)
-  putEnv($RANLIB, $ranlib)
-  putEnv($READELF, $readelf)
-  putEnv($SIZE, $size)
-  putEnv($STRIP, $strip)
-
-proc prepareNative*() =
-  removeDir(getEnv($TBLD))
-  createDir(getEnv($TBLD))
-
-  # Create the `src` dir if it doesn't exist, but don't remove it if it does exist!
-  createDir(getEnv($TSRC))
 
 proc buildNative*() =
   buildCerata([
@@ -331,6 +216,52 @@ proc buildNative*() =
     $linux
   ], $native, false)
 
+proc buildToolchain*() =
+  buildCerata([
+    $muslHeaders,
+    $binutils,
+    $gcc,
+    $musl,
+    $libgcc,
+    $libstdcxxV3
+  ], $toolchain, false)
+
+proc cleanBootstrap*() =
+  removeDir(getEnv($CRSD))
+  removeDir(getEnv($LOGD))
+  removeDir(getEnv($TBLD))
+  removeDir(getEnv($TLCD))
+
+proc distcleanBootstrap*() =
+  removeDir(getEnv($BAKD))
+
+  cleanBootstrap()
+
+  removeDir(getEnv($SRCD))
+  removeDir(getEnv($GLAD) / $tmp)
+
+proc init*() =
+  createDir(getEnv($BAKD))
+  createDir(getEnv($CRSD))
+  createDir(getEnv($LOGD))
+  createDir(getEnv($SRCD))
+  createDir(getEnv($TBLD))
+  createDir(getEnv($TSRC))
+  createDir(getEnv($TLCD))
+
+proc prepareCross*() =
+  discard rsync(getEnv($BAKD) / $cross, getEnv($GLAD))
+
+  removeDir(getEnv($TBLD))
+  createDir(getEnv($TBLD))
+
+proc prepareNative*() =
+  removeDir(getEnv($TBLD))
+  createDir(getEnv($TBLD))
+
+  # Create the `src` dir if it doesn't exist, but don't remove it if it does exist!
+  createDir(getEnv($TSRC))
+
 proc releaseImg*() =
   if not isAdmin():
     abort(&"""{"1":8}{"permission denied":48}""")
@@ -420,15 +351,85 @@ proc releaseIso*() =
   # Create a new ISO file
   discard execCmd(&"{grubMkrescue} {Grub} -v -o {iso} {getEnv($ISOD)} -volid {glaucus} {shellRedirect}")
 
-func backupToolchain*() =
-  discard rsync(getEnv($CRSD), getEnv($BAKD))
+proc setEnvBootstrap*() =
+  let path = parentDir(getCurrentDir())
 
-proc buildToolchain*() =
-  buildCerata([
-    $muslHeaders,
-    $binutils,
-    $gcc,
-    $musl,
-    $libgcc,
-    $libstdcxxV3
-  ], $toolchain, false)
+  putEnv($GLAD, path)
+
+  putEnv($BAKD, path / $bak)
+  putEnv($CERD, path / $radCerata.cerata)
+  putEnv($CRSD, path / $cross)
+  putEnv($ISOD, path / $iso)
+  putEnv($LOGD, path / $log)
+  putEnv($SRCD, path / $src)
+  putEnv($TBLD, path / $tmp / $bld)
+  putEnv($TSRC, path / $tmp / $src)
+  putEnv($TLCD, path / $toolchain)
+
+  putEnv($PATH, getEnv($TLCD) / $usr / &"{bin}{PathSep}{getEnv($PATH)}")
+
+proc setEnvCrossPkgConfig*() =
+  putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
+  putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
+
+  # These env variables are `pkgconf` specific, but setting them won't
+  # do any harm...
+  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
+  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
+
+proc setEnvCrossTools*() =
+  let crossCompile = getEnv($TGT) & '-'
+
+  putEnv($CROSS_COMPILE, crossCompile)
+
+  putEnv($AR, crossCompile & $ar)
+  putEnv($radEnv.AS, crossCompile & $radTools.As)
+  putEnv($CC, crossCompile & $gcc)
+  putEnv($radEnv.CPP, &"{getEnv($CC)} {cpp}")
+  putEnv($CXX, crossCompile & $cxx)
+  putEnv($CXXCPP, &"{getEnv($CXX)} {cpp}")
+  putEnv($HOSTCC, $gcc)
+  putEnv($NM, crossCompile & $nm)
+  putEnv($OBJCOPY, crossCompile & $objcopy)
+  putEnv($OBJDUMP, crossCompile & $objdump)
+  putEnv($RANLIB, crossCompile & $ranlib)
+  putEnv($READELF, crossCompile & $readelf)
+  putEnv($SIZE, crossCompile & $size)
+  putEnv($STRIP, crossCompile & $strip)
+
+proc setEnvNativeDirs*() =
+  putEnv($SRCD, $radCacheSrc)
+  putEnv($CERD, $radLibClustersGlaucus)
+  putEnv($LOGD, $radLog)
+  putEnv($TBLD, $radTmp / $bld)
+  putEnv($TSRC, $radTmp / $src)
+
+proc setEnvNativePkgConfig*() =
+  putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
+
+  # These env variables are `pkgconf` specific, but setting them won't
+  # do any harm...
+  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, $pkgConfigSystemIncludePath)
+  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
+
+proc setEnvNativeTools*() =
+  putEnv($radEnv.BOOTSTRAP, "yes")
+
+  putEnv($AR, $ar)
+  putEnv($radEnv.AS, $radTools.As)
+  putEnv($CC, $gcc)
+  putEnv($radEnv.CPP, &"{gcc} {cpp}")
+  putEnv($CXX, $cxx)
+  putEnv($CXXCPP, &"{cxx} {cpp}")
+  putEnv($HOSTCC, $gcc)
+  putEnv($NM, $nm)
+  putEnv($OBJCOPY, $objcopy)
+  putEnv($OBJDUMP, $objdump)
+  putEnv($RANLIB, $ranlib)
+  putEnv($READELF, $readelf)
+  putEnv($SIZE, $size)
+  putEnv($STRIP, $strip)
+

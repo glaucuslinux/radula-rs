@@ -6,12 +6,6 @@ import
   constants,
   hashlib/misc/blake3
 
-proc gitCheckoutRepo*(dir, cmt: string): int =
-  execCmd(&"{git} -C {dir} {gitCheckout} {cmt} -q")
-
-proc gitCloneRepo*(url, dir: string): int =
-  execCmd(&"{git} {gitClone} {url} {dir} -q")
-
 func compressZst*(file: string): int =
   execCmd(&"{zstd} {zstdCompress} {file} {shellRedirect}")
 
@@ -26,13 +20,13 @@ proc exit*(status = 0) =
 
   quit(status)
 
-func extractTar*(archive, dir: string): int =
-  execCmd(&"{tar} {tarExtract} {archive} -C {dir} {shellRedirect}")
-
 proc abort*(err: string) =
   styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}""", resetStyle
 
   exit(QuitFailure)
+
+func extractTar*(archive, dir: string): int =
+  execCmd(&"{tar} {tarExtract} {archive} -C {dir} {shellRedirect}")
 
 func genInitramfs*(dir: string, bootstrap = false): int =
   execCmd(&"""{booster} {build} --force --compression={zstd} --config={$radLibClustersGlaucus / $booster / $boosterYaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}""")
@@ -51,6 +45,12 @@ proc genSum*(dir, sum: string) =
     sum.writeLine(&"{count[BLAKE3](readFile(dir / file))}  {file}")
 
   sum.close()
+
+proc gitCheckoutRepo*(dir, cmt: string): int =
+  execCmd(&"{git} -C {dir} {gitCheckout} {cmt} -q")
+
+proc gitCloneRepo*(url, dir: string): int =
+  execCmd(&"{git} {gitClone} {url} {dir} -q")
 
 proc interrupt*() {.noconv.} =
   abort(&"""{"1":8}{"interrupt received":48}""")
