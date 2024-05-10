@@ -21,7 +21,7 @@ proc cleanCerata*() =
 proc distcleanCerata*() =
   removeDir($radCacheBin)
   removeDir($radCacheSrc)
-  removeDir($radCacheVenom)
+  removeDir($radCacheLocal)
 
   cleanCerata()
 
@@ -197,7 +197,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
     case stage
     of $native:
-      if fileExists($radCacheVenom / ceras.nom / &"""{ceras.nom}{(
+      if fileExists($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
         case ceras.url
         of $NIL:
           ""
@@ -223,7 +223,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         continue
 
-      putEnv($SACD, $radCacheVenom / ceras.nom / $sac)
+      putEnv($SACD, $radCacheLocal / ceras.nom / $sac)
       createDir(getEnv($SACD))
 
     # We only use `nom` and `ver` from `ceras`
@@ -253,7 +253,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
     case stage
     of $native:
-      status = createTarZst($radCacheVenom / ceras.nom / &"""{ceras.nom}{(
+      status = createTarZst($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
         case ceras.url
         of $NIL:
           ""
@@ -268,7 +268,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       )}{tarZst}""", getEnv($SACD))
 
       if status == 0:
-        genSum(getEnv($SACD), $radCacheVenom / ceras.nom / $sum)
+        genSum(getEnv($SACD), $radCacheLocal / ceras.nom / $sum)
 
         removeDir(getEnv($SACD))
 
@@ -296,7 +296,7 @@ proc installCerata*(cerata: openArray[string]) =
         ceras.ver
     , $install)
 
-    let status = extractTar($radCacheVenom / ceras.nom / &"""{ceras.nom}{(
+    let status = extractTar($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
       case ceras.url
       of $NIL:
         ""
@@ -346,7 +346,7 @@ proc removeCerata*(cerata: openArray[string]) =
         ceras.ver
     , $remove)
 
-    let sum = $radCacheVenom / ceras.nom / $sum
+    let sum = $radCacheLocal / ceras.nom / $sum
 
     for line in lines(sum):
       removeFile(DirSep & line.split()[2])

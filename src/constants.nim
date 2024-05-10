@@ -317,8 +317,8 @@ Distributed under the terms of the ISC License"""
 
     # RAD
     radCacheBin = "/var/cache/rad/bin"
+    radCacheLocal = "/var/cache/rad/local"
     radCacheSrc = "/var/cache/rad/src"
-    radCacheVenom = "/var/cache/rad/venom"
     radLibClustersGlaucus = "/var/lib/rad/clusters/glaucus"
     radLibLocal = "/var/lib/rad/local"
     radLog = "/var/log/rad"
