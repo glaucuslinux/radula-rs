@@ -432,4 +432,3 @@ proc setEnvNativeTools*() =
   putEnv($READELF, $readelf)
   putEnv($SIZE, $size)
   putEnv($STRIP, $strip)
-
