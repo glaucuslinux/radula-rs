@@ -8,7 +8,7 @@ import
 
 type
   Ceras = object
-    nom, ver, cmt, url, sum, bld, run = $NIL
+    nom, ver, cmt, url, sum, bld, run = $Nil
 
 # Check if the `ceras` src is extracted
 proc checkExtractSrc(file: string): bool =
@@ -71,7 +71,7 @@ proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) 
 
   deps[ceras.nom] =
     case dep
-    of $NIL:
+    of $Nil:
       @[]
     else:
       dep.split()
@@ -98,7 +98,7 @@ proc fetchCerata(cerata: openArray[string]) =
 
     # Check for virtual cerata
     case ceras.url
-    of $NIL:
+    of $Nil:
       printFooter(idx, ceras.nom, ceras.ver, $fetch)
     else:
       let
@@ -199,7 +199,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     of $native:
       if fileExists($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
         case ceras.url
-        of $NIL:
+        of $Nil:
           ""
         else:
           '-' & ceras.ver
@@ -255,7 +255,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     of $native:
       status = createTarZst($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
         case ceras.url
-        of $NIL:
+        of $Nil:
           ""
         else:
           '-' & ceras.ver
@@ -298,7 +298,7 @@ proc installCerata*(cerata: openArray[string]) =
 
     let status = extractTar($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
       case ceras.url
-      of $NIL:
+      of $Nil:
         ""
       else:
         '-' & ceras.ver
