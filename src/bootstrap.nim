@@ -124,7 +124,7 @@ proc setEnvCrossTools*() =
   putEnv($CROSS_COMPILE, crossCompile)
 
   putEnv($AR, crossCompile & $ar)
-  putEnv($radEnv.AS, crossCompile & $radTools.AS)
+  putEnv($radEnv.AS, crossCompile & $radTools.As)
   putEnv($CC, crossCompile & $gcc)
   putEnv($radEnv.CPP, &"{getEnv($CC)} {cpp}")
   putEnv($CXX, crossCompile & $cxx)

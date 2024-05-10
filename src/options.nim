@@ -7,7 +7,7 @@ import
 
 proc options*() =
   if paramCount() < 1:
-    echo RAD
+    echo Rad
 
     quit(QuitFailure)
 
@@ -17,7 +17,7 @@ proc options*() =
 
   case p.kind
   of cmdArgument, cmdEnd:
-    echo RAD
+    echo Rad
 
     quit(QuitFailure)
   of cmdLongOption, cmdShortOption:
