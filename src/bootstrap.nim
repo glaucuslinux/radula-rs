@@ -315,7 +315,7 @@ proc releaseImg*() =
   # Install `grub` as the default bootloader
   createDir(path / $boot / $grub)
 
-  discard rsync($radLibClustersGlaucus / $grub / $grubCfgImg, path / $boot / $grub / $grubCfg, rsyncRelease)
+  discard rsync($radLibClustersCerata / $grub / $grubCfgImg, path / $boot / $grub / $grubCfg, rsyncRelease)
 
   discard execCmd(&"{grubInstall} {Grub} --boot-directory={path / $boot} --target=i386-pc {device} {shellRedirect}")
 
@@ -338,7 +338,7 @@ proc releaseIso*() =
   removeDir(getEnv($ISOD))
   createDir(path / $grub)
 
-  discard rsync($radLibClustersGlaucus / $grub / $grubCfgIso, path / $grub / $grubCfg)
+  discard rsync($radLibClustersCerata / $grub / $grubCfgIso, path / $grub / $grubCfg)
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
@@ -400,7 +400,7 @@ proc setEnvCrossTools*() =
 
 proc setEnvNativeDirs*() =
   putEnv($SRCD, $radCacheSrc)
-  putEnv($CERD, $radLibClustersGlaucus)
+  putEnv($CERD, $radLibClustersCerata)
   putEnv($LOGD, $radLog)
   putEnv($TBLD, $radTmp / $bld)
   putEnv($TSRC, $radTmp / $src)

@@ -29,7 +29,7 @@ func extractTar*(archive, dir: string): int =
   execCmd(&"{tar} {tarExtract} {archive} -C {dir} {shellRedirect}")
 
 func genInitramfs*(dir: string, bootstrap = false): int =
-  execCmd(&"""{booster} {build} --force --compression={zstd} --config={$radLibClustersGlaucus / $booster / $boosterYaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}""")
+  execCmd(&"""{booster} {build} --force --compression={zstd} --config={$radLibClustersCerata / $booster / $boosterYaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}""")
 
 proc genSum*(dir, sum: string) =
   var files: seq[string]

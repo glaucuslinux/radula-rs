@@ -27,7 +27,7 @@ proc distcleanCerata*() =
 
 # Return the full path to the `ceras` file
 proc getCerasPath(nom: string): string =
-  $radLibClustersGlaucus / nom / $ceras
+  $radLibClustersCerata / nom / $ceras
 
 # Check if the `ceras` file exists
 proc checkCerasExist(nom: string) =
@@ -228,13 +228,13 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...
     var status = execCmd(&"""
-      {sh} {shellCommand} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {radLibClustersGlaucus}{DirSep}{ceras.nom}{DirSep}{build}{CurDir}{stage} &&
+      {sh} {shellCommand} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {$radLibClustersCerata / ceras.nom / $build}{CurDir}{stage} &&
       cerasPrepare $1 &&
       cerasConfigure $1 &&
       cerasBuild $1 &&
       cerasCheck $1 &&
       cerasInstall $1'
-    """ % &">> {getEnv($LOGD)}{ceras.nom}{CurDir}{log} 2>&1")
+    """ % &">> {getEnv($LOGD) / ceras.nom}{CurDir}{log} 2>&1")
 
     cursorUp 1
     eraseLine()
@@ -362,10 +362,13 @@ proc removeCerata*(cerata: openArray[string]) =
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for file in walkDir($radLibClustersGlaucus, relative = true, skipSpecial = true):
+  for file in walkDir($radLibClustersCerata, relative = true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in file[1]:
         cerata.add(file[1])
+
+  if cerata.len() == 0:
+    exit(QuitFailure)
 
   sort(cerata)
 

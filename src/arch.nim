@@ -6,7 +6,7 @@ import
   constants
 
 proc getTuple*(): (string, int) =
-  execCmdEx($radLibClustersGlaucus / $binutils / $configGuess)
+  execCmdEx($radLibClustersCerata / $binutils / $configGuess)
 
 proc setEnvArch*(stage = native) =
   putEnv($ARCH, $x86_64)
