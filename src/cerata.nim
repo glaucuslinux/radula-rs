@@ -352,10 +352,10 @@ proc removeCerata*(cerata: openArray[string]) =
         ceras.ver
     , $remove)
 
-    let sum = $radCacheLocal / ceras.nom / $sum
-
-    for line in lines(sum):
+    for line in lines($radLibLocal / ceras.nom / $sum):
       removeFile(DirSep & line.split()[2])
+
+    removeDir($radLibLocal / ceras.nom)
 
     cursorUp 1
     eraseLine()
