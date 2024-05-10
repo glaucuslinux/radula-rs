@@ -5,13 +5,13 @@ import
   std/os,
   ../../src/[arch, bootstrap, constants]
 
-rad_arch_env()
-rad_bootstrap_native_env_tools()
+setEnvArch()
+setEnvNativeTools()
 
 echo "AR             :: ", getEnv($AR)
-echo "AS             :: ", getEnv($RAD_ENV.AS)
+echo "AS             :: ", getEnv($radEnv.AS)
 echo "CC             :: ", getEnv($CC)
-echo "CPP            :: ", getEnv($RAD_ENV.CPP)
+echo "CPP            :: ", getEnv($radEnv.CPP)
 echo "CXX            :: ", getEnv($CXX)
 echo "CXXCPP         :: ", getEnv($CXXCPP)
 echo "HOSTCC         :: ", getEnv($HOSTCC)
@@ -24,9 +24,9 @@ echo "SIZE           :: ", getEnv($SIZE)
 echo "STRIP          :: ", getEnv($STRIP)
 
 doAssert getEnv($AR) == "gcc-ar"
-doAssert getEnv($RAD_ENV.AS) == "as"
+doAssert getEnv($radEnv.AS) == "as"
 doAssert getEnv($CC) == "gcc"
-doAssert getEnv($RAD_ENV.CPP) == "gcc -E"
+doAssert getEnv($radEnv.CPP) == "gcc -E"
 doAssert getEnv($CXX) == "g++"
 doAssert getEnv($CXXCPP) == "g++ -E"
 doAssert getEnv($HOSTCC) == "gcc"

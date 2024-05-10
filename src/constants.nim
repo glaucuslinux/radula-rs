@@ -226,7 +226,7 @@ type
     gitClone = "clone"
     Grub = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none"""
     ldflags = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
-    Make = "-j4 -O"
+    make = "-j4 -O"
     Mke2fs = "-qt"
     Parted = "-s"
     Rsync = "-vaHAXSx"

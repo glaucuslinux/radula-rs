@@ -5,4 +5,4 @@ import
   std/strutils,
   ../../src/arch
 
-doAssert rad_arch_tuple()[0].strip().startsWith("x86_64-pc-linux-")
+doAssert getTuple()[0].strip().startsWith("x86_64-pc-linux-")

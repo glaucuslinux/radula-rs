@@ -5,7 +5,7 @@ import
   std/[os, strutils],
   ../../src/[bootstrap, constants]
 
-rad_bootstrap_env()
+setEnvBootstrap()
 
 echo "GLAD  :: ", getEnv($GLAD)
 

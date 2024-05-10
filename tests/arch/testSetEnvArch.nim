@@ -5,7 +5,7 @@ import
   std/[os, strutils],
   ../../src/[arch, constants]
 
-rad_arch_env(cross)
+setEnvArch(cross)
 
 echo "ARCH    :: ", getEnv($ARCH)
 echo "CARCH   :: ", getEnv($CARCH)
@@ -18,5 +18,5 @@ echo "TGT     :: ", getEnv($TGT)
 doAssert getEnv($ARCH) == "x86-64"
 doAssert getEnv($CARCH) == "x86-64-v3"
 
-doAssert getEnv($BLD) == rad_arch_tuple()[0].strip()
+doAssert getEnv($BLD) == getTuple()[0].strip()
 doAssert getEnv($TGT) == "x86_64-glaucus-linux-musl"

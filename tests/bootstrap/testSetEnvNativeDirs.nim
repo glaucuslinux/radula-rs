@@ -5,7 +5,7 @@ import
   std/os,
   ../../src/[bootstrap, constants]
 
-rad_bootstrap_native_env_dir()
+setEnvNativeDirs()
 
 echo "CERD  :: ", getEnv($CERD)
 echo "LOGD  :: ", getEnv($LOGD)
