@@ -229,11 +229,11 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     # current working dir...
     var status = execCmd(&"""
       {sh} {shellCommand} 'nom={ceras.nom} ver={ceras.ver} {CurDir} {$radLibClustersCerata / ceras.nom / $build}{CurDir}{stage} &&
-      cerasPrepare $1 &&
-      cerasConfigure $1 &&
-      cerasBuild $1 &&
-      cerasCheck $1 &&
-      cerasInstall $1'
+      prepare $1 &&
+      configure $1 &&
+      build $1 &&
+      check $1 &&
+      package $1'
     """ % &">> {getEnv($LOGD) / ceras.nom}{CurDir}{log} 2>&1")
 
     if status != 0:
