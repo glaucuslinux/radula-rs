@@ -62,6 +62,7 @@ proc printFooter(idx: int, nom, ver, cmd: string) =
 
 proc printHeader() =
   echo &"""{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin"""
+  echo '~'.repeat(72)
 
 # Resolve deps using topological sorting
 proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) =
