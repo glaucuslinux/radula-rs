@@ -349,7 +349,7 @@ proc releaseIso*() =
   discard rsync(getEnv($CRSD) / $boot / $kernel, path)
 
   # Create a new ISO file
-  discard execCmd(&"{grubMkrescue} {Grub} -v -o {iso} {getEnv($ISOD)} -volid {glaucus} {shellRedirect}")
+  discard execCmd(&"{grubMkrescue} {Grub} -o {iso} --product-name {glaucus} {getEnv($ISOD)} -A {glaucus} -iso-level 3 -J -joliet-long -l -pad -publisher {glaucus} -p {glaucus} -R -r -V {glaucus} -vv {shellRedirect}")
 
 proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())
