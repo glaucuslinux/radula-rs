@@ -272,7 +272,8 @@ proc releaseImg*() =
     # Find the first unused loop device
     device = execCmdEx(&"{losetup} -f")[0].strip()
 
-    partition = device & "p1"
+    partitionOne = device & "p1"
+    partitionTwo = device & "p2"
 
     path = DirSep & $mnt / $glaucus
 
@@ -280,9 +281,10 @@ proc releaseImg*() =
   discard execCmd(&"{dd} bs=1M count={imgSize} if=/dev/zero of={img} {shellRedirect}")
 
   # Partition the IMG file
-  discard execCmd(&"{parted} {Parted} {img} mklabel msdos {shellRedirect}")
-  discard execCmd(&"{parted} {Parted} -a none {img} mkpart primary ext4 1 {imgSize} {shellRedirect}")
-  discard execCmd(&"{parted} {Parted} -a none {img} set 1 boot on {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} {img} mklabel gpt {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} {img} mkpart ESP fat32 1 65 {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} {img} set 1 esp on {shellRedirect}")
+  discard execCmd(&"{parted} {Parted} {img} mkpart ext4 65 {imgSize} {shellRedirect}")
 
   # Load the `loop` module
   discard execCmd(&"{modprobe} loop {shellRedirect}")
@@ -293,39 +295,42 @@ proc releaseImg*() =
   # Associate the first unused loop device with the IMG file
   discard execCmd(&"{losetup} {device} {img} {shellRedirect}")
 
-  # Notify the kernel about the new partition on the IMG file
+  # Notify the kernel about the new partitions on the IMG file
   discard execCmd(&"{partx} -a {device} {shellRedirect}")
 
-  # Create an `ext4` filesystem in the partition
-  discard execCmd(&"{mke2fs} {Mke2fs} ext4 {partition}")
+  # Create a `FAT` filesystem in the first partition
+  discard execCmd(&"{mkfsFat} {MkfsFat} 32 {partitionOne} {shellRedirect}")
+  # Create an `ext4` filesystem in the second partition
+  discard execCmd(&"{mke2fs} {Mke2fs} ext4 {partitionTwo}")
 
   createDir(path)
 
-  discard execCmd(&"{mount} {partition} {path} {shellRedirect}")
-
-  # Remove `/lost+found` dir
-  removeDir(path / $lostFound)
+  discard execCmd(&"{mount} {partitionTwo} {path} {shellRedirect}")
 
   discard rsync(getEnv($CRSD) & DirSep, path, rsyncRelease)
 
-  discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
+  # discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
+
+  discard execCmd(&"{mount} {partitionOne} {path / $boot} {shellRedirect}")
 
   discard genInitramfs(path / $boot, true)
 
-  # Install `grub` as the default bootloader
-  createDir(path / $boot / $grub)
+  discard rsync($radLibClustersCerata / $limine / $limineCfgImg, path / $boot / $limineCfg, rsyncRelease)
 
-  discard rsync($radLibClustersCerata / $grub / $grubCfgImg, path / $boot / $grub / $grubCfg, rsyncRelease)
+  discard rsync(DirSep & $boot / "vmlinuz-linux-cachyos", path / $boot / $kernel, rsyncRelease)
 
-  discard execCmd(&"{grubInstall} {Grub} --boot-directory={path / $boot} --target=i386-pc {device} {shellRedirect}")
+  createDir(path / $boot / "EFI" / "BOOT")
+  discard rsync(DirSep & $usr / $share / $limine / "BOOTX64.EFI", path / $boot / "EFI" / "BOOT", rsyncRelease)
 
   # Change ownerships
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
   discard execCmd(&"{chown} {Chown} 20:20 {path / $VAR / $log / $wtmpd} {shellRedirect}")
 
   # Clean up
+  discard execCmd(&"{umount} {Umount} {path / $boot} {shellRedirect}")
   discard execCmd(&"{umount} {Umount} {path} {shellRedirect}")
-  discard execCmd(&"{partx} -d {partition} {shellRedirect}")
+  discard execCmd(&"{partx} -d {partitionOne} {shellRedirect}")
+  discard execCmd(&"{partx} -d {partitionTwo} {shellRedirect}")
   discard execCmd(&"{losetup} -d {device} {shellRedirect}")
 
 proc releaseIso*() =
@@ -334,11 +339,10 @@ proc releaseIso*() =
 
     path = getEnv($ISOD) / $boot
 
-  # Install `grub` as the default bootloader
   removeDir(getEnv($ISOD))
-  createDir(path / $grub)
+  # createDir(path / $grub)
 
-  discard rsync($radLibClustersCerata / $grub / $grubCfgIso, path / $grub / $grubCfg)
+  # discard rsync($radLibClustersCerata / $grub / $grubCfgIso, path / $grub / $grubCfg)
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
@@ -349,7 +353,7 @@ proc releaseIso*() =
   discard rsync(getEnv($CRSD) / $boot / $kernel, path)
 
   # Create a new ISO file
-  discard execCmd(&"{grubMkrescue} {Grub} -o {iso} --product-name {glaucus} {getEnv($ISOD)} -A {glaucus} -iso-level 3 -J -joliet-long -l -publisher {glaucus} -p {glaucus} -r -V {toUpperAscii($glaucus)} -vv {shellRedirect}")
+  # discard execCmd(&"{grubMkrescue} {Grub} -o {iso} --product-name {glaucus} {getEnv($ISOD)} -A {glaucus} -iso-level 3 -J -joliet-long -l -publisher {glaucus} -p {glaucus} -r -V {toUpperAscii($glaucus)} -vv {shellRedirect}")
 
 proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())

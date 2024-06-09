@@ -43,7 +43,6 @@ type
     gettextTiny = "gettext-tiny"
     gmp
     grep
-    grub
 
     help2man
 
@@ -64,6 +63,7 @@ type
     libstdcxxV3 = "libstdc++-v3"
     libtool
     libudevZero = "libudev-zero"
+    limine
     linux
     linuxHeaders = "linux-headers"
     lz4
@@ -206,12 +206,12 @@ type
     boosterYaml = "booster.yaml"
     ceras
     configGuess = "config.guess"
-    grubCfg = "grub.cfg"
-    grubCfgImg = "grub.cfg.img"
-    grubCfgIso = "grub.cfg.iso"
     imgSize = "16384"
     initramfs
     kernel = "vmlinuz"
+    limineCfg = "limine.cfg"
+    limineCfgImg = "limine.cfg.img"
+    limineCfgIso = "limine.cfg.iso"
     radLck = "rad.lck"
     rootfs
     sum
@@ -224,10 +224,10 @@ type
     cpp = "-E"
     gitCheckout = "checkout"
     gitClone = "clone"
-    Grub = """--compress=no --fonts="" --locales="" --themes="" -v --core-compress=none --product-version=glaucus"""
     ldflags = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
     make = "-j4 -O"
     Mke2fs = "-qt"
+    MkfsFat = "-F"
     Parted = "-s"
     Rsync = "-vaHAXSx"
     rsyncRelease = "-vaHAXx"
@@ -347,11 +347,10 @@ Distributed under the terms of the ISC License"""
     cxx = "g++"
     dd
     git
-    grubInstall = "grub-install"
-    grubMkrescue = "grub-mkrescue"
     losetup
     mke2fs
     mkfsErofs = "mkfs.erofs"
+    mkfsFat= "mkfs.fat"
     modprobe
     mount
     nm = "gcc-nm"
