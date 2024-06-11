@@ -209,9 +209,11 @@ type
     imgSize = "16384"
     initramfs
     kernel = "vmlinuz"
+    kernelCachyOs = "vmlinuz-linux-cachyos"
     limineCfg = "limine.cfg"
     limineCfgImg = "limine.cfg.img"
     limineCfgIso = "limine.cfg.iso"
+    limineEfi= "BOOTX64.EFI"
     radLck = "rad.lck"
     rootfs
     sum
@@ -227,7 +229,6 @@ type
     ldflags = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
     make = "-j4 -O"
     Mke2fs = "-qt"
-    MkfsFat = "-F"
     Parted = "-s"
     Rsync = "-vaHAXSx"
     rsyncRelease = "-vaHAXx"
@@ -308,6 +309,8 @@ Distributed under the terms of the ISC License"""
     usr
     Var = "var"
     wtmpd
+
+    limineEfiBoot = "EFI/BOOT"
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
     # automatically prefixed to PATH and LIBDIR)

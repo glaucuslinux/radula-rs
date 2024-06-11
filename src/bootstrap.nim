@@ -269,7 +269,6 @@ proc releaseImg*() =
   let
     img = getEnv($GLAD) / &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}img"""
 
-    # Find the first unused loop device
     device = execCmdEx(&"{losetup} -f")[0].strip()
 
     partitionOne = device & "p1"
@@ -277,30 +276,22 @@ proc releaseImg*() =
 
     path = DirSep & $mnt / $glaucus
 
-  # Create a new IMG file
   discard execCmd(&"{dd} bs=1M count={imgSize} if=/dev/zero of={img} {shellRedirect}")
 
-  # Partition the IMG file
   discard execCmd(&"{parted} {Parted} {img} mklabel gpt {shellRedirect}")
   discard execCmd(&"{parted} {Parted} {img} mkpart ESP fat32 1 65 {shellRedirect}")
   discard execCmd(&"{parted} {Parted} {img} set 1 esp on {shellRedirect}")
   discard execCmd(&"{parted} {Parted} {img} mkpart ext4 65 {imgSize} {shellRedirect}")
 
-  # Load the `loop` module
   discard execCmd(&"{modprobe} loop {shellRedirect}")
 
-  # Detach all used loop devices
   discard execCmd(&"{losetup} -D {shellRedirect}")
 
-  # Associate the first unused loop device with the IMG file
   discard execCmd(&"{losetup} {device} {img} {shellRedirect}")
 
-  # Notify the kernel about the new partitions on the IMG file
   discard execCmd(&"{partx} -a {device} {shellRedirect}")
 
-  # Create a `FAT` filesystem in the first partition
-  discard execCmd(&"{mkfsFat} {MkfsFat} 32 {partitionOne} {shellRedirect}")
-  # Create an `ext4` filesystem in the second partition
+  discard execCmd(&"{mkfsFat} -F 32 {partitionOne} {shellRedirect}")
   discard execCmd(&"{mke2fs} {Mke2fs} ext4 {partitionTwo}")
 
   createDir(path)
@@ -309,7 +300,7 @@ proc releaseImg*() =
 
   discard rsync(getEnv($CRSD) & DirSep, path, rsyncRelease)
 
-  # discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
+  discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
 
   discard execCmd(&"{mount} {partitionOne} {path / $boot} {shellRedirect}")
 
@@ -317,16 +308,14 @@ proc releaseImg*() =
 
   discard rsync($radLibClustersCerata / $limine / $limineCfgImg, path / $boot / $limineCfg, rsyncRelease)
 
-  discard rsync(DirSep & $boot / "vmlinuz-linux-cachyos", path / $boot / $kernel, rsyncRelease)
+  discard rsync(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel, rsyncRelease)
 
-  createDir(path / $boot / "EFI" / "BOOT")
-  discard rsync(DirSep & $usr / $share / $limine / "BOOTX64.EFI", path / $boot / "EFI" / "BOOT", rsyncRelease)
+  createDir(path / $boot / $limineEfiBoot)
+  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $limineEfiBoot, rsyncRelease)
 
-  # Change ownerships
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
-  discard execCmd(&"{chown} {Chown} 20:20 {path / $VAR / $log / $wtmpd} {shellRedirect}")
+  discard execCmd(&"{chown} {Chown} 20:20 {path / $Var / $log / $wtmpd} {shellRedirect}")
 
-  # Clean up
   discard execCmd(&"{umount} {Umount} {path / $boot} {shellRedirect}")
   discard execCmd(&"{umount} {Umount} {path} {shellRedirect}")
   discard execCmd(&"{partx} -d {partitionOne} {shellRedirect}")
