@@ -318,31 +318,39 @@ proc releaseImg*() =
 
   discard execCmd(&"{umount} {Umount} {path / $boot} {shellRedirect}")
   discard execCmd(&"{umount} {Umount} {path} {shellRedirect}")
+
   discard execCmd(&"{partx} -d {partitionOne} {shellRedirect}")
   discard execCmd(&"{partx} -d {partitionTwo} {shellRedirect}")
+
   discard execCmd(&"{losetup} -d {device} {shellRedirect}")
 
 proc releaseIso*() =
   let
     iso = getEnv($GLAD) / &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}{iso}"""
 
-    path = getEnv($ISOD) / $boot
+    path = getEnv($ISOD)
 
-  removeDir(getEnv($ISOD))
-  # createDir(path / $grub)
-
-  # discard rsync($radLibClustersCerata / $grub / $grubCfgIso, path / $grub / $grubCfg)
+  removeDir(path)
+  createDir(path / $limine)
+  createDir(path / $limineEfiBoot)
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
-  # Compress rootfs
+  discard rsync($radLibClustersCerata / $limine / $limineCfgIso, path / $limine / $limineCfg, rsyncRelease)
+
+  discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
+
   discard execCmd(&"{mkfsErofs} {path / $rootfs} {getEnv($CRSD)} {shellRedirect}")
 
-  # Copy kernel
-  discard rsync(getEnv($CRSD) / $boot / $kernel, path)
+  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $limineEfiBoot, rsyncRelease)
 
-  # Create a new ISO file
-  # discard execCmd(&"{grubMkrescue} {Grub} -o {iso} --product-name {glaucus} {getEnv($ISOD)} -A {glaucus} -iso-level 3 -J -joliet-long -l -publisher {glaucus} -p {glaucus} -r -V {toUpperAscii($glaucus)} -vv {shellRedirect}")
+  discard rsync(DirSep & $usr / $share / $limine / $limineBios, path / $limine, rsyncRelease)
+  discard rsync(DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease)
+  discard rsync(DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease)
+
+  discard execCmd(&"xorriso -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path}")
+
+  discard execCmd(&"{limine} bios-install {iso}")
 
 proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())

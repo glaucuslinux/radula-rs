@@ -210,10 +210,13 @@ type
     initramfs
     kernel = "vmlinuz"
     kernelCachyOs = "vmlinuz-linux-cachyos"
+    limineBios = "limine-bios.sys"
+    limineBiosCd = "limine-bios-cd.bin"
     limineCfg = "limine.cfg"
     limineCfgImg = "limine.cfg.img"
     limineCfgIso = "limine.cfg.iso"
-    limineEfi= "BOOTX64.EFI"
+    limineEfi = "BOOTX64.EFI"
+    limineUefiCd = "limine-uefi-cd.bin"
     radLck = "rad.lck"
     rootfs
     sum
