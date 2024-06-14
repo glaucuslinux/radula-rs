@@ -310,8 +310,8 @@ proc releaseImg*() =
 
   discard rsync(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel, rsyncRelease)
 
-  createDir(path / $boot / $limineEfiBoot)
-  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $limineEfiBoot, rsyncRelease)
+  createDir(path / $boot / $efiBoot)
+  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot, rsyncRelease)
 
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
   discard execCmd(&"{chown} {Chown} 20:20 {path / $Var / $log / $wtmpd} {shellRedirect}")
@@ -331,8 +331,8 @@ proc releaseIso*() =
     path = getEnv($ISOD)
 
   removeDir(path)
+  createDir(path / $efiBoot)
   createDir(path / $limine)
-  createDir(path / $limineEfiBoot)
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
@@ -342,13 +342,13 @@ proc releaseIso*() =
 
   discard execCmd(&"{mkfsErofs} {path / $rootfs} {getEnv($CRSD)} {shellRedirect}")
 
-  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $limineEfiBoot, rsyncRelease)
+  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
 
   discard rsync(DirSep & $usr / $share / $limine / $limineBios, path / $limine, rsyncRelease)
   discard rsync(DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease)
   discard rsync(DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease)
 
-  discard execCmd(&"xorriso -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path}")
+  discard execCmd(&"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path}")
 
   discard execCmd(&"{limine} bios-install {iso}")
 

@@ -313,7 +313,7 @@ Distributed under the terms of the ISC License"""
     Var = "var"
     wtmpd
 
-    limineEfiBoot = "EFI/BOOT"
+    efiBoot = "EFI/BOOT"
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
     # automatically prefixed to PATH and LIBDIR)
@@ -371,3 +371,4 @@ Distributed under the terms of the ISC License"""
     strip
     tar = "bsdtar"
     umount
+    xorriso
