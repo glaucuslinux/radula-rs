@@ -348,9 +348,9 @@ proc releaseIso*() =
   discard rsync(DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease)
   discard rsync(DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease)
 
-  discard execCmd(&"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path}")
+  discard execCmd(&"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path} {shellRedirect}")
 
-  discard execCmd(&"{limine} bios-install {iso}")
+  discard execCmd(&"{limine} bios-install {iso} {shellRedirect}")
 
 proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())
