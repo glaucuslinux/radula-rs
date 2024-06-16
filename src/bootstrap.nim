@@ -340,6 +340,9 @@ proc releaseIso*() =
 
   discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
 
+  discard execCmd(&"{chown} {Chown} 0:0 {getEnv($CRSD)} {shellRedirect}")
+  discard execCmd(&"{chown} {Chown} 20:20 {getEnv($CRSD) / $Var / $log / $wtmpd} {shellRedirect}")
+
   discard execCmd(&"{mkfsErofs} {path / $rootfs} {getEnv($CRSD)} {shellRedirect}")
 
   discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
