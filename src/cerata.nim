@@ -19,9 +19,9 @@ proc cleanCerata*() =
   removeDir($radTmp)
 
 proc distcleanCerata*() =
-  removeDir($radCacheBin)
-  removeDir($radCacheSrc)
   removeDir($radCacheLocal)
+  removeDir($radCachePkg)
+  removeDir($radCacheSrc)
 
   cleanCerata()
 

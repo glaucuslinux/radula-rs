@@ -322,8 +322,8 @@ Distributed under the terms of the ISC License"""
     pkgConfigSystemLibraryPath = "/usr/lib"
 
     # RAD
-    radCacheBin = "/var/cache/rad/bin"
     radCacheLocal = "/var/cache/rad/local"
+    radCachePkg = "/var/cache/rad/pkg"
     radCacheSrc = "/var/cache/rad/src"
     radLibClustersCerata = "/var/lib/rad/clusters/cerata"
     radLibLocal = "/var/lib/rad/local"
