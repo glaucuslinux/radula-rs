@@ -25,7 +25,7 @@ type
     byacc
     bzip2
 
-    cerata = "cerata"
+    cerata
     cmake
 
     diffutils
@@ -45,7 +45,9 @@ type
     grep
 
     help2man
+    hwdata
 
+    ianaEtc
     iproute2
     iputils
     isl
@@ -87,6 +89,7 @@ type
     opendoas
 
     patch
+    pciutils
     pcre2
     perl
     pigz

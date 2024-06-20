@@ -14,7 +14,7 @@ echo "TBLD  :: ", getEnv($TBLD)
 echo "TSRC  :: ", getEnv($TSRC)
 
 doAssert getEnv($SRCD) == "/var/cache/rad/src"
-doAssert getEnv($CERD) == "/var/lib/rad/clusters/glaucus"
+doAssert getEnv($CERD) == "/var/lib/rad/clusters/cerata"
 doAssert getEnv($LOGD) == "/var/log/rad"
 doassert getEnv($TBLD) == "/var/tmp/rad/bld"
 doassert getEnv($TSRC) == "/var/tmp/rad/src"
