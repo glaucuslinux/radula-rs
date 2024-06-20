@@ -332,6 +332,7 @@ proc releaseIso*() =
 
   removeDir(path)
   createDir(path / $efiBoot)
+  createDir(path / $fs)
   createDir(path / $limine)
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
@@ -340,10 +341,12 @@ proc releaseIso*() =
 
   discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
 
-  discard execCmd(&"{chown} {Chown} 0:0 {getEnv($CRSD)} {shellRedirect}")
-  discard execCmd(&"{chown} {Chown} 20:20 {getEnv($CRSD) / $Var / $log / $wtmpd} {shellRedirect}")
+  discard execCmd(&"{chown} {Chown} 0:0 {path / $fs} {shellRedirect}")
+  discard execCmd(&"{chown} {Chown} 20:20 {path / $fs / $Var / $log / $wtmpd} {shellRedirect}")
 
-  discard execCmd(&"{mkfsErofs} {path / $fs} {getEnv($CRSD)} {shellRedirect}")
+  discard execCmd(&"{mkfsErofs} {path / $fs}.erofs {path / $fs} {shellRedirect}")
+
+  installCerata([$skel], getEnv($PKGD), path / $fs, path / $fs / $radLibLocal)
 
   discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
 

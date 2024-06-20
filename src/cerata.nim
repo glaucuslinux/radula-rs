@@ -35,7 +35,7 @@ proc checkCerasExist(nom: string) =
     abort(&"""{"nom":8}{nom:48}""")
 
 # Parse the `ceras` file
-proc parseCeras(nom: string): Ceras =
+proc parseCeras*(nom: string): Ceras =
   Toml.loadFile(getCerasPath(nom), Ceras)
 
 proc printCerata*(cerata: openArray[string]) =
@@ -278,7 +278,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         ceras.ver
     , $build)
 
-proc installCerata*(cerata: openArray[string]) =
+proc installCerata*(cerata: openArray[string], cache = $radCacheLocal, fs = $DirSep, lib = $radLibLocal) =
   let cluster = checkCerata(cerata)
 
   printHeader()
@@ -294,7 +294,7 @@ proc installCerata*(cerata: openArray[string]) =
         ceras.ver
     , $install)
 
-    let status = extractTar($radCacheLocal / ceras.nom / &"""{ceras.nom}{(
+    let status = extractTar(cache / ceras.nom / &"""{ceras.nom}{(
       case ceras.url
       of $Nil:
         ""
@@ -306,7 +306,7 @@ proc installCerata*(cerata: openArray[string]) =
         '-' & ceras.cmt
       else:
         ""
-    )}{tarZst}""", $DirSep)
+    )}{tarZst}""", fs)
 
     if status != 0:
       abort(&"""{status:<8}{ceras.nom:24}{(
@@ -317,11 +317,11 @@ proc installCerata*(cerata: openArray[string]) =
           ceras.ver
       ):24}""")
 
-    createDir($radLibLocal / ceras.nom)
+    createDir(lib / ceras.nom)
 
-    writeFile($radLibLocal / ceras.nom / "ver", ceras.ver)
+    writeFile(lib / ceras.nom / "ver", ceras.ver)
 
-    discard rsync($radCacheLocal / ceras.nom / $sum, $radLibLocal / ceras.nom)
+    discard rsync(cache / ceras.nom / $sum, lib / ceras.nom)
 
     cursorUp 1
     eraseLine()

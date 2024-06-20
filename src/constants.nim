@@ -106,6 +106,7 @@ type
     sed
     shadow
     skalibs
+    skel
 
     texinfo
     toybox
