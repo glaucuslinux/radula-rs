@@ -35,9 +35,9 @@ type
     expat
 
     file
-    filesystem
     findutils
     flex
+    fs
 
     gcc
     gettextTiny = "gettext-tiny"
@@ -133,6 +133,7 @@ type
     bld
     iso
     log
+    pkg
     sac
     src
     tmp
@@ -156,6 +157,7 @@ type
     GLAD
     ISOD
     LOGD
+    PKGD
     SACD
     SRCD
     TBLD
@@ -218,7 +220,6 @@ type
     limineEfi = "BOOTX64.EFI"
     limineUefiCd = "limine-uefi-cd.bin"
     radLck = "rad.lck"
-    rootfs
     sum
     tarZst = ".tar.zst"
 

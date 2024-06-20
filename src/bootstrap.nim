@@ -11,7 +11,7 @@ func backupToolchain*() =
 proc buildCross*() =
   buildCerata([
     # Filesystem
-    $filesystem,
+    $fs,
 
     # Package Management
     $radCerata.cerata,
@@ -108,7 +108,7 @@ proc buildCross*() =
 proc buildNative*() =
   buildCerata([
     # Filesystem
-    $filesystem,
+    $fs,
 
     # Development
     $musl,
@@ -343,7 +343,7 @@ proc releaseIso*() =
   discard execCmd(&"{chown} {Chown} 0:0 {getEnv($CRSD)} {shellRedirect}")
   discard execCmd(&"{chown} {Chown} 20:20 {getEnv($CRSD) / $Var / $log / $wtmpd} {shellRedirect}")
 
-  discard execCmd(&"{mkfsErofs} {path / $rootfs} {getEnv($CRSD)} {shellRedirect}")
+  discard execCmd(&"{mkfsErofs} {path / $fs} {getEnv($CRSD)} {shellRedirect}")
 
   discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
 
@@ -365,6 +365,7 @@ proc setEnvBootstrap*() =
   putEnv($CRSD, path / $cross)
   putEnv($ISOD, path / $iso)
   putEnv($LOGD, path / $log)
+  putEnv($PKGD, path / $pkg)
   putEnv($SRCD, path / $src)
   putEnv($TBLD, path / $tmp / $bld)
   putEnv($TSRC, path / $tmp / $src)
