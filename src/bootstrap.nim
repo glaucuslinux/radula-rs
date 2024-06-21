@@ -331,22 +331,14 @@ proc releaseIso*() =
     path = getEnv($ISOD)
 
   removeDir(path)
+
   createDir(path / $efiBoot)
-  createDir(path / $fs)
   createDir(path / $limine)
+  createDir(path / $tmp)
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
   discard rsync($radLibClustersCerata / $limine / $limineCfgIso, path / $limine / $limineCfg, rsyncRelease)
-
-  discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
-
-  discard execCmd(&"{chown} {Chown} 0:0 {path / $fs} {shellRedirect}")
-  discard execCmd(&"{chown} {Chown} 20:20 {path / $fs / $Var / $log / $wtmpd} {shellRedirect}")
-
-  discard execCmd(&"{mkfsErofs} {path / $fs}.erofs {path / $fs} {shellRedirect}")
-
-  installCerata([$skel], getEnv($PKGD), path / $fs, path / $fs / $radLibLocal)
 
   discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
 
@@ -354,7 +346,19 @@ proc releaseIso*() =
   discard rsync(DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease)
   discard rsync(DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease)
 
+  discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
+
+  installCerata([$skel], getEnv($PKGD), path / $tmp, path / $tmp / $radLibLocal)
+
+  discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
+  discard execCmd(&"{chown} {Chown} 20:20 {path / $tmp / $Var / $log / $wtmpd} {shellRedirect}")
+  discard execCmd(&"{mkfsErofs} {path / $fs} {path / $tmp} {shellRedirect}")
+
+  removeDir(path / $tmp)
+
   discard execCmd(&"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -hfsplus -apm-block-size 2048 -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path} {shellRedirect}")
+
+  removeDir(path)
 
   discard execCmd(&"{limine} bios-install {iso} {shellRedirect}")
 
