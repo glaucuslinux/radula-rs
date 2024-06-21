@@ -109,6 +109,9 @@ proc buildNative*() =
   buildCerata([
     # Filesystem
     $fs,
+    $ianaEtc,
+    $tzcode,
+    $tzdata,
 
     # Development
     $musl,
@@ -189,7 +192,6 @@ proc buildNative*() =
     # Networking
     $iproute2,
     $iputils,
-    $sdhcp,
     $wget2,
 
     # Utilities

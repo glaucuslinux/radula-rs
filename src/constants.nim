@@ -105,7 +105,6 @@ type
     s6LinuxInit = "s6-linux-init"
     s6Rc = "s6-rc"
     samurai
-    sdhcp
     sed
     shadow
     skalibs
