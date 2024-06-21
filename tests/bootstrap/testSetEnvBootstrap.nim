@@ -36,7 +36,7 @@ doAssert getEnv($LOGD).endsWith("log")
 doAssert getEnv($PKGD).endsWith("pkg")
 doAssert getEnv($SRCD).endsWith("src")
 doAssert getEnv($TBLD).endsWith("tmp/bld")
-doAssert getEnv($TSRC).endsWith("tmp/src")
 doAssert getEnv($TLCD).endsWith("toolchain")
+doAssert getEnv($TSRC).endsWith("tmp/src")
 
 doAssert getEnv($PATH).split(PathSep)[0].endsWith("toolchain/usr/bin")

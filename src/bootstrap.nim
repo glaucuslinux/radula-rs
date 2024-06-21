@@ -407,9 +407,10 @@ proc setEnvCrossTools*() =
   putEnv($STRIP, crossCompile & $strip)
 
 proc setEnvNativeDirs*() =
-  putEnv($SRCD, $radCacheSrc)
   putEnv($CERD, $radLibClustersCerata)
   putEnv($LOGD, $radLog)
+  putEnv($PKGD, $radCachePkg)
+  putEnv($SRCD, $radCacheSrc)
   putEnv($TBLD, $radTmp / $bld)
   putEnv($TSRC, $radTmp / $src)
 
