@@ -353,6 +353,8 @@ proc releaseIso*() =
 
   installCerata([$skel], getEnv($PKGD), path / $tmp, path / $tmp / $radLibLocal)
 
+  removeDir(path / $tmp / $boot)
+
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
   discard execCmd(&"{chown} {Chown} 20:20 {path / $tmp / $Var / $log / $wtmpd} {shellRedirect}")
   discard execCmd(&"{mkfsErofs} {path / $fs} {path / $tmp} {shellRedirect}")
