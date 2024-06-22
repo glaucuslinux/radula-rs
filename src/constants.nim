@@ -31,6 +31,7 @@ type
     diffutils
 
     e2fsprogs
+    eiwd
     execline
     expat
 

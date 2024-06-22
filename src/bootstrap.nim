@@ -18,9 +18,9 @@ proc buildCross*() =
     $rad,
 
     # Compatibility
+    $linuxHeaders,
     $muslFts,
     $muslUtils,
-    $linuxHeaders,
 
     # Init
     $skalibs,
@@ -42,11 +42,11 @@ proc buildCross*() =
     $xxhash,
 
     # Userland
-    $toybox,
     $diffutils,
     $file,
     $findutils,
     $sed,
+    $toybox,
 
     # Development
     $expat,
@@ -79,7 +79,7 @@ proc buildCross*() =
     $rsync,
     $samurai,
 
-    # Editors, Pagers and Shells
+    # Terminal
     $netbsdCurses,
     $libedit,
     $pcre2,
@@ -128,8 +128,8 @@ proc buildNative*() =
     $rad,
 
     # Compatibility
-    $muslFts,
     $linuxHeaders,
+    $muslFts,
 
     # Permissions & Capabilities
     $attr,
@@ -190,6 +190,7 @@ proc buildNative*() =
     $vim,
 
     # Networking
+    $eiwd,
     $iproute2,
     $iputils,
     $wget2,
