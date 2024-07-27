@@ -335,7 +335,7 @@ proc installCerata*(cerata: openArray[string], cache = $radCacheLocal, fs = $Dir
     , $install)
 
 proc listCerata*() =
-  printCerata(walkDir($radLibLocal, relative = true, skipSpecial = true).toSeq().unzip()[1])
+  printCerata(walkDir($radLibLocal, true, skipSpecial = true).toSeq().unzip()[1])
 
 proc removeCerata*(cerata: openArray[string]) =
   let cluster = checkCerata(cerata)
@@ -372,7 +372,7 @@ proc removeCerata*(cerata: openArray[string]) =
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for ceras in walkDir($radLibClustersCerata, relative = true, skipSpecial = true):
+  for ceras in walkDir($radLibClustersCerata, true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in ceras[1]:
         cerata.add(ceras[1])
