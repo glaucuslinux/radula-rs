@@ -10,8 +10,8 @@ type
   Ceras = object
     nom, ver, cmt, url, sum, bld, run = $Nil
 
-func `$` (ceras: Ceras): string =
-  ceras.nom
+func `$` (self: Ceras): string =
+  self.nom
 
 # Check if the `ceras` src is extracted
 proc checkExtractSrc(file: string): bool =
