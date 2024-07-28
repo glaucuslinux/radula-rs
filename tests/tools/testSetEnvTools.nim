@@ -1,9 +1,7 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import
-  std/os,
-  ../../src/[constants, tools]
+import std/os, ../../src/[constants, tools]
 
 setEnvTools()
 

@@ -4,58 +4,45 @@
 type
   radArch* = enum
     glaucus
-
     tupleCross = "-glaucus-linux-musl"
     tupleNative = "-pc-linux-musl"
-
     x86_64 = "x86-64"
-    x86_64Linux= "x86_64"
+    x86_64Linux = "x86_64"
     x86_64_v3 = "x86-64-v3"
-
 
   radCerata* = enum
     acl
     attr
     autoconf
     automake
-
     bash
     binutils
     booster
     byacc
     bzip2
-
     cerata
     cmake
-
     diffutils
-
     e2fsprogs
     eiwd
     execline
     expat
-
     file
     findutils
     flex
     fs
-
     gcc
     gettextTiny = "gettext-tiny"
     gmp
     grep
-
     help2man
     hwdata
-
     ianaEtc
     iproute2
     iputils
     isl
-
     kbd
     kmod
-
     less
     libarchive
     libcap
@@ -70,7 +57,6 @@ type
     linux
     linuxHeaders = "linux-headers"
     lz4
-
     m4
     make
     mandoc
@@ -83,12 +69,9 @@ type
     muslFts = "musl-fts"
     muslHeaders = "musl-headers"
     muslUtils = "musl-utils"
-
     netbsdCurses = "netbsd-curses"
     nsss
-
     opendoas
-
     patch
     pciutils
     pcre2
@@ -97,10 +80,8 @@ type
     pkgconf
     procpsNg = "procps-ng"
     psmisc
-
     rad
     rsync
-
     s6
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"
@@ -110,27 +91,19 @@ type
     shadow
     skalibs
     skel
-
     texinfo
     toybox
     tzcode
     tzdata
-
     utilLinux = "util-linux"
     utmps
-
     vim
-
     wget2
-
     xxhash
     xz
-
     yash
-
     zlibNg = "zlib-ng"
     zstd
-
 
   radDirs* = enum
     bak
@@ -142,7 +115,6 @@ type
     src
     tmp
 
-
   radEnv* = enum
     # ARCH
     ARCH
@@ -150,7 +122,6 @@ type
     CARCH
     CROSS_COMPILE
     PRETTY_NAME
-
     BLD
     TGT
 
@@ -172,7 +143,6 @@ type
     CFLAGS
     CXXFLAGS
     LDFLAGS
-
     PATH
 
     # PKG_CONFIG
@@ -207,7 +177,6 @@ type
     STRIP
     YACC
 
-
   radFiles* = enum
     boosterYaml = "booster.yaml"
     ceras
@@ -227,14 +196,15 @@ type
     sum
     tarZst = ".tar.zst"
 
-
   radFlags* = enum
-    cflags = "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+    cflags =
+      "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
     Chown = "-Rv"
     cpp = "-E"
     gitCheckout = "checkout"
     gitClone = "clone"
-    ldflags = "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
+    ldflags =
+      "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
     make = "-j4 -O"
     Mke2fs = "-qt"
     Parted = "-s"
@@ -248,9 +218,9 @@ type
     zstdCompress = "-22 --ultra -T0 --long"
     zstdDecompress = "-d -T0 --long"
 
-
   radHelp* = enum
-    Rad = """
+    Rad =
+      """
 USAGE:
   rad [ OPTION ]
 
@@ -259,8 +229,8 @@ OPTIONS:
   -c, --cerata     Manage cerata
   -h, --help       Display this help message
   -v, --version    Display current version"""
-
-    bootstrap = """
+    bootstrap =
+      """
 USAGE:
   rad [ -b | --bootstrap ] [ COMMAND ]
 
@@ -273,8 +243,8 @@ COMMANDS:
   r, release       Release a glaucus ISO
   t, toolchain     Bootstrap toolchain
   x, cross         Bootstrap cross glaucus"""
-
-    Cerata = """
+    Cerata =
+      """
 USAGE:
   rad [ -c | --cerata ] [ COMMAND ] [ cerata ]
 
@@ -292,13 +262,12 @@ COMMANDS:
   s, search        Search for cerata
   u, upgrade       Upgrade cerata
   y, sync          Synchronize clusters"""
-
-    version = """
+    version =
+      """
 rad version 0.1.0
 
 Copyright (c) 2018-2024, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
-
 
   radPaths* = enum
     # FILESYSTEM
@@ -317,7 +286,6 @@ Distributed under the terms of the ISC License"""
     usr
     Var = "var"
     wtmpd
-
     efiBoot = "EFI/BOOT"
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
@@ -335,7 +303,6 @@ Distributed under the terms of the ISC License"""
     radLog = "/var/log/rad"
     radTmp = "/var/tmp/rad"
 
-
   radPrint* = enum
     build
     clone
@@ -344,12 +311,10 @@ Distributed under the terms of the ISC License"""
     Nil = "nil"
     remove
 
-
   radStages* = enum
     cross
     native
     toolchain
-
 
   radTools* = enum
     ar = "gcc-ar"
@@ -361,7 +326,7 @@ Distributed under the terms of the ISC License"""
     losetup
     mke2fs
     mkfsErofs = "mkfs.erofs"
-    mkfsFat= "mkfs.fat"
+    mkfsFat = "mkfs.fat"
     modprobe
     mount
     nm = "gcc-nm"

@@ -1,233 +1,234 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import
-  std/[os, osproc, strformat, strutils, times],
-  cerata, constants, tools
+import std/[os, osproc, strformat, strutils, times], cerata, constants, tools
 
 func backupToolchain*() =
   discard rsync(getEnv($CRSD), getEnv($BAKD))
 
 proc buildCross*() =
-  buildCerata([
-    # Filesystem
-    $fs,
+  buildCerata(
+    [
+      # Filesystem
+      $fs,
 
-    # Package Management
-    $radCerata.cerata,
-    $rad,
+      # Package Management
+      $radCerata.cerata,
+      $rad,
 
-    # Compatibility
-    $linuxHeaders,
-    $muslFts,
-    $muslUtils,
+      # Compatibility
+      $linuxHeaders,
+      $muslFts,
+      $muslUtils,
 
-    # Init
-    $skalibs,
-    $nsss,
-    $execline,
-    $mdevd,
-    $s6,
-    $utmps,
+      # Init
+      $skalibs,
+      $nsss,
+      $execline,
+      $mdevd,
+      $s6,
+      $utmps,
 
-    # Permissions & Capabilities
-    $attr,
-    $acl,
-    $libcap,
-    $libcapNg,
-    $shadow,
+      # Permissions & Capabilities
+      $attr,
+      $acl,
+      $libcap,
+      $libcapNg,
+      $shadow,
 
-    # Hashing
-    $libressl,
-    $xxhash,
+      # Hashing
+      $libressl,
+      $xxhash,
 
-    # Userland
-    $diffutils,
-    $file,
-    $findutils,
-    $sed,
-    $toybox,
+      # Userland
+      $diffutils,
+      $file,
+      $findutils,
+      $sed,
+      $toybox,
 
-    # Development
-    $expat,
+      # Development
+      $expat,
 
-    # Compression
-    $bzip2,
-    $lz4,
-    $xz,
-    $zlibNg,
-    $pigz,
-    $zstd,
-    $libarchive,
+      # Compression
+      $bzip2,
+      $lz4,
+      $xz,
+      $zlibNg,
+      $pigz,
+      $zstd,
+      $libarchive,
 
-    # Development
-    $autoconf,
-    $automake,
-    $binutils,
-    $byacc,
-    $flex,
-    $gcc,
-    $gettextTiny,
-    $help2man,
-    $libtool,
-    $m4,
-    $radCerata.make,
-    $mawk,
-    $patch,
-    $pkgconf,
-    $muon,
-    $rsync,
-    $samurai,
+      # Development
+      $autoconf,
+      $automake,
+      $binutils,
+      $byacc,
+      $flex,
+      $gcc,
+      $gettextTiny,
+      $help2man,
+      $libtool,
+      $m4,
+      $radCerata.make,
+      $mawk,
+      $patch,
+      $pkgconf,
+      $muon,
+      $rsync,
+      $samurai,
 
-    # Terminal
-    $netbsdCurses,
-    $libedit,
-    $pcre2,
-    $bash,
+      # Terminal
+      $netbsdCurses,
+      $libedit,
+      $pcre2,
+      $bash,
 
-    # Userland
-    $grep,
+      # Userland
+      $grep,
 
-    # Utilities
-    $kmod,
-    $libudevZero,
-    $procpsNg,
-    $psmisc,
-    $utilLinux,
-    $e2fsprogs,
+      # Utilities
+      $kmod,
+      $libudevZero,
+      $procpsNg,
+      $psmisc,
+      $utilLinux,
+      $e2fsprogs,
 
-    # Services
-    $s6LinuxInit,
-    $s6Rc,
-    $s6BootScripts,
+      # Services
+      $s6LinuxInit,
+      $s6Rc,
+      $s6BootScripts,
 
-    # Kernel
-    $linux
-  ], $cross, false)
+      # Kernel
+      $linux,
+    ],
+    $cross,
+    false,
+  )
 
 proc buildNative*() =
-  buildCerata([
-    # Filesystem
-    $fs,
-    $ianaEtc,
-    $tzcode,
-    $tzdata,
+  buildCerata(
+    [
+      # Filesystem
+      $fs,
+      $ianaEtc,
+      $tzcode,
+      $tzdata,
 
-    # Development
-    $musl,
-    $cmake,
-    $gmp,
-    $mpfr,
-    $mpc,
-    $isl,
-    $perl,
-    $texinfo,
+      # Development
+      $musl,
+      $cmake,
+      $gmp,
+      $mpfr,
+      $mpc,
+      $isl,
+      $perl,
+      $texinfo,
 
-    # Package Management
-    $radCerata.cerata,
-    $rad,
+      # Package Management
+      $radCerata.cerata,
+      $rad,
 
-    # Compatibility
-    $linuxHeaders,
-    $muslFts,
+      # Compatibility
+      $linuxHeaders,
+      $muslFts,
 
-    # Permissions & Capabilities
-    $attr,
-    $acl,
-    $libcap,
-    $libcapNg,
-    $opendoas,
-    $shadow,
+      # Permissions & Capabilities
+      $attr,
+      $acl,
+      $libcap,
+      $libcapNg,
+      $opendoas,
+      $shadow,
 
-    # Hashing
-    $libressl,
-    $xxhash,
+      # Hashing
+      $libressl,
+      $xxhash,
 
-    # Userland
-    $diffutils,
-    $file,
-    $findutils,
-    $grep,
-    $sed,
-    $toybox,
+      # Userland
+      $diffutils,
+      $file,
+      $findutils,
+      $grep,
+      $sed,
+      $toybox,
 
-    # Compression
-    $bzip2,
-    $lz4,
-    $xz,
-    $zlibNg,
-    $pigz,
-    $zstd,
-    $libarchive,
+      # Compression
+      $bzip2,
+      $lz4,
+      $xz,
+      $zlibNg,
+      $pigz,
+      $zstd,
+      $libarchive,
 
-    # Development
-    $autoconf,
-    $automake,
-    $binutils,
-    $byacc,
-    $expat,
-    $flex,
-    $gcc,
-    $gettextTiny,
-    $help2man,
-    $libtool,
-    $m4,
-    $radCerata.make,
-    $mawk,
-    $patch,
-    $pkgconf,
-    $rsync,
-    $samurai,
+      # Development
+      $autoconf,
+      $automake,
+      $binutils,
+      $byacc,
+      $expat,
+      $flex,
+      $gcc,
+      $gettextTiny,
+      $help2man,
+      $libtool,
+      $m4,
+      $radCerata.make,
+      $mawk,
+      $patch,
+      $pkgconf,
+      $rsync,
+      $samurai,
 
-    # Editors, Pagers and Shells
-    $netbsdCurses,
-    $libedit,
-    $pcre2,
-    $bash,
-    $yash,
-    $less,
-    $mandoc,
-    $vim,
+      # Editors, Pagers and Shells
+      $netbsdCurses,
+      $libedit,
+      $pcre2,
+      $bash,
+      $yash,
+      $less,
+      $mandoc,
+      $vim,
 
-    # Networking
-    $eiwd,
-    $iproute2,
-    $iputils,
-    $wget2,
+      # Networking
+      $eiwd,
+      $iproute2,
+      $iputils,
+      $wget2,
 
-    # Utilities
-    $kbd,
-    $kmod,
-    $libudevZero,
-    $procpsNg,
-    $psmisc,
-    $utilLinux,
-    $e2fsprogs,
+      # Utilities
+      $kbd,
+      $kmod,
+      $libudevZero,
+      $procpsNg,
+      $psmisc,
+      $utilLinux,
+      $e2fsprogs,
 
-    # Init & Services
-    $skalibs,
-    $nsss,
-    $execline,
-    $mdevd,
-    $s6,
-    $utmps,
-    $s6LinuxInit,
-    $s6Rc,
-    $s6BootScripts,
+      # Init & Services
+      $skalibs,
+      $nsss,
+      $execline,
+      $mdevd,
+      $s6,
+      $utmps,
+      $s6LinuxInit,
+      $s6Rc,
+      $s6BootScripts,
 
-    # Kernel
-    $linux
-  ], $native, false)
+      # Kernel
+      $linux,
+    ],
+    $native,
+    false,
+  )
 
 proc buildToolchain*() =
-  buildCerata([
-    $muslHeaders,
-    $binutils,
-    $gcc,
-    $musl,
-    $libgcc,
-    $libstdcxxV3
-  ], $toolchain, false)
+  buildCerata(
+    [$muslHeaders, $binutils, $gcc, $musl, $libgcc, $libstdcxxV3], $toolchain, false
+  )
 
 proc cleanBootstrap*() =
   removeDir(getEnv($CRSD))
@@ -270,7 +271,9 @@ proc releaseImg*() =
     abort(&"""{"1":8}{"permission denied":48}""")
 
   let
-    img = getEnv($GLAD) / &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}img"""
+    img =
+      getEnv($GLAD) /
+      &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}img"""
 
     device = execCmdEx(&"{losetup} -f")[0].strip()
 
@@ -309,15 +312,22 @@ proc releaseImg*() =
 
   discard genInitramfs(path / $boot, true)
 
-  discard rsync($radLibClustersCerata / $limine / $limineCfgImg, path / $boot / $limineCfg, rsyncRelease)
+  discard rsync(
+    $radLibClustersCerata / $limine / $limineCfgImg,
+    path / $boot / $limineCfg,
+    rsyncRelease,
+  )
 
   discard rsync(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel, rsyncRelease)
 
   createDir(path / $boot / $efiBoot)
-  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot, rsyncRelease)
+  discard rsync(
+    DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot, rsyncRelease
+  )
 
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
-  discard execCmd(&"{chown} {Chown} 20:20 {path / $Var / $log / $wtmpd} {shellRedirect}")
+  discard
+    execCmd(&"{chown} {Chown} 20:20 {path / $Var / $log / $wtmpd} {shellRedirect}")
 
   discard execCmd(&"{umount} {Umount} {path / $boot} {shellRedirect}")
   discard execCmd(&"{umount} {Umount} {path} {shellRedirect}")
@@ -329,7 +339,9 @@ proc releaseImg*() =
 
 proc releaseIso*() =
   let
-    iso = getEnv($GLAD) / &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}{iso}"""
+    iso =
+      getEnv($GLAD) /
+      &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}{iso}"""
 
     path = getEnv($ISOD)
 
@@ -341,13 +353,23 @@ proc releaseIso*() =
 
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
-  discard rsync($radLibClustersCerata / $limine / $limineCfgIso, path / $limine / $limineCfg, rsyncRelease)
+  discard rsync(
+    $radLibClustersCerata / $limine / $limineCfgIso,
+    path / $limine / $limineCfg,
+    rsyncRelease,
+  )
 
-  discard rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
+  discard
+    rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
 
-  discard rsync(DirSep & $usr / $share / $limine / $limineBios, path / $limine, rsyncRelease)
-  discard rsync(DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease)
-  discard rsync(DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease)
+  discard
+    rsync(DirSep & $usr / $share / $limine / $limineBios, path / $limine, rsyncRelease)
+  discard rsync(
+    DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease
+  )
+  discard rsync(
+    DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease
+  )
 
   discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
 
@@ -356,12 +378,16 @@ proc releaseIso*() =
   removeDir(path / $tmp / $boot)
 
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
-  discard execCmd(&"{chown} {Chown} 20:20 {path / $tmp / $Var / $log / $wtmpd} {shellRedirect}")
+  discard execCmd(
+    &"{chown} {Chown} 20:20 {path / $tmp / $Var / $log / $wtmpd} {shellRedirect}"
+  )
   discard execCmd(&"{mkfsErofs} {path / $fs} {path / $tmp} {shellRedirect}")
 
   removeDir(path / $tmp)
 
-  discard execCmd(&"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -hfsplus -apm-block-size 2048 -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path} {shellRedirect}")
+  discard execCmd(
+    &"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -hfsplus -apm-block-size 2048 -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path} {shellRedirect}"
+  )
 
   removeDir(path)
 

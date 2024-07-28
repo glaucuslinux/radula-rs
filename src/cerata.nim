@@ -3,14 +3,16 @@
 
 import
   std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
-  constants, tools,
-  hashlib/misc/blake3, toml_serialization, toposort
+  constants,
+  tools,
+  hashlib/misc/blake3,
+  toml_serialization,
+  toposort
 
-type
-  Ceras = object
-    nom, ver, cmt, url, sum, bld, run = $Nil
+type Ceras = object
+  nom, ver, cmt, url, sum, bld, run = $Nil
 
-func `$` (self: Ceras): string =
+func `$`(self: Ceras): string =
   self.nom
 
 # Check if the `ceras` src is extracted
@@ -58,7 +60,8 @@ proc printCerata*(cerata: openArray[string]) =
     echo ""
 
 proc printContent(idx: int, nom, ver, cmd: string) =
-  styledEcho fgMagenta, styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
+  styledEcho fgMagenta,
+    styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
 
 proc printFooter(idx: int, nom, ver, cmd: string) =
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
@@ -188,17 +191,21 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
   for idx, nom in (if resolve: cluster else: cerata.toSeq()):
     let ceras = parseCeras(nom)
 
-    printContent(idx, $ceras,
+    printContent(
+      idx,
+      $ceras,
       case ceras.ver
-      of $git:
-        ceras.cmt
-      else:
-        ceras.ver
-    , $build)
+      of $git: ceras.cmt
+      else: ceras.ver
+      ,
+      $build,
+    )
 
     case stage
     of $native:
-      if fileExists($radCacheLocal / $ceras / &"""{ceras}{(
+      if fileExists(
+        $radCacheLocal / $ceras /
+          &"""{ceras}{(
         case ceras.url
         of $Nil:
           ""
@@ -210,17 +217,20 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
           '-' & ceras.cmt
         else:
           ""
-      )}{tarZst}"""):
+      )}{tarZst}"""
+      ):
         cursorUp 1
         eraseLine()
 
-        printFooter(idx, $ceras,
+        printFooter(
+          idx,
+          $ceras,
           case ceras.ver
-          of $git:
-            ceras.cmt
-          else:
-            ceras.ver
-        , $build)
+          of $git: ceras.cmt
+          else: ceras.ver
+          ,
+          $build,
+        )
 
         continue
 
@@ -231,27 +241,34 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...
-    var status = execCmd(&"""
+    var status = execCmd(
+      &"""
       {sh} {shellCommand} 'nom={ceras} ver={ceras.ver} {CurDir} {$radLibClustersCerata / $ceras / $build}{CurDir}{stage} &&
       prepare $1 &&
       configure $1 &&
       build $1 &&
       check $1 &&
       package $1'
-    """ % &">> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1")
+    """ %
+        &">> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1"
+    )
 
     if status != 0:
-      abort(&"""{status:<8}{ceras:24}{(
+      abort(
+        &"""{status:<8}{ceras:24}{(
         case ceras.ver
         of $git:
           ceras.cmt
         else:
           ceras.ver
-      ):24}""")
+      ):24}"""
+      )
 
     case stage
     of $native:
-      status = createTarZst($radCacheLocal / $ceras / &"""{ceras}{(
+      status = createTarZst(
+        $radCacheLocal / $ceras /
+          &"""{ceras}{(
         case ceras.url
         of $Nil:
           ""
@@ -263,7 +280,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
           '-' & ceras.cmt
         else:
           ""
-      )}{tarZst}""", getEnv($SACD))
+      )}{tarZst}""",
+        getEnv($SACD),
+      )
 
       if status == 0:
         genSum(getEnv($SACD), $radCacheLocal / $ceras / $sum)
@@ -273,15 +292,19 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     cursorUp 1
     eraseLine()
 
-    printFooter(idx, $ceras,
+    printFooter(
+      idx,
+      $ceras,
       case ceras.ver
-      of $git:
-        ceras.cmt
-      else:
-        ceras.ver
-    , $build)
+      of $git: ceras.cmt
+      else: ceras.ver
+      ,
+      $build,
+    )
 
-proc installCerata*(cerata: openArray[string], cache = $radCacheLocal, fs = $DirSep, lib = $radLibLocal) =
+proc installCerata*(
+    cerata: openArray[string], cache = $radCacheLocal, fs = $DirSep, lib = $radLibLocal
+) =
   let cluster = checkCerata(cerata)
 
   printHeader()
@@ -289,15 +312,19 @@ proc installCerata*(cerata: openArray[string], cache = $radCacheLocal, fs = $Dir
   for idx, nom in cluster:
     let ceras = parseCeras(nom)
 
-    printContent(idx, $ceras,
+    printContent(
+      idx,
+      $ceras,
       case ceras.ver
-      of $git:
-        ceras.cmt
-      else:
-        ceras.ver
-    , $install)
+      of $git: ceras.cmt
+      else: ceras.ver
+      ,
+      $install,
+    )
 
-    let status = extractTar(cache / $ceras / &"""{ceras}{(
+    let status = extractTar(
+      cache / $ceras /
+        &"""{ceras}{(
       case ceras.url
       of $Nil:
         ""
@@ -309,16 +336,20 @@ proc installCerata*(cerata: openArray[string], cache = $radCacheLocal, fs = $Dir
         '-' & ceras.cmt
       else:
         ""
-    )}{tarZst}""", fs)
+    )}{tarZst}""",
+      fs,
+    )
 
     if status != 0:
-      abort(&"""{status:<8}{ceras:24}{(
+      abort(
+        &"""{status:<8}{ceras:24}{(
         case ceras.ver
         of $git:
           ceras.cmt
         else:
           ceras.ver
-      ):24}""")
+      ):24}"""
+      )
 
     createDir(lib / $ceras)
 
@@ -329,13 +360,15 @@ proc installCerata*(cerata: openArray[string], cache = $radCacheLocal, fs = $Dir
     cursorUp 1
     eraseLine()
 
-    printFooter(idx, $ceras,
+    printFooter(
+      idx,
+      $ceras,
       case ceras.ver
-      of $git:
-        ceras.cmt
-      else:
-        ceras.ver
-    , $install)
+      of $git: ceras.cmt
+      else: ceras.ver
+      ,
+      $install,
+    )
 
 proc listCerata*() =
   printCerata(walkDir($radLibLocal, true, skipSpecial = true).toSeq().unzip()[1])
@@ -348,13 +381,15 @@ proc removeCerata*(cerata: openArray[string]) =
   for idx, nom in cluster:
     let ceras = parseCeras(nom)
 
-    printContent(idx, $ceras,
+    printContent(
+      idx,
+      $ceras,
       case ceras.ver
-      of $git:
-        ceras.cmt
-      else:
-        ceras.ver
-    , $remove)
+      of $git: ceras.cmt
+      else: ceras.ver
+      ,
+      $remove,
+    )
 
     for line in lines($radLibLocal / $ceras / $sum):
       removeFile(DirSep & line.split()[2])
@@ -364,13 +399,15 @@ proc removeCerata*(cerata: openArray[string]) =
     cursorUp 1
     eraseLine()
 
-    printFooter(idx, $ceras,
+    printFooter(
+      idx,
+      $ceras,
       case ceras.ver
-      of $git:
-        ceras.cmt
-      else:
-        ceras.ver
-    , $remove)
+      of $git: ceras.cmt
+      else: ceras.ver
+      ,
+      $remove,
+    )
 
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]

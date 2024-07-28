@@ -10,7 +10,9 @@ func compressZst*(file: string): int =
   execCmd(&"{zstd} {zstdCompress} {file} {shellRedirect}")
 
 func createTarZst*(archive, dir: string): int =
-  execCmd(&"{tar} --use-compress-program '{zstd} {zstdCompress}' {tarCreate} {archive} -C {dir} {CurDir} {shellRedirect}")
+  execCmd(
+    &"{tar} --use-compress-program '{zstd} {zstdCompress}' {tarCreate} {archive} -C {dir} {CurDir} {shellRedirect}"
+  )
 
 proc downloadFile*(file, url: string): int =
   execCmd(&"{wget2} -q -O {file} -c -N {url}")
@@ -29,7 +31,9 @@ func extractTar*(archive, dir: string): int =
   execCmd(&"{tar} {tarExtract} {archive} -C {dir} {shellRedirect}")
 
 func genInitramfs*(dir: string, bootstrap = false): int =
-  execCmd(&"""{booster} {build} --force --compression={zstd} --config={$radLibClustersCerata / $booster / $boosterYaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}""")
+  execCmd(
+    &"""{booster} {build} --force --compression={zstd} --config={$radLibClustersCerata / $booster / $boosterYaml} {(if bootstrap: "--universal" else: "")} --strip {dir / $initramfs}"""
+  )
 
 proc genSum*(dir, sum: string) =
   var files: seq[string]
