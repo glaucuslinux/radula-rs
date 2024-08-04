@@ -1,6 +1,6 @@
-switch("d", "lto")
 switch("d", "release")
 switch("d", "useMalloc")
+switch("d", "lto")
 switch("d", "strip")
 switch("os", "linux")
 switch("cpu", "amd64")
