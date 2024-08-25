@@ -313,8 +313,8 @@ proc releaseImg*() =
   discard genInitramfs(path / $boot, true)
 
   discard rsync(
-    $radLibClustersCerata / $limine / $limineCfgImg,
-    path / $boot / $limineCfg,
+    $radLibClustersCerata / $limine / $limineConfImg,
+    path / $boot / $limineConf,
     rsyncRelease,
   )
 
@@ -354,8 +354,8 @@ proc releaseIso*() =
   discard rsync(getEnv($GLAD) / $initramfs, path)
 
   discard rsync(
-    $radLibClustersCerata / $limine / $limineCfgIso,
-    path / $limine / $limineCfg,
+    $radLibClustersCerata / $limine / $limineConfIso,
+    path / $limine / $limineConf,
     rsyncRelease,
   )
 
