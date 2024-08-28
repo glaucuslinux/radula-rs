@@ -37,7 +37,7 @@ type
     grep
     help2man
     hwdata
-    ianaEtc
+    ianaEtc = "iana-etc"
     iproute2
     iputils
     isl

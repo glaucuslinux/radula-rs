@@ -60,8 +60,6 @@ proc buildCross*() =
       $libarchive,
 
       # Development
-      $autoconf,
-      $automake,
       $binutils,
       $byacc,
       $flex,
@@ -124,7 +122,9 @@ proc buildNative*() =
       $mpc,
       $isl,
       $perl,
+      $autoconf,
       $texinfo,
+      $automake,
 
       # Package Management
       $radCerata.cerata,
@@ -164,8 +164,6 @@ proc buildNative*() =
       $libarchive,
 
       # Development
-      $autoconf,
-      $automake,
       $binutils,
       $byacc,
       $expat,
