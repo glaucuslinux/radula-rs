@@ -5,7 +5,7 @@ import std/[os, osproc, strformat, strutils, times], cerata, constants, tools
 
 proc backupToolchain*() =
   removeDir(getEnv($BAKD) / $cross)
-  copyDirWithPermissions(getEnv($CRSD), getEnv($BAKD))
+  copyDirWithPermissions(getEnv($CRSD), getEnv($BAKD) / $cross)
 
 proc buildCross*() =
   buildCerata(
@@ -250,7 +250,7 @@ proc init*() =
 
 proc prepareCross*() =
   removeDir(getEnv($CRSD))
-  copyDirWithPermissions(getEnv($BAKD) / $cross, getEnv($GLAD))
+  copyDirWithPermissions(getEnv($BAKD) / $cross, getEnv($CRSD))
 
   removeDir(getEnv($TBLD))
   createDir(getEnv($TBLD))
@@ -310,11 +310,10 @@ proc releaseImg*() =
   copyFileWithPermissions(
     $radLibClustersCerata / $limine / $limineConfImg, path / $boot / $limineConf
   )
-
-  copyDirWithPermissions(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel)
+  copyFileWithPermissions(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel)
 
   createDir(path / $boot / $efiBoot)
-  copyDirWithPermissions(
+  copyFileWithPermissions(
     DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot
   )
 
@@ -345,15 +344,12 @@ proc releaseIso*() =
   createDir(path / $tmp)
 
   copyFileWithPermissions(getEnv($GLAD) / $initramfs, path)
-
-  copyDirWithPermissions(
+  copyFileWithPermissions(
     $radLibClustersCerata / $limine / $limineConfIso, path / $limine / $limineConf
   )
-
   copyFileWithPermissions(
     DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot
   )
-
   copyFileWithPermissions(
     DirSep & $usr / $share / $limine / $limineBios, path / $limine
   )
@@ -363,7 +359,6 @@ proc releaseIso*() =
   copyFileWithPermissions(
     DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine
   )
-
   copyFileWithPermissions(DirSep & $boot / $kernelCachyOs, path / $kernel)
 
   installCerata([$skel], getEnv($PKGD), path / $tmp, path / $tmp / $radLibLocal)
