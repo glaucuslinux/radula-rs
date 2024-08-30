@@ -245,12 +245,12 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       &"""
       {sh} {shellCommand} 'nom={ceras} ver={ceras.ver} {CurDir} {$radLibClustersCerata / $ceras / $build}{CurDir}{stage} &&
       prepare $1 &&
-      configure $1 &&
-      build $1 &&
-      check $1 &&
-      package $1'
+      configure >$1 &&
+      build >$1 &&
+      check >$1 &&
+      package >$1'
     """ %
-        &">> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1"
+        &"> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1"
     )
 
     if status != 0:
@@ -355,7 +355,7 @@ proc installCerata*(
 
     writeFile(lib / $ceras / "ver", ceras.ver)
 
-    discard rsync(cache / $ceras / $sum, lib / $ceras)
+    copyFileWithPermissions(cache / $ceras / $sum, lib / $ceras)
 
     cursorUp 1
     eraseLine()

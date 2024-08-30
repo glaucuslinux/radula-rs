@@ -55,6 +55,7 @@ type
     libudevZero = "libudev-zero"
     limine
     linux
+    linuxCachyOS = "linux-cachyos"
     linuxHeaders = "linux-headers"
     lz4
     m4
@@ -81,7 +82,6 @@ type
     procpsNg = "procps-ng"
     psmisc
     rad
-    rsync
     s6
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"
@@ -170,7 +170,6 @@ type
     OBJCOPY
     OBJDUMP
     PKG_CONFIG
-    RAD_RSYNC_FLAGS
     RANLIB
     READELF
     SIZE
@@ -208,8 +207,6 @@ type
     make = "-j4 -O"
     Mke2fs = "-qt"
     Parted = "-s"
-    Rsync = "-vaHAXSx"
-    rsyncRelease = "-vaHAXx"
     shellCommand = "-c"
     shellRedirect = "> /dev/null 2>&1"
     tarCreate = "-cpvf"

@@ -3,8 +3,9 @@
 
 import std/[os, osproc, strformat, strutils, times], cerata, constants, tools
 
-func backupToolchain*() =
-  discard rsync(getEnv($CRSD), getEnv($BAKD))
+proc backupToolchain*() =
+  removeDir(getEnv($BAKD) / $cross)
+  copyDirWithPermissions(getEnv($CRSD), getEnv($BAKD))
 
 proc buildCross*() =
   buildCerata(
@@ -38,7 +39,6 @@ proc buildCross*() =
 
       # Hashing
       $libressl,
-      $xxhash,
 
       # Userland
       $diffutils,
@@ -73,7 +73,6 @@ proc buildCross*() =
       $patch,
       $pkgconf,
       $muon,
-      $rsync,
       $samurai,
 
       # Terminal
@@ -99,7 +98,7 @@ proc buildCross*() =
       $s6BootScripts,
 
       # Kernel
-      $linux,
+      $linuxCachyOS,
     ],
     $cross,
     false,
@@ -144,7 +143,6 @@ proc buildNative*() =
 
       # Hashing
       $libressl,
-      $xxhash,
 
       # Userland
       $diffutils,
@@ -177,7 +175,6 @@ proc buildNative*() =
       $mawk,
       $patch,
       $pkgconf,
-      $rsync,
       $samurai,
 
       # Editors, Pagers and Shells
@@ -217,7 +214,7 @@ proc buildNative*() =
       $s6BootScripts,
 
       # Kernel
-      $linux,
+      $linuxCachyOS,
     ],
     $native,
     false,
@@ -252,7 +249,8 @@ proc init*() =
   createDir(getEnv($TLCD))
 
 proc prepareCross*() =
-  discard rsync(getEnv($BAKD) / $cross, getEnv($GLAD))
+  removeDir(getEnv($CRSD))
+  copyDirWithPermissions(getEnv($BAKD) / $cross, getEnv($GLAD))
 
   removeDir(getEnv($TBLD))
   createDir(getEnv($TBLD))
@@ -302,25 +300,22 @@ proc releaseImg*() =
 
   discard execCmd(&"{mount} {partitionTwo} {path} {shellRedirect}")
 
-  discard rsync(getEnv($CRSD) & DirSep, path, rsyncRelease)
-
-  discard rsync(getEnv($SRCD) & DirSep, path / $radCacheSrc, rsyncRelease)
+  copyDirWithPermissions(getEnv($CRSD), path)
+  copyDirWithPermissions(getEnv($SRCD), path / $radCacheSrc)
 
   discard execCmd(&"{mount} {partitionOne} {path / $boot} {shellRedirect}")
 
   discard genInitramfs(path / $boot, true)
 
-  discard rsync(
-    $radLibClustersCerata / $limine / $limineConfImg,
-    path / $boot / $limineConf,
-    rsyncRelease,
+  copyFileWithPermissions(
+    $radLibClustersCerata / $limine / $limineConfImg, path / $boot / $limineConf
   )
 
-  discard rsync(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel, rsyncRelease)
+  copyDirWithPermissions(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel)
 
   createDir(path / $boot / $efiBoot)
-  discard rsync(
-    DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot, rsyncRelease
+  copyDirWithPermissions(
+    DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot
   )
 
   discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
@@ -349,27 +344,27 @@ proc releaseIso*() =
   createDir(path / $limine)
   createDir(path / $tmp)
 
-  discard rsync(getEnv($GLAD) / $initramfs, path)
+  copyFileWithPermissions(getEnv($GLAD) / $initramfs, path)
 
-  discard rsync(
-    $radLibClustersCerata / $limine / $limineConfIso,
-    path / $limine / $limineConf,
-    rsyncRelease,
+  copyDirWithPermissions(
+    $radLibClustersCerata / $limine / $limineConfIso, path / $limine / $limineConf
   )
 
-  discard
-    rsync(DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot, rsyncRelease)
-
-  discard
-    rsync(DirSep & $usr / $share / $limine / $limineBios, path / $limine, rsyncRelease)
-  discard rsync(
-    DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine, rsyncRelease
-  )
-  discard rsync(
-    DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine, rsyncRelease
+  copyFileWithPermissions(
+    DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot
   )
 
-  discard rsync(DirSep & $boot / $kernelCachyOs, path / $kernel, rsyncRelease)
+  copyFileWithPermissions(
+    DirSep & $usr / $share / $limine / $limineBios, path / $limine
+  )
+  copyFileWithPermissions(
+    DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine
+  )
+  copyFileWithPermissions(
+    DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine
+  )
+
+  copyFileWithPermissions(DirSep & $boot / $kernelCachyOs, path / $kernel)
 
   installCerata([$skel], getEnv($PKGD), path / $tmp, path / $tmp / $radLibLocal)
 

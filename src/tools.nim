@@ -65,9 +65,6 @@ proc lock*() =
   else:
     writeFile(DirSep & $tmp / $radLck, "")
 
-func rsync*(src, dest: string, flags = RSYNC): int =
-  execCmd(&"{radCerata.rsync} {flags} {src} {dest} --delete {shellRedirect}")
-
 proc setEnvTools*() =
   putEnv($AWK, $mawk)
   putEnv($BISON, $byacc)
@@ -76,7 +73,6 @@ proc setEnvTools*() =
   putEnv($MAKE, $radCerata.make)
   putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($PKG_CONFIG, $pkgconf)
-  putEnv($RAD_RSYNC_FLAGS, $RSYNC)
   putEnv($YACC, $byacc)
 
 proc verifyFile*(file, sum: string): bool =
