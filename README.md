@@ -10,7 +10,6 @@ glaucus package manager
 
 ## Mirrors
 - [Codeberg](https://codeberg.org/glaucuslinux/rad)
-- [Framagit](https://framagit.org/glaucuslinux/rad)
 - [GitHub](https://github.com/glaucuslinux/rad)
 - [GitLab](https://gitlab.com/glaucuslinux/rad)
 - [SourceHut](https://git.sr.ht/~glaucuslinux/rad)
