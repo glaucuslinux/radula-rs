@@ -22,27 +22,19 @@ type
     bzip2
     cerata
     cmake
-    diffutils
     e2fsprogs
     eiwd
     execline
     expat
-    file
-    findutils
     flex
     fs
     gcc
     gettextTiny = "gettext-tiny"
     gmp
-    grep
     help2man
     hwdata
-    ianaEtc = "iana-etc"
-    iproute2
-    iputils
     isl
     kbd
-    kmod
     less
     libarchive
     libcap
@@ -73,21 +65,16 @@ type
     netbsdCurses = "netbsd-curses"
     nsss
     opendoas
-    patch
-    pciutils
     pcre2
     perl
     pigz
     pkgconf
-    procpsNg = "procps-ng"
-    psmisc
     rad
     s6
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"
     s6Rc = "s6-rc"
     samurai
-    sed
     shadow
     skalibs
     skel
@@ -99,7 +86,6 @@ type
     utmps
     vim
     wget2
-    xxhash
     xz
     yash
     zlibNg = "zlib-ng"

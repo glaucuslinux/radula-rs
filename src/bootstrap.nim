@@ -41,10 +41,6 @@ proc buildCross*() =
       $libressl,
 
       # Userland
-      $diffutils,
-      $file,
-      $findutils,
-      $sed,
       $toybox,
 
       # Development
@@ -70,9 +66,7 @@ proc buildCross*() =
       $m4,
       $radCerata.make,
       $mawk,
-      $patch,
       $pkgconf,
-      $muon,
       $samurai,
 
       # Terminal
@@ -81,14 +75,8 @@ proc buildCross*() =
       $pcre2,
       $bash,
 
-      # Userland
-      $grep,
-
       # Utilities
-      $kmod,
       $libudevZero,
-      $procpsNg,
-      $psmisc,
       $utilLinux,
       $e2fsprogs,
 
@@ -109,13 +97,13 @@ proc buildNative*() =
     [
       # Filesystem
       $fs,
-      $ianaEtc,
       $tzcode,
       $tzdata,
 
       # Development
       $musl,
       $cmake,
+      $muon,
       $gmp,
       $mpfr,
       $mpc,
@@ -145,11 +133,6 @@ proc buildNative*() =
       $libressl,
 
       # Userland
-      $diffutils,
-      $file,
-      $findutils,
-      $grep,
-      $sed,
       $toybox,
 
       # Compression
@@ -173,7 +156,6 @@ proc buildNative*() =
       $m4,
       $radCerata.make,
       $mawk,
-      $patch,
       $pkgconf,
       $samurai,
 
@@ -189,16 +171,11 @@ proc buildNative*() =
 
       # Networking
       $eiwd,
-      $iproute2,
-      $iputils,
       $wget2,
 
       # Utilities
       $kbd,
-      $kmod,
       $libudevZero,
-      $procpsNg,
-      $psmisc,
       $utilLinux,
       $e2fsprogs,
 

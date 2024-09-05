@@ -12,7 +12,6 @@ echo "LEX                 :: ", getEnv($LEX)
 echo "MAKE                :: ", getEnv($radEnv.MAKE)
 echo "MAKEFLAGS           :: ", getEnv($MAKEFLAGS)
 echo "PKG_CONFIG          :: ", getEnv($PKG_CONFIG)
-echo "RAD_RSYNC_FLAGS     :: ", getEnv($RAD_RSYNC_FLAGS)
 echo "YACC                :: ", getEnv($YACC)
 
 doAssert getEnv($AWK) == "mawk"
@@ -22,5 +21,4 @@ doAssert getEnv($LEX) == "flex"
 doAssert getEnv($radEnv.MAKE) == "make"
 doAssert getEnv($MAKEFLAGS) == "-j4 -O"
 doAssert getEnv($PKG_CONFIG) == "pkgconf"
-doAssert getEnv($RAD_RSYNC_FLAGS) == "-vaHAXSx"
 doAssert getEnv($YACC) == "byacc"
