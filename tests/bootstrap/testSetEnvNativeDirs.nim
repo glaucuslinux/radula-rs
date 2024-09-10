@@ -9,12 +9,10 @@ echo "CERD  :: ", getEnv($CERD)
 echo "LOGD  :: ", getEnv($LOGD)
 echo "PKGD  :: ", getEnv($PKGD)
 echo "SRCD  :: ", getEnv($SRCD)
-echo "TBLD  :: ", getEnv($TBLD)
-echo "TSRC  :: ", getEnv($TSRC)
+echo "TMPD  :: ", getEnv($TMPD)
 
 doAssert getEnv($CERD) == "/var/lib/rad/clusters/cerata"
 doAssert getEnv($LOGD) == "/var/log/rad"
 doAssert getEnv($PKGD) == "/var/cache/rad/pkg"
 doAssert getEnv($SRCD) == "/var/cache/rad/src"
-doassert getEnv($TBLD) == "/var/tmp/rad/bld"
-doassert getEnv($TSRC) == "/var/tmp/rad/src"
+doassert getEnv($TMPD) == "/var/tmp/rad"

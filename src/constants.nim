@@ -15,35 +15,27 @@ type
     attr
     autoconf
     automake
-    bash
     binutils
     booster
     byacc
     bzip2
     cerata
-    cmake
     e2fsprogs
-    eiwd
     execline
     expat
     flex
     fs
     gcc
-    gettextTiny = "gettext-tiny"
     gmp
-    help2man
     hwdata
     isl
-    kbd
     less
     libarchive
     libcap
-    libcapNg = "libcap-ng"
     libedit
     libgcc
     libressl
     libstdcxxV3 = "libstdc++-v3"
-    libtool
     libudevZero = "libudev-zero"
     limine
     linux
@@ -52,14 +44,12 @@ type
     lz4
     m4
     make
-    mandoc
     mawk
     mdevd
     mpc
     mpfr
     muon
     musl
-    muslFts = "musl-fts"
     muslHeaders = "musl-headers"
     muslUtils = "musl-utils"
     netbsdCurses = "netbsd-curses"
@@ -67,7 +57,6 @@ type
     opendoas
     pcre2
     perl
-    pigz
     pkgconf
     rad
     s6
@@ -78,10 +67,8 @@ type
     shadow
     skalibs
     skel
-    texinfo
+    slibtool
     toybox
-    tzcode
-    tzdata
     utilLinux = "util-linux"
     utmps
     vim
@@ -93,7 +80,6 @@ type
 
   radDirs* = enum
     bak
-    bld
     iso
     log
     pkg
@@ -121,9 +107,8 @@ type
     PKGD
     SACD
     SRCD
-    TBLD
+    TMPD
     TLCD
-    TSRC
 
     # FLAGS
     CFLAGS
@@ -150,6 +135,7 @@ type
     FLEX
     HOSTCC
     LEX
+    LIBTOOL
     MAKE
     MAKEFLAGS
     NM

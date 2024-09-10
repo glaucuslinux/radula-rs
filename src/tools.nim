@@ -76,7 +76,7 @@ proc setEnvTools*() =
   putEnv($YACC, $byacc)
 
 proc verifyFile*(file, sum: string): bool =
-  $count[BLAKE3](readFile(file)) == sum
+  fileExists(file) and $count[BLAKE3](readFile(file)) == sum
 
 proc verifySum*(sum: string) =
   for line in lines(sum):

@@ -4,14 +4,13 @@
 import std/[os, osproc, strformat, strutils, times], constants
 
 proc getTuple*(): (string, int) =
-  execCmdEx($radLibClustersCerata / $binutils / $configGuess)
+  execCmdEx($radLibClustersCerata / $slibtool / $configGuess)
 
 proc setEnvArch*(stage = native) =
   putEnv($ARCH, $x86_64)
+  putEnv($BLD, getTuple()[0].strip())
   putEnv($CARCH, $x86_64_v3)
   putEnv($PRETTY_NAME, &"""{glaucus} {s6} {x86_64_v3} {now().format("YYYYMMdd")}""")
-
-  putEnv($BLD, getTuple()[0].strip())
   putEnv(
     $TGT,
     $x86_64Linux &

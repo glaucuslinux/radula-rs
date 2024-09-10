@@ -19,7 +19,6 @@ proc buildCross*() =
 
       # Compatibility
       $linuxHeaders,
-      $muslFts,
       $muslUtils,
 
       # Init
@@ -34,7 +33,6 @@ proc buildCross*() =
       $attr,
       $acl,
       $libcap,
-      $libcapNg,
       $shadow,
 
       # Hashing
@@ -51,7 +49,6 @@ proc buildCross*() =
       $lz4,
       $xz,
       $zlibNg,
-      $pigz,
       $zstd,
       $libarchive,
 
@@ -60,20 +57,17 @@ proc buildCross*() =
       $byacc,
       $flex,
       $gcc,
-      $gettextTiny,
-      $help2man,
-      $libtool,
       $m4,
       $radCerata.make,
       $mawk,
       $pkgconf,
       $samurai,
+      $slibtool,
 
       # Terminal
       $netbsdCurses,
       $libedit,
       $pcre2,
-      $bash,
 
       # Utilities
       $libudevZero,
@@ -97,12 +91,9 @@ proc buildNative*() =
     [
       # Filesystem
       $fs,
-      $tzcode,
-      $tzdata,
 
       # Development
       $musl,
-      $cmake,
       $muon,
       $gmp,
       $mpfr,
@@ -110,7 +101,6 @@ proc buildNative*() =
       $isl,
       $perl,
       $autoconf,
-      $texinfo,
       $automake,
 
       # Package Management
@@ -119,13 +109,11 @@ proc buildNative*() =
 
       # Compatibility
       $linuxHeaders,
-      $muslFts,
 
       # Permissions & Capabilities
       $attr,
       $acl,
       $libcap,
-      $libcapNg,
       $opendoas,
       $shadow,
 
@@ -140,7 +128,6 @@ proc buildNative*() =
       $lz4,
       $xz,
       $zlibNg,
-      $pigz,
       $zstd,
       $libarchive,
 
@@ -150,31 +137,25 @@ proc buildNative*() =
       $expat,
       $flex,
       $gcc,
-      $gettextTiny,
-      $help2man,
-      $libtool,
       $m4,
       $radCerata.make,
       $mawk,
       $pkgconf,
       $samurai,
+      $slibtool,
 
       # Editors, Pagers and Shells
       $netbsdCurses,
       $libedit,
       $pcre2,
-      $bash,
       $yash,
       $less,
-      $mandoc,
       $vim,
 
       # Networking
-      $eiwd,
       $wget2,
 
       # Utilities
-      $kbd,
       $libudevZero,
       $utilLinux,
       $e2fsprogs,
@@ -205,7 +186,7 @@ proc buildToolchain*() =
 proc cleanBootstrap*() =
   removeDir(getEnv($CRSD))
   removeDir(getEnv($LOGD))
-  removeDir(getEnv($TBLD))
+  removeDir(getEnv($TMPD))
   removeDir(getEnv($TLCD))
 
 proc distcleanBootstrap*() =
@@ -214,30 +195,26 @@ proc distcleanBootstrap*() =
   cleanBootstrap()
 
   removeDir(getEnv($SRCD))
-  removeDir(getEnv($GLAD) / $tmp)
+  removeDir(getEnv($TMPD))
 
 proc init*() =
   createDir(getEnv($BAKD))
   createDir(getEnv($CRSD))
   createDir(getEnv($LOGD))
   createDir(getEnv($SRCD))
-  createDir(getEnv($TBLD))
-  createDir(getEnv($TSRC))
+  createDir(getEnv($TMPD))
   createDir(getEnv($TLCD))
 
 proc prepareCross*() =
   removeDir(getEnv($CRSD))
   copyDirWithPermissions(getEnv($BAKD) / $cross, getEnv($CRSD))
 
-  removeDir(getEnv($TBLD))
-  createDir(getEnv($TBLD))
+  removeDir(getEnv($TMPD))
+  createDir(getEnv($TMPD))
 
 proc prepareNative*() =
-  removeDir(getEnv($TBLD))
-  createDir(getEnv($TBLD))
-
-  # Create the `src` dir if it doesn't exist, but don't remove it if it does exist!
-  createDir(getEnv($TSRC))
+  removeDir(getEnv($TMPD))
+  createDir(getEnv($TMPD))
 
 proc releaseImg*() =
   if not isAdmin():
@@ -370,8 +347,7 @@ proc setEnvBootstrap*() =
   putEnv($LOGD, path / $log)
   putEnv($PKGD, path / $pkg)
   putEnv($SRCD, path / $src)
-  putEnv($TBLD, path / $tmp / $bld)
-  putEnv($TSRC, path / $tmp / $src)
+  putEnv($TMPD, path / $tmp)
   putEnv($TLCD, path / $toolchain)
 
   putEnv($PATH, getEnv($TLCD) / $usr / &"{bin}{PathSep}{getEnv($PATH)}")
@@ -411,8 +387,7 @@ proc setEnvNativeDirs*() =
   putEnv($LOGD, $radLog)
   putEnv($PKGD, $radCachePkg)
   putEnv($SRCD, $radCacheSrc)
-  putEnv($TBLD, $radTmp / $bld)
-  putEnv($TSRC, $radTmp / $src)
+  putEnv($TMPD, $radTmp)
 
 proc setEnvNativePkgConfig*() =
   putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)

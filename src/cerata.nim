@@ -15,10 +15,6 @@ type Ceras = object
 func `$`(self: Ceras): string =
   self.nom
 
-# Check if the `ceras` src is extracted
-proc checkExtractSrc(file: string): bool =
-  walkDir(parentDir(file)).toSeq().len() > 1
-
 proc cleanCerata*() =
   removeDir($radLog)
   removeDir($radTmp)
@@ -108,48 +104,13 @@ proc fetchCerata(cerata: openArray[string]) =
     of $Nil:
       printFooter(idx, $ceras, ceras.ver, $fetch)
     else:
-      let
-        path = getEnv($SRCD) / $ceras
-        archive = path / lastPathPart(ceras.url)
+      let path = getEnv($SRCD) / $ceras
 
-      if dirExists(path):
-        case ceras.ver
-        of $git:
+      case ceras.ver
+      of $git:
+        if dirExists(path):
           printFooter(idx, $ceras, ceras.cmt, $fetch)
         else:
-          if verifyFile(archive, ceras.sum):
-            if not checkExtractSrc(archive):
-              printContent(idx, $ceras, ceras.ver, $fetch)
-
-              discard extractTar(archive, path)
-
-              cursorUp 1
-              eraseLine()
-
-            printFooter(idx, $ceras, ceras.ver, $fetch)
-          else:
-            printContent(idx, $ceras, ceras.ver, $fetch)
-
-            removeDir(path)
-            createDir(path)
-
-            discard downloadFile(archive, ceras.url)
-
-            if verifyFile(archive, ceras.sum):
-              discard extractTar(archive, path)
-            else:
-              cursorUp 1
-              eraseLine()
-
-              abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
-
-            cursorUp 1
-            eraseLine()
-
-            printFooter(idx, $ceras, ceras.ver, $fetch)
-      else:
-        case ceras.ver
-        of $git:
           printContent(idx, $ceras, ceras.cmt, $clone)
 
           discard gitCloneRepo(ceras.url, path)
@@ -158,26 +119,27 @@ proc fetchCerata(cerata: openArray[string]) =
           cursorUp 1
           eraseLine()
 
-          printFooter(idx, $ceras, ceras.cmt, $clone)
-        else:
-          printContent(idx, $ceras, ceras.ver, $fetch)
+          printFooter(idx, $ceras, ceras.cmt, $fetch)
+      else:
+        let archive = path / lastPathPart(ceras.url)
 
+        printContent(idx, $ceras, ceras.ver, $fetch)
+
+        if not verifyFile(archive, ceras.sum):
+          removeDir(path)
           createDir(path)
 
           discard downloadFile(archive, ceras.url)
 
-          if verifyFile(archive, ceras.sum):
-            discard extractTar(archive, path)
-          else:
-            cursorUp 1
-            eraseLine()
-
-            abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
+        if verifyFile(archive, ceras.sum):
+          discard extractTar(archive, getEnv($TMPD))
 
           cursorUp 1
           eraseLine()
 
           printFooter(idx, $ceras, ceras.ver, $fetch)
+        else:
+          abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
 proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
   let cluster = checkCerata(cerata, false)
@@ -237,6 +199,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       putEnv($SACD, $radCacheLocal / $ceras / $sac)
       createDir(getEnv($SACD))
 
+    if dirExists(&"{getEnv($TMPD) / $ceras}-{ceras.ver}"):
+      setCurrentDir(&"{getEnv($TMPD) / $ceras}-{ceras.ver}")
+
     # We only use `nom` and `ver` from `ceras`
     #
     # All phases need to be called sequentially to prevent the loss of the
@@ -247,7 +212,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       prepare $1 &&
       configure >$1 &&
       build >$1 &&
-      check >$1 &&
       package >$1'
     """ %
         &"> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1"

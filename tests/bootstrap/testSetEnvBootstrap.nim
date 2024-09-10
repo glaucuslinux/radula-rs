@@ -16,9 +16,8 @@ echo "ISOD  :: ", getEnv($ISOD)
 echo "LOGD  :: ", getEnv($LOGD)
 echo "PKGD  :: ", getEnv($PKGD)
 echo "SRCD  :: ", getEnv($SRCD)
-echo "TBLD  :: ", getEnv($TBLD)
+echo "TMPD  :: ", getEnv($TMPD)
 echo "TLCD  :: ", getEnv($TLCD)
-echo "TSRC  :: ", getEnv($TSRC)
 
 echo ""
 
@@ -33,8 +32,7 @@ doAssert getEnv($ISOD).endsWith("iso")
 doAssert getEnv($LOGD).endsWith("log")
 doAssert getEnv($PKGD).endsWith("pkg")
 doAssert getEnv($SRCD).endsWith("src")
-doAssert getEnv($TBLD).endsWith("tmp/bld")
+doAssert getEnv($TMPD).endsWith("tmp")
 doAssert getEnv($TLCD).endsWith("toolchain")
-doAssert getEnv($TSRC).endsWith("tmp/src")
 
 doAssert getEnv($PATH).split(PathSep)[0].endsWith("toolchain/usr/bin")
