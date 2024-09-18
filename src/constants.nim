@@ -15,6 +15,7 @@ type
     attr
     autoconf
     automake
+    bash
     binutils
     booster
     byacc
@@ -29,6 +30,7 @@ type
     gmp
     hwdata
     isl
+    kmod
     less
     libarchive
     libcap

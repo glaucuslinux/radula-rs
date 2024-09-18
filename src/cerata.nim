@@ -168,18 +168,14 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       if fileExists(
         $radCacheLocal / $ceras /
           &"""{ceras}{(
-        case ceras.url
-        of $Nil:
-          ""
-        else:
-          '-' & ceras.ver
-      )}{(
-        case ceras.ver
-        of $git:
-          '-' & ceras.cmt
-        else:
-          ""
-      )}{tarZst}"""
+            case ceras.url
+            of $Nil: ""
+            else: '-' & ceras.ver
+          )}{(
+            case ceras.ver
+            of $git: '-' & ceras.cmt
+            else: ""
+          )}{tarZst}"""
       ):
         cursorUp 1
         eraseLine()
@@ -207,25 +203,26 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...
     var status = execCmd(
-      &"""
-      {sh} {shellCommand} 'nom={ceras} ver={ceras.ver} {CurDir} {$radLibClustersCerata / $ceras / $build}{CurDir}{stage} &&
+      &"""{sh} {shellCommand} 'nom={ceras} ver={ceras.ver} {CurDir} {$radLibClustersCerata / $ceras / (
+        case stage
+        of $native: $build
+        else: $build & CurDir & stage
+      )} &&
       prepare $1 &&
       configure >$1 &&
       build >$1 &&
       package >$1'
-    """ %
+      """ %
         &"> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1"
     )
 
     if status != 0:
       abort(
         &"""{status:<8}{ceras:24}{(
-        case ceras.ver
-        of $git:
-          ceras.cmt
-        else:
-          ceras.ver
-      ):24}"""
+          case ceras.ver
+          of $git: ceras.cmt
+          else: ceras.ver
+        ):24}"""
       )
 
     case stage
@@ -233,18 +230,14 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       status = createTarZst(
         $radCacheLocal / $ceras /
           &"""{ceras}{(
-        case ceras.url
-        of $Nil:
-          ""
-        else:
-          '-' & ceras.ver
-      )}{(
-        case ceras.ver
-        of $git:
-          '-' & ceras.cmt
-        else:
-          ""
-      )}{tarZst}""",
+            case ceras.url
+            of $Nil: ""
+            else: '-' & ceras.ver
+          )}{(
+            case ceras.ver
+            of $git: '-' & ceras.cmt
+            else: ""
+          )}{tarZst}""",
         getEnv($SACD),
       )
 
@@ -289,30 +282,24 @@ proc installCerata*(
     let status = extractTar(
       cache / $ceras /
         &"""{ceras}{(
-      case ceras.url
-      of $Nil:
-        ""
-      else:
-        '-' & ceras.ver
-    )}{(
-      case ceras.ver
-      of $git:
-        '-' & ceras.cmt
-      else:
-        ""
-    )}{tarZst}""",
+          case ceras.url
+          of $Nil: ""
+          else: '-' & ceras.ver
+        )}{(
+          case ceras.ver
+          of $git: '-' & ceras.cmt
+          else: ""
+        )}{tarZst}""",
       fs,
     )
 
     if status != 0:
       abort(
         &"""{status:<8}{ceras:24}{(
-        case ceras.ver
-        of $git:
-          ceras.cmt
-        else:
-          ceras.ver
-      ):24}"""
+          case ceras.ver
+          of $git: ceras.cmt
+          else: ceras.ver
+        ):24}"""
       )
 
     createDir(lib / $ceras)

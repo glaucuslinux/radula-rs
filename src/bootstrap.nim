@@ -59,20 +59,19 @@ proc buildCross*() =
       $gcc,
       $m4,
       $radCerata.make,
-      $mawk,
       $pkgconf,
       $samurai,
-      $slibtool,
 
       # Terminal
       $netbsdCurses,
       $libedit,
       $pcre2,
+      $bash,
 
       # Utilities
+      $kmod,
       $libudevZero,
       $utilLinux,
-      $e2fsprogs,
 
       # Services
       $s6LinuxInit,
@@ -139,7 +138,6 @@ proc buildNative*() =
       $gcc,
       $m4,
       $radCerata.make,
-      $mawk,
       $pkgconf,
       $samurai,
       $slibtool,
@@ -156,6 +154,7 @@ proc buildNative*() =
       $wget2,
 
       # Utilities
+      $kmod,
       $libudevZero,
       $utilLinux,
       $e2fsprogs,
