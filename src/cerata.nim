@@ -132,7 +132,8 @@ proc fetchCerata(cerata: openArray[string]) =
           discard downloadFile(archive, ceras.url)
 
         if verifyFile(archive, ceras.sum):
-          discard extractTar(archive, getEnv($TMPD))
+          createDir(getEnv($TMPD) / $ceras)
+          discard extractTar(archive, getEnv($TMPD) / $ceras)
 
           cursorUp 1
           eraseLine()
@@ -195,8 +196,8 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       putEnv($SACD, $radCacheLocal / $ceras / $sac)
       createDir(getEnv($SACD))
 
-    if dirExists(&"{getEnv($TMPD) / $ceras}-{ceras.ver}"):
-      setCurrentDir(&"{getEnv($TMPD) / $ceras}-{ceras.ver}")
+    if dirExists(&"{getEnv($TMPD) / $ceras / $ceras}-{ceras.ver}"):
+      setCurrentDir(&"{getEnv($TMPD) / $ceras / $ceras}-{ceras.ver}")
 
     # We only use `nom` and `ver` from `ceras`
     #

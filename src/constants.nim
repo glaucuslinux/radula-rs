@@ -157,7 +157,6 @@ type
     imgSize = "16384"
     initramfs
     kernel = "vmlinuz"
-    kernelCachyOs = "vmlinuz-linux-cachyos"
     limineBios = "limine-bios.sys"
     limineBiosCd = "limine-bios-cd.bin"
     limineConf = "limine.conf"

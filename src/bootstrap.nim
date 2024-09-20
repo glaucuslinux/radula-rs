@@ -263,7 +263,6 @@ proc releaseImg*() =
   copyFileWithPermissions(
     $radLibClustersCerata / $limine / $limineConfImg, path / $boot / $limineConf
   )
-  copyFileWithPermissions(DirSep & $boot / $kernelCachyOs, path / $boot / $kernel)
 
   createDir(path / $boot / $efiBoot)
   copyFileWithPermissions(
@@ -312,7 +311,6 @@ proc releaseIso*() =
   copyFileWithPermissions(
     DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine
   )
-  copyFileWithPermissions(DirSep & $boot / $kernelCachyOs, path / $kernel)
 
   installCerata([$skel], getEnv($PKGD), path / $tmp, path / $tmp / $radLibLocal)
 
