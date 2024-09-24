@@ -13,11 +13,8 @@ proc buildCross*() =
       # Filesystem
       $fs,
 
-      # Package Management
+      # Development
       $radCerata.cerata,
-      $rad,
-
-      # Compatibility
       $linuxHeaders,
       $muslUtils,
 
@@ -29,23 +26,21 @@ proc buildCross*() =
       $s6,
       $utmps,
 
-      # Permissions & Capabilities
+      # Security
       $attr,
       $acl,
       $libcap,
-      $shadow,
-
-      # Hashing
       $libressl,
-
-      # Userland
-      $toybox,
+      $shadow,
 
       # Development
       $expat,
+      $radCerata.make,
+      $pkgconf,
 
       # Compression
       $bzip2,
+      $pigz,
       $lz4,
       $xz,
       $zlibNg,
@@ -54,23 +49,17 @@ proc buildCross*() =
 
       # Development
       $binutils,
-      $byacc,
-      $flex,
       $gcc,
-      $m4,
-      $radCerata.make,
-      $pkgconf,
-      $samurai,
 
       # Terminal
       $netbsdCurses,
       $libedit,
-      $pcre2,
       $bash,
 
       # Utilities
       $kmod,
       $libudevZero,
+      $toybox,
       $utilLinux,
 
       # Services
@@ -92,43 +81,34 @@ proc buildNative*() =
       $fs,
 
       # Development
+      $radCerata.cerata,
+      $linuxHeaders,
       $musl,
-      $muon,
       $gmp,
       $mpfr,
       $mpc,
       $isl,
+      $mawk,
       $perl,
       $autoconf,
       $automake,
 
-      # Package Management
-      $radCerata.cerata,
-      $rad,
-
-      # Compatibility
-      $linuxHeaders,
-
-      # Permissions & Capabilities
-      $attr,
+      # Security
       $acl,
+      $attr,
       $libcap,
+      $libressl,
       $opendoas,
       $shadow,
 
-      # Hashing
-      $libressl,
-
-      # Userland
-      $toybox,
-
       # Compression
       $bzip2,
+      $pigz,
+      $libarchive,
       $lz4,
       $xz,
       $zlibNg,
       $zstd,
-      $libarchive,
 
       # Development
       $binutils,
@@ -142,13 +122,12 @@ proc buildNative*() =
       $samurai,
       $slibtool,
 
-      # Editors, Pagers and Shells
-      $netbsdCurses,
+      # Terminal
+      $bash,
       $libedit,
-      $pcre2,
+      $neatvi,
+      $netbsdCurses,
       $yash,
-      $less,
-      $vim,
 
       # Networking
       $wget2,
@@ -156,6 +135,7 @@ proc buildNative*() =
       # Utilities
       $kmod,
       $libudevZero,
+      $toybox,
       $utilLinux,
       $e2fsprogs,
 
