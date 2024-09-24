@@ -70,6 +70,7 @@ proc setEnvTools*() =
   putEnv($BISON, $byacc)
   putEnv($FLEX, $flex)
   putEnv($LEX, $flex)
+  putEnv($LIBTOOL, $slibtool)
   putEnv($MAKE, $radCerata.make)
   putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($PKG_CONFIG, $pkgconf)

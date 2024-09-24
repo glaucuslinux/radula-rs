@@ -27,6 +27,7 @@ type
     flex
     fs
     gcc
+    gettextTiny = "gettext-tiny"
     gmp
     hwdata
     isl
@@ -54,11 +55,13 @@ type
     musl
     muslHeaders = "musl-headers"
     muslUtils = "musl-utils"
+    neatvi
     netbsdCurses = "netbsd-curses"
     nsss
     opendoas
     pcre2
     perl
+    pigz
     pkgconf
     rad
     s6
@@ -73,7 +76,6 @@ type
     toybox
     utilLinux = "util-linux"
     utmps
-    vim
     wget2
     xz
     yash
@@ -82,6 +84,7 @@ type
 
   radDirs* = enum
     bak
+    img
     iso
     log
     pkg
@@ -104,6 +107,7 @@ type
     CERD
     CRSD
     GLAD
+    IMGD
     ISOD
     LOGD
     PKGD
