@@ -1,7 +1,7 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[os, osproc, strformat, strutils, times], cerata, constants, tools
+import std/[os, strformat, strutils], cerata, constants
 
 proc backupToolchain*() =
   removeDir(getEnv($BAKD) / $cross)
@@ -195,123 +195,6 @@ proc prepareNative*() =
   removeDir(getEnv($TMPD))
   createDir(getEnv($TMPD))
 
-proc releaseImg*() =
-  if not isAdmin():
-    abort(&"""{"1":8}{"permission denied":48}""")
-
-  let
-    img =
-      getEnv($GLAD) /
-      &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}img"""
-
-    device = execCmdEx(&"{losetup} -f")[0].strip()
-
-    partitionOne = device & "p1"
-    partitionTwo = device & "p2"
-
-    path = DirSep & $mnt / $glaucus
-
-  discard execCmd(&"{dd} bs=1M count={imgSize} if=/dev/zero of={img} {shellRedirect}")
-
-  discard execCmd(&"{parted} {Parted} {img} mklabel gpt {shellRedirect}")
-  discard execCmd(&"{parted} {Parted} {img} mkpart ESP fat32 1 65 {shellRedirect}")
-  discard execCmd(&"{parted} {Parted} {img} set 1 esp on {shellRedirect}")
-  discard execCmd(&"{parted} {Parted} {img} mkpart ext4 65 {imgSize} {shellRedirect}")
-
-  discard execCmd(&"{modprobe} loop {shellRedirect}")
-
-  discard execCmd(&"{losetup} -D {shellRedirect}")
-
-  discard execCmd(&"{losetup} {device} {img} {shellRedirect}")
-
-  discard execCmd(&"{partx} -a {device} {shellRedirect}")
-
-  discard execCmd(&"{mkfsFat} -F 32 {partitionOne} {shellRedirect}")
-  discard execCmd(&"{mke2fs} {Mke2fs} ext4 {partitionTwo}")
-
-  createDir(path)
-
-  discard execCmd(&"{mount} {partitionTwo} {path} {shellRedirect}")
-
-  copyDirWithPermissions(getEnv($CRSD), path)
-  copyDirWithPermissions(getEnv($SRCD), path / $radCacheSrc)
-
-  discard execCmd(&"{mount} {partitionOne} {path / $boot} {shellRedirect}")
-
-  discard genInitramfs(path / $boot, true)
-
-  copyFileWithPermissions(
-    $radLibClustersCerata / $limine / $limineConfImg, path / $boot / $limineConf
-  )
-
-  createDir(path / $boot / $efiBoot)
-  copyFileWithPermissions(
-    DirSep & $usr / $share / $limine / $limineEfi, path / $boot / $efiBoot
-  )
-
-  discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
-  discard
-    execCmd(&"{chown} {Chown} 20:20 {path / $Var / $log / $wtmpd} {shellRedirect}")
-
-  discard execCmd(&"{umount} {Umount} {path / $boot} {shellRedirect}")
-  discard execCmd(&"{umount} {Umount} {path} {shellRedirect}")
-
-  discard execCmd(&"{partx} -d {partitionOne} {shellRedirect}")
-  discard execCmd(&"{partx} -d {partitionTwo} {shellRedirect}")
-
-  discard execCmd(&"{losetup} -d {device} {shellRedirect}")
-
-proc releaseIso*() =
-  let
-    iso =
-      getEnv($GLAD) /
-      &"""{glaucus}-{s6}-{x86_64_v3}-{now().format("YYYYMMdd")}{CurDir}{iso}"""
-
-    path = getEnv($ISOD)
-
-  removeDir(path)
-
-  createDir(path / $efiBoot)
-  createDir(path / $limine)
-  createDir(path / $tmp)
-
-  copyFileWithPermissions(getEnv($GLAD) / $initramfs, path)
-  copyFileWithPermissions(
-    $radLibClustersCerata / $limine / $limineConfIso, path / $limine / $limineConf
-  )
-  copyFileWithPermissions(
-    DirSep & $usr / $share / $limine / $limineEfi, path / $efiBoot
-  )
-  copyFileWithPermissions(
-    DirSep & $usr / $share / $limine / $limineBios, path / $limine
-  )
-  copyFileWithPermissions(
-    DirSep & $usr / $share / $limine / $limineBiosCd, path / $limine
-  )
-  copyFileWithPermissions(
-    DirSep & $usr / $share / $limine / $limineUefiCd, path / $limine
-  )
-
-  installCerata([$skel], getEnv($PKGD), path / $tmp, path / $tmp / $radLibLocal)
-
-  removeDir(path / $tmp / $boot)
-
-  discard execCmd(&"{chown} {Chown} 0:0 {path} {shellRedirect}")
-  discard execCmd(
-    &"{chown} {Chown} 20:20 {path / $tmp / $Var / $log / $wtmpd} {shellRedirect}"
-  )
-  discard execCmd(&"{mkfsErofs} {path / $fs} {path / $tmp} {shellRedirect}")
-
-  removeDir(path / $tmp)
-
-  discard execCmd(
-    &"{xorriso} -as mkisofs -o {iso} -iso-level 3 -l -r -J -joliet-long -hfsplus -apm-block-size 2048 -V {toUpperAscii($glaucus)} -P {glaucus} -A {glaucus} -p {glaucus} -b {$limine / $limineBiosCd} -boot-load-size 4 -no-emul-boot -boot-info-table --efi-boot {$limine / $limineUefiCd} --protective-msdos-label -efi-boot-part --efi-boot-image -vv {path} {shellRedirect}"
-  )
-
-  removeDir(path)
-
-  discard execCmd(&"{limine} bios-install {iso} {shellRedirect}")
-
 proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())
 
@@ -320,7 +203,6 @@ proc setEnvBootstrap*() =
   putEnv($BAKD, path / $bak)
   putEnv($CERD, path / $radCerata.cerata)
   putEnv($CRSD, path / $cross)
-  putEnv($ISOD, path / $iso)
   putEnv($LOGD, path / $log)
   putEnv($PKGD, path / $pkg)
   putEnv($SRCD, path / $src)

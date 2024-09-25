@@ -48,11 +48,6 @@ proc options*() =
           echo "distclean complete"
         of "h", "help":
           echo radHelp.bootstrap
-        of "i", "img":
-          setEnvBootstrap()
-          releaseImg()
-
-          echo "img complete"
         of "n", "native":
           setEnvArch()
           setEnvFlags()
@@ -66,11 +61,6 @@ proc options*() =
 
           echo ""
           echo "native complete"
-        of "r", "release":
-          setEnvBootstrap()
-          releaseIso()
-
-          echo "release complete"
         of "t", "toolchain":
           setEnvArch(toolchain)
           setEnvBootstrap()

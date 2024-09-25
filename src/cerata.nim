@@ -93,7 +93,7 @@ proc checkCerata*(cerata: openArray[string], run = true): seq[string] =
 
   topoSort(deps)
 
-proc fetchCerata(cerata: openArray[string]) =
+proc prepareCerata(cerata: openArray[string]) =
   printHeader()
 
   for idx, nom in cerata:
@@ -103,49 +103,53 @@ proc fetchCerata(cerata: openArray[string]) =
     case ceras.url
     of $Nil:
       printFooter(idx, $ceras, ceras.ver, $fetch)
+
+      continue
+
+    let
+      src = getEnv($SRCD) / $ceras
+      tmp = getEnv($TMPD) / $ceras
+
+    case ceras.ver
+    of $git:
+      printContent(idx, $ceras, ceras.cmt, $fetch)
+
+      if not dirExists(src):
+        discard gitCloneRepo(ceras.url, src)
+        discard gitCheckoutRepo(src, ceras.cmt)
+
+      copyDirWithPermissions(src, tmp)
+
+      cursorUp 1
+      eraseLine()
+
+      printFooter(idx, $ceras, ceras.cmt, $fetch)
     else:
-      let path = getEnv($SRCD) / $ceras
+      let archive = src / lastPathPart(ceras.url)
 
-      case ceras.ver
-      of $git:
-        if dirExists(path):
-          printFooter(idx, $ceras, ceras.cmt, $fetch)
-        else:
-          printContent(idx, $ceras, ceras.cmt, $clone)
+      printContent(idx, $ceras, ceras.ver, $fetch)
 
-          discard gitCloneRepo(ceras.url, path)
-          discard gitCheckoutRepo(path, ceras.cmt)
+      if not verifyFile(archive, ceras.sum):
+        removeDir(src)
+        createDir(src)
 
-          cursorUp 1
-          eraseLine()
+        discard downloadFile(archive, ceras.url)
 
-          printFooter(idx, $ceras, ceras.cmt, $fetch)
+      if verifyFile(archive, ceras.sum):
+        createDir(tmp)
+        discard extractTar(archive, tmp)
+
+        cursorUp 1
+        eraseLine()
+
+        printFooter(idx, $ceras, ceras.ver, $fetch)
       else:
-        let archive = path / lastPathPart(ceras.url)
-
-        printContent(idx, $ceras, ceras.ver, $fetch)
-
-        if not verifyFile(archive, ceras.sum):
-          removeDir(path)
-          createDir(path)
-
-          discard downloadFile(archive, ceras.url)
-
-        if verifyFile(archive, ceras.sum):
-          createDir(getEnv($TMPD) / $ceras)
-          discard extractTar(archive, getEnv($TMPD) / $ceras)
-
-          cursorUp 1
-          eraseLine()
-
-          printFooter(idx, $ceras, ceras.ver, $fetch)
-        else:
-          abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
+        abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
 proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
   let cluster = checkCerata(cerata, false)
 
-  fetchCerata(cluster)
+  prepareCerata(cluster)
 
   echo ""
 
@@ -196,8 +200,20 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       putEnv($SACD, $radCacheLocal / $ceras / $sac)
       createDir(getEnv($SACD))
 
-    if dirExists(&"{getEnv($TMPD) / $ceras / $ceras}-{ceras.ver}"):
-      setCurrentDir(&"{getEnv($TMPD) / $ceras / $ceras}-{ceras.ver}")
+    if dirExists(
+      &"""{getEnv($TMPD) / $ceras / $ceras}-{(
+      case ceras.ver
+      of $git: ceras.cmt
+      else: ceras.ver
+    )}"""
+    ):
+      setCurrentDir(
+        &"""{getEnv($TMPD) / $ceras / $ceras}-{(
+        case ceras.ver
+        of $git: ceras.cmt
+        else: ceras.ver
+      )}"""
+      )
 
     # We only use `nom` and `ver` from `ceras`
     #
@@ -212,9 +228,14 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       prepare $1 &&
       configure >$1 &&
       build >$1 &&
-      package >$1'
-      """ %
-        &"> {getEnv($LOGD) / $ceras}{CurDir}{log} 2>&1"
+      package >$1'""" %
+        &"""> {getEnv($LOGD) / (
+        case stage
+        of $native: $ceras
+        else:
+          createDir(getEnv($LOGD) / $stage)
+          $stage / $ceras
+      )}{CurDir}{log} 2>&1"""
     )
 
     if status != 0:

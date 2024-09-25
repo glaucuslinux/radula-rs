@@ -17,7 +17,6 @@ type
     automake
     bash
     binutils
-    booster
     byacc
     bzip2
     cerata
@@ -84,8 +83,6 @@ type
 
   radDirs* = enum
     bak
-    img
-    iso
     log
     pkg
     sac
@@ -107,8 +104,6 @@ type
     CERD
     CRSD
     GLAD
-    IMGD
-    ISOD
     LOGD
     PKGD
     SACD
@@ -155,19 +150,8 @@ type
     YACC
 
   radFiles* = enum
-    boosterYaml = "booster.yaml"
     ceras
     configGuess = "config.guess"
-    imgSize = "16384"
-    initramfs
-    kernel = "vmlinuz"
-    limineBios = "limine-bios.sys"
-    limineBiosCd = "limine-bios-cd.bin"
-    limineConf = "limine.conf"
-    limineConfImg = "limine.conf.img"
-    limineConfIso = "limine.conf.iso"
-    limineEfi = "BOOTX64.EFI"
-    limineUefiCd = "limine-uefi-cd.bin"
     radLck = "rad.lck"
     sum
     tarZst = ".tar.zst"
@@ -182,13 +166,10 @@ type
     ldflags =
       "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
     make = "-j4 -O"
-    Mke2fs = "-qt"
-    Parted = "-s"
     shellCommand = "-c"
     shellRedirect = "> /dev/null 2>&1"
     tarCreate = "-cpvf"
     tarExtract = "-xmPvf"
-    Umount = "-fqRv"
     zstdCompress = "-22 --ultra -T0 --long"
     zstdDecompress = "-d -T0 --long"
 
@@ -212,9 +193,7 @@ COMMANDS:
   c, clean         Clean cache
   d, distclean     Clean everything
   h, help          Display this help message
-  i, img           Release a glaucus IMG
   n, native        Bootstrap native glaucus
-  r, release       Release a glaucus ISO
   t, toolchain     Bootstrap toolchain
   x, cross         Bootstrap cross glaucus"""
     Cerata =
@@ -260,7 +239,6 @@ Distributed under the terms of the ISC License"""
     usr
     Var = "var"
     wtmpd
-    efiBoot = "EFI/BOOT"
 
     # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
     # automatically prefixed to PATH and LIBDIR)
@@ -297,22 +275,13 @@ Distributed under the terms of the ISC License"""
     cxx = "g++"
     dd
     git
-    losetup
-    mke2fs
-    mkfsErofs = "mkfs.erofs"
-    mkfsFat = "mkfs.fat"
-    modprobe
-    mount
     nm = "gcc-nm"
     objcopy
     objdump
     parted
-    partx
     ranlib = "gcc-ranlib"
     readelf
     sh
     size
     strip
     tar = "bsdtar"
-    umount
-    xorriso
