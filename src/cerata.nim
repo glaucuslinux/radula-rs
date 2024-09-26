@@ -173,14 +173,14 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       if fileExists(
         $radCacheLocal / $ceras /
           &"""{ceras}{(
-            case ceras.url
-            of $Nil: ""
-            else: '-' & ceras.ver
-          )}{(
-            case ceras.ver
-            of $git: '-' & ceras.cmt
-            else: ""
-          )}{tarZst}"""
+          case ceras.url
+          of $Nil: ""
+          else: '-' & ceras.ver
+        )}{(
+          case ceras.ver
+          of $git: '-' & ceras.cmt
+          else: ""
+        )}{tarZst}"""
       ):
         cursorUp 1
         eraseLine()
@@ -200,20 +200,11 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       putEnv($SACD, $radCacheLocal / $ceras / $sac)
       createDir(getEnv($SACD))
 
-    if dirExists(
-      &"""{getEnv($TMPD) / $ceras / $ceras}-{(
-      case ceras.ver
-      of $git: ceras.cmt
-      else: ceras.ver
-    )}"""
-    ):
-      setCurrentDir(
-        &"""{getEnv($TMPD) / $ceras / $ceras}-{(
-        case ceras.ver
-        of $git: ceras.cmt
-        else: ceras.ver
-      )}"""
-      )
+    if dirExists(getEnv($TMPD) / $ceras):
+      setCurrentDir(getEnv($TMPD) / $ceras)
+
+    if dirExists(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}"):
+      setCurrentDir(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}")
 
     # We only use `nom` and `ver` from `ceras`
     #
