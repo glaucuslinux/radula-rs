@@ -28,10 +28,8 @@ type
     gcc
     gettextTiny = "gettext-tiny"
     gmp
-    hwdata
     isl
     kmod
-    less
     libarchive
     libcap
     libedit
@@ -39,7 +37,6 @@ type
     libressl
     libstdcxxV3 = "libstdc++-v3"
     libudevZero = "libudev-zero"
-    limine
     linux
     linuxCachyOS = "linux-cachyos"
     linuxHeaders = "linux-headers"
@@ -50,7 +47,6 @@ type
     mdevd
     mpc
     mpfr
-    muon
     musl
     muslHeaders = "musl-headers"
     muslUtils = "musl-utils"
@@ -58,7 +54,6 @@ type
     netbsdCurses = "netbsd-curses"
     nsss
     opendoas
-    pcre2
     perl
     pigz
     pkgconf
