@@ -23,13 +23,14 @@ type
     e2fsprogs
     execline
     expat
-    flex
     fs
     gcc
     gettextTiny = "gettext-tiny"
     gmp
+    gperf
     isl
     kmod
+    less
     libarchive
     libcap
     libedit
@@ -58,6 +59,7 @@ type
     pigz
     pkgconf
     rad
+    reflex
     s6
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"

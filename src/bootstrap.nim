@@ -48,8 +48,14 @@ proc buildCross*() =
       $libarchive,
 
       # Development
+      $autoconf,
+      $automake,
       $binutils,
       $gcc,
+      $m4,
+      $mawk,
+      $reflex,
+      $slibtool,
 
       # Terminal
       $netbsdCurses,
@@ -84,14 +90,14 @@ proc buildNative*() =
       $radCerata.cerata,
       $linuxHeaders,
       $musl,
+      $perl,
+      $byacc,
+      $gettextTiny,
+      $gperf,
       $gmp,
       $mpfr,
       $mpc,
       $isl,
-      $mawk,
-      $perl,
-      $autoconf,
-      $automake,
 
       # Security
       $acl,
@@ -111,19 +117,22 @@ proc buildNative*() =
       $zstd,
 
       # Development
+      $autoconf,
+      $automake,
       $binutils,
-      $byacc,
       $expat,
-      $flex,
-      $gcc,
+      # $gcc,
       $m4,
       $radCerata.make,
+      $mawk,
       $pkgconf,
+      $reflex,
       $samurai,
       $slibtool,
 
       # Terminal
       $bash,
+      $less,
       $libedit,
       $neatvi,
       $netbsdCurses,
