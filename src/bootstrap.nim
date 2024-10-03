@@ -49,7 +49,6 @@ proc buildCross*() =
 
       # Development
       $autoconf,
-      $automake,
       $binutils,
       $gcc,
       $gettextTiny,
@@ -92,6 +91,7 @@ proc buildNative*() =
       $linuxHeaders,
       $musl,
       $perl,
+      $automake,
       $byacc,
       $gperf,
       $gmp,
@@ -118,7 +118,6 @@ proc buildNative*() =
 
       # Development
       $autoconf,
-      $automake,
       $binutils,
       $expat,
       # $gcc,
