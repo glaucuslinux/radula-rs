@@ -39,11 +39,11 @@ proc buildCross*() =
       $pkgconf,
 
       # Compression
+      $zlibNg,
       $bzip2,
       $pigz,
       $lz4,
       $xz,
-      $zlibNg,
       $zstd,
       $libarchive,
 
@@ -120,7 +120,7 @@ proc buildNative*() =
       $autoconf,
       $binutils,
       $expat,
-      # $gcc,
+      $gcc,
       $gettextTiny,
       $m4,
       $radCerata.make,
