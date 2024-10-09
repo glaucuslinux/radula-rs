@@ -4,7 +4,7 @@
 import
   std/[algorithm, os, osproc, strformat, strutils, terminal, times],
   constants,
-  hashlib/misc/blake3
+  hashlib/misc/xxhash
 
 func compressZst*(file: string): int =
   execCmd(&"{zstd} {zstdCompress} {file} {shellRedirect}")
@@ -41,7 +41,7 @@ proc genSum*(dir, sum: string) =
   let sum = open(sum, fmWrite)
 
   for file in files:
-    sum.writeLine(&"{count[BLAKE3](readFile(dir / file))}  {file}")
+    sum.writeLine(&"{count[XXHASH3_128](readFile(dir / file))}  {file}")
 
   sum.close()
 
@@ -72,11 +72,11 @@ proc setEnvTools*() =
   putEnv($YACC, $byacc)
 
 proc verifyFile*(file, sum: string): bool =
-  fileExists(file) and $count[BLAKE3](readFile(file)) == sum
+  fileExists(file) and $count[XXHASH3_128](readFile(file)) == sum
 
 proc verifySum*(sum: string) =
   for line in lines(sum):
     let line = line.split()
 
-    if $count[BLAKE3](readFile(line[1])) != line[0]:
+    if $count[XXHASH3_128](readFile(line[1])) != line[0]:
       echo line[1], ": FAILED"
