@@ -5,6 +5,7 @@ import
   std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
   constants,
   tools,
+  hashlib/misc/blake3,
   toml_serialization,
   toposort
 
