@@ -54,7 +54,6 @@ type
     neatvi
     netbsdCurses = "netbsd-curses"
     nsss
-    opendoas
     perl
     pigz
     pkgconf
@@ -155,7 +154,6 @@ type
   radFlags* = enum
     cflags =
       "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-    Chown = "-Rv"
     cpp = "-E"
     gitCheckout = "checkout"
     gitClone = "clone"
@@ -253,7 +251,6 @@ Distributed under the terms of the ISC License"""
 
   radPrint* = enum
     build
-    clone
     fetch
     install
     Nil = "nil"
@@ -267,7 +264,6 @@ Distributed under the terms of the ISC License"""
   radTools* = enum
     ar = "gcc-ar"
     As = "as"
-    chown
     cxx = "g++"
     dd
     git

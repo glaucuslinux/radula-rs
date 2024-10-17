@@ -104,7 +104,6 @@ proc buildNative*() =
       $attr,
       $libcap,
       $libressl,
-      $opendoas,
       $shadow,
 
       # Compression
