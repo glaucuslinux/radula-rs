@@ -138,6 +138,7 @@ proc buildNative*() =
       $yash,
 
       # Networking
+      $sdhcp,
       $wget2,
 
       # Utilities
@@ -145,7 +146,6 @@ proc buildNative*() =
       $libudevZero,
       $toybox,
       $utilLinux,
-      $e2fsprogs,
 
       # Init & Services
       $skalibs,

@@ -101,9 +101,6 @@ proc options*() =
         exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
-        of "a", "append":
-          echo ""
-          echo "append complete"
         of "b", "build":
           setEnvArch()
           setEnvFlags()
@@ -134,9 +131,6 @@ proc options*() =
           echo "install complete"
         of "l", "list":
           listCerata()
-        of "n", "new":
-          echo ""
-          echo "new complete"
         of "p", "print":
           printCerata(remainingArgs(p))
         of "r", "remove":

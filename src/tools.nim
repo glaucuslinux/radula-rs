@@ -57,8 +57,8 @@ proc interrupt*() {.noconv.} =
 proc lock*() =
   if fileExists(DirSep & $tmp / $radLck):
     abort(&"""{"1":8}{"lck exists":48}""")
-  else:
-    writeFile(DirSep & $tmp / $radLck, "")
+
+  writeFile(DirSep & $tmp / $radLck, "")
 
 proc setEnvTools*() =
   putEnv($AWK, $mawk)

@@ -20,7 +20,6 @@ type
     byacc
     bzip2
     cerata
-    e2fsprogs
     execline
     expat
     fs
@@ -64,6 +63,7 @@ type
     s6LinuxInit = "s6-linux-init"
     s6Rc = "s6-rc"
     samurai
+    sdhcp
     shadow
     skalibs
     slibtool
@@ -196,14 +196,12 @@ USAGE:
   rad [ -c | --cerata ] [ COMMAND ] [ cerata ]
 
 COMMANDS:
-  a, append        Append a cluster
   b, build         Build cerata
   c, clean         Clean cache
   d, distclean     Clean everything
   h, help          Display this help message
   i, install       Install cerata
   l, list          List installed cerata
-  n, new           Create a new ceras
   p, print         Print cerata information
   r, remove        Remove cerata
   s, search        Search for cerata
@@ -241,19 +239,18 @@ Distributed under the terms of the ISC License"""
     pkgConfigSystemLibraryPath = "/usr/lib"
 
     # RAD
-    radCacheLocal = "/var/cache/rad/local"
     radCachePkg = "/var/cache/rad/pkg"
     radCacheSrc = "/var/cache/rad/src"
     radLibClustersCerata = "/var/lib/rad/clusters/cerata"
-    radLibLocal = "/var/lib/rad/local"
+    radLibPkg = "/var/lib/rad/pkg"
     radLog = "/var/log/rad"
     radTmp = "/var/tmp/rad"
 
   radPrint* = enum
     build
-    fetch
     install
     Nil = "nil"
+    prepare
     remove
 
   radStages* = enum

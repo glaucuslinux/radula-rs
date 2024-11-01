@@ -20,7 +20,6 @@ proc cleanCerata*() =
   removeDir($radTmp)
 
 proc distcleanCerata*() =
-  removeDir($radCacheLocal)
   removeDir($radCachePkg)
   removeDir($radCacheSrc)
 
@@ -102,7 +101,7 @@ proc prepareCerata(cerata: openArray[string]) =
     # Check for virtual cerata
     case ceras.url
     of $Nil:
-      printFooter(idx, $ceras, ceras.ver, $fetch)
+      printFooter(idx, $ceras, ceras.ver, $prepare)
 
       continue
 
@@ -112,7 +111,7 @@ proc prepareCerata(cerata: openArray[string]) =
 
     case ceras.ver
     of $git:
-      printContent(idx, $ceras, ceras.cmt, $fetch)
+      printContent(idx, $ceras, ceras.cmt, $prepare)
 
       if not dirExists(src):
         discard gitCloneRepo(ceras.url, src)
@@ -123,11 +122,11 @@ proc prepareCerata(cerata: openArray[string]) =
       cursorUp 1
       eraseLine()
 
-      printFooter(idx, $ceras, ceras.cmt, $fetch)
+      printFooter(idx, $ceras, ceras.cmt, $prepare)
     else:
       let archive = src / lastPathPart(ceras.url)
 
-      printContent(idx, $ceras, ceras.ver, $fetch)
+      printContent(idx, $ceras, ceras.ver, $prepare)
 
       if not verifyFile(archive, ceras.sum):
         removeDir(src)
@@ -142,7 +141,7 @@ proc prepareCerata(cerata: openArray[string]) =
         cursorUp 1
         eraseLine()
 
-        printFooter(idx, $ceras, ceras.ver, $fetch)
+        printFooter(idx, $ceras, ceras.ver, $prepare)
       else:
         abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
@@ -171,7 +170,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     case stage
     of $native:
       if fileExists(
-        $radCacheLocal / $ceras /
+        $radCachePkg / $ceras /
           &"""{ceras}{(
           case ceras.url
           of $Nil: ""
@@ -197,11 +196,10 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         continue
 
-      putEnv($SACD, $radCacheLocal / $ceras / $sac)
-      createDir(getEnv($SACD))
+    putEnv($SACD, $radCachePkg / $ceras / $sac)
+    createDir(getEnv($SACD))
 
-    if dirExists(getEnv($TMPD) / $ceras):
-      setCurrentDir(getEnv($TMPD) / $ceras)
+    setCurrentDir(getEnv($TMPD) / $ceras)
 
     if dirExists(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}"):
       setCurrentDir(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}")
@@ -241,7 +239,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     case stage
     of $native:
       status = createTarZst(
-        $radCacheLocal / $ceras /
+        $radCachePkg / $ceras /
           &"""{ceras}{(
             case ceras.url
             of $Nil: ""
@@ -255,7 +253,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       )
 
       if status == 0:
-        genSum(getEnv($SACD), $radCacheLocal / $ceras / $sum)
+        genSum(getEnv($SACD), $radCachePkg / $ceras / $sum)
 
         removeDir(getEnv($SACD))
 
@@ -273,7 +271,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     )
 
 proc installCerata*(
-    cerata: openArray[string], cache = $radCacheLocal, fs = $DirSep, lib = $radLibLocal
+    cerata: openArray[string], cache = $radCachePkg, fs = $DirSep, lib = $radLibPkg
 ) =
   let cluster = checkCerata(cerata)
 
@@ -319,7 +317,7 @@ proc installCerata*(
 
     writeFile(lib / $ceras / "ver", ceras.ver)
 
-    copyFileWithPermissions(cache / $ceras / $sum, lib / $ceras)
+    copyFileWithPermissions(cache / $ceras / $sum, lib / $ceras / $sum)
 
     cursorUp 1
     eraseLine()
@@ -335,7 +333,7 @@ proc installCerata*(
     )
 
 proc listCerata*() =
-  printCerata(walkDir($radLibLocal, true, skipSpecial = true).toSeq().unzip()[1])
+  printCerata(walkDir($radLibPkg, true, skipSpecial = true).toSeq().unzip()[1])
 
 proc removeCerata*(cerata: openArray[string]) =
   let cluster = checkCerata(cerata)
@@ -355,10 +353,10 @@ proc removeCerata*(cerata: openArray[string]) =
       $remove,
     )
 
-    for line in lines($radLibLocal / $ceras / $sum):
+    for line in lines($radLibPkg / $ceras / $sum):
       removeFile(DirSep & line.split()[2])
 
-    removeDir($radLibLocal / $ceras)
+    removeDir($radLibPkg / $ceras)
 
     cursorUp 1
     eraseLine()
