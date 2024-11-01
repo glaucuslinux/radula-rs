@@ -1,7 +1,7 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[os, parseopt], arch, bootstrap, cerata, constants, flags, tools
+import std/[os, parseopt], arch, bootstrap, cerata, constants, tools
 
 proc options*() =
   if paramCount() < 1:

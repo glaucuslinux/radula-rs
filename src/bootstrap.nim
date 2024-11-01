@@ -138,6 +138,8 @@ proc buildNative*() =
       $yash,
 
       # Networking
+      $iproute2,
+      $iputils,
       $sdhcp,
       $wget2,
 

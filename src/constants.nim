@@ -1,8 +1,6 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import strformat
-
 type
   radArch* = enum
     glaucus
@@ -22,6 +20,7 @@ type
     byacc
     bzip2
     cerata
+    eiwd
     execline
     expat
     fs
@@ -29,6 +28,8 @@ type
     gettextTiny = "gettext-tiny"
     gmp
     gperf
+    iproute2
+    iputils
     isl
     kmod
     less
@@ -153,14 +154,14 @@ type
     tarZst = ".tar.zst"
 
   radFlags* = enum
-    ltoflags = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin"
     cflags =
-      &"-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize {ltoflags} -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+      "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
     cpp = "-E"
     gitCheckout = "checkout"
     gitClone = "clone"
     ldflags =
       "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu,--compress-debug-sections=zstd"
+    ltoflags = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin "
     make = "-j4 -O"
     shellCommand = "-c"
     shellRedirect = "> /dev/null 2>&1"
