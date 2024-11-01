@@ -4,7 +4,7 @@
 import std/[os, osproc, strformat, strutils, times], constants
 
 proc getTuple*(): (string, int) =
-  execCmdEx($radLibClustersCerata / $slibtool / $configGuess)
+  execCmdEx($radClustersCerataLib / $slibtool / $configGuess)
 
 proc setEnvArch*(stage = native) =
   putEnv($ARCH, $x86_64)
@@ -20,8 +20,3 @@ proc setEnvArch*(stage = native) =
         else: tupleCross
       ),
   )
-
-proc setEnvFlags*() =
-  putEnv($CFLAGS, $cflags)
-  putEnv($CXXFLAGS, $cflags)
-  putEnv($LDFLAGS, &"{ldflags} {cflags}")

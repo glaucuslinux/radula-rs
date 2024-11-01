@@ -18,7 +18,7 @@ proc downloadFile*(file, url: string): int =
   execCmd(&"{wget2} -q -O {file} -c -N {url}")
 
 proc exit*(status = 0) =
-  removeFile(DirSep & $tmp / $radLck)
+  removeFile($radLock)
 
   quit(status)
 
@@ -55,10 +55,10 @@ proc interrupt*() {.noconv.} =
   abort(&"""{"1":8}{"interrupt received":48}""")
 
 proc lock*() =
-  if fileExists(DirSep & $tmp / $radLck):
-    abort(&"""{"1":8}{"lck exists":48}""")
+  if fileExists($radLock):
+    abort(&"""{"1":8}{"lock exists":48}""")
 
-  writeFile(DirSep & $tmp / $radLck, "")
+  writeFile($radLock, "")
 
 proc setEnvTools*() =
   putEnv($AWK, $mawk)

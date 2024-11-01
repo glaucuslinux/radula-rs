@@ -1,6 +1,8 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
+import strformat
+
 type
   radArch* = enum
     glaucus
@@ -147,13 +149,13 @@ type
   radFiles* = enum
     ceras
     configGuess = "config.guess"
-    radLck = "rad.lck"
     sum
     tarZst = ".tar.zst"
 
   radFlags* = enum
+    ltoflags = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin"
     cflags =
-      "-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+      &"-pipe -g0 -O2 -fdevirtualize-at-ltrans -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize {ltoflags} -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
     cpp = "-E"
     gitCheckout = "checkout"
     gitClone = "clone"
@@ -214,6 +216,9 @@ rad version 0.1.0
 Copyright (c) 2018-2024, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
+  radNop* = enum
+    lto
+
   radPaths* = enum
     # FILESYSTEM
     bin
@@ -237,12 +242,12 @@ Distributed under the terms of the ISC License"""
     pkgConfigLibdir = "/usr/lib/pkgconfig"
     pkgConfigSystemIncludePath = "/usr/include"
     pkgConfigSystemLibraryPath = "/usr/lib"
-
-    # RAD
-    radCachePkg = "/var/cache/rad/pkg"
-    radCacheSrc = "/var/cache/rad/src"
-    radLibClustersCerata = "/var/lib/rad/clusters/cerata"
-    radLibPkg = "/var/lib/rad/pkg"
+    radConf = "/etc/rad.conf"
+    radLock = "/tmp/rad.lock"
+    radPkgCache = "/var/cache/rad/pkg"
+    radSrcCache = "/var/cache/rad/src"
+    radClustersCerataLib = "/var/lib/rad/clusters/cerata"
+    radPkgLib = "/var/lib/rad/pkg"
     radLog = "/var/log/rad"
     radTmp = "/var/tmp/rad"
 

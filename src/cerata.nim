@@ -4,13 +4,14 @@
 import
   std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
   constants,
+  flags,
   tools,
   hashlib/misc/blake3,
   toml_serialization,
   toposort
 
 type Ceras = object
-  nom, ver, cmt, url, sum, bld, run = $Nil
+  nom, ver, cmt, url, sum, bld, run, nop = $Nil
 
 func `$`(self: Ceras): string =
   self.nom
@@ -20,21 +21,18 @@ proc cleanCerata*() =
   removeDir($radTmp)
 
 proc distcleanCerata*() =
-  removeDir($radCachePkg)
-  removeDir($radCacheSrc)
-
   cleanCerata()
 
-# Return the full path to the `ceras` file
-proc getCerasPath(nom: string): string =
-  $radLibClustersCerata / nom / $ceras
+  removeDir($radPkgCache)
+  removeDir($radSrcCache)
 
-# Check if the `ceras` file exists
+proc getCerasPath(nom: string): string =
+  $radClustersCerataLib / nom / $ceras
+
 proc checkCerasExist(nom: string) =
   if not fileExists(getCerasPath(nom)):
     abort(&"""{"nom":8}{nom:48}""")
 
-# Parse the `ceras` file
 proc parseCeras*(nom: string): Ceras =
   Toml.loadFile(getCerasPath(nom), Ceras)
 
@@ -51,6 +49,7 @@ proc printCerata*(cerata: openArray[string]) =
     echo &"sum  :: {ceras.sum}"
     echo &"bld  :: {ceras.bld}"
     echo &"run  :: {ceras.run}"
+    echo &"nop  :: {ceras.nop}"
 
     echo ""
 
@@ -65,7 +64,6 @@ proc printHeader() =
   echo &"""{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin"""
   echo '~'.repeat(72)
 
-# Resolve deps using topological sorting
 proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) =
   let
     ceras = parseCeras(nom)
@@ -82,7 +80,7 @@ proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) 
     for dep in deps[$ceras]:
       resolveDeps(dep, deps, if run: true else: false)
 
-proc checkCerata*(cerata: openArray[string], run = true): seq[string] =
+proc sortCerata*(cerata: openArray[string], run = true): seq[string] =
   var deps: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
@@ -146,7 +144,7 @@ proc prepareCerata(cerata: openArray[string]) =
         abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
 proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
-  let cluster = checkCerata(cerata, false)
+  let cluster = sortCerata(cerata, false)
 
   prepareCerata(cluster)
 
@@ -170,7 +168,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     case stage
     of $native:
       if fileExists(
-        $radCachePkg / $ceras /
+        $radPkgCache / $ceras /
           &"""{ceras}{(
           case ceras.url
           of $Nil: ""
@@ -196,7 +194,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         continue
 
-    putEnv($SACD, $radCachePkg / $ceras / $sac)
+    putEnv($SACD, $radPkgCache / $ceras / $sac)
     createDir(getEnv($SACD))
 
     setCurrentDir(getEnv($TMPD) / $ceras)
@@ -204,12 +202,18 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     if dirExists(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}"):
       setCurrentDir(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}")
 
+    if stage != $toolchain:
+      setEnvFlags()
+
+      if $lto in $ceras.nop:
+        setEnvFlagsNopLto()
+
     # We only use `nom` and `ver` from `ceras`
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...
     var status = execCmd(
-      &"""{sh} {shellCommand} 'nom={ceras} ver={ceras.ver} {CurDir} {$radLibClustersCerata / $ceras / (
+      &"""{sh} {shellCommand} 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (
         case stage
         of $native: $build
         else: $build & CurDir & stage
@@ -239,7 +243,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     case stage
     of $native:
       status = createTarZst(
-        $radCachePkg / $ceras /
+        $radPkgCache / $ceras /
           &"""{ceras}{(
             case ceras.url
             of $Nil: ""
@@ -253,7 +257,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       )
 
       if status == 0:
-        genSum(getEnv($SACD), $radCachePkg / $ceras / $sum)
+        genSum(getEnv($SACD), $radPkgCache / $ceras / $sum)
 
         removeDir(getEnv($SACD))
 
@@ -271,9 +275,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     )
 
 proc installCerata*(
-    cerata: openArray[string], cache = $radCachePkg, fs = $DirSep, lib = $radLibPkg
+    cerata: openArray[string], cache = $radPkgCache, fs = $DirSep, lib = $radPkgLib
 ) =
-  let cluster = checkCerata(cerata)
+  let cluster = sortCerata(cerata)
 
   printHeader()
 
@@ -333,10 +337,10 @@ proc installCerata*(
     )
 
 proc listCerata*() =
-  printCerata(walkDir($radLibPkg, true, skipSpecial = true).toSeq().unzip()[1])
+  printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1])
 
 proc removeCerata*(cerata: openArray[string]) =
-  let cluster = checkCerata(cerata)
+  let cluster = sortCerata(cerata)
 
   printHeader()
 
@@ -353,10 +357,10 @@ proc removeCerata*(cerata: openArray[string]) =
       $remove,
     )
 
-    for line in lines($radLibPkg / $ceras / $sum):
+    for line in lines($radPkgLib / $ceras / $sum):
       removeFile(DirSep & line.split()[2])
 
-    removeDir($radLibPkg / $ceras)
+    removeDir($radPkgLib / $ceras)
 
     cursorUp 1
     eraseLine()
@@ -374,7 +378,7 @@ proc removeCerata*(cerata: openArray[string]) =
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]
 
-  for ceras in walkDir($radLibClustersCerata, true, skipSpecial = true):
+  for ceras in walkDir($radClustersCerataLib, true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in ceras[1]:
         cerata.add(ceras[1])

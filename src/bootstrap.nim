@@ -177,12 +177,10 @@ proc cleanBootstrap*() =
   removeDir(getEnv($TLCD))
 
 proc distcleanBootstrap*() =
-  removeDir(getEnv($BAKD))
-
   cleanBootstrap()
 
+  removeDir(getEnv($BAKD))
   removeDir(getEnv($SRCD))
-  removeDir(getEnv($TMPD))
 
 proc init*() =
   createDir(getEnv($BAKD))
@@ -250,10 +248,10 @@ proc setEnvCrossTools*() =
   putEnv($STRIP, crossCompile & $strip)
 
 proc setEnvNativeDirs*() =
-  putEnv($CERD, $radLibClustersCerata)
+  putEnv($CERD, $radClustersCerataLib)
   putEnv($LOGD, $radLog)
-  putEnv($PKGD, $radCachePkg)
-  putEnv($SRCD, $radCacheSrc)
+  putEnv($PKGD, $radPkgCache)
+  putEnv($SRCD, $radSrcCache)
   putEnv($TMPD, $radTmp)
 
 proc setEnvNativePkgConfig*() =

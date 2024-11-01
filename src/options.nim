@@ -1,7 +1,7 @@
 # Copyright (c) 2018-2024, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[os, parseopt], arch, bootstrap, cerata, constants, tools
+import std/[os, parseopt], arch, bootstrap, cerata, constants, flags, tools
 
 proc options*() =
   if paramCount() < 1:
@@ -22,7 +22,6 @@ proc options*() =
     # Catch `Ctrl-C` and exit gracefully
     setControlCHook(interrupt)
 
-    # Check lck file
     lock()
 
     case p.key
@@ -50,7 +49,6 @@ proc options*() =
           echo radHelp.bootstrap
         of "n", "native":
           setEnvArch()
-          setEnvFlags()
           setEnvTools()
           setEnvNativeDirs()
           setEnvNativePkgConfig()
@@ -77,7 +75,6 @@ proc options*() =
         of "x", "cross":
           setEnvArch(cross)
           setEnvBootstrap()
-          setEnvFlags()
           setEnvTools()
           setEnvCrossPkgConfig()
           setEnvCrossTools()
@@ -103,7 +100,6 @@ proc options*() =
         case p.key
         of "b", "build":
           setEnvArch()
-          setEnvFlags()
           setEnvTools()
           setEnvNativeDirs()
           setEnvNativePkgConfig()
