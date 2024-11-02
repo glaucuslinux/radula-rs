@@ -30,6 +30,7 @@ type
     gmp
     gperf
     grep
+    hwdata
     iproute2
     iputils
     isl
@@ -58,6 +59,8 @@ type
     neatvi
     netbsdCurses = "netbsd-curses"
     nsss
+    pciutils
+    pcre2
     perl
     pigz
     pkgconf

@@ -150,8 +150,10 @@ proc buildNative*() =
 
       # Utilities
       $grep,
+      $hwdata,
       $kmod,
       $libudevZero,
+      $pciutils,
       $toybox,
       $utilLinux,
 
