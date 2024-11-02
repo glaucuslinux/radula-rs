@@ -23,11 +23,13 @@ type
     eiwd
     execline
     expat
+    file
     fs
     gcc
     gettextTiny = "gettext-tiny"
     gmp
     gperf
+    grep
     iproute2
     iputils
     isl

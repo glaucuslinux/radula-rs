@@ -50,10 +50,12 @@ proc buildCross*() =
       # Development
       $autoconf,
       $binutils,
+      $file,
       $gcc,
       $gettextTiny,
       $m4,
       $mawk,
+      $pcre2,
       $reflex,
       $slibtool,
 
@@ -63,6 +65,7 @@ proc buildCross*() =
       $bash,
 
       # Utilities
+      $grep,
       $kmod,
       $libudevZero,
       $toybox,
@@ -119,11 +122,13 @@ proc buildNative*() =
       $autoconf,
       $binutils,
       $expat,
+      $file,
       $gcc,
       $gettextTiny,
       $m4,
       $radCerata.make,
       $mawk,
+      $pcre2,
       $pkgconf,
       $reflex,
       $samurai,
@@ -144,6 +149,7 @@ proc buildNative*() =
       $wget2,
 
       # Utilities
+      $grep,
       $kmod,
       $libudevZero,
       $toybox,

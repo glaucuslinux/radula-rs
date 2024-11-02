@@ -91,8 +91,6 @@ proc sortCerata*(cerata: openArray[string], run = true): seq[string] =
   topoSort(deps)
 
 proc prepareCerata(cerata: openArray[string]) =
-  printHeader()
-
   for idx, nom in cerata:
     let ceras = parseCeras(nom)
 
@@ -144,6 +142,8 @@ proc prepareCerata(cerata: openArray[string]) =
         abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
 proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
+  printHeader()
+
   let cluster = sortCerata(cerata, false)
 
   prepareCerata(cluster)
@@ -194,8 +194,8 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         continue
 
-    putEnv($SACD, $radPkgCache / $ceras / $sac)
-    createDir(getEnv($SACD))
+      putEnv($SACD, $radPkgCache / $ceras / $sac)
+      createDir(getEnv($SACD))
 
     setCurrentDir(getEnv($TMPD) / $ceras)
 
@@ -277,9 +277,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 proc installCerata*(
     cerata: openArray[string], cache = $radPkgCache, fs = $DirSep, lib = $radPkgLib
 ) =
-  let cluster = sortCerata(cerata)
-
   printHeader()
+
+  let cluster = sortCerata(cerata)
 
   for idx, nom in cluster:
     let ceras = parseCeras(nom)
