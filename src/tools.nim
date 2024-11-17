@@ -15,7 +15,7 @@ func createTarZst*(archive, dir: string): int =
   )
 
 proc downloadFile*(file, url: string): int =
-  execCmd(&"{wget2} -q -O {file} -c -N {url}")
+  execCmd(&"{curl} -q -O {file} -c -N {url}")
 
 proc exit*(status = 0) =
   removeFile($radLock)

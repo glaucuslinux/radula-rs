@@ -143,14 +143,16 @@ proc buildNative*() =
       $yash,
 
       # Networking
+      $axel,
+      $curl,
       $iproute2,
       $iputils,
       $sdhcp,
-      $wget2,
 
       # Utilities
       $grep,
       $hwdata,
+      $kbd,
       $kmod,
       $libudevZero,
       $pciutils,

@@ -15,11 +15,13 @@ type
     attr
     autoconf
     automake
+    axel
     bash
     binutils
     byacc
     bzip2
     cerata
+    curl
     eiwd
     execline
     expat
@@ -34,6 +36,7 @@ type
     iproute2
     iputils
     isl
+    kbd
     kmod
     less
     libarchive
@@ -78,7 +81,6 @@ type
     toybox
     utilLinux = "util-linux"
     utmps
-    wget2
     xz
     yash
     zlibNg = "zlib-ng"
