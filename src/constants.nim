@@ -36,7 +36,6 @@ type
     iproute2
     iputils
     isl
-    kbd
     kmod
     less
     libarchive

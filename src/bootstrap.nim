@@ -152,7 +152,6 @@ proc buildNative*() =
       # Utilities
       $grep,
       $hwdata,
-      $kbd,
       $kmod,
       $libudevZero,
       $pciutils,
