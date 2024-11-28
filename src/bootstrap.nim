@@ -15,8 +15,11 @@ proc buildCross*() =
 
       # Development
       $radCerata.cerata,
+      $expat,
       $linuxHeaders,
       $muslUtils,
+      $netbsdCurses,
+      $pkgconf,
 
       # Init
       $skalibs,
@@ -32,11 +35,6 @@ proc buildCross*() =
       $libcap,
       $libressl,
       $shadow,
-
-      # Development
-      $expat,
-      $netbsdCurses,
-      $pkgconf,
 
       # Compression
       $zlibNg,
