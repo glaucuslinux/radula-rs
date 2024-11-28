@@ -35,7 +35,7 @@ proc buildCross*() =
 
       # Development
       $expat,
-      $radCerata.make,
+      $netbsdCurses,
       $pkgconf,
 
       # Compression
@@ -48,23 +48,21 @@ proc buildCross*() =
       $libarchive,
 
       # Development
-      $autoconf,
-      $binutils,
+      # $autoconf,
+      # $binutils,
       $file,
-      $gcc,
+      # $gcc,
       $gettextTiny,
+      $libedit,
       $m4,
+      $radCerata.make,
       $mawk,
       $pcre2,
       $reflex,
       $slibtool,
 
-      # Terminal
-      $netbsdCurses,
-      $libedit,
-      $bash,
-
       # Utilities
+      $dash,
       $grep,
       $kmod,
       $libudevZero,
@@ -95,6 +93,7 @@ proc buildNative*() =
       $musl,
       $perl,
       $automake,
+      $bash,
       $byacc,
       $gperf,
       $gmp,
@@ -125,22 +124,16 @@ proc buildNative*() =
       $file,
       $gcc,
       $gettextTiny,
+      $libedit,
       $m4,
       $radCerata.make,
       $mawk,
+      $netbsdCurses,
       $pcre2,
       $pkgconf,
       $reflex,
       $samurai,
       $slibtool,
-
-      # Terminal
-      $bash,
-      $less,
-      $libedit,
-      $neatvi,
-      $netbsdCurses,
-      $yash,
 
       # Networking
       $axel,
@@ -153,10 +146,13 @@ proc buildNative*() =
       $grep,
       $hwdata,
       $kmod,
+      $less,
       $libudevZero,
+      $neatvi,
       $pciutils,
       $toybox,
       $utilLinux,
+      $yash,
 
       # Init & Services
       $skalibs,

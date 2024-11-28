@@ -22,6 +22,7 @@ type
     bzip2
     cerata
     curl
+    dash
     eiwd
     execline
     expat

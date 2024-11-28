@@ -197,7 +197,8 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       putEnv($SACD, $radPkgCache / $ceras / $sac)
       createDir(getEnv($SACD))
 
-    setCurrentDir(getEnv($TMPD) / $ceras)
+    if dirExists(getEnv($TMPD) / $ceras):
+      setCurrentDir(getEnv($TMPD) / $ceras)
 
     if dirExists(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}"):
       setCurrentDir(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}")
