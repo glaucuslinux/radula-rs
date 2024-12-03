@@ -110,6 +110,7 @@ type
     CRSD
     GLAD
     LOGD
+    PATH
     PKGD
     SACD
     SRCD
@@ -120,7 +121,6 @@ type
     CFLAGS
     CXXFLAGS
     LDFLAGS
-    PATH
 
     # PKG_CONFIG
     PKG_CONFIG_LIBDIR
@@ -275,7 +275,6 @@ Distributed under the terms of the ISC License"""
     ar = "gcc-ar"
     As = "as"
     cxx = "g++"
-    dd
     git
     nm = "gcc-nm"
     objcopy
