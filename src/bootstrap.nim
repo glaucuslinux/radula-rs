@@ -46,10 +46,10 @@ proc buildCross*() =
       $libarchive,
 
       # Development
-      # $autoconf,
-      # $binutils,
+      $autoconf,
+      $binutils,
       $file,
-      # $gcc,
+      $gcc,
       $gettextTiny,
       $libedit,
       $m4,
