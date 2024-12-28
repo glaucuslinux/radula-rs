@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2024, Firas Khalil Khana
+# Copyright (c) 2018-2025, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
 import
@@ -381,7 +381,7 @@ proc searchCerata*(pattern: openArray[string]) =
 
   for ceras in walkDir($radClustersCerataLib, true, skipSpecial = true):
     for nom in pattern:
-      if nom.toLowerAscii() in ceras[1]:
+      if nom.normalize() in ceras[1]:
         cerata.add(ceras[1])
 
   if cerata.len() == 0:
