@@ -22,7 +22,6 @@ type
     bzip2
     cerata
     curl
-    dash
     eiwd
     execline
     expat
@@ -34,8 +33,8 @@ type
     gperf
     grep
     hwdata
+    inetutils
     iproute2
-    iputils
     isl
     kmod
     less

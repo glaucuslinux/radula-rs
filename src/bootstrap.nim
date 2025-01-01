@@ -60,7 +60,7 @@ proc buildCross*() =
       $slibtool,
 
       # Utilities
-      $dash,
+      $bash,
       $grep,
       $kmod,
       $libudevZero,
@@ -91,7 +91,6 @@ proc buildNative*() =
       $musl,
       $perl,
       $automake,
-      $bash,
       $byacc,
       $gperf,
       $gmp,
@@ -136,11 +135,12 @@ proc buildNative*() =
       # Networking
       $axel,
       $curl,
+      $inetutils,
       $iproute2,
-      $iputils,
       $sdhcp,
 
       # Utilities
+      $bash,
       $grep,
       $hwdata,
       $kmod,
