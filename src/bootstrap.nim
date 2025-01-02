@@ -23,7 +23,6 @@ proc buildCross*() =
 
       # Init
       $skalibs,
-      $nsss,
       $execline,
       $mdevd,
       $s6,
@@ -154,7 +153,6 @@ proc buildNative*() =
 
       # Init & Services
       $skalibs,
-      $nsss,
       $execline,
       $mdevd,
       $s6,
