@@ -60,10 +60,10 @@ proc buildCross*() =
 
       # Utilities
       $dash,
-      $grep,
       $kmod,
       $libudevZero,
       $toybox,
+      $ugrep,
       $utilLinux,
 
       # Services
@@ -135,12 +135,11 @@ proc buildNative*() =
       # Networking
       $axel,
       $curl,
-      $inetutils,
+      $fping,
       $iproute2,
       $sdhcp,
 
       # Utilities
-      $grep,
       $hwdata,
       $kmod,
       $less,
@@ -148,6 +147,7 @@ proc buildNative*() =
       $neatvi,
       $pciutils,
       $toybox,
+      $ugrep,
       $utilLinux,
       $yash,
 

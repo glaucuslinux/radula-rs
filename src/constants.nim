@@ -27,14 +27,13 @@ type
     execline
     expat
     file
+    fping
     fs
     gcc
     gettextTiny = "gettext-tiny"
     gmp
     gperf
-    grep
     hwdata
-    inetutils
     iproute2
     isl
     kmod
@@ -78,6 +77,7 @@ type
     skalibs
     slibtool
     toybox
+    ugrep
     utilLinux = "util-linux"
     utmps
     xz
