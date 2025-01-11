@@ -60,6 +60,7 @@ type
     muslUtils = "musl-utils"
     neatvi
     netbsdCurses = "netbsd-curses"
+    openresolv
     pciutils
     pcre2
     perl

@@ -135,8 +135,10 @@ proc buildNative*() =
       # Networking
       $axel,
       $curl,
+      $eiwd,
       $fping,
       $iproute2,
+      $openresolv,
       $sdhcp,
 
       # Utilities
