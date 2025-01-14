@@ -17,8 +17,8 @@ echo "YACC        :: ", getEnv($YACC)
 
 doAssert getEnv($AWK) == "mawk"
 doAssert getEnv($BISON) == "byacc"
-doAssert getEnv($FLEX) == "reflex"
-doAssert getEnv($LEX) == "reflex"
+doAssert getEnv($FLEX) == "flex"
+doAssert getEnv($LEX) == "flex"
 doAssert getEnv($LIBTOOL) == "slibtool"
 doAssert getEnv($radEnv.MAKE) == "make"
 doAssert getEnv($MAKEFLAGS) == "-j4 -O"
