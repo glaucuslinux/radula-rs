@@ -48,6 +48,7 @@ proc buildCross*() =
       $autoconf,
       $binutils,
       $file,
+      $flex,
       $gcc,
       $gettextTiny,
       $libedit,
@@ -55,7 +56,6 @@ proc buildCross*() =
       $radCerata.make,
       $mawk,
       $pcre2,
-      $reflex,
       $slibtool,
 
       # Utilities
@@ -92,8 +92,9 @@ proc buildNative*() =
       $automake,
       $bash,
       $byacc,
-      $gperf,
+      $cmake,
       $gmp,
+      $gperf,
       $mpfr,
       $mpc,
       $isl,
@@ -119,6 +120,7 @@ proc buildNative*() =
       $binutils,
       $expat,
       $file,
+      $flex,
       $gcc,
       $gettextTiny,
       $libedit,
@@ -128,7 +130,6 @@ proc buildNative*() =
       $netbsdCurses,
       $pcre2,
       $pkgconf,
-      $reflex,
       $samurai,
       $slibtool,
 

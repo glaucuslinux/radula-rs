@@ -21,12 +21,14 @@ type
     byacc
     bzip2
     cerata
+    cmake
     curl
     dash
     eiwd
     execline
     expat
     file
+    flex
     fping
     fs
     gcc
@@ -53,6 +55,7 @@ type
     make
     mawk
     mdevd
+    mimalloc
     mpc
     mpfr
     musl
@@ -67,7 +70,6 @@ type
     pigz
     pkgconf
     rad
-    reflex
     s6
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"

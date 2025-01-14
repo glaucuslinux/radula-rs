@@ -63,8 +63,8 @@ proc lock*() =
 proc setEnvTools*() =
   putEnv($AWK, $mawk)
   putEnv($BISON, $byacc)
-  putEnv($FLEX, $reflex)
-  putEnv($LEX, $reflex)
+  putEnv($FLEX, $flex)
+  putEnv($LEX, $flex)
   putEnv($LIBTOOL, $slibtool)
   putEnv($MAKE, $radCerata.make)
   putEnv($MAKEFLAGS, $radFlags.make)
