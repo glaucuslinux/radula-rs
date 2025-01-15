@@ -8,7 +8,7 @@ proc setEnvFlags*() =
   putEnv($CXXFLAGS, $cflags)
   putEnv($LDFLAGS, &"{ldflags} {cflags}")
 
-proc setEnvFlagsNopLto*() =
+proc setEnvFlagsOptLto*() =
   putEnv($CFLAGS, replace($cflags, $ltoflags))
   putEnv($CXXFLAGS, getEnv($CFLAGS))
   putEnv($LDFLAGS, $ldflags)

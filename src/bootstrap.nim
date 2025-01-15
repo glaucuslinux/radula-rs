@@ -91,10 +91,10 @@ proc buildNative*() =
       $perl,
       $automake,
       $bash,
-      $byacc,
-      $cmake,
+      # $cmake,
       $gmp,
       $gperf,
+      $bison,
       $mpfr,
       $mpc,
       $isl,
@@ -134,13 +134,13 @@ proc buildNative*() =
       $slibtool,
 
       # Networking
-      $axel,
       $curl,
       $eiwd,
       $fping,
-      $iproute2,
+      # $iproute2,
       $openresolv,
       $sdhcp,
+      $wget2,
 
       # Utilities
       $hwdata,
@@ -271,8 +271,6 @@ proc setEnvNativePkgConfig*() =
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
 
 proc setEnvNativeTools*() =
-  putEnv($radEnv.BOOTSTRAP, "yes")
-
   putEnv($AR, $ar)
   putEnv($radEnv.AS, $radTools.As)
   putEnv($CC, $gcc)

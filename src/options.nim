@@ -30,7 +30,7 @@ proc options*() =
 
       case p.kind
       of cmdEnd:
-        echo radHelp.bootstrap
+        echo Bootstrap
 
         exit(QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
@@ -46,7 +46,7 @@ proc options*() =
 
           echo "distclean complete"
         of "h", "help":
-          echo radHelp.bootstrap
+          echo Bootstrap
         of "n", "native":
           setEnvArch()
           setEnvTools()
@@ -85,7 +85,7 @@ proc options*() =
           echo ""
           echo "cross complete"
         else:
-          echo radHelp.bootstrap
+          echo Bootstrap
 
           exit(QuitFailure)
     of "c", "cerata":

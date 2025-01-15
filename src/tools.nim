@@ -62,14 +62,11 @@ proc lock*() =
 
 proc setEnvTools*() =
   putEnv($AWK, $mawk)
-  putEnv($BISON, $byacc)
-  putEnv($FLEX, $flex)
   putEnv($LEX, $flex)
   putEnv($LIBTOOL, $slibtool)
   putEnv($MAKE, $radCerata.make)
   putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($PKG_CONFIG, $pkgconf)
-  putEnv($YACC, $byacc)
 
 proc verifyFile*(file, sum: string): bool =
   fileExists(file) and $count[BLAKE3](readFile(file)) == sum

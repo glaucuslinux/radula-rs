@@ -15,10 +15,9 @@ type
     attr
     autoconf
     automake
-    axel
     bash
     binutils
-    byacc
+    bison
     bzip2
     cerata
     cmake
@@ -83,6 +82,7 @@ type
     ugrep
     utilLinux = "util-linux"
     utmps
+    wget2
     xz
     yash
     zlibNg = "zlib-ng"
@@ -99,7 +99,6 @@ type
   radEnv* = enum
     # ARCH
     ARCH
-    BOOTSTRAP
     CARCH
     CROSS_COMPILE
     PRETTY_NAME
@@ -135,12 +134,10 @@ type
     AR
     AS
     AWK
-    BISON
     CC
     CPP
     CXX
     CXXCPP
-    FLEX
     HOSTCC
     LEX
     LIBTOOL
@@ -154,7 +151,6 @@ type
     READELF
     SIZE
     STRIP
-    YACC
 
   radFiles* = enum
     ceras
@@ -190,7 +186,7 @@ OPTIONS:
   -c, --cerata     Manage cerata
   -h, --help       Display this help message
   -v, --version    Display current version"""
-    bootstrap =
+    Bootstrap =
       """
 USAGE:
   rad [ -b | --bootstrap ] [ COMMAND ]
@@ -226,8 +222,12 @@ rad version 0.1.0
 Copyright (c) 2018-2025, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
-  radNop* = enum
+  radOpt* = enum
+    bootstrap
+    check
+    empty
     lto
+    parallel
 
   radPaths* = enum
     # FILESYSTEM

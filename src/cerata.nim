@@ -11,7 +11,7 @@ import
   toposort
 
 type Ceras = object
-  nom, ver, cmt, url, sum, bld, run, nop = $Nil
+  nom, ver, cmt, url, sum, bld, run, opt = $Nil
 
 func `$`(self: Ceras): string =
   self.nom
@@ -49,7 +49,7 @@ proc printCerata*(cerata: openArray[string]) =
     echo &"sum  :: {ceras.sum}"
     echo &"bld  :: {ceras.bld}"
     echo &"run  :: {ceras.run}"
-    echo &"nop  :: {ceras.nop}"
+    echo &"opt  :: {ceras.opt}"
 
     echo ""
 
@@ -206,8 +206,8 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     if stage != $toolchain:
       setEnvFlags()
 
-      if $lto in $ceras.nop:
-        setEnvFlagsNopLto()
+      if $lto in $ceras.opt:
+        setEnvFlagsOptLto()
 
     # We only use `nom` and `ver` from `ceras`
     #
@@ -243,9 +243,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
     case stage
     of $native:
-      status = createTarZst(
+      let archive =
         $radPkgCache / $ceras /
-          &"""{ceras}{(
+        &"""{ceras}{(
             case ceras.url
             of $Nil: ""
             else: '-' & ceras.ver
@@ -253,14 +253,17 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
             case ceras.ver
             of $git: '-' & ceras.cmt
             else: ""
-          )}{tarZst}""",
-        getEnv($SACD),
-      )
+          )}{tarZst}"""
+
+      status = createTarZst(archive, getEnv($SACD))
 
       if status == 0:
         genSum(getEnv($SACD), $radPkgCache / $ceras / $sum)
 
         removeDir(getEnv($SACD))
+
+      if $bootstrap in $ceras.opt:
+        status = extractTar(archive, $DirSep)
 
     cursorUp 1
     eraseLine()
