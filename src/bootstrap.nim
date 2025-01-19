@@ -3,10 +3,6 @@
 
 import std/[os, strformat], cerata, constants
 
-proc backupToolchain*() =
-  removeDir(getEnv($BAKD) / $cross)
-  copyDirWithPermissions(getEnv($CRSD), getEnv($BAKD) / $cross)
-
 proc buildCross*() =
   buildCerata(
     [
@@ -185,11 +181,10 @@ proc cleanBootstrap*() =
 proc distcleanBootstrap*() =
   cleanBootstrap()
 
-  removeDir(getEnv($BAKD))
+  removeDir(getEnv($PKGD))
   removeDir(getEnv($SRCD))
 
-proc init*() =
-  createDir(getEnv($BAKD))
+proc initBootstrap*() =
   createDir(getEnv($CRSD))
   createDir(getEnv($LOGD))
   createDir(getEnv($SRCD))
@@ -197,13 +192,6 @@ proc init*() =
   createDir(getEnv($TLCD))
 
 proc prepareCross*() =
-  removeDir(getEnv($CRSD))
-  copyDirWithPermissions(getEnv($BAKD) / $cross, getEnv($CRSD))
-
-  removeDir(getEnv($TMPD))
-  createDir(getEnv($TMPD))
-
-proc prepareNative*() =
   removeDir(getEnv($TMPD))
   createDir(getEnv($TMPD))
 
@@ -212,7 +200,6 @@ proc setEnvBootstrap*() =
 
   putEnv($GLAD, path)
 
-  putEnv($BAKD, path / $bak)
   putEnv($CERD, path / $radCerata.cerata)
   putEnv($CRSD, path / $cross)
   putEnv($LOGD, path / $log)

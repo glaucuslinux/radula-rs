@@ -9,7 +9,6 @@ echo "GLAD  :: ", getEnv($GLAD)
 
 echo ""
 
-echo "BAKD  :: ", getEnv($BAKD)
 echo "CERD  :: ", getEnv($CERD)
 echo "CRSD  :: ", getEnv($CRSD)
 echo "LOGD  :: ", getEnv($LOGD)
@@ -24,7 +23,6 @@ echo "PATH  :: ", getEnv($PATH)
 
 doAssert getEnv($GLAD).endsWith("glaucus")
 
-doAssert getEnv($BAKD).endsWith("bak")
 doAssert getEnv($CERD).endsWith("cerata")
 doAssert getEnv($CRSD).endsWith("cross")
 doAssert getEnv($LOGD).endsWith("log")

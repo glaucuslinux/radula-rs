@@ -54,7 +54,6 @@ proc options*() =
           setEnvNativePkgConfig()
           setEnvNativeTools()
 
-          prepareNative()
           buildNative()
 
           echo ""
@@ -65,10 +64,9 @@ proc options*() =
           setEnvTools()
 
           cleanBootstrap()
-          init()
+          initBootstrap()
 
           buildToolchain()
-          backupToolchain()
 
           echo ""
           echo "toolchain complete"
@@ -105,7 +103,7 @@ proc options*() =
           setEnvNativePkgConfig()
           setEnvNativeTools()
 
-          prepareNative()
+          cleanCerata()
           buildCerata(remainingArgs(p))
 
           echo ""

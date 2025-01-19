@@ -89,7 +89,6 @@ type
     zstd
 
   radDirs* = enum
-    bak
     log
     pkg
     sac
@@ -106,7 +105,6 @@ type
     TGT
 
     # DIRS
-    BAKD
     CERD
     CRSD
     GLAD
