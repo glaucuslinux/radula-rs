@@ -12,7 +12,7 @@ echo "PRETTY_NAME  :: ", getEnv($PRETTY_NAME)
 echo "TGT          :: ", getEnv($TGT)
 
 doAssert getEnv($ARCH) == "x86-64"
-doAssert getEnv($BLD) == getTuple()[0].strip()
+doAssert getEnv($BLD).startsWith("x86_64-pc-linux-")
 doAssert getEnv($CARCH) == "x86-64-v3"
 doAssert getEnv($PRETTY_NAME).startsWith("glaucus s6 x86-64-v3 ")
 doAssert getEnv($TGT) == "x86_64-glaucus-linux-musl"

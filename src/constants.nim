@@ -164,10 +164,7 @@ type
     lto = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin "
     make = "-j4 -O"
     parallel = "-j1 -O"
-    shellCommand = "-c"
     shellRedirect = "> /dev/null 2>&1"
-    tarCreate = "-cpvf"
-    tarExtract = "-xmPvf"
     zstdCompress = "-22 --ultra -T0 --long"
     zstdDecompress = "-d -T0 --long"
 

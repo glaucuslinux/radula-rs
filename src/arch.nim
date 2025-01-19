@@ -3,7 +3,7 @@
 
 import std/[os, osproc, strformat, strutils, times], constants
 
-proc getTuple*(): (string, int) =
+proc getTuple(): (string, int) =
   execCmdEx($radClustersCerataLib / $slibtool / $configGuess)
 
 proc setEnvArch*(stage = native) =
