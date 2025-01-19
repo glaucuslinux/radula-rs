@@ -15,7 +15,7 @@ proc createTarZst*(archive, dir: string): int =
   )
 
 proc downloadFile*(file, url: string): int =
-  execCmd(&"{curl} -q -O {file} -c -N {url}")
+  execCmd(&"{wget2} -q -O {file} -c -N {url}")
 
 proc exit*(status = 0) =
   removeFile($radLock)
@@ -59,14 +59,6 @@ proc lock*() =
     abort(&"""{"1":8}{"lock exists":48}""")
 
   writeFile($radLock, "")
-
-proc setEnvTools*() =
-  putEnv($AWK, $mawk)
-  putEnv($LEX, $flex)
-  putEnv($LIBTOOL, $slibtool)
-  putEnv($MAKE, $radCerata.make)
-  putEnv($MAKEFLAGS, $radFlags.make)
-  putEnv($PKG_CONFIG, $pkgconf)
 
 proc verifyFile*(file, sum: string): bool =
   fileExists(file) and $count[BLAKE3](readFile(file)) == sum

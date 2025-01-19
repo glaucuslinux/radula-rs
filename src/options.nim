@@ -49,7 +49,6 @@ proc options*() =
           echo Bootstrap
         of "n", "native":
           setEnvArch()
-          setEnvTools()
           setEnvNativeDirs()
           setEnvNativePkgConfig()
           setEnvNativeTools()
@@ -61,7 +60,6 @@ proc options*() =
         of "t", "toolchain":
           setEnvArch(toolchain)
           setEnvBootstrap()
-          setEnvTools()
 
           cleanBootstrap()
           initBootstrap()
@@ -73,7 +71,6 @@ proc options*() =
         of "x", "cross":
           setEnvArch(cross)
           setEnvBootstrap()
-          setEnvTools()
           setEnvCrossPkgConfig()
           setEnvCrossTools()
 
@@ -98,7 +95,6 @@ proc options*() =
         case p.key
         of "b", "build":
           setEnvArch()
-          setEnvTools()
           setEnvNativeDirs()
           setEnvNativePkgConfig()
           setEnvNativeTools()

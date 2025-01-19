@@ -187,6 +187,7 @@ proc distcleanBootstrap*() =
 proc initBootstrap*() =
   createDir(getEnv($CRSD))
   createDir(getEnv($LOGD))
+  createDir(getEnv($PKGD))
   createDir(getEnv($SRCD))
   createDir(getEnv($TMPD))
   createDir(getEnv($TLCD))
@@ -215,8 +216,7 @@ proc setEnvCrossPkgConfig*() =
   putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
   putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
 
-  # These env variables are `pkgconf` specific, but setting them won't
-  # do any harm...
+  # `pkgconf` specific variables; no harm in setting them
   putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
 
@@ -252,22 +252,26 @@ proc setEnvNativePkgConfig*() =
   putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
   putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
 
-  # These env variables are `pkgconf` specific, but setting them won't
-  # do any harm...
+  # `pkgconf` specific variables; no harm in setting them
   putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, $pkgConfigSystemIncludePath)
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
 
 proc setEnvNativeTools*() =
   putEnv($AR, $ar)
   putEnv($radEnv.AS, $radTools.As)
+  putEnv($AWK, $mawk)
   putEnv($CC, $gcc)
   putEnv($radEnv.CPP, &"{gcc} {cpp}")
   putEnv($CXX, $cxx)
   putEnv($CXXCPP, &"{cxx} {cpp}")
   putEnv($HOSTCC, $gcc)
+  putEnv($LEX, $flex)
+  putEnv($LIBTOOL, $slibtool)
+  putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($NM, $nm)
   putEnv($OBJCOPY, $objcopy)
   putEnv($OBJDUMP, $objdump)
+  putEnv($PKG_CONFIG, $pkgconf)
   putEnv($RANLIB, $ranlib)
   putEnv($READELF, $readelf)
   putEnv($SIZE, $size)

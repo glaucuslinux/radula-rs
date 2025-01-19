@@ -139,7 +139,6 @@ type
     HOSTCC
     LEX
     LIBTOOL
-    MAKE
     MAKEFLAGS
     NM
     OBJCOPY
