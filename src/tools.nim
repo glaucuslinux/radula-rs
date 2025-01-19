@@ -46,10 +46,10 @@ proc genSum*(dir, sum: string) =
   sum.close()
 
 proc gitCheckoutRepo*(dir, cmt: string): int =
-  execCmd(&"{git} -C {dir} {gitCheckout} {cmt} -q")
+  execCmd(&"{git} -C {dir} checkout {cmt} -q")
 
 proc gitCloneRepo*(url, dir: string): int =
-  execCmd(&"{git} {gitClone} {url} {dir} -q")
+  execCmd(&"{git} clone {url} {dir} -q")
 
 proc interrupt*() {.noconv.} =
   abort(&"""{"1":8}{"interrupt received":48}""")

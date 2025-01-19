@@ -206,10 +206,15 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     if stage != $toolchain:
       setEnvFlags()
 
-      if $lto in $ceras.opt:
+      if $radFlags.lto in $ceras.opt:
         setEnvFlagsOptLto()
 
-    # We only use `nom` and `ver` from `ceras`
+      if $radFlags.parallel in $ceras.opt:
+        setEnvFlagsOptParallel()
+
+    putEnv($MAKEFLAGS, $radFlags.make)
+
+    # Only use `nom` and `ver` from `ceras`
     #
     # All phases need to be called sequentially to prevent the loss of the
     # current working dir...

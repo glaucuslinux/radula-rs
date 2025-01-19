@@ -13,6 +13,6 @@ echo "PKG_CONFIG_SYSTEM_LIBRARY_PATH  :: ", getEnv($PKG_CONFIG_SYSTEM_LIBRARY_PA
 
 doAssert getEnv($PKG_CONFIG_LIBDIR) == "/usr/lib/pkgconfig"
 doAssert getEnv($PKG_CONFIG_PATH) == "/usr/lib/pkgconfig"
-doAssert getEnv($PKG_CONFIG_SYSROOT_DIR) == DirSep
+doAssert getEnv($PKG_CONFIG_SYSROOT_DIR) == $DirSep
 doAssert getEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH) == "/usr/include"
 doAssert getEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH) == "/usr/lib"

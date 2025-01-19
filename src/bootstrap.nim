@@ -215,7 +215,6 @@ proc setEnvCrossPkgConfig*() =
   putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
   putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
   putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
-
   # `pkgconf` specific variables; no harm in setting them
   putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
@@ -232,7 +231,6 @@ proc setEnvCrossTools*() =
   putEnv($CXX, crossCompile & $cxx)
   putEnv($CXXCPP, &"{getEnv($CXX)} {cpp}")
   putEnv($HOSTCC, $gcc)
-  putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($NM, crossCompile & $nm)
   putEnv($OBJCOPY, crossCompile & $objcopy)
   putEnv($OBJDUMP, crossCompile & $objdump)
@@ -252,7 +250,6 @@ proc setEnvNativePkgConfig*() =
   putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)
   putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
   putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
-
   # `pkgconf` specific variables; no harm in setting them
   putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, $pkgConfigSystemIncludePath)
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
@@ -268,7 +265,6 @@ proc setEnvNativeTools*() =
   putEnv($HOSTCC, $gcc)
   putEnv($LEX, $flex)
   putEnv($LIBTOOL, $slibtool)
-  putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($NM, $nm)
   putEnv($OBJCOPY, $objcopy)
   putEnv($OBJDUMP, $objdump)
