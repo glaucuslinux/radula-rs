@@ -13,7 +13,7 @@ import
 type Ceras = object
   nom, ver, cmt, url, sum, bld, run, opt = $Nil
 
-func `$`(self: Ceras): string =
+proc `$`(self: Ceras): string =
   self.nom
 
 proc cleanCerata*() =

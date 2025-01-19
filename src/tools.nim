@@ -6,10 +6,10 @@ import
   constants,
   hashlib/misc/blake3
 
-func compressZst*(file: string): int =
+proc compressZst*(file: string): int =
   execCmd(&"{zstd} {zstdCompress} {file} {shellRedirect}")
 
-func createTarZst*(archive, dir: string): int =
+proc createTarZst*(archive, dir: string): int =
   execCmd(
     &"{tar} --use-compress-program '{zstd} {zstdCompress}' {tarCreate} {archive} -C {dir} {CurDir} {shellRedirect}"
   )
@@ -27,7 +27,7 @@ proc abort*(err: string) =
 
   exit(QuitFailure)
 
-func extractTar*(archive, dir: string): int =
+proc extractTar*(archive, dir: string): int =
   execCmd(&"{tar} {tarExtract} {archive} -C {dir} {shellRedirect}")
 
 proc genSum*(dir, sum: string) =
