@@ -232,6 +232,7 @@ proc setEnvCrossTools*() =
   putEnv($CXX, crossCompile & $cxx)
   putEnv($CXXCPP, &"{getEnv($CXX)} {cpp}")
   putEnv($HOSTCC, $gcc)
+  putEnv($MAKEFLAGS, $radFlags.make)
   putEnv($NM, crossCompile & $nm)
   putEnv($OBJCOPY, crossCompile & $objcopy)
   putEnv($OBJDUMP, crossCompile & $objdump)
