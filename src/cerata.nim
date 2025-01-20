@@ -11,7 +11,7 @@ import
   toposort
 
 type Ceras = object
-  nom, ver, url, sum, bld, run, opt = $Nil
+  nom, ver, url, sum, bld, run, nop = $Nil
 
 proc `$`(self: Ceras): string =
   self.nom
@@ -45,7 +45,7 @@ url  :: {ceras.url}
 sum  :: {ceras.sum}
 bld  :: {ceras.bld}
 run  :: {ceras.run}
-opt  :: {ceras.opt}
+nop  :: {ceras.nop}
 """
 
 proc printContent(idx: int, nom, ver, cmd: string) =
@@ -172,11 +172,11 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     if stage != $toolchain:
       setEnvFlags()
 
-      if $radFlags.lto in $ceras.opt:
-        setEnvFlagsOptLto()
+      if $radFlags.lto in $ceras.nop:
+        setEnvFlagsNopLto()
 
-      if $radFlags.parallel in $ceras.opt:
-        setEnvFlagsOptParallel()
+      if $radFlags.parallel in $ceras.nop:
+        setEnvFlagsNopParallel()
 
     putEnv($MAKEFLAGS, $radFlags.make)
 
@@ -223,7 +223,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         removeDir(getEnv($SACD))
 
-      if $bootstrap in $ceras.opt:
+      if $bootstrap in $ceras.nop:
         discard extractTar(archive, $DirSep)
 
     cursorUp 1

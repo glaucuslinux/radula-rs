@@ -3,7 +3,7 @@
 
 import std/os, ../../src/[constants, flags]
 
-setEnvflagsOptParallel()
+setEnvflagsNopParallel()
 
 echo "MAKEFLAGS  :: ", getEnv($MAKEFLAGS)
 

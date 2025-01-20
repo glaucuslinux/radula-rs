@@ -9,11 +9,11 @@ proc setEnvFlags*() =
   putEnv($LDFLAGS, &"{ldflags} {cflags}")
   putEnv($MAKEFLAGS, $radFlags.make)
 
-proc setEnvFlagsOptLto*() =
+proc setEnvFlagsNopLto*() =
   putEnv($CFLAGS, replace($cflags, $radFlags.lto))
   putEnv($CXXFLAGS, getEnv($CFLAGS))
   putEnv($LDFLAGS, $ldflags)
   putEnv($MAKEFLAGS, $radFlags.make)
 
-proc setEnvFlagsOptParallel*() =
+proc setEnvFlagsNopParallel*() =
   putEnv($MAKEFLAGS, $radFlags.parallel)

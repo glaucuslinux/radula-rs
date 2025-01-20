@@ -3,7 +3,7 @@
 
 import std/os, ../../src/[constants, flags]
 
-setEnvflagsOptLto()
+setEnvflagsNopLto()
 
 echo "CFLAGS     :: ", getEnv($CFLAGS)
 echo "CXXFLAGS   :: ", getEnv($CXXFLAGS)

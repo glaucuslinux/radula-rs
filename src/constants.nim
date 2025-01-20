@@ -34,6 +34,7 @@ type
     gettextTiny = "gettext-tiny"
     gmp
     gperf
+    grep
     hwdata
     iproute2
     isl
@@ -79,7 +80,6 @@ type
     skalibs
     slibtool
     toybox
-    ugrep
     utilLinux = "util-linux"
     utmps
     wget2
@@ -215,7 +215,7 @@ rad version 0.1.0
 Copyright (c) 2018-2025, Firas Khalil Khana
 Distributed under the terms of the ISC License"""
 
-  radOpt* = enum
+  radNop* = enum
     bootstrap
     check
     empty

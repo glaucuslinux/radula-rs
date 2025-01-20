@@ -56,10 +56,10 @@ proc buildCross*() =
 
       # Utilities
       $dash,
+      $grep,
       $kmod,
       $libudevZero,
       $toybox,
-      $ugrep,
       $utilLinux,
 
       # Services
@@ -139,6 +139,7 @@ proc buildNative*() =
       $wget2,
 
       # Utilities
+      $grep,
       $hwdata,
       $kmod,
       $less,
@@ -146,7 +147,6 @@ proc buildNative*() =
       $neatvi,
       $pciutils,
       $toybox,
-      $ugrep,
       $utilLinux,
       $yash,
 
