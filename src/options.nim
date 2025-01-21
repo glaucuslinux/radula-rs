@@ -133,9 +133,6 @@ proc options*() =
         of "u", "upgrade":
           echo ""
           echo "upgrade complete"
-        of "y", "sync":
-          echo ""
-          echo "sync complete"
         else:
           echo Cerata
 

@@ -206,8 +206,7 @@ COMMANDS:
   p, print         Print cerata information
   r, remove        Remove cerata
   s, search        Search for cerata
-  u, upgrade       Upgrade cerata
-  y, sync          Synchronize clusters"""
+  u, upgrade       Upgrade cerata"""
     version =
       """
 rad version 0.1.0

@@ -292,7 +292,7 @@ proc searchCerata*(pattern: openArray[string]) =
 
   for ceras in walkDir($radClustersCerataLib, true, skipSpecial = true):
     for nom in pattern:
-      if nom.normalize() in ceras[1]:
+      if nom.toLowerAscii() in ceras[1]:
         cerata.add(ceras[1])
 
   if cerata.len() == 0:
