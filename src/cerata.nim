@@ -73,13 +73,13 @@ proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) 
 
   if deps[$ceras].len() > 0:
     for dep in deps[$ceras]:
-      resolveDeps(dep, deps, if run: true else: false)
+      resolveDeps(dep, deps, run)
 
 proc sortCerata*(cerata: openArray[string], run = true): seq[string] =
   var deps: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
-    resolveDeps(nom, deps, if run: true else: false)
+    resolveDeps(nom, deps, run)
 
   topoSort(deps)
 
@@ -87,40 +87,38 @@ proc prepareCerata(cerata: openArray[string]) =
   for idx, nom in cerata:
     let ceras = parseCeras(nom)
 
+    printContent(idx, $ceras, ceras.ver, $prepare)
+
     # Check for virtual cerata
     case ceras.url
     of $Nil:
-      printFooter(idx, $ceras, ceras.ver, $prepare)
-
-      continue
-
-    printContent(idx, $ceras, ceras.ver, $prepare)
-
-    let
-      src = getEnv($SRCD) / $ceras
-      tmp = getEnv($TMPD) / $ceras
-
-    case ceras.sum
-    of $Nil:
-      if not dirExists(src):
-        discard gitCloneRepo(ceras.url, src)
-        discard gitCheckoutRepo(src, ceras.ver)
-
-      copyDirWithPermissions(src, tmp)
+      discard
     else:
-      let archive = src / lastPathPart(ceras.url)
+      let
+        src = getEnv($SRCD) / $ceras
+        tmp = getEnv($TMPD) / $ceras
 
-      if not verifyFile(archive, ceras.sum):
-        removeDir(src)
-        createDir(src)
+      case ceras.sum
+      of $Nil:
+        if not dirExists(src):
+          discard gitCloneRepo(ceras.url, src)
+          discard gitCheckoutRepo(src, ceras.ver)
 
-        discard downloadFile(archive, ceras.url)
-
-      if verifyFile(archive, ceras.sum):
-        createDir(tmp)
-        discard extractTar(archive, tmp)
+        copyDirWithPermissions(src, tmp)
       else:
-        abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
+        let archive = src / lastPathPart(ceras.url)
+
+        if not verifyFile(archive, ceras.sum):
+          removeDir(src)
+          createDir(src)
+
+          discard downloadFile(archive, ceras.url)
+
+        if verifyFile(archive, ceras.sum):
+          createDir(tmp)
+          discard extractTar(archive, tmp)
+        else:
+          abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
     cursorUp 1
     eraseLine()
@@ -163,13 +161,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       putEnv($SACD, $radPkgCache / $ceras / $sac)
       createDir(getEnv($SACD))
 
-    if dirExists(getEnv($TMPD) / $ceras):
-      setCurrentDir(getEnv($TMPD) / $ceras)
-
-    if dirExists(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}"):
-      setCurrentDir(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}")
-
-    if stage != $toolchain:
       setEnvFlags()
 
       if $radFlags.lto in $ceras.nop:
@@ -179,6 +170,12 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         setEnvFlagsNopParallel()
 
     putEnv($MAKEFLAGS, $radFlags.make)
+
+    if dirExists(getEnv($TMPD) / $ceras):
+      setCurrentDir(getEnv($TMPD) / $ceras)
+
+    if dirExists(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}"):
+      setCurrentDir(getEnv($TMPD) / $ceras / &"{ceras}-{ceras.ver}")
 
     # Only use `nom` and `ver` from `ceras`
     #
