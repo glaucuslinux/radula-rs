@@ -211,14 +211,6 @@ proc setEnvBootstrap*() =
 
   putEnv($PATH, getEnv($TLCD) / $usr / &"{bin}{PathSep}{getEnv($PATH)}")
 
-proc setEnvCrossPkgConfig*() =
-  putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
-  putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
-  putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
-  # `pkgconf` specific variables; no harm in setting them
-  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
-  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
-
 proc setEnvCrossTools*() =
   let crossCompile = getEnv($TGT) & '-'
 
@@ -234,6 +226,9 @@ proc setEnvCrossTools*() =
   putEnv($NM, crossCompile & $nm)
   putEnv($OBJCOPY, crossCompile & $objcopy)
   putEnv($OBJDUMP, crossCompile & $objdump)
+  putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
+  putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
   putEnv($RANLIB, crossCompile & $ranlib)
   putEnv($READELF, crossCompile & $readelf)
   putEnv($SIZE, crossCompile & $size)
@@ -245,14 +240,6 @@ proc setEnvNativeDirs*() =
   putEnv($PKGD, $radPkgCache)
   putEnv($SRCD, $radSrcCache)
   putEnv($TMPD, $radTmp)
-
-proc setEnvNativePkgConfig*() =
-  putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)
-  putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
-  putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
-  # `pkgconf` specific variables; no harm in setting them
-  putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, $pkgConfigSystemIncludePath)
-  putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, $pkgConfigSystemLibraryPath)
 
 proc setEnvNativeTools*() =
   putEnv($AR, $ar)
@@ -269,6 +256,9 @@ proc setEnvNativeTools*() =
   putEnv($OBJCOPY, $objcopy)
   putEnv($OBJDUMP, $objdump)
   putEnv($PKG_CONFIG, $pkgconf)
+  putEnv($PKG_CONFIG_LIBDIR, $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_PATH, $pkgConfigLibdir)
+  putEnv($PKG_CONFIG_SYSROOT_DIR, $DirSep)
   putEnv($RANLIB, $ranlib)
   putEnv($READELF, $readelf)
   putEnv($SIZE, $size)

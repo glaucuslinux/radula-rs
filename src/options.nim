@@ -50,9 +50,7 @@ proc options*() =
         of "n", "native":
           setEnvArch()
           setEnvNativeDirs()
-          setEnvNativePkgConfig()
           setEnvNativeTools()
-
           buildNative()
 
           echo ""
@@ -60,10 +58,8 @@ proc options*() =
         of "t", "toolchain":
           setEnvArch(toolchain)
           setEnvBootstrap()
-
           cleanBootstrap()
           initBootstrap()
-
           buildToolchain()
 
           echo ""
@@ -71,9 +67,7 @@ proc options*() =
         of "x", "cross":
           setEnvArch(cross)
           setEnvBootstrap()
-          setEnvCrossPkgConfig()
           setEnvCrossTools()
-
           prepareCross()
           buildCross()
 
@@ -96,9 +90,7 @@ proc options*() =
         of "b", "build":
           setEnvArch()
           setEnvNativeDirs()
-          setEnvNativePkgConfig()
           setEnvNativeTools()
-
           cleanCerata()
           buildCerata(remainingArgs(p))
 
