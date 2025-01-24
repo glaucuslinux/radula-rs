@@ -17,13 +17,12 @@ proc `$`(self: Ceras): string =
   self.nom
 
 proc cleanCerata*() =
-  # removeDir($radLog)
+  removeDir($radLog)
   removeDir($radTmp)
 
 proc distcleanCerata*() =
   cleanCerata()
 
-  # removeDir($radLog)
   removeDir($radPkgCache)
   removeDir($radSrcCache)
 
@@ -77,11 +76,10 @@ proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) 
     else:
       dep.split()
 
-  if deps[$ceras].len() > 0:
-    for dep in deps[$ceras]:
-      resolveDeps(dep, deps, run)
+  for dep in deps[$ceras]:
+    resolveDeps(dep, deps, run)
 
-proc sortCerata*(cerata: openArray[string], run = true): seq[string] =
+proc sortCerata(cerata: openArray[string], run = true): seq[string] =
   var deps: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
@@ -164,8 +162,8 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       if $radFlags.lto in $ceras.nop:
         setEnvFlagsNopLto()
 
-      if $radFlags.parallel in $ceras.nop:
-        setEnvFlagsNopParallel()
+    if $radFlags.parallel in $ceras.nop:
+      setEnvFlagsNopParallel()
 
     putEnv($MAKEFLAGS, $radFlags.make)
 
@@ -188,7 +186,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       package >$1'""" %
         &"""> {getEnv($LOGD) / (
         case stage
-        of $native: $ceras
+        of $native:
+          createDir(getEnv($LOGD))
+          $ceras
         else:
           createDir(getEnv($LOGD) / $stage)
           $stage / $ceras
