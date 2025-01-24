@@ -70,8 +70,7 @@ proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) 
     dep = if run: ceras.run else: ceras.bld
 
   deps[$ceras] =
-    case dep
-    of $Nil:
+    if dep == $Nil:
       @[]
     else:
       dep.split()
@@ -94,35 +93,35 @@ proc prepareCerata(cerata: openArray[string]) =
     printContent(idx, $ceras, ceras.ver, $prepare)
 
     # Skip virtual cerata
-    case ceras.url
-    of $Nil:
-      discard
+    if ceras.url == $Nil:
+      printFooter(idx, $ceras, ceras.ver, $prepare)
+
+      continue
+
+    let
+      src = getEnv($SRCD) / $ceras
+      tmp = getEnv($TMPD) / $ceras
+
+    if ceras.sum == $Nil:
+      if not dirExists(src):
+        discard gitCloneRepo(ceras.url, src)
+        discard gitCheckoutRepo(src, ceras.ver)
+
+      copyDirWithPermissions(src, tmp)
     else:
-      let
-        src = getEnv($SRCD) / $ceras
-        tmp = getEnv($TMPD) / $ceras
+      let archive = src / lastPathPart(ceras.url)
 
-      case ceras.sum
-      of $Nil:
-        if not dirExists(src):
-          discard gitCloneRepo(ceras.url, src)
-          discard gitCheckoutRepo(src, ceras.ver)
+      if not verifyFile(archive, ceras.sum):
+        removeDir(src)
+        createDir(src)
 
-        copyDirWithPermissions(src, tmp)
+        discard downloadFile(archive, ceras.url)
+
+      if verifyFile(archive, ceras.sum):
+        createDir(tmp)
+        discard extractTar(archive, tmp)
       else:
-        let archive = src / lastPathPart(ceras.url)
-
-        if not verifyFile(archive, ceras.sum):
-          removeDir(src)
-          createDir(src)
-
-          discard downloadFile(archive, ceras.url)
-
-        if verifyFile(archive, ceras.sum):
-          createDir(tmp)
-          discard extractTar(archive, tmp)
-        else:
-          abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
+        abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
     printFooter(idx, $ceras, ceras.ver, $prepare)
 
@@ -140,22 +139,16 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       ceras = parseCeras(nom)
       archive =
         $radPkgCache / $ceras /
-        &"""{ceras}{(case ceras.url
-        of $Nil: ""
-        else: '-' & ceras.ver)}{tarZst}"""
+        &"""{ceras}{(if ceras.url == $Nil: "" else: '-' & ceras.ver)}{tarZst}"""
       log = open(
-        getEnv($LOGD) /
-          &"""{ceras}{(case stage
-        of $native: ""
-        else: CurDir & stage)}""",
+        getEnv($LOGD) / &"""{ceras}{(if stage == $native: "" else: CurDir & stage)}""",
         fmWrite,
       )
       tmp = getEnv($TMPD) / $ceras
 
     printContent(idx, $ceras, ceras.ver, $build)
 
-    case stage
-    of $native:
+    if stage == $native:
       if fileExists(archive):
         printFooter(idx, $ceras, ceras.ver, $build)
 
@@ -186,10 +179,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     #
     # Call all phases sequentially to preserve the current working dir
     let shell = execCmdEx(
-      &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (case stage
-        of $native: $build
-        else: $build & CurDir & stage)} &&
-      prepare && configure && build && package'"""
+      &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & CurDir & stage)} && prepare && configure && build && package'"""
     )
 
     log.writeLine(shell.output.strip())
@@ -198,8 +188,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     if shell.exitCode != QuitSuccess:
       abort(&"{shell.exitCode:<8}{ceras:24}{ceras.ver:24}")
 
-    case stage
-    of $native:
+    if stage == $native:
       let status = createTarZst(archive, getEnv($SACD))
 
       if status == QuitSuccess:
@@ -225,10 +214,7 @@ proc installCerata*(
 
     discard extractTar(
       cache / $ceras /
-        &"""{ceras}{(case ceras.url
-      of $Nil: ""
-      else: '-' & ceras.ver
-      )}{tarZst}""",
+        &"""{ceras}{(if ceras.url == $Nil: "" else: '-' & ceras.ver)}{tarZst}""",
       fs,
     )
 
