@@ -4,7 +4,7 @@
 import std/[os, parseopt], arch, bootstrap, cerata, constants, tools
 
 proc options*() =
-  if paramCount() < 1:
+  if paramCount() < QuitFailure:
     echo Rad
 
     quit(QuitFailure)
@@ -59,7 +59,7 @@ proc options*() =
           setEnvArch(toolchain)
           setEnvBootstrap()
           cleanBootstrap()
-          initBootstrap()
+          prepareBootstrap()
           buildToolchain()
 
           echo ""

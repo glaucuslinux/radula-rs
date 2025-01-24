@@ -184,7 +184,7 @@ proc distcleanBootstrap*() =
   removeDir(getEnv($PKGD))
   removeDir(getEnv($SRCD))
 
-proc initBootstrap*() =
+proc prepareBootstrap*() =
   createDir(getEnv($CRSD))
   createDir(getEnv($LOGD))
   createDir(getEnv($PKGD))

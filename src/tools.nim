@@ -17,7 +17,7 @@ proc createTarZst*(archive, dir: string): int =
 proc downloadFile*(file, url: string): int =
   execCmd(&"{wget2} -q -O {file} -c -N {url}")
 
-proc exit*(status = 0) =
+proc exit*(status = QuitSuccess) =
   removeFile($radLock)
 
   quit(status)
@@ -52,11 +52,11 @@ proc gitCloneRepo*(url, dir: string): int =
   execCmd(&"{git} clone {url} {dir} -q")
 
 proc interrupt*() {.noconv.} =
-  abort(&"""{"1":8}{"interrupt received":48}""")
+  abort(&"""{$QuitFailure:8}{"interrupt received":48}""")
 
 proc lock*() =
   if fileExists($radLock):
-    abort(&"""{"1":8}{"lock exists":48}""")
+    abort(&"""{$QuitFailure:8}{"lock exists":48}""")
 
   writeFile($radLock, "")
 
@@ -67,5 +67,5 @@ proc verifySum*(sum: string) =
   for line in lines(sum):
     let line = line.split()
 
-    if $count[BLAKE3](readFile(line[1])) != line[0]:
-      echo line[1], ": FAILED"
+    if $count[BLAKE3](readFile(line[QuitFailure])) != line[QuitSuccess]:
+      echo line[QuitFailure], ": FAILED"

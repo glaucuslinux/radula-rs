@@ -143,6 +143,13 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         &"""{ceras}{(case ceras.url
         of $Nil: ""
         else: '-' & ceras.ver)}{tarZst}"""
+      log = open(
+        getEnv($LOGD) /
+          &"""{ceras}{(case stage
+        of $native: ""
+        else: CurDir & stage)}""",
+        fmWrite,
+      )
       tmp = getEnv($TMPD) / $ceras
 
     printContent(idx, $ceras, ceras.ver, $build)
@@ -154,9 +161,12 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         continue
 
+      createDir(getEnv($LOGD))
+
       putEnv($SACD, $radPkgCache / $ceras / $sac)
       createDir(getEnv($SACD))
 
+    if stage != $toolchain:
       setEnvFlags()
 
       if $radFlags.lto in $ceras.nop:
@@ -175,34 +185,25 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     # Only use `nom` and `ver` from `ceras`
     #
     # Call all phases sequentially to preserve the current working dir
-    var status = execCmd(
+    let shell = execCmdEx(
       &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (
         case stage
         of $native: $build
         else: $build & CurDir & stage)} &&
-      prepare $1 &&
-      configure >$1 &&
-      build >$1 &&
-      package >$1'""" %
-        &"""> {getEnv($LOGD) / (
-        case stage
-        of $native:
-          createDir(getEnv($LOGD))
-          $ceras
-        else:
-          createDir(getEnv($LOGD) / $stage)
-          $stage / $ceras
-      )}{CurDir}{log} 2>&1"""
+      prepare && configure && build && package'"""
     )
 
-    if status != 0:
-      abort(&"""{status:<8}{ceras:24}{ceras.ver:24}""")
+    log.writeLine(shell.output.strip())
+    log.close()
+
+    if shell.exitCode != QuitSuccess:
+      abort(&"""{shell.exitCode:<8}{ceras:24}{ceras.ver:24}""")
 
     case stage
     of $native:
-      status = createTarZst(archive, getEnv($SACD))
+      let status = createTarZst(archive, getEnv($SACD))
 
-      if status == 0:
+      if status == QuitSuccess:
         genSum(getEnv($SACD), $radPkgCache / $ceras / $sum)
         removeDir(getEnv($SACD))
 
@@ -243,9 +244,9 @@ proc listCerata*() =
   printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1])
 
 proc removeCerata*(cerata: openArray[string]) =
-  let cluster = sortCerata(cerata)
-
   printHeader()
+
+  let cluster = sortCerata(cerata)
 
   for idx, nom in cluster:
     let ceras = parseCeras(nom)
@@ -267,7 +268,7 @@ proc searchCerata*(pattern: openArray[string]) =
       if nom.toLowerAscii() in ceras[1]:
         cerata.add(ceras[1])
 
-  if cerata.len() == 0:
+  if cerata.len() == QuitSuccess:
     exit(QuitFailure)
 
   sort(cerata)
