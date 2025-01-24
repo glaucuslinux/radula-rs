@@ -186,8 +186,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     #
     # Call all phases sequentially to preserve the current working dir
     let shell = execCmdEx(
-      &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (
-        case stage
+      &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (case stage
         of $native: $build
         else: $build & CurDir & stage)} &&
       prepare && configure && build && package'"""
@@ -197,7 +196,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     log.close()
 
     if shell.exitCode != QuitSuccess:
-      abort(&"""{shell.exitCode:<8}{ceras:24}{ceras.ver:24}""")
+      abort(&"{shell.exitCode:<8}{ceras:24}{ceras.ver:24}")
 
     case stage
     of $native:
@@ -226,8 +225,7 @@ proc installCerata*(
 
     discard extractTar(
       cache / $ceras /
-        &"""{ceras}{(
-      case ceras.url
+        &"""{ceras}{(case ceras.url
       of $Nil: ""
       else: '-' & ceras.ver
       )}{tarZst}""",
@@ -254,7 +252,7 @@ proc removeCerata*(cerata: openArray[string]) =
     printContent(idx, $ceras, ceras.ver, $remove)
 
     for line in lines($radPkgLib / $ceras / $sum):
-      removeFile(DirSep & line.split()[2])
+      removeFile(&"{DirSep}{line.split()[2]}")
 
     removeDir($radPkgLib / $ceras)
 

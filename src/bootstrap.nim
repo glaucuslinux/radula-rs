@@ -212,30 +212,30 @@ proc setEnvBootstrap*() =
   putEnv($PATH, getEnv($TLCD) / $usr / &"{bin}{PathSep}{getEnv($PATH)}")
 
 proc setEnvCrossTools*() =
-  let crossCompile = getEnv($TGT) & '-'
+  let crossCompile = &"{getEnv($TGT)}-"
 
   putEnv($CROSS_COMPILE, crossCompile)
 
-  putEnv($AR, crossCompile & $ar)
-  putEnv($radEnv.AS, crossCompile & $radTools.As)
-  putEnv($CC, crossCompile & $gcc)
+  putEnv($AR, &"{crossCompile}{ar}")
+  putEnv($radEnv.AS, &"{crossCompile}{radTools.As}")
+  putEnv($CC, &"{crossCompile}{gcc}")
   putEnv($radEnv.CPP, &"{getEnv($CC)} {cpp}")
-  putEnv($CXX, crossCompile & $cxx)
+  putEnv($CXX, &"{crossCompile}{cxx}")
   putEnv($CXXCPP, &"{getEnv($CXX)} {cpp}")
   putEnv($HOSTCC, $gcc)
-  putEnv($NM, crossCompile & $nm)
-  putEnv($OBJCOPY, crossCompile & $objcopy)
-  putEnv($OBJDUMP, crossCompile & $objdump)
+  putEnv($NM, &"{crossCompile}{nm}")
+  putEnv($OBJCOPY, &"{crossCompile}{objcopy}")
+  putEnv($OBJDUMP, &"{crossCompile}{objdump}")
   putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
   putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
-  putEnv($PKG_CONFIG_SYSROOT_DIR, getEnv($CRSD) & DirSep)
+  putEnv($PKG_CONFIG_SYSROOT_DIR, &"{getEnv($CRSD)}{DirSep}")
   # `pkgconf` specific variables; no harm in setting them
   putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
-  putEnv($RANLIB, crossCompile & $ranlib)
-  putEnv($READELF, crossCompile & $readelf)
-  putEnv($SIZE, crossCompile & $size)
-  putEnv($STRIP, crossCompile & $strip)
+  putEnv($RANLIB, &"{crossCompile}{ranlib}")
+  putEnv($READELF, &"{crossCompile}{readelf}")
+  putEnv($SIZE, &"{crossCompile}{size}")
+  putEnv($STRIP, &"{crossCompile}{strip}")
 
 proc setEnvNativeDirs*() =
   putEnv($CERD, $radClustersCerataLib)
