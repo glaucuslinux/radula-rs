@@ -189,11 +189,13 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       abort(&"{shell.exitCode:<8}{ceras:24}{ceras.ver:24}")
 
     if stage == $native:
-      let status = createTarZst(archive, getEnv($SACD))
+      let
+        sac = getEnv($SACD)
+        status = createTarZst(archive, sac)
 
       if status == QuitSuccess:
-        genSum(getEnv($SACD), $radPkgCache / $ceras / $sum)
-        removeDir(getEnv($SACD))
+        genSum(sac, $radPkgCache / $ceras / $sum)
+        removeDir(sac)
 
       if $bootstrap in $ceras.nop:
         discard extractTar(archive, $DirSep)

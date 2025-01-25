@@ -11,4 +11,4 @@ proc setEnvArch*(stage = native) =
   )
   putEnv($CARCH, $x86_64_v3)
   putEnv($PRETTY_NAME, &"""{glaucus} {s6} {x86_64_v3} {now().format("YYYYMMdd")}""")
-  putEnv($TGT, &"""{x86_64Linux}{(if stage == native: tupleNative else: tupleCross)}""")
+  putEnv($TGT, &"{x86_64Linux}-{(if stage == native: tupleNative else: tupleCross)}")

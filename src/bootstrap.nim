@@ -229,7 +229,7 @@ proc setEnvCrossTools*() =
   putEnv($PKG_CONFIG_LIBDIR, getEnv($CRSD) / $pkgConfigLibdir)
   putEnv($PKG_CONFIG_PATH, getEnv($PKG_CONFIG_LIBDIR))
   putEnv($PKG_CONFIG_SYSROOT_DIR, &"{getEnv($CRSD)}{DirSep}")
-  # `pkgconf` specific variables; no harm in setting them
+  # `pkgconf` specific extensions
   putEnv($PKG_CONFIG_SYSTEM_INCLUDE_PATH, getEnv($CRSD) / $pkgConfigSystemIncludePath)
   putEnv($PKG_CONFIG_SYSTEM_LIBRARY_PATH, getEnv($CRSD) / $pkgConfigSystemLibraryPath)
   putEnv($RANLIB, &"{crossCompile}{ranlib}")

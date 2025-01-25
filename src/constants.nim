@@ -4,8 +4,8 @@
 type
   radArch* = enum
     glaucus
-    tupleCross = "-glaucus-linux-musl"
-    tupleNative = "-pc-linux-musl"
+    tupleCross = "glaucus-linux-musl"
+    tupleNative = "pc-linux-musl"
     x86_64 = "x86-64"
     x86_64Linux = "x86_64"
     x86_64_v3 = "x86-64-v3"
@@ -222,25 +222,9 @@ Distributed under the terms of the ISC License"""
     parallel
 
   radPaths* = enum
-    # FILESYSTEM
     bin
-    boot
-    doc
-    etc
-    info
-    lib
-    lib64
-    lostFound = "lost+found"
-    man
-    mnt
-    modules
-    share
-    usr
-    Var = "var"
-    wtmpd
-
-    # `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
-    # automatically prefixed to PATH and LIBDIR)
+    # `pkgconf` and `pkg-config` do not respect sysroot; does not get prefixed
+    # to PATH and LIBDIR
     pkgConfigLibdir = "/usr/lib/pkgconfig"
     pkgConfigSystemIncludePath = "/usr/include"
     pkgConfigSystemLibraryPath = "/usr/lib"
@@ -252,6 +236,7 @@ Distributed under the terms of the ISC License"""
     radPkgLib = "/var/lib/rad/pkg"
     radLog = "/var/log/rad"
     radTmp = "/var/tmp/rad"
+    usr
 
   radPrint* = enum
     build
