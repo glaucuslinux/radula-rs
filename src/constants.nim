@@ -83,6 +83,7 @@ type
     utilLinux = "util-linux"
     utmps
     wget2
+    xxhash
     xz
     yash
     zlibNg = "zlib-ng"

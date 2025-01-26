@@ -61,6 +61,7 @@ proc buildCross*() =
       $libudevZero,
       $toybox,
       $utilLinux,
+      $xxhash,
 
       # Services
       $s6LinuxInit,
@@ -148,6 +149,7 @@ proc buildNative*() =
       $pciutils,
       $toybox,
       $utilLinux,
+      $xxhash,
       $yash,
 
       # Init & Services
