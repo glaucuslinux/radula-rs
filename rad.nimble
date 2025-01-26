@@ -8,7 +8,6 @@ srcDir = "src"
 
 bin = @["rad"]
 
-requires "hashlib >= 1.0.1"
 requires "nim >= 2.3.1"
 requires "tomlSerialization >= 0.2.14"
 requires "toposort >= 1.0.0"

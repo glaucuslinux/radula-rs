@@ -1,17 +1,14 @@
 # Copyright (c) 2018-2025, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import
-  std/[algorithm, os, osproc, strformat, strutils, terminal, times],
-  constants,
-  hashlib/misc/blake3
+import std/[algorithm, os, osproc, strformat, strutils, terminal, times], constants
 
 proc compressZst*(file: string): int =
   execCmd(&"{zstd} {zstdCompress} {file} {shellRedirect}")
 
 proc createTarZst*(archive, dir: string): int =
   execCmd(
-    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cpvf {archive} -C {dir} {CurDir} {shellRedirect}"
+    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cPpf {archive} -C {dir} {CurDir}"
   )
 
 proc downloadFile*(file, url: string): int =
@@ -28,7 +25,10 @@ proc abort*(err: string) =
   exit(QuitFailure)
 
 proc extractTar*(archive, dir: string): int =
-  execCmd(&"{tar} -xmPvf {archive} -C {dir} {shellRedirect}")
+  execCmd(&"{tar} -xmPpf {archive} -C {dir}")
+
+proc xxhsum(file: string): string =
+  execCmdEx(&"xxhsum -H2 {file}")[0].split()[0]
 
 proc genSum*(dir, sum: string) =
   var files: seq[string]
@@ -41,7 +41,7 @@ proc genSum*(dir, sum: string) =
   let sum = open(sum, fmWrite)
 
   for file in files:
-    sum.writeLine(&"{count[BLAKE3](readFile(dir / file))}  {file}")
+    sum.writeLine(&"{xxhsum(dir / file)}  {file}")
 
   sum.close()
 
@@ -61,11 +61,11 @@ proc lock*() =
   writeFile($radLock, "")
 
 proc verifyFile*(file, sum: string): bool =
-  fileExists(file) and $count[BLAKE3](readFile(file)) == sum
+  fileExists(file) and xxhsum(file) == sum
 
 proc verifySum*(sum: string) =
   for line in lines(sum):
     let line = line.split()
 
-    if $count[BLAKE3](readFile(line[QuitFailure])) != line[QuitSuccess]:
-      echo line[QuitFailure], ": FAILED"
+    if xxhsum(line[2]) != line[QuitSuccess]:
+      echo line[2], ": FAILED"
