@@ -6,8 +6,7 @@ import
   constants,
   flags,
   tools,
-  toml_serialization,
-  toposort
+  toml_serialization
 
 type Ceras = object
   nom, ver, url, sum, bld, run, nop = $Nil
@@ -63,7 +62,15 @@ proc printHeader() =
 {"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin
 {'~'.repeat(72)}"""
 
-proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) =
+proc resolveDeps(
+    nom: string,
+    cluster: var seq[string],
+    deps: var Table[string, seq[string]],
+    run = true,
+) =
+  if nom in cluster:
+    return
+
   let
     ceras = parseCeras(nom)
     dep = if run: ceras.run else: ceras.bld
@@ -75,15 +82,19 @@ proc resolveDeps(nom: string, deps: var Table[string, seq[string]], run = true) 
       dep.split()
 
   for dep in deps[$ceras]:
-    resolveDeps(dep, deps, run)
+    resolveDeps(dep, cluster, deps, run)
+
+  cluster.add(nom)
 
 proc sortCerata(cerata: openArray[string], run = true): seq[string] =
-  var deps: Table[string, seq[string]]
+  var
+    cluster: seq[string]
+    deps: Table[string, seq[string]]
 
   for nom in cerata.deduplicate():
-    resolveDeps(nom, deps, run)
+    resolveDeps(nom, cluster, deps, run)
 
-  topoSort(deps)
+  cluster
 
 proc prepareCerata(cerata: openArray[string]) =
   for idx, nom in cerata:

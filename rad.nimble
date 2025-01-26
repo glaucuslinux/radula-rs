@@ -10,4 +10,3 @@ bin = @["rad"]
 
 requires "nim >= 2.3.1"
 requires "tomlSerialization >= 0.2.14"
-requires "toposort >= 1.0.0"
