@@ -18,19 +18,25 @@ proc cleanCerata*() =
   removeDir($radLog)
   removeDir($radTmp)
 
+  createDir($radLog)
+  createDir($radTmp)
+
 proc distcleanCerata*() =
   cleanCerata()
 
   removeDir($radPkgCache)
   removeDir($radSrcCache)
 
-proc parseCeras(nom: string): Ceras =
-  let path = $radClustersCerataLib / nom / $ceras
+  createDir($radPkgCache)
+  createDir($radSrcCache)
 
-  if not fileExists(path):
+proc parseCeras(nom: string): Ceras =
+  let path = $radClustersCerataLib / nom
+
+  if not dirExists(path):
     abort(&"""{"nom":8}{nom:48}""")
 
-  Toml.loadFile(path, Ceras)
+  Toml.loadFile(path / $ceras, Ceras)
 
 proc printCerata*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
@@ -166,8 +172,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
         continue
 
-      createDir(getEnv($LOGD))
-
       putEnv($SACD, $radPkgCache / $ceras / $sac)
       createDir(getEnv($SACD))
 
@@ -189,7 +193,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
     # Only use `nom` and `ver` from `ceras`
     #
-    # Call all phases sequentially to preserve the current working dir
+    # Call phases sequentially to preserve the current working directory
     let shell = execCmdEx(
       &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & CurDir & stage)} && prepare && configure && build && package'"""
     )
