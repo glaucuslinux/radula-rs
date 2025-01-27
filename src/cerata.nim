@@ -142,6 +142,8 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
   prepareCerata(cluster)
 
+  echo ""
+
   printHeader()
 
   for idx, nom in (if resolve: cluster else: cerata.toSeq()):
@@ -172,13 +174,13 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     if stage != $toolchain:
       setEnvFlags()
 
-      if $radFlags.lto in $ceras.nop:
+      if $radNop.lto in $ceras.nop:
         setEnvFlagsNopLto()
 
-    if $radFlags.parallel in $ceras.nop:
+    if $radNop.parallel in $ceras.nop:
       setEnvFlagsNopParallel()
-
-    putEnv($MAKEFLAGS, $radFlags.make)
+    else:
+      putEnv($MAKEFLAGS, $radFlags.make)
 
     if dirExists(tmp):
       setCurrentDir(tmp)
