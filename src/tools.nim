@@ -19,10 +19,10 @@ proc exit*(status = QuitSuccess) =
 
   quit(status)
 
-proc abort*(err: string) =
+proc abort*(err: string, status = QuitFailure) =
   styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
 
-  exit(QuitFailure)
+  exit(status)
 
 proc extractTar*(archive, dir: string): int =
   execCmd(&"{tar} -xmPpf {archive} -C {dir}")
@@ -60,12 +60,29 @@ proc lock*() =
 
   writeFile($radLock, "")
 
+proc require*() =
+  for nom in [
+    $autoconf,
+    $automake,
+    $bash,
+    $bison,
+    $bzip2,
+    $flex,
+    $gcc,
+    $git,
+    $grep,
+    $m4,
+    $radCerata.make,
+    $mawk,
+    $perl,
+    $pigz,
+    $pkgconf,
+    $tar,
+    $xz,
+    $zstd,
+  ]:
+    if findExe(nom).isEmptyOrWhitespace():
+      abort(&"""{127:8}{&"\{nom\} not found":48}""")
+
 proc verifyFile*(file, sum: string): bool =
   fileExists(file) and xxhsum(file) == sum
-
-proc verifySum*(sum: string) =
-  for line in lines(sum):
-    let line = line.split()
-
-    if xxhsum(line[2]) != line[QuitSuccess]:
-      echo line[2], ": FAILED"

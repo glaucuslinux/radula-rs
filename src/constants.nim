@@ -165,7 +165,7 @@ type
     lto = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin "
     make = "-j4 -O"
     parallel = "-j1 -O"
-    shellRedirect = "> /dev/null 2>&1"
+    shellRedirect = ">/dev/null 2>&1"
     zstdCompress = "-22 --ultra -T0 --long"
     zstdDecompress = "-d -T0 --long"
 

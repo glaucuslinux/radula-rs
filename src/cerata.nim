@@ -34,7 +34,7 @@ proc parseCeras(nom: string): Ceras =
   let path = $radClustersCerataLib / nom
 
   if not dirExists(path):
-    abort(&"""{"nom":8}{nom:48}""")
+    abort(&"""{"nom":8}{&"\{nom\} not found":48}""", 127)
 
   Toml.loadFile(path / $ceras, Ceras)
 
@@ -157,9 +157,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       ceras = parseCeras(nom)
       archive =
         $radPkgCache / $ceras /
-        &"""{ceras}{(if ceras.url == $Nil: "" else: '-' & ceras.ver)}{tarZst}"""
+        &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}"""
       log = open(
-        getEnv($LOGD) / &"""{ceras}{(if stage == $native: "" else: CurDir & stage)}""",
+        getEnv($LOGD) / &"""{ceras}{(if stage == $native: "" else: &".\{stage\}")}""",
         fmWrite,
       )
       tmp = getEnv($TMPD) / $ceras
@@ -195,7 +195,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     #
     # Call phases sequentially to preserve the current working directory
     let shell = execCmdEx(
-      &"""{sh} -c 'nom={ceras} ver={ceras.ver} {CurDir} {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & CurDir & stage)} && prepare && configure && build && package'"""
+      &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '.' & stage)} && prepare && configure && build && package'"""
     )
 
     log.writeLine(shell.output.strip())
@@ -232,7 +232,7 @@ proc installCerata*(
 
     discard extractTar(
       cache / $ceras /
-        &"""{ceras}{(if ceras.url == $Nil: "" else: '-' & ceras.ver)}{tarZst}""",
+        &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}""",
       fs,
     )
 
