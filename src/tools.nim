@@ -3,15 +3,12 @@
 
 import std/[algorithm, os, osproc, strformat, strutils, terminal, times], constants
 
-proc compressZst*(file: string): int =
-  execCmd(&"{zstd} {zstdCompress} {file} {shellRedirect}")
-
 proc createTarZst*(archive, dir: string): int =
   execCmd(
-    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cPpf {archive} -C {dir} {CurDir}"
+    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cPpf {archive} -C {dir} ."
   )
 
-proc downloadFile*(file, url: string): int =
+proc downloadFile*(url, file: string): int =
   execCmd(&"{wget2} -q -O {file} -c -N {url}")
 
 proc exit*(status = QuitSuccess) =
@@ -27,23 +24,20 @@ proc abort*(err: string, status = QuitFailure) =
 proc extractTar*(archive, dir: string): int =
   execCmd(&"{tar} -xmPpf {archive} -C {dir}")
 
-proc xxhsum(file: string): string =
-  execCmdEx(&"xxhsum -H2 {file}")[0].split()[0]
+proc genFiles*(dir, files: string) =
+  var items: seq[string]
 
-proc genSum*(dir, sum: string) =
-  var files: seq[string]
+  for item in walkDirRec(dir, relative = true, skipSpecial = true):
+    items.add(item)
 
-  for file in walkDirRec(dir, relative = true, skipSpecial = true):
-    files.add(file)
+  sort(items)
 
-  sort(files)
+  let files = open(files, fmWrite)
 
-  let sum = open(sum, fmWrite)
+  for item in items:
+    files.writeLine(item)
 
-  for file in files:
-    sum.writeLine(&"{xxhsum(dir / file)}  {file}")
-
-  sum.close()
+  files.close()
 
 proc gitCheckoutRepo*(dir, cmt: string): int =
   execCmd(&"{git} -C {dir} checkout {cmt} -q")
@@ -61,7 +55,7 @@ proc lock*() =
   writeFile($radLock, "")
 
 proc require*() =
-  for nom in [
+  for exe in [
     $autoconf,
     $automake,
     $bash,
@@ -71,6 +65,7 @@ proc require*() =
     $gcc,
     $git,
     $grep,
+    $limine,
     $m4,
     $radCerata.make,
     $mawk,
@@ -81,8 +76,11 @@ proc require*() =
     $xz,
     $zstd,
   ]:
-    if findExe(nom).isEmptyOrWhitespace():
-      abort(&"""{127:8}{&"\{nom\} not found":48}""")
+    if findExe(exe).isEmptyOrWhitespace():
+      abort(&"""{127:8}{&"\{exe\} not found":48}""")
+
+proc xxhsum(file: string): string =
+  execCmdEx(&"xxhsum -H2 {file}").output.strip()
 
 proc verifyFile*(file, sum: string): bool =
-  fileExists(file) and xxhsum(file) == sum
+  fileExists(file) and xxhsum(file).split()[0] == sum

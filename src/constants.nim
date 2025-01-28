@@ -47,6 +47,7 @@ type
     libressl
     libstdcxxV3 = "libstdc++-v3"
     libudevZero = "libudev-zero"
+    limine
     linux
     linuxCachyOS = "linux-cachyos"
     linuxHeaders = "linux-headers"
@@ -153,7 +154,7 @@ type
   radFiles* = enum
     ceras
     configGuess = "config.guess"
-    sum
+    files
     tarZst = ".tar.zst"
 
   radFlags* = enum
@@ -237,6 +238,7 @@ Distributed under the terms of the ISC License"""
     radPkgLib = "/var/lib/rad/pkg"
     radLog = "/var/log/rad"
     radTmp = "/var/tmp/rad"
+    root = "/"
     usr
 
   radPrint* = enum
@@ -266,3 +268,160 @@ Distributed under the terms of the ISC License"""
     size
     strip
     tar = "bsdtar"
+
+const
+  Cross* = [
+    # Filesystem
+    $fs,
+
+    # Development
+    $radCerata.cerata,
+    $expat,
+    $linuxHeaders,
+    $muslUtils,
+    $netbsdCurses,
+    $pkgconf,
+
+    # Init
+    $skalibs,
+    $execline,
+    $mdevd,
+    $s6,
+    $utmps,
+
+    # Security
+    $attr,
+    $acl,
+    $libcap,
+    $libressl,
+    $shadow,
+
+    # Compression
+    $zlibNg,
+    $bzip2,
+    $pigz,
+    $lz4,
+    $xz,
+    $zstd,
+    $libarchive,
+
+    # Development
+    $autoconf,
+    $binutils,
+    $file,
+    $flex,
+    $gcc,
+    $gettextTiny,
+    $libedit,
+    $m4,
+    $radCerata.make,
+    $mawk,
+    $pcre2,
+    $slibtool,
+
+    # Utilities
+    $dash,
+    $grep,
+    $kmod,
+    $libudevZero,
+    $toybox,
+    $utilLinux,
+    $xxhash,
+
+    # Services
+    $s6LinuxInit,
+    $s6Rc,
+    $s6BootScripts,
+
+    # Kernel
+    $linuxCachyOS,
+  ]
+  Native* = [
+    # Filesystem
+    $fs,
+
+    # Development
+    $radCerata.cerata,
+    $linuxHeaders,
+    $musl,
+    $perl,
+    $automake,
+    $bash,
+    $cmake,
+    $gmp,
+    $gperf,
+    $bison,
+    $mpfr,
+    $mpc,
+    $isl,
+
+    # Security
+    $acl,
+    $attr,
+    $libcap,
+    $libressl,
+    $shadow,
+
+    # Compression
+    $bzip2,
+    $pigz,
+    $libarchive,
+    $lz4,
+    $xz,
+    $zlibNg,
+    $zstd,
+
+    # Development
+    $autoconf,
+    $binutils,
+    $expat,
+    $file,
+    $flex,
+    $gcc,
+    $gettextTiny,
+    $libedit,
+    $m4,
+    $radCerata.make,
+    $mawk,
+    $netbsdCurses,
+    $pcre2,
+    $pkgconf,
+    $samurai,
+    $slibtool,
+
+    # Networking
+    $curl,
+    $eiwd,
+    $fping,
+    $iproute2,
+    $openresolv,
+    $sdhcp,
+    $wget2,
+
+    # Utilities
+    $grep,
+    $hwdata,
+    $kmod,
+    $less,
+    $libudevZero,
+    $neatvi,
+    $pciutils,
+    $toybox,
+    $utilLinux,
+    $xxhash,
+    $yash,
+
+    # Init & Services
+    $skalibs,
+    $execline,
+    $mdevd,
+    $s6,
+    $utmps,
+    $s6LinuxInit,
+    $s6Rc,
+    $s6BootScripts,
+
+    # Kernel
+    $linuxCachyOS,
+  ]
+  Toolchain* = [$muslHeaders, $binutils, $gcc, $musl, $libgcc, $libstdcxxV3]

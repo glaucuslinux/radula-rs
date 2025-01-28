@@ -87,8 +87,8 @@ proc resolveDeps(
     else:
       dep.split()
 
-  for dep in deps[$ceras]:
-    resolveDeps(dep, cluster, deps, run)
+  for nom in deps[$ceras]:
+    resolveDeps(nom, cluster, deps, run)
 
   cluster.add(nom)
 
@@ -131,7 +131,7 @@ proc prepareCerata(cerata: openArray[string]) =
         removeDir(src)
         createDir(src)
 
-        discard downloadFile(archive, ceras.url)
+        discard downloadFile(ceras.url, archive)
 
       if verifyFile(archive, ceras.sum):
         createDir(tmp)
@@ -210,16 +210,16 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         status = createTarZst(archive, sac)
 
       if status == QuitSuccess:
-        genSum(sac, $radPkgCache / $ceras / $sum)
+        genFiles(sac, $radPkgCache / $ceras / $files)
         removeDir(sac)
 
       if $bootstrap in $ceras.nop:
-        discard extractTar(archive, $DirSep)
+        discard extractTar(archive, $root)
 
     printFooter(idx, $ceras, ceras.ver, $build)
 
 proc installCerata*(
-    cerata: openArray[string], cache = $radPkgCache, fs = $DirSep, lib = $radPkgLib
+    cerata: openArray[string], cache = $radPkgCache, fs = $root, lib = $radPkgLib
 ) =
   printHeader()
 
@@ -238,7 +238,7 @@ proc installCerata*(
 
     createDir(lib / $ceras)
     writeFile(lib / $ceras / "ver", ceras.ver)
-    copyFileWithPermissions(cache / $ceras / $sum, lib / $ceras / $sum)
+    copyFileWithPermissions(cache / $ceras / $files, lib / $ceras / $files)
 
     printFooter(idx, $ceras, ceras.ver, $install)
 
@@ -255,8 +255,8 @@ proc removeCerata*(cerata: openArray[string]) =
 
     printContent(idx, $ceras, ceras.ver, $remove)
 
-    for line in lines($radPkgLib / $ceras / $sum):
-      removeFile(&"{DirSep}{line.split()[2]}")
+    for line in lines($radPkgLib / $ceras / $files):
+      removeFile(&"/{line.split()[2]}")
 
     removeDir($radPkgLib / $ceras)
 
@@ -270,7 +270,7 @@ proc searchCerata*(pattern: openArray[string]) =
       if nom.toLowerAscii() in ceras[1]:
         cerata.add(ceras[1])
 
-  if cerata.len() == QuitSuccess:
+  if cerata.len() == 0:
     exit(QuitFailure)
 
   sort(cerata)

@@ -4,7 +4,7 @@
 import std/[os, parseopt], arch, bootstrap, cerata, constants, tools
 
 proc options*() =
-  if paramCount() < QuitFailure:
+  if paramCount() < 1:
     echo Rad
 
     quit(QuitFailure)
@@ -51,7 +51,7 @@ proc options*() =
           setEnvArch()
           setEnvNativeDirs()
           setEnvNativeTools()
-          buildNative()
+          buildCerata(Native, $native, false)
 
           echo ""
           echo "native complete"
@@ -62,7 +62,7 @@ proc options*() =
           setEnvBootstrap()
           cleanBootstrap()
           prepareBootstrap()
-          buildToolchain()
+          buildCerata(Toolchain, $toolchain, false)
 
           echo ""
           echo "toolchain complete"
@@ -71,7 +71,7 @@ proc options*() =
           setEnvBootstrap()
           setEnvCrossTools()
           prepareCross()
-          buildCross()
+          buildCerata(Cross, $cross, false)
 
           echo ""
           echo "cross complete"

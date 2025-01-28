@@ -31,4 +31,4 @@ doAssert getEnv($SRCD).endsWith("src")
 doAssert getEnv($TMPD).endsWith("tmp")
 doAssert getEnv($TLCD).endsWith("toolchain")
 
-doAssert getEnv($PATH).split(PathSep)[QuitSuccess].endsWith("toolchain/usr/bin")
+doAssert getEnv($PATH).split(':')[0].endsWith("toolchain/usr/bin")
